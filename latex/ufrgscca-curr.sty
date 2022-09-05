@@ -1,0 +1,181 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-curr}
+\def\tc@tmp@altpackname{ufrgsccacurr}
+\def\tc@tmp@packdesc{UFRGS/CCA curricula commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0beta}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+
+\newcounter{gr@credob}
+\newcounter{gr@credel}
+\newcounter{gr@credalt}
+\NewDocumentCommand{\gr@setcred}{}{\setcounter{gr@credob}{0}\setcounter{gr@credel}{0}\setcounter{gr@credalt}{0}}
+\NewDocumentCommand{\gr@addclasscred}{m}{\addtocounter{gr@cred\csname gr@class:#1.typ\endcsname}{\csname gr@class:#1.cred\endcsname}}
+
+\let\@ex\expandafter
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentCommand\topicdef{O{black}mm}{
+    \expandafter\gdef\csname gr@topic:#2.txt\endcsname{#3}%
+    \expandafter\gdef\csname gr@topic:#2.color\endcsname{#1}%
+}
+
+\NewDocumentCommand\defaulttopic{m}{\xdef\gr@defaulttopic{#1}}
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentCommand\semdef{O{#3}D<>{#3}m}{%
+    \expandafter\gdef\csname gr@et:#3.idx\endcsname{x#3}%
+    \expandafter\gdef\csname gr@etidx:x#3.cod\endcsname{#2}%
+    \expandafter\gdef\csname gr@etidx:x#3.nam\endcsname{#3}%
+    \expandafter\gdef\csname gr@etidx:x#3.pos\endcsname{#1}%
+    \gdef\gr@sem{#3}%
+    \gdef\gr@semcod{#2}%
+}
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentCommand\classdef{O{\gr@defaulttopic}D<>{}mmmmm}{%
+    \@ifundefined{gr@topic:#1.txt}%
+		    {\expandafter\gdef\csname gr@class:#3.topic\endcsname{\gr@defaulttopic}}%
+				{\expandafter\gdef\csname gr@class:#3.topic\endcsname{#1}}%
+    \expandafter\gdef\csname gr@class:#3.pos\endcsname{#2}%
+    \expandafter\gdef\csname gr@class:#3.cred\endcsname{#4}%
+    \expandafter\gdef\csname gr@class:#3.typ\endcsname{#5}%
+    \expandafter\gdef\csname gr@class:#3.nam\endcsname{#6}%
+    \expandafter\gdef\csname gr@class:#3.desc\endcsname{#7}%
+    \expandafter\xdef\csname gr@class:#3.et\endcsname{\gr@semcod}%
+    \gdef\gr@disc{#3}
+		\newcounter{gr@class:#3.bibcnt}
+		\newcounter{gr@class:#3.basiccnt}
+		\newcounter{gr@class:#3.compcnt}
+		\newcounter{gr@class:#3.dep}
+		\stepcounter{gr@class:#3.dep}
+    \ifcsundef{gr@et:\gr@sem}{\csgdef{gr@et:\gr@sem}{#3}}{\csgappto{gr@et:\gr@sem}{,#3}}
+    \ifcsundef{gr@topic:#1}{\csgdef{gr@topic:#1}{#3}}{\csgappto{gr@topic:#1}{,#3}}
+}
+\NewDocumentCommand{\setclass}{m}{\ifcsundef{gr@class:#1.et}{{\color{red} #1 undef\\}}{\gdef\gr@disc{#1}}}
+
+\NewDocumentCommand{\classremark}{m}{%
+   \expandafter\gdef\csname gr@class:\gr@disc.remark\endcsname{#1}%
+}
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentCommand\depdef{O{\csname gr@class:\gr@disc.topic\endcsname}D<>{}m}{%
+    \ifcsundef{gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}}{\csgdef{gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}}{#3}}{\csgappto{gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}}{,#3}}
+    \expandafter\gdef\csname gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}:#3.topic\endcsname{#1}%
+    \expandafter\gdef\csname gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}:#3.pos\endcsname{#2}%
+}
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentCommand\bibdef{O{bib}m}{%
+		\stepcounter{gr@class:\gr@disc.#1cnt}%
+    \expandafter\gdef\csname gr@class:\gr@disc.#1\Alph{gr@class:\gr@disc.#1cnt}\endcsname{#2}%
+}
+
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+
+\NewDocumentCommand\altdef{}{%
+	\stepcounter{gr@class:\gr@disc.dep}%
+}
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentCommand\goo{m}{}
+\NewDocumentCommand\gooble{m}{}
+
+\NewDocumentCommand\LstDep{O{\goo}D<>{A}m}{%
+    \xdef\gr@disc{#3}%
+    \xdef\gr@depSeq{#2}%
+    \ifcsdef{gr@class:#3.dep#2}{\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex#1\@ex\@ex\@ex{\csname gr@class:#3.dep#2\endcsname}}{}
+}
+
+\NewDocumentCommand\LstClass{O{\gooble}m}{%
+\xdef\gr@sem{#2}%
+\gr@setcred%
+\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex\gr@addclasscred\@ex\@ex\@ex{\csname gr@et:#2\endcsname}%
+\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex#1\@ex\@ex\@ex{\csname gr@et:#2\endcsname}%
+}
+
+\NewDocumentCommand\LstTopic{O{\goo}m}{%
+\xdef\gr@topic{#2}%
+\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex#1\@ex\@ex\@ex{\csname gr@topic:#2\endcsname}%
+}
+

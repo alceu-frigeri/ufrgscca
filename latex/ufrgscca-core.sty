@@ -1,0 +1,279 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-core}
+\def\tc@tmp@altpackname{ufrgsccacore}
+\def\tc@tmp@packdesc{UFRGS/CCA core commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% student commands%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+\NewDocumentCommand{\tccore@articledefx}{mmmmm}{%
+  \expandafter\gdef\csname #1article\endcsname{#2}%
+  \expandafter\gdef\csname #1narticle\endcsname{#3}%
+  \expandafter\gdef\csname #1Article\endcsname{#4}%
+  \expandafter\gdef\csname #1Narticle\endcsname{#5}%
+}%
+\NewDocumentCommand{\tccore@articledefn}{m}{%
+	\tccore@articledefx{#1}{o(a)}{(a)}{O(A)}{(A)}%
+}%
+\NewDocumentCommand{\tccore@articledefm}{m}{%
+	\tccore@articledefx{#1}{o}{}{O}{}%
+}%
+\NewDocumentCommand{\tccore@articledeff}{m}{%
+	\tccore@articledefx{#1}{a}{a}{A}{A}%
+}%
+\NewDocumentCommand{\tccore@articledef}{mm}{%
+	\ifthenelse{\equal{#2}{m}}{%%
+		\tccore@articledefm{#1}%%
+	}{%%
+ 		\ifthenelse{\equal{#2}{f}}{%%
+	 	  \tccore@articledeff{#1}%%
+		}{%%
+		  \tccore@articledefn{#1}%%
+		}%%
+	}%%
+}%
+
+%
+% Exception:: those are only used at ufrgscca-forms, but, it make sense to be used at 'local.tex'
+%
+\cmdfactory<core>{formlocal}
+\cmdfactory<core>{tccbrief,tcccoadvisorbrief,tccadvisorsreview}
+
+
+\cmdfactory<core>{TCCcoordtitle}
+\NewDocumentCommand{\TCCcoord}{mO{}}{%
+	\tcgen@cdef<core>{TCCcoord}{#1}%
+	\tccore@articledef{tcdef@core@TCCcoord}{#2}%%
+}
+
+\cmdfactory<core>{coursecoordtitle}%
+\NewDocumentCommand{\coursecoord}{mO{}}{%
+	\tcgen@cdef<core>{coursecoord}{#1}%
+	\tccore@articledef{tcdef@core@coursecoord}{#2}%%
+}
+%
+%
+\def\tccore@ref@advisor{tc@student\Alph{tc@studentcount}@advisor}
+\def\tccore@ref@coadvisor{tc@student\Alph{tc@studentcount}@coadvisor}
+
+\NewDocumentCommand{\tccore@examiners}{m}{\def\tc@@examiners{tc@student\Alph{tc@studentcount}@#1}}%
+\def\tccore@ref@examiner{\tc@@examiners}
+\def\tccore@ref@student{tc@student\Alph{tc@studentcount}}
+\def\tccore@ref@coursecoord{tcdef@core@coursecoord}
+\def\tccore@ref@TCCcoord{tcdef@core@TCCcoord}
+
+\NewDocumentCommand{\tccore@@ref}{mm}{\expandafter\csname\csname tccore@ref@#1\endcsname#2\endcsname}%
+%
+%
+\let\tc@org@author\author
+%
+\newcounter{tc@studentcount}%
+\RenewDocumentCommand{\author}{mmO{}}{%
+        \stepcounter{tc@studentcount}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}last\endcsname{#1}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}first\endcsname{#2}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}\endcsname{#2 #1}%
+		\tccore@articledef{tc@student\Alph{tc@studentcount}}{#3}%%
+}%
+%
+\NewDocumentCommand{\authorinfo}{O{}mm}{%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Nproc\endcsname{#1}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}ID\endcsname{#2}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}email\endcsname{#3}%
+}%
+\NewDocumentCommand{\student}{mmO{}}{\author{#1}{#2}[#3]}%
+\NewDocumentCommand{\studentinfo}{O{}mm}{\authorinfo[#1]{#2}{#3}}%
+%----------
+%----------
+%
+\NewDocumentCommand{\tccore@ProfFields}{mmmmm}{%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1last\endcsname{#3}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1first\endcsname{#4}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1\endcsname{#2~#4 #3}%%
+		\tccore@articledef{tc@student\Alph{tc@studentcount}@#1}{#5}%
+
+}%
+\NewDocumentCommand{\tccore@ProfInfo}{mmmmm}{%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1institution\endcsname{#2}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1titleinfo\endcsname{#3}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1email\endcsname{#4}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1phone\endcsname{#5}%%
+}%
+%
+%
+%
+\newcounter{tc@examinercount}[tc@studentcount]%
+%
+\NewDocumentCommand{\advisor}{O{}mmO{}}{%%
+	\tccore@ProfFields{advisor}{#1}{#2}{#3}{#4}%%
+%%% the advisor is also the first examiner if not @nBoard%
+	\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%%
+}%
+\NewDocumentCommand{\advisorinfo}{mmmm}{%%
+	\tccore@ProfInfo{advisor}{#1}{#2}{#3}{#4}%%
+%%% the advisor is also the first examiner if not @nBoard%
+	\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
+}%
+%
+\NewDocumentCommand{\coadvisor}{O{}mmO{}}{%%
+				\tccore@ProfFields{coadvisor}{#1}{#2}{#3}{#4}%%
+}%
+\NewDocumentCommand{\coadvisorinfo}{mmmm}{%%
+				\tccore@ProfInfo{coadvisor}{#1}{#2}{#3}{#4}%%
+}%
+%
+%
+\NewDocumentCommand{\examiner}{O{}mmO{}}{%%
+        \stepcounter{tc@examinercount}%%
+				\tccore@ProfFields{examiner\Alph{tc@examinercount}}{#1}{#2}{#3}{#4}%%
+}%
+\NewDocumentCommand{\examinerinfo}{mmmm}{%%
+				\tccore@ProfInfo{examiner\Alph{tc@examinercount}}{#1}{#2}{#3}{#4}%%
+}%
+%
+\newcounter{tc@altexaminercount}[tc@studentcount]%
+\NewDocumentCommand{\altexaminer}{O{}mmO{}}{%%
+        \stepcounter{tc@altexaminercount}%%
+				\tccore@ProfFields{altexaminer\Alph{tc@altexaminercount}}{#1}{#2}{#3}{#4}%%
+}%
+\NewDocumentCommand{\altexaminerinfo}{mmmm}{%%
+				\tccore@ProfInfo{altexaminer\Alph{tc@altexaminercount}}{#1}{#2}{#3}{#4}%%
+}%
+%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% assure that student/advisor/examiners... commands are defined with underlines (if not already defined)%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\tc@IDrule{30mm}%
+\def\tc@emailrule{40mm}%
+\def\tc@namerule{50mm}%
+\def\tc@titlerule{40mm}%
+\def\tc@phonerule{20mm}%
+\def\tc@agreerule{25mm}%
+\def\tc@daterule{15mm}%
+%%%
+%%
+%%%
+\NewDocumentCommand{\tccore@emptyfields}{}{%
+
+	\@ifundefined{tc@studentA}{%
+		\student{\rule{\tc@namerule}{.1pt}}{}%
+		\studentinfo{\rule{\tc@IDrule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}%
+	}{}%
+	\@ifundefined{tc@studentA@advisor}{%
+		\advisor{\rule{\tc@namerule}{.1pt}}{}%
+		\advisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+	}{}%
+%
+	\@ifundefined{tc@studentA@examinerC}{%
+		\examiner{\rule{\tc@namerule}{.1pt}}{}%
+		\examinerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+	}{}%
+	\@ifundefined{tc@studentA@examinerC}{%
+		\examiner{\rule{\tc@namerule}{.1pt}}{}%
+		\examinerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+	}{}%
+	\@ifundefined{tc@studentA@examinerC}{%
+		\examiner{\rule{\tc@namerule}{.1pt}}{}%
+		\examinerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+	}{}%
+	\@ifundefined{tc@studentA@altexaminerA}{%
+		\altexaminer{\rule{\tc@namerule}{.1pt}}{}%
+		\altexaminerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+	}{}%
+	%
+	% add an \iftcif@forms !!!
+	%
+	\@ifundefined{tcdef@core@tccbrief}{%
+		\tccbrief{\tcdef@core@formsblanklines}%
+	}{}%
+	\@ifundefined{tcdef@core@tcccoadvisorbrief}{%
+		\tcccoadvisorbrief{\tcdef@core@formsblanklines}%
+	}{}%
+	\@ifundefined{tcdef@core@tccadvisorsreview}{%
+		\tccadvisorsreview{\tcdef@core@formsblanklines}%
+	}{}%
+}%
+
+\NewDocumentCommand{\tccore@resetfields}{}{%
+	\setcounter{tc@studentcount}{0}
+	\csundef{tc@studentA}
+	\csundef{tc@studentA@advisor}
+	\csundef{tc@studentA@coadvisor}
+	\csundef{tc@studentA@examinerC}
+	\csundef{tc@studentA@altexaminerA}
+	\csundef{tcdef@core@tccbrief}
+	\csundef{tcdef@core@tcccoadvisorbrief}
+	\csundef{tcdef@core@tccadvisorsreview}
+}

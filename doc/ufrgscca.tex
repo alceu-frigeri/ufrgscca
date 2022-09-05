@@ -1,0 +1,1125 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation (this file)
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+
+\documentclass[dctools,english]{ufrgscca} % tcbundle  tcpack tcmain
+\usepackage{democodetools}
+\usepackage{ufrgscca-curr}
+
+\maxdeadcycles=500 %%the many marginpar statements are actually a pain.
+\newif\iffulldoc
+
+\fulldoctrue
+
+\iffulldoc
+  \dcTitle{The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion \\(extended documentation)}
+\else
+  \dcTitle{The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion}
+\fi
+
+\dcAuthor{Alceu Frigeri}
+\dcDate{September 2022}
+\makeatletter
+
+
+\begin{document}
+
+	\dcMakeTitle
+
+
+	\begin{dcAbstract}
+		This bundled is aimed at producing undergraduate students final work/report at UFRGS/EE (Engineering School at the Federal University of Rio Grande do Sul), closely following ABNT rules (Brazilian Association for Technical Norms). It is composed of a main class, \Pack{ufrgscca}, and a set of auxiliary packages, some of which can be used independently.
+
+	\end{dcAbstract}
+
+\tableofcontents
+
+	\section{Introduction}
+	\emph{ABNT} rules can be quite challenging some times (read: bibliography style/references) and sometimes just odd (line spacing, front matter, page layout), nevertheless it is a \emph{Brazilian Standard} for typography whose students at UFRGS should grow cherished to follow.
+
+	In short, as of version \ufrgsccaversion\space the bundle is composed of a class, \Pack{ufrgscca} (based on the standard \LaTeX2e \Pack{report} class), which pre-loads all other, as needed, packages: \Packlst{ufrgscca-abnt, ufrgscca-core, ufrgscca-cover, ufrgscca-forms, ufrgscca-gen, ufrgscca-lists, ufrgscca-curr, ufrgscca-coord, ufrgscca-ppc}.
+
+	N.B.: This bundle requires a quite recent \LaTeX2e kernel, at least as recent as June 2022, which allows to declare package options using the new \Key{key}~=\Key{value} system and declare commands with \Macro{\NewDocumentCommand}{}, out-of-the-box.
+
+\subsection{Current Version}
+For the sake of the 'maintainers' sanity, since this is a bundle, all files are saved with the same version (bundle version), with two exceptions: \Pack{ufrgscca-curr.sty} \Pack{ufrgscca-ppc.sty} which are less tested than the others, and somewhat in what one would call 'beta' state. Better said, all files are version \ufrgsccaversion, except \Pack{ufrgscca-curr} and \Pack{ufrgscca-ppc} whose versions are \ufrgsccacurrversion.
+
+\section{\tightul{ufrgscca} Class}
+
+The following packages are always pre-loaded: {\MetaFmt[Pack]\sffamily etex, etoolbox, lmodern, fontenc (T1), inputenc (utf8), silence, ufrgscca-abnt, ufrgscca-gen, ufrgscca-cover, ufrgscca-core, hyperref} and (if it exists) a \emph{local.tex} file.
+
+Other set of auxiliary packages are also pre-loaded, depending on the class options used, and finally it loads (normally) the \Pack{report} class (the exception being if one uses the \Option{dctools} option).
+
+Being based on the report class, one can use all class options one would with a report, plus the ones listed below.
+\subsection{Class Options}
+\begin{Options}
+	\DescribeOption{tocdepth} use: \KeyUse{tocdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 3 (\Macro{\subsubsection}{}).
+	\DescribeOption{secdepth} use: \KeyUse{secdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 4 (\Macro{\paragraph}{}).
+	\DescribeOption{english} the default language being Portuguese, this option changes locale to English.
+	\DescribeOption{brazilian} in some rare cases (to be further investigated) babel seems to get confused about which language is active, this “shouldn't be necessary” but one can explicitly tell babel to use THIS language (which should, otherwise, be the default one).
+	\DescribeOption{relnum} by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.
+	\DescribeOption{openright} in case of printed material, this will assure that a \Macro{\chapter}{} always starts at an odd page, which is relevant in case of printing out (double sided) the document.
+	\DescribeOption{oneside} in case the document will be printed in single side sheets, otherwise it's assumed a two-sided printing.
+	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
+	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
+	\DescribeOption{xlists} this will load the ufrgscca-lists package, for the definition of new floats/lists.
+	\DescribeOption{xpacks} this will load a series of packages, which can be handy when writing Engineering reports: {\MetaFmt[Pack]\sffamily relsize, keyval, graphicx, mathtools, mathrsfs, amsfonts, amssymb, empheq, amsthm, ext\-arrows, mathfixs, bigdelim, circuitikz, steimenz} and tikz libraries: {\MetaFmt[Pack]\sffamily fit,  math, calc, shapes.geometry, shapes.misc, shapes.multipart, graphs, 3d, positioning, shadows, babel}. One is advised to look after each package documentation (ctan.org) for further information.
+	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
+	\DescribeOption{internship} in case the doc is an internship report.
+	\DescribeOption{forms} in the process of submitting a student final work/report, there is a series of forms to be submitted, this allows the customization  of said forms in a simple  way.
+	\DescribeOption{chapternopagenum} to suppress the page numbers at chapters begin.
+	\DescribeOption{nomicrotype} in some rare cases, \Pack{microtype} might hurt page layout, this allows the suppression of \Pack{microtype}.
+	\DescribeOption{showframes} for layout proof only, it will draw frames around each page main parts.
+	\DescribeOption{showlabels} it will put a reference mark in each label created, and print out it's name.
+	\DescribeOption{nofontwarning} in case of \Pack{ufrgscca-ppc} is loaded, it will suppress some font related warnings.
+	\DescribeOption{dctools} this will change page layout and base class to article, it is meant to document the class itself.
+	\DescribeOption{texlive} this is a reserved key, in case some workaround for texlive is needed.
+	\DescribeOption{overleaf} this is a reserved key, in case some workaround for overleaf is needed.
+	\DescribeOption{miktex} this is a reserved key, in case some workaround for miktex is needed.
+\end{Options}
+
+\subsection{Class Declared Commands}
+\begin{Macros}{\autonameref,\annexref,\autoannexref}
+	\begin{Syntax}%
+		\Macro!{\autonameref}{\oarg{sep}\marg{label}\oarg{spc}}
+		\Macro{\annexref}{label}
+		\Macro!{\autoannexref}{\oarg{sep}\marg{label}\oarg{spc}}
+	\end{Syntax}
+The \Pack{hyperref} package, sometimes, gets the \Macro{\autoref}{} name wrong (when referencing an annex), therefore the \Macro{\annexref}{label} will assure the correct annex name is used.
+
+\Macro{\autonameref}{label} produces an entry of the form `\Macro{\autoref}{label} \Arg{sep} \Macro{\nameref}{label} \Arg{spc}'
+
+\Macro{\autoannexref}{label} produces an entry of the form `\Macro{\annexref}{label} \Arg{sep} \Macro{\nameref}{label} \Arg{spc}'
+
+The default \Arg{sep} being a comma, and the default \Arg{spc} being empty space.
+
+\end{Macros}
+\section{\tightul{ufrgscca-abnt} Package}
+This package is the one that sets the page layout (using \Packlst{geometry, titlesec, titletoc}) and adjusts the main float environments (figure, tables, captions).
+It can be used as a stand alone package, regardless of the underlying class.
+
+The following packages are always pre-loaded: {\MetaFmt[Pack]\sffamily babel, csquotes, geometry, appendix, titlesec, titletoc, enumitem, chngctr, caption, biblatex, microtype, array, nicematrix, contour} and {\MetaFmt[Pack]\sffamily soul}.
+
+Take note that \Pack{biblatex} is loaded with the \textbf{\Option{biber}} option, to correctly handle ABNT biography style.
+
+\subsection{Package Options}
+\begin{Options}
+	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
+	\DescribeOption{chapternopagenum} to suppress the page numbers at chapters begin.
+	\DescribeOption{relnum} by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.
+	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
+	\DescribeOption{nomicrotype} in some rare cases, \Pack{microtype} might hurt page layout, this allows the suppression of \Pack{microtype}.
+	\DescribeOption{showframes} for layout proof only, it will draw frames around each page main parts.
+	\DescribeOption{showlabels} it will put a reference mark in each label created, and print out it's name.
+	\DescribeOption{tocdepth} use: \KeyUse{tocdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 3 (\Macro{\subsubsection}{}).
+	\DescribeOption{secdepth} use: \KeyUse{secdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 4 (\Macro{\paragraph}{}).
+	\DescribeOption{dctools}  this will change page layout and base class to article, it is meant to document the class itself.
+\end{Options}
+
+\begin{Macros}{\keyword}
+	\begin{Syntax}%
+		\Macro{\keyword}{keyword}
+	\end{Syntax}
+\end{Macros}
+  This command can be invoked many times, it will construct a list of keywords to be used when printing out the abstract environment.
+
+\begin{Macros}{\sourcecitation,\note}
+	\begin{Syntax}%
+		\Macro{\sourcecitation}{source}
+		\Macro{\note}{text}
+	\end{Syntax}
+\end{Macros}
+When describing floating elements (like figure, tables, circuits) one always has to cite the source of it, and in some cases it might be necessary to add a special note. Those assure uniformity when doing that.
+
+\begin{Macros}{\nonum,\notoc}
+	\begin{Syntax}%
+		\Macro!{\nonum}{\Macro{\chapter}{chap.title}}
+		\Macro!{\nonum}{\Macro{\section}{sec.title}}
+		\Macro!{\notoc}{\Macro{\chapter}{chap.title}}
+		\Macro!{\notoc}{\Macro{\section}{sec.title}}
+	\end{Syntax}
+\end{Macros}
+In some cases, it might be necessary to create a numberless chapters or sections. Those two commands can be used as a \emph{prefix} to any sectioning command. Whilst \Macro{\nonum}{} will just suppress the sectioning number, the \Macro{\notoc}{} will also suppress it from the table of contents.
+
+\begin{stcode}[st=demononum]
+	\nonum\chapter{some title} %this one will appear in the toc
+	\notoc\section{some other title} %this won't even appear in the toc
+\end{stcode}
+\DisplayCode[emph={nonum,notoc}]{demononum}
+
+\begin{Macros}{\tightul}
+	\begin{Syntax}%
+		\Macro{\tightul}{text}
+	\end{Syntax}
+\end{Macros}
+This will \emph{underline} a short text, take note that \Meta{text} `can't be broken' (think paragraph justification), which can lead to \emph{text overflows} and bad justification.
+
+\begin{stcode}[st=demotight]
+	\tightul{Some text example}%
+\end{stcode}
+
+\TabbedDemoCode[emph={tightul}]{demotight}[-0.75ex]
+
+\begin{Macros}{\NewChapListEnv}
+	\begin{Syntax}%
+		\Macro{\NewChapListEnv}{envname,displayname}
+	\end{Syntax}
+\end{Macros}
+This is the command used to created those \emph{chapter like} lists, like `List of Symbols' or `List of acronyms'. With it, a new environment is created, \Arg{envname}, with an associated `numberless' chapter name \Arg{displayname}. The newly created environment will implement a \emph{description} like environment (thanks to \Pack{enumitem}) with an optional and a mandatory argument (see below).
+
+\begin{stcode}[st=d.newchapenv]
+	\def\listabbrvname{Lista de Abreviaturas}
+	\NewChapListEnv{listofabbrv}{\listabbrvname} % this is the actual code used in ufrgscca-abnt.sty
+\end{stcode}
+\DisplayCode{d.newchapenv}
+
+\begin{Macros}{\date,\today,\monthname}
+	\begin{Syntax}%
+		\Macro{\date}[day]{month,year}
+		\Macro{\today}{}
+		\Macro{\monthname}{}
+	\end{Syntax}
+\end{Macros}
+The command \Macro{\date}{} is redefined, to allow a separation between the many arguments \Arg{day}, \Arg{month} and \Arg{year}. If not called by the user it \emph{defaults} to current month / year. \Macro{\today}{} returns the current \emph{locale} date, whilst \Macro{\monthname}{} returns the \emph{locale} name of the current month.
+
+
+\subsection{Environments}
+
+\begin{Envs}{abstract}
+	\begin{Syntax}%
+		\Macro{\begin{abstract}}[lang]{keywords}\ldots\Macro{\end{abstract}}{}
+	\end{Syntax}
+	The standard environment \Env{abstract} is redefined as a numberless chapter based on the current locale (default: Portuguese), at the end of it the keywords list created with \Macro{\keyword}{} will be added.
+\end{Envs}
+
+\begin{stcode}[st=d.abstract]
+	\keyword{a keyword}
+	\keyword{another keyword}
+	\begin{abstract} some short summary of things\ldots
+	\end{abstract}
+\end{stcode}
+\DisplayCode{d.abstract}
+
+\begin{Envs}{otherabstract}
+	\begin{Syntax}%
+		\Macro{\begin{otherabstract}}[lang]{keywords}\ldots\Macro{\end{otherabstract}}{}
+	\end{Syntax}
+This is the environment to create an abstract in a language other than the default one.
+The default value for \Arg{lang} is english, and it can be any value that \Pack{babel} understands. The \Arg{keywords} are just a list of keywords which will be added at the end of the \emph{otherabstract}.
+\end{Envs}
+
+\begin{stcode}[st=d.oabstract]
+	\begin{otherabstract}[english]{a keyword, another keyword} some short summary of things\ldots
+	\end{otherabstract}
+\end{stcode}
+\DisplayCode{d.oabstract}
+
+
+\begin{Envs}{listofabbrv,listofsymbols}
+	\begin{Syntax}%
+	\Macro{\begin{listofabbrv}}[enum-opt]{ABBRV}\ldots\Macro{\end{listofabbrv}}{}
+	\Macro{\begin{listofsymbols}}[enum-opt]{SYMB}\ldots\Macro{\end{listofsymbols}}{}
+	\end{Syntax}
+\end{Envs}
+Both environments create a description like list preceded by a numberless (\Macro{\nonum}{}) chapter. \Arg{enum-opt} is any \Pack{enumitem} list valid key. Whereas \Arg{ABBRV} / \Arg{SYMB} are just the `biggest' abbreviation/symbol to be used as a tab reference.
+
+\begin{Envs}{appendix,annex}
+	\begin{Syntax}%
+		\Macro{\begin{appendix}}{}.... \Macro{\end{appendix}}{}
+		\Macro{\begin{annex}}{}.... \Macro{\end{annex}}{}
+	\end{Syntax}
+\end{Envs}
+Those two environments start the appendices and annex chapters (using locale). Chapters are  alphabetic \emph{numbered} (starting at A).
+\subsection{Tabular New Columns}
+Thanks to \Pack{array} some new columns types are defined:
+\begin{Values}
+	\DescribeValue{P} \Value{P\marg{width}} Normal text, ragged left.
+	\DescribeValue{B} \Value{B\marg{width}} Bold text, ragged left.
+	\DescribeValue{C} \Value{C\marg{width}} Normal text, centered.
+	\DescribeValue{R} \Value{R\marg{width}} Normal text, ragged left.
+	\DescribeValue{L} \Value{L\marg{width}} Normal text, ragged right.
+	\DescribeValue{J} \Value{J\marg{width}} Normal text, justified.
+
+	\end{Values}
+\subsection{enumitem Extra Keys}
+Besides the \emph{default} keys defined by the \Pack{enumitem} package a few others are defined for author's convenience:
+\begin{Keys}
+	\DescribeKey{ppc, tcc} \Key{ppc} and \Key{tcc} are alias of each other, and just assure that lists indentation will be the same as paragraphs default.
+	\DescribeKey{parindent} with \Key{parindent}, the list number/mark is aligned with paragraph indentation.
+	\DescribeKey{noindent} \Key{noindent} removes the label indentation.
+
+	\begin{stcode}[st=enumA]
+\begin{enumerate}[tcc]
+	\item some A
+	\item some B
+\end{enumerate}
+\begin{enumerate}[tcc,parindent]
+	\item some A
+	\item some B
+\end{enumerate}
+\begin{enumerate}[parindent]
+	\item some A
+	\item some B
+\end{enumerate}
+\begin{enumerate}[noindent]
+	\item some A
+	\item some B
+\end{enumerate}
+
+New paragraph, for reference.
+\end{stcode}
+
+	\TabbedDemoCode[parindent=org]{enumA}
+
+	\DescribeKey{tight} allows for very tight lists (no indentation) to be used, for instance, inside quotes. N.B. don't use it in normal paragraph mode, otherwise the labels will spill outside the default text window.
+	\DescribeKey{miditemsep} \Key{miditemsep} halves items separation, as an alternative to \Key{noitemsep} from \Pack{enumitem}
+	\begin{stcode}[st=enumB]
+	\begin{enumerate}[tcc]
+		\item some A
+		\item some B
+	\end{enumerate}
+	\begin{enumerate}[tcc,miditemsep]
+		\item some A
+		\item some B
+	\end{enumerate}
+	\begin{enumerate}[tcc,noitemsep]
+		\item some A
+		\item some B
+	\end{enumerate}
+\end{stcode}
+
+\TabbedDemoCode{enumB}
+
+
+	\DescribeKey{arabic} That's the \emph{default} enumerate style. Arabic numbers, starting at 1, followed by a dot.
+	\DescribeKey{arabic)} Label will be constructed as number followed by a parenthesis.
+	\DescribeKey{(arabic)} Label will be enclosed by parenthesis.
+	\DescribeKey{arabic*} (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final dot.
+	\DescribeKey{arabic*)} (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final parenthesis.
+
+	\DescribeKey{roman} This and below keys are the same as the arabic ones, but using lower case roman numbers.
+	\DescribeKey{roman)} lower case roman number, followed by a parenthesis.
+	\DescribeKey{(roman)} enclosed by parenthesis.
+	\DescribeKey{roman*} preceding one followed by roman number and a final dot.
+	\DescribeKey{roman*)} same, followed by a final parenthesis.
+
+	\DescribeKey{Roman} This and below keys are the same as the arabic ones, but using upper case roman numbers.
+	\DescribeKey{Roman)} upper case roman number, followed by a parenthesis.
+	\DescribeKey{(Roman)} enclosed by parenthesis.
+	\DescribeKey{Roman*} preceding one followed by roman number and a final dot.
+	\DescribeKey{Roman*)} same, followed by a final parenthesis.
+
+	\DescribeKey{alpha} This and below keys are the same as the arabic ones, but using lower case alpha numbers.
+	\DescribeKey{alpha)} lower case alpha number, followed by a parenthesis.
+	\DescribeKey{(alpha)} enclosed by parenthesis.
+	\DescribeKey{alpha*} preceding one followed by alpha number and a final dot.
+	\DescribeKey{alpha*)} same, followed by a final parenthesis.
+
+	\DescribeKey{Alpha} This and below keys are the same as the arabic ones, but using upper case alpha numbers.
+	\DescribeKey{Alpha)} upper case roman number, followed by a parenthesis.
+	\DescribeKey{(Alpha)} enclosed by parenthesis.
+	\DescribeKey{Alpha*} preceding one followed by roman number and a final dot.
+	\DescribeKey{Alpha*)} same, followed by a final parenthesis.
+	\begin{stcode}[st=enumC]
+	\begin{enumerate}[tcc,roman]
+		\item some A
+		\item some B
+		\item some C
+	\end{enumerate}
+	\begin{enumerate}[tcc,Roman]
+		\item some A
+		\item some B
+		\begin{enumerate}[tcc,alpha*]
+			\item some A
+			\item some B
+			\item some C
+		\end{enumerate}
+		\item some C
+	\end{enumerate}
+	\begin{enumerate}[tcc,arabic]
+		\item some A
+		\item some B
+		\begin{enumerate}[tcc,roman*)]
+			\item some A
+			\item some B
+			\item some C
+		\end{enumerate}
+		\item some C
+	\end{enumerate}
+\end{stcode}
+
+\TabbedDemoCode{enumC}
+
+	\DescribeKey{bullet} for simple itemized lists, it will replace the default black dot by an `open bullet'
+	\begin{stcode}[st=enumD]
+	\begin{itemize}[tcc,miditemsep]
+		\item some A
+		\item some B
+		\item some C
+	\end{itemize}
+	\begin{itemize}[tcc,bullet,miditemsep]
+		\item some A
+		\item some B
+		\item some C
+	\end{itemize}
+\end{stcode}
+
+\TabbedDemoCode{enumD}
+
+
+\end{Keys}
+
+\section{\tightul{ufrgscca-core} Package}
+The \Pack{ufrgscca-core} package defines a set of commands for authors, students, advisors and examiners names and related info. It is needed by most/all of the tc bundled packages.
+
+\subsection{Core Forms Commands}
+\begin{Macros}{\tccbrief,\tcccoadvisorbrief,\tccadvisorsreview}
+	\begin{Syntax}%
+		\Macro{\tccbrief}{brief}
+		\Macro{\tcccoadvisorbrief}{brief}
+		\Macro{\tccadvisorsreview}{brief}
+	\end{Syntax}
+Those commands are only of use when using \Pack{ufrgscca-forms}. \Macro{\tccbrief}{} sets the work initial summary, \Macro{\tcccoadvisorbrief}{} sets the justification for having a co-advisor, \Macro{\tccadvisorsreview}{} sets the advisor's review.
+\end{Macros}
+
+\subsection{Core Global Commands}\label{core-commands}
+
+\begin{Macros}{\location}
+	\begin{Syntax}%
+		\Macro{\location}{city,state}
+	\end{Syntax}
+	To redefine the default values of \Arg{city} and \Arg{state} (Porto Alegre and RS).\\
+\end{Macros}
+
+\begin{Macros}{\TCCcoord,\TCCcoordtitle}
+	\begin{Syntax}%
+		\Macro!{\TCCcoord}{\marg{(title) full name}\oarg{gender}}
+		\Macro{\TCCcoordtitle}{coordinator denomination}
+	\end{Syntax}
+\end{Macros}
+
+\begin{Macros}{\coursecoord,\coursecoordtitle}
+	\begin{Syntax}%
+		\Macro!{\coursecoord}{\oarg{(title) full name}\oarg{gender}}
+		\Macro{\coursecoordtitle}{course coordinator denomination}
+	\end{Syntax}
+\end{Macros}
+ \Arg{coordinator denomination} and \Arg{course coordinator denomination} are the full 'job title' of their position. \Arg{gender} can be either 'm' or 'f'.
+
+\subsection{Core Specific Commands}\label{core-specific-commands}
+
+The following commands are more or less self-explanatory, \Arg{ID} is the student's university ID. \Arg{Nproc} is the process/request number. \Arg{gender} can be either 'm' or 'f'.
+
+
+\begin{Macros}{\author,\authorinfo,\student,\studentinfo}%,\studentgender}
+	\begin{Syntax}%
+		~\Macro!{ \author}{\marg{last}\marg{first}\oarg{gender}}
+		\Macro{\authorinfo}[Nproc]{ID,email}
+		\Macro!{\student}{\marg{last}\marg{first}\oarg{gender}}
+		\Macro{\studentinfo}[Nproc]{ID,email}
+	\end{Syntax}
+\end{Macros}
+
+
+\begin{Macros}{\advisor,\advisorinfo}%,\advisorgender}
+	\begin{Syntax}%
+		~\Macro!{\advisor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
+		\Macro{\advisorinfo}{Institut,title-info,email,phone}
+	\end{Syntax}
+\end{Macros}
+
+\begin{Macros}{\coadvisor,\coadvisorinfo}%,\coadvisorgender}
+	\begin{Syntax}%
+		~\Macro!{\coadvisor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
+		\Macro{\coadvisorinfo}{Institut,title-info,email,phone}
+	\end{Syntax}
+\end{Macros}
+
+\begin{Macros}{\examiner,\examinerinfo}%,\examinergender}
+	\begin{Syntax}%
+		~\Macro!{\examiner}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
+		\Macro{\examinerinfo}{Institut,title-info,email,phone}
+	\end{Syntax}
+\end{Macros}
+
+\begin{Macros}{\altexaminer,\altexaminerinfo}%,\altexaminergender}
+	\begin{Syntax}%
+		~\Macro!{\altexaminer}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
+		\Macro{\altexaminerinfo}{Institut,title-info,email,phone}
+	\end{Syntax}
+\end{Macros}
+
+
+\section{\tightul{ufrgscca-cover} Package}
+This package is the one that sets the front pages, depending on the kind of 'report' being generated. The default being to generate 3 cover pages: an identification on, followed by presentation one, then an referral/approval one.
+
+\subsection{Package Options}
+\begin{Options}
+	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
+	\DescribeOption{internship} in case the report is a internship one.
+\end{Options}
+
+\subsection{Defined Commands}
+\begin{Macros}{\maketitle}
+	\begin{Syntax}%
+		\Macro{\maketitle}{}
+	\end{Syntax}
+This is the only main command, which will typeset the front matter. It requires that all \emph{specific info} be already set up (like work title, author's name, affiliation, etc.)
+\end{Macros}
+
+
+\begin{Macros}{\course,\courseacronym,\graduationtitle,\university,\universityacronym,%
+		\universitydivision,\divisiongradcouncil,\department,\classcode,\classname,\subject}
+\begin{Syntax}%
+	\Macro{\course}{arg}
+	\Macro{\courseacronym}{arg}
+	\Macro{\graduationtitle}{arg}
+	\Macro{\university}{arg}
+	\Macro{\universityacronym}{arg}
+	\Macro{\universitydivision}{arg}
+	\Macro{\divisiongradcouncil}{arg}
+	\Macro{\department}{arg}
+	\Macro{\classcode}{arg}
+	\Macro{\classname}{arg}
+	\Macro{\subject}{arg}
+\end{Syntax}
+In case some customization is needed, one can change them as needed. The default values are set for the \emph{control and automation} course at UFRGS/EE.
+\end{Macros}
+
+\section{\tightul{ufrgscca-forms} Package}
+This package defines just two user commands to generate specific forms needed at UFRGS/EE.
+\subsection{Forms Defined Commands}\label{forms.commands}
+\begin{Macros}{\tcforms,\tcemptyforms}
+	\begin{Syntax}%
+\Macro{\tcforms}{formslist}
+\Macro{\tcemptyforms}{formslist}
+\end{Syntax}
+\Macro{\tcforms}{} will generate the many forms (\Arg{formslist}) using the information from \emph{local.tex}, whilst \Macro{\tcemptyforms}{} will generate said forms with 'blanks' (to be fulfilled by hand, for instance).
+
+\Arg{formslist} is a csv list of any of:
+\begin{Options+}
+    \DescribeOption+{reqform} Registration requirement form.
+    \DescribeOption+{coadvisor} Coadvisor justification form.
+    \DescribeOption+{boardsapproval} Boards approval form.
+    \DescribeOption+{advisorsapproval} Advisors approval form.
+    \DescribeOption+{receipts} Receipts forms (one per board member).
+    \DescribeOption+{examinersforms} Grades and correction forms (per board member).
+    \DescribeOption+{rectifyapprovalform} Corrections approval  form.
+\end{Options+}
+
+\end{Macros}
+
+
+\section{\tightul{ufrgscca-lists} Package}
+The following packages are always pre-loaded: {\MetaFmt[Pack]\sffamily newfloat, listings} and \Pack{xcolor}.
+It defines a new \emph{floating environment}. Combined with \Pack{listings} one can typeset exempts of \emph{code listing}.
+
+\subsection{Environment}
+\begin{Envs}{codelist}
+	\begin{Syntax}%
+		\Macro{\begin{codelist}}{}\ldots \Macro{\end{codelist}}{}
+	\end{Syntax}
+\Macro{\caption}{} will be named 'Listing' (Listagem).
+
+\begin{stcode}[st=d.listing]
+	\begin{codelist}[htbp]
+		\caption{sample C code}
+		\label{code01}
+		\begin{lstlisting}[language=C]
+			struct i2c_msg
+			{
+				__u16 addr;     /* endereco do escravo */
+				__u16 flags;
+			}
+		\end{lstlisting}
+		{\sourcecitation{\textcite{Garg:SMA-2000}}}
+	\end{codelist}
+\end{stcode}
+\DisplayCode{d.listing}
+
+\end{Envs}
+
+\subsection{Declared Commands}
+\begin{Macros}{listofcodelist}
+	\begin{Syntax}%
+		\Macro{\listofcodelist}{}
+	\end{Syntax}
+This will create the 'List of ...' associated with the previous environment.
+\end{Macros}
+
+\iffulldoc
+
+\begin{Macros}{\DeclareNewFloat}
+	\begin{Syntax}%
+		\Macro{\DeclareNewFloat}{env-name,file-ext,listname,listofname}
+	\end{Syntax}
+A new float environment, named \Env{env-name}, will be created. Captions will be associated (numbered) as \textbf{\Arg{listname} num:}. Finally, an associated command \Macro{\listof...}{} will be defined, using \Arg{listofname} as a numberless \Macro{\chapter}{} title.
+
+\begin{stcode}[st=d.float]
+	\def\listingname{Listing}%
+	\def\listlistingname{List of Listings}%
+	\DeclareNewFloat{codelist}{lox}{\listingname}{\listlistingname}%%
+	%% after that, one can do as in the previous example
+ 	%%
+ 	%% the list of, will be created as
+ 	\listofcodelist
+\end{stcode}
+
+\DisplayCode[emph={codelist,listofcodelist}]{d.float}
+\end{Macros}
+\fi
+
+\iffulldoc
+\section{\tightul{ufrgscca-gen} Package (extended documentation)}
+Just two set of commands are defined, one is kind of a 'command factory' aimed at creating macros in a standard way, while the other helps create 'case like' commands.
+
+
+\subsection{Package Options}
+\begin{Options}
+	\DescribeOption{family} sets the family name, defaults to \Value{tcdef}.
+	\DescribeOption{group} sets the group name, defaults to \Value{gen}.
+\end{Options}
+
+\subsection{Defined Commands}
+\begin{Macros}{\cmdfactory,\factory,\tcgen@cdef}
+	\begin{Syntax}%
+		\Macro!{\cmdfactory}{\oarg{fam}\xarg{grp}\marg{cmd-list}}
+		\Macro!{\factory}{\oarg{fam}\xarg{grp}\marg{cmd}}
+		\Macro!{\tcgen@cdef}{\oarg{fam}\xarg{grp}\marg{cmd}\marg{new-val}}
+	\end{Syntax}
+	\Macro{\cmdfactory}{} is the actual command meant to be used (the other two are just auxiliary ones). \Arg{cmd-lst} is a csv list of commands. \Arg{fam} is the command \emph{family} (defaults to \emph{tcdef}) and \Arg{grp} is the family group (defaults to \emph{gen}).
+
+	The newly created commands will be based on \Macro{\tcgen@cdef}{} (the actual assigment command) having the form \Macro{\cmd}{new-val}, accepting a single mandatory value. Internally \Arg{new-val} will be stored in a macro likely named \Macro{\fam@grp@cmd}{}.
+
+    \Macro{\factory}{} is basically the same as \Macro{\cmdfactory}{}, whilst to create just one new command (it is the command called by \Macro{\cmdfactory}{} via \Macro{\forcsvlist}{}.)
+\end{Macros}
+
+\begin{Macros}{\mkswitch,\addcase}
+	\begin{Syntax}%
+		\Macro{\mkswitch}[default]{sw-name}
+		\Macro{\addcase}{sw-name,str-case,code}
+	\end{Syntax}
+	\Macro{mkswitch}{} will create a command, \Macro{\sw-name}{case}, which will behave like a switch/case in other programming languages. \Arg{default} is the code to be executed in case a \emph{switching value} isn't defined.
+	\Macro{\addcase}{} adds \emph{cases}, one by one, to the switch. \Arg{str-case} can be any \Macro{\csname}{} valid name. \Arg{code} is the code to be executed.
+
+	\begin{stcode}[st=d.switch]
+		\mkswitch[\gr@depcut]\gr@case@angle
+		\addcase\gr@case@angle{}{\def\gr@ANG{0}}
+		\addcase\gr@case@angle{A}{\def\gr@ANG{\gr@A}}
+		%%
+		%% actual use of the switch
+		\gr@case@angle{A}  % this will result in \def\gr@ANG{\gr@A}
+	\end{stcode}
+	\DisplayCode{d.switch}
+\end{Macros}
+\fi
+
+\iffulldoc
+\section{\tightul{ufrgscca-coord} Package (extended documentation)}
+This package defines a set of auxiliary commands meant to support the Professor coordinating students work.
+it will always pre-load the \Pack{longtable} and \Pack{ufrgscca-forms} packages. One can select the reports/forms to be generated using the package options or the command \Macro{\setreports}{keys}
+
+N.B. It might be also useful to use the commands defined at \autonameref{forms.commands}.
+
+\subsection{Package/Report Options}\label{ufrgscca-coord.options}
+\begin{Options}
+	\DescribeOption{calendar} Calendar for the period.
+	\DescribeOption{checklist} a students check list.
+	\DescribeOption{report} a student control report.
+	\DescribeOption{boards} exam board dates.
+	\DescribeOption{boarddates} exam board dates with highlighted dates.
+	\DescribeOption{studentlist} a simple student list.
+	\DescribeOption{revforms} per student reviews forms.
+	\DescribeOption{referral} per student referral letters.
+	\DescribeOption{cocertificate} per student coadvisor certificate letter (if any).
+\end{Options}
+
+\subsection{Defined Commands}
+The \emph{report document} to be created is composed of 2 main parts:
+\begin{enumerate}[tcc,arabic,miditemsep]
+	\item A global preamble, where one sets
+	\begin{enumerate}[tcc,alpha*,noitemsep]
+		\item the current semester, Course/TCC coordinator names, etc. ,
+		\item auxiliary data, like students \emph{check list} items and
+		\item students data.
+	\end{enumerate}
+    \item A 'final part' whereas one set which reports are to be generated.
+\end{enumerate}
+
+\subsubsection{Global Commands I}
+One can (should) use the commands listed at \autonameref{core-commands}, and these below:
+
+\begin{Macros}{\tcccalendareventdate,\boardstitleB,\boardsOBS,\TCCperiod}
+	\begin{Syntax}%
+		\Macro{\tcccalendareventdate}{date}
+		\Macro{\boardstitleB}{titleB}
+		\Macro{\boardsOBS}{obs}
+		\Macro{\TCCperiod}{semester}
+	\end{Syntax}
+Use \Macro{\tcccalendareventdate}{} to set the date of a given 'event' (the list of 'calendar events' are (might have been) set in the \emph{ufrgscca-ptBR-coord.def} or \emph{ufrgscca-en-coord.def} file). \Macro{boardstitleB}{} sets a 2nd title line for the 'boards schedule report'. \Macro{\boardsOBS}{} allows to add an observation (\Arg{obs}) for the 'boards schedule report', finally, \Macro{\TCCperiod} sets the current semester value.
+\end{Macros}
+
+
+\begin{Macros}{\checkdef}%,\checklist}
+	\begin{Syntax}%
+		\Macro{\checkdef}{checkLC,check-item,check-text}
+	\end{Syntax}
+Whereas one has a '4x5 alphabetic matrix', lines A to D, columns A to E. \Arg{checkLC} being one element of that matrix (from checkAA up to checkDE), \Arg{chek-item} is a free identifier (to be used with the \Macro{\checklist}{}), and \Arg{check-text} the text to appear in the 'check list report'.  So, for instance:
+
+\begin{stcode}[st=d.check]
+	\checkdef{checkAA}{tcc-part}{Rel. Parcial}        % this creates the 'check item' tcc-part and associates it with the AA position (first line, first column), display text 'Rel. Parcial'
+	\checkdef{checkBA}{partOK}{Aprov. Rel. Parcial}   % this creates 'partOK' and associates it with BA position
+
+	\checkdef{checkAB}{board}{Banca def.}             %
+	\checkdef{checkBB}{board-date}{Data defesa}       % 'board-date' is associated with the BB position
+
+	\checkdef{checkAE}{tcc-final}{TCC final}          %
+	\checkdef{checkBE}{approval}{Aprovação Correções} %
+	\checkdef{checkDE}{exam}{Em Exame}                % 'exam' (display 'Em Exame') is associated with the DE position
+	%%
+	%%
+	%% later on, one can use (inside a \NewStudent command)
+	\checklist{tcc-part,partOK,exam}                  % this will, for a given student, 'mark' the 'tcc-part', 'partOK' and 'exam' items.
+\end{stcode}
+
+
+\DisplayCode[emph={{tcc-part},partOK,board,board-date,{tcc-final},approval,exam}]{d.check}
+
+Be aware that, \Macro{\checkdef}{} can and should be only used at the preamble, whereas \Macro{\checklist}{} can only be used at the 'student data definition' context (meaning, inside the \Macro{\NewStudent}{} command).
+\end{Macros}
+
+
+\subsubsection{Global Commands II}\label{new-student}
+
+\begin{Macros}{\NewStudent}
+	\begin{Syntax}%
+		\Macro{\NewStudent}{studentname,code}
+	\end{Syntax}
+	This is the main command describing each \Arg{student} associated work, advisor and exam board. In \Arg{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \Macro{\begin{document}}{}), to describe a student work.
+	So, for instance:
+	\begin{stcode}[st=d.newstudent]
+\NewStudent{Artur}{
+	\student{last}{first}[m]
+
+	\studentinfo[]{243716}{email@somewhere}
+	\TCCtitle{work title}
+	\advisor{de Amorin}{Heraldo José}[m]
+	\coadvisor{Camargo Nardelli}{Vítor}[m]
+	\examinergrades{9.2}{8.5}{9.2}
+	\examiner{Götz}{Marcelo}[m]
+	\examinergrades{10}{9.5}{9.5}
+	\examiner{Comparsi Laranja}{Rafael Antônio}
+	\examinergrades{8.5}{8.5}{8}
+	\altexaminer{Ventura Bayan Henriques}{Renato}
+	%%
+	%%
+	\timeslot[Teams]{12/11}{15:30}
+
+	\studentFate[Dismiss]  %% FF or Dismiss ??
+}
+\end{stcode}
+
+\DisplayCode{d.newstudent}
+
+N.B. Internally, \Macro{\NewStudent}{} will create a command named \Macro{\studentname}{}, with a \emph{hook} named \Macro{\studentname.hook}{} (the dot is part of the hook's name).
+\end{Macros}
+
+\subsubsection{Student Specific Commands}\label{student-specific-commands}
+\begin{Macros}{\studentFate}
+	\begin{Syntax}%
+		\Macro{\studentFate}[fate]{}
+	\end{Syntax}
+This assigns the \Arg{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \Arg{fate} can be either C or D (in case a student got in exam), FF for those that haven't finished the work or 'Dismiss' for those that, for whatever reason, got dismissed. The default is 'do nothing' (no \Arg{fate} assigned)
+\end{Macros}
+
+\begin{Macros}{\studenttimeslot,\timeslot}
+	\begin{Syntax}%
+		\Macro{\studenttimeslot}[local]{date,time}
+		\Macro{\timeslot}[local]{date,time}
+	\end{Syntax}
+\Macro{\timeslot}{} is just an alias of \Macro{\studenttimeslot}{}. They set, for the Boards Report, the \Arg{local}, \Arg{date} and \Arg{time} in which a student will have its work presented. Those commands are meant to be used 'inside' a \Macro{\NewStudent}{} command.
+\end{Macros}
+
+
+
+\begin{Macros}{\studentTCCtitle,\TCCtitle,\studentremark}
+	\begin{Syntax}%
+		\Macro{\studentTCCtitle}{title}
+		\Macro{\TCCtitle}{title}
+		\Macro{\studentremark}{remark}
+	\end{Syntax}
+\end{Macros}
+\Macro{\TCCtitle}{} is also just an alias to \Macro{\studentTCCtitle}{} which just 'defines' the current student “work's title”. \Macro{\studentremark}{} just inserts a \Arg{remark}, which will appear in the \emph{report}'s report (\ldots report option).
+
+
+\begin{Macros}{\DistinctBoard,\DefaultBoard}
+	\begin{Syntax}%
+		\Macro{\DistinctBoard}{}
+		\Macro{\DefaultBoard}{}
+	\end{Syntax}
+Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \Macro{\DistinctBoard}{} after informing a student's name (via \Macro{\student}{}) and before informing its advisor name (via \Macro{\advisor}{}). For instance:
+
+	\begin{stcode}[st=d.distinct]
+	\NewStudent{Artur}{
+		\student{last}{first}[m]
+
+		\studentinfo[]{243716}{email@somewhere}
+		\TCCtitle{work title}
+		\DistinctBoard
+		\advisor{de Amorin}{Heraldo José}[m]
+		\examiner{Götz}{Marcelo}[m]                 % He will be the 1st examiner
+		\examiner{Comparsi Laranja}{Rafael Antônio} % the 2nd
+		\examiner{Ventura Bayan Henriques}{Renato}  % the 3rd
+	}
+\end{stcode}
+
+\DisplayCode[emph={DistinctBoard}]{d.distinct}
+\end{Macros}
+
+
+
+\begin{Macros}{\examinergrades}
+	\begin{Syntax}%
+		\Macro{\examinersgrades}{N1,N2,N3}
+	\end{Syntax}
+Quite obvious, this set the grades given by an examiner (the one defined by the 'last' \Macro{\examiner}{} before this.).
+\end{Macros}
+
+\begin{Macros}{\checklist}
+	\begin{Syntax}%
+		\Macro{\checklist}{csv-checkitems}
+	\end{Syntax}
+ \Arg{csv-checkitems} is a csv list of valid 'items' (the ones defined by \Macro{\checkdef}{}) and it will 'mark' (check) the corresponding items for a given student.
+\end{Macros}
+
+
+\begin{Macros}{\addtostudent}
+	\begin{Syntax}%
+		\Macro{\addtostudent}{student,code}
+	\end{Syntax}
+\Arg{code} will be appended to the command created with \Macro{\NewStudent}{}. \Arg{student} must be an already defined one, whilst \Arg{code} can be anything valid in the context of a \Macro{\NewStudent}{} as described in \autonameref{new-student}.
+\end{Macros}
+
+\begin{Macros}{\setreports}
+	\begin{Syntax}%
+		\Macro{\setreports}{rep-list}
+	\end{Syntax}
+	\Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
+\end{Macros}
+
+\begin{Macros}{\setstudentlist}
+	\begin{Syntax}%
+		\Macro{\setstudentlist}{listID,list}
+	\end{Syntax}
+This command will define/create a list named \Arg{listID} composed of a csv \Arg{list}~ of student names (as defined by \Macro{\Newstudent}{}).
+\end{Macros}
+
+\begin{Macros}{\tcreports}
+	\begin{Syntax}%
+		\Macro{\tcreports}[rep-list]{listID}
+	\end{Syntax}
+	This is the main command, to be used only once, at the end of the file. It will typeset the reports, as set by \Macro{\setreports}{}, using the student list identified by \Arg{listID}.
+    \Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
+\end{Macros}
+
+
+\section{\tightul{ufrgscca-ppc} Package (beta) (extended documentation)}
+This contains a set of auxiliary commands to keep track of many \emph{indicators} whilst writing  a \emph{PPC document} (which is going to be evaluated based on said \emph{indicators}, though the track of those \emph{indicators} themselves shall not appear in the final version of it). Keep in mind, when considering the use of it: “it works as is” but it hasn't being properly debugged, and it might change “as needed locally”.
+
+The packages \Pack{longtable}, \Pack{pdfcomment}, \Pack{mdframed} and \Pack{ufrgscca-curr} will always be pre-loaded.
+
+\subsection{Package Options}
+\begin{Options}
+\DescribeOption{showind} (for drafts) it will display the report indicators, of those indicators whose family wasn't set to hide.
+\DescribeOption{indlong} (for drafts) when displaying an indicator, the long version of them will be used.
+\DescribeOption{nocomments} (for drafts) comments (created with the command \Macro{\comment}) will be suppressed.
+\end{Options}
+
+\subsection{Defined Commands}
+\begin{Macros}{\maketitle}
+    \begin{Syntax}%
+        \Macro{\maketitle}{}
+    \end{Syntax}
+\Macro{\maketitle}{} is redefined for the specifics of a \emph{PPC document}.
+\end{Macros}
+
+The next few commands use a finite set of \Arg{status} which are a pre-defined list of:
+\begin{Values+}
+    \DescribeValue+{tbd} “To Be Done”%
+    \DescribeValue+{done} “Done”%
+    \DescribeValue+{review} “to be reviewed”%
+    \DescribeValue+{attention} Needs Attention%
+    \DescribeValue+{NSA} NSA (portuguese for “do not apply”)%
+    \DescribeValue+{noref} no references%
+    \DescribeValue+{EAD} EAD (portuguese for “distance learning”)%
+    \DescribeValue+{MDi} course ware (portuguese for “didactic material”) %
+    \DescribeValue+{DOCs} other DOCs%
+    \DescribeValue+{default} everything else%
+\end{Values+}
+
+\begin{Macros}{\declareindicator, \indicatorDesc, \indicatorText}
+	\begin{Syntax}%
+		\Macro{\declareindicator}<*+>[status]{fam,ID,text}
+		\Macro{\indicatorDesc}{longdesc,extra}
+		\Macro{\indicatorText}{text}
+	\end{Syntax}
+\Macro{\declareindicator}{} is the command to create/define a given “indicator”. \Arg{fam} set's its \emph{family} group, \Arg{ID} is the particular ID/term used to reference it (in a family of indicators), \Arg{text} is a short text describing it (it is the text displayed when using the \Macro{\indref}{} below.). \Macro{\indicatorDesc}{} adds a \Arg{longdesc} (long description) and \Arg{extra} (extra long description) to a defined \Macro{\declareindicator}{} (it will add those text fields to the “last declared one”). \Arg{longdesc} will also be displayed when using the \Macro{\indref}{} commands, but only if the \Option{indlong} option was used. The \Arg{extra} will only be used/displayed with the \Macro{\PrintIndicators}{} command. Finally, \Macro{indicatorText}{} adds a remark \Arg{text}, which will be also printed out when using  \Macro{\lstind}{} (akin of an explanation/remark field.)
+\end{Macros}
+
+\begin{Macros}{\indsetstatus, \indsetview, \indsethide}
+	\begin{Syntax}%
+	\Macro{\indsetstatus}[status]{fam,ID}
+	\Macro{\indsetview}{fam}
+	\Macro{\indsethide}{fam}
+\end{Syntax}
+\Macro{indsetstatus}{} sets the \Arg{status} of a given indicator defined by \Arg{fam} and \Arg{ID}. \Macro{\indsetview}{} and \Macro{indsethide} set the visibility (or not) of a given “family” of indicators, meaning, if those indicators are going to be visible or not (command \Macro{\indref}{}, for instance) if the option \Option{showind} is in use.
+\end{Macros}
+
+\begin{Macros}{\lstind}
+	\begin{Syntax}%
+	\Macro{\lstind}[seclvl1,seclvl2]{fam}
+\end{Syntax}
+\Macro{\lstind}{} will produce a sectioning like list, \Arg{seclvl1} defaults to \Macro{\section}{} and \Arg{seclvl2} defaults to \Macro{\subsection}{}, those indicators marked with an \textbf{*} (when creating them) will be issued with \Arg{seclvl1}, those marked with an \textbf{+} will be issued with \Arg{seclvl2}. The indicator's short text will be the sectioning title, whilst the indicator's 'text' (the one assigned with \Macro{indicatorText}{} will be the sectioning body.)
+\end{Macros}
+
+\begin{Macros}{\PrintIndicators}
+    \begin{Syntax}%
+        \Macro{\PrintIndicators}[fam]{}
+    \end{Syntax}
+    \Macro{\PrintIndicators}{} will produce a “list of contents” like list (with cross reference to all used \Macro{\indref}{} pages). It will either issue a list of all \Macro{\declareindicator}, or just the ones belonging to \Arg{fam}. \Arg{fam} can be a csv list of families. Each entry will be composed by indicator's “family”, “ID”, “short text”, “long text” and “extra description” but not the text issued with \Macro{\indicatorText}{}.
+\end{Macros}
+
+
+\begin{Macros}{\helpindicators}
+	\begin{Syntax}%
+	\Macro{\helpindicators}{}
+\end{Syntax}
+This will just prints, middle text, a quick “help text” listing the few main “indicators related command” (to help out those less \LaTeXe~ savvy writers.)
+\end{Macros}
+
+\begin{Macros}{ \ifshowind}
+    \begin{Syntax}%
+        \Macro{\ifshowind}{code-ifshow,code-ifnot}
+    \end{Syntax}
+Just a helping command, based on the package options. If the option \Option{showind} was used, \Arg{code-ifshow} is executed, otherwise \Arg{code-ifnot}.
+\end{Macros}
+
+
+\begin{Macros}{\textmark, \comment}
+	\begin{Syntax}%
+	\Macro{\textmark}[status]{text}
+	\Macro{\comment}[status]{title,text}
+\end{Syntax}
+Those are annotation, remark commands. The difference being that \Macro{\textmark}{} will just highlight the \Arg{text} (using \Arg{status} “format”), whilst \Macro{comment}{} will create a “remark box” (the same used when inserting an indicator's reference, commands below). N.B. \Macro{\comment}{} is suppressed unless the option \Option{showind} is used.
+\end{Macros}
+
+\begin{Macros}{\indref,\indreflst}
+	\begin{Syntax}%
+	\Macro{\indref}<*>[status]{fam,ID,comment}
+	\Macro{\indreflst}<*>[status]{fam,IDlist,comment}
+\end{Syntax}
+\Macro{\indref}{} creates a box (\Pack{TikZ} based \Pack{mdframed} ) of the indicator denoted by  \Arg{fam} and \Arg{ID}. The family and IDs will be issued as the “frame title”, the current indicator's \Arg{status} will be printed out (the whole box will be highlighted accordly), the short version of the indicator will be used (the long version will “appear” as a \Pack{pdfcomment}), finally any \Arg{comment} will be added to the text box. Each \Macro{\indref}{} box will have a link to the indicator's list (issued with \Macro{\PrintIndicators}{}). If the optional argument \Arg{status} is used, the indicator's status will be updated accordly. The star version also prints the indicator's long text.
+
+\Macro{\indreflst}{} behaves similarly, with the difference that \Arg{IDlist} is a csv list of IDs (same family), moreover, each item of said list can have the form either just \Arg{ID} or \Arg{status:ID}, in the last form, that ID will have its status updated, as well.
+\end{Macros}
+
+\begin{Macros}{\fancyquote}
+	\begin{Syntax}%
+	\Macro{\fancyquote}[vspc]{text,author,dateref}
+\end{Syntax}
+As quick “quote” hack, \Macro{\fancyquote}{} will typesets a \Arg{text} (small size, italic  text, in a minipage environment) followed by \Arg{author} and \Arg{dateref}. This is meant to be used after a \Macro{\chapter}{} or \Macro{\section}{} commands. \Arg{vspc} is to be used in case one has to adjust the vertical space between the sectioning command, and the quote one.
+\end{Macros}
+
+
+\begin{Macros}{\labelhack}
+    \begin{Syntax}%
+        \Macro{\labelhack}{text}
+    \end{Syntax}
+As the name implies, it is a hack. In some cases (which we haven't manage to found why/what), \Pack{hyperref} would fail miserably when using the \Macro{\nameref}{} (in some cases getting the sectioning correct, but not the name!). This just assures that \Macro{\nameref}{} will use the correct sectioning name in those cases.
+\begin{stcode}[st=d.labelhack]
+    \section{this section}\labelhack{this section}\label{somelabel}
+\end{stcode}
+\DisplayCode[codeprefix={For Example:},emph={labelhack}]{d.labelhack}
+\end{Macros}
+
+\begin{Macros}{\acrodef, \acro,\acrol,\acrols,\acrosl,\acrofoot,\printacrolist}
+    \begin{Syntax}%
+        \Macro{\acrodef}{acroID}{acronym}{long}
+        \Macro{\acro}{acroID}
+        \Macro{\acrol}{acroID}
+        \Macro{\acrols}{acroID}
+        \Macro{\acrosl}{acroID}
+        \Macro{\acrofoot}{acroID}
+        \Macro{\printacrolist}[enumkeys]{widest}
+    \end{Syntax}
+Those are yet another acronym hack. \Macro{\acrodef}{} “creates” an acronym, identified by \Arg{acroID}, whose short (acronym) version is \Arg{acronym} and the long version in \Arg{long}. \Macro{\acro}{} just typesets the \Arg{acronym}, \Macro{\acrol}{} the \Arg{long} version.
+\Macro{\acrols}{} typesets the the long version followed by the short (using a comma as separator).
+\Macro{\acrosl}{} prints the short version first. Finally, \Macro{\acrofoot}{} typesets the short version in text and the long as a footnote. \Macro{\printacrolist}{} creates a description list based on the \Env{listofabbrv} environment.
+\end{Macros}
+
+\subsection{Environments}
+\begin{Envs}{ppc.quote}
+    \begin{Syntax}%
+    \Macro{\begin{ppc.quote}}{} \ldots \Macro{\end{ppc.quote}}{}
+    \end{Syntax}
+\end{Envs}
+This is just a tailored “quote” environment, using almost all page width, just in a smaller font size.
+
+\section{\tightul{ufrgscca-curr} Package (beta) (extended documentation)}
+This package is mostly in beta state, some parts of it should be identified as  alpha state. Those are mostly rushed out adaptations of other “solutions at hand”. Literally, try to use it at your own peril.
+
+The background of it: To have the ability to “describe” (store the information in a “structured way”) an University Course curricula and later on have the possibility to presented that same information in many different ways (including a dependence graph). To an extended, most of it is done (and working), but hopeless lacking more testing and debugging.
+
+Why is it included in the bundle? Well, it is needed, in part for completeness, by \Pack{ufrgscca-ppc} which is “locally important”.
+
+\subsection{Commands Creating the many lists}
+The following commands “describe” a curricula, whereas one is a sequence of semesters \Arg{semID}, each semester is composed by a list of classes, \Arg{classID}, and each class has a list of dependencies, \Arg{classID} as \Macro{\depdef}{}. All those lists are stored as csv lists, so “processing them” can be systematized.
+
+\begin{Macros}{\topicdef,\defaulttopic}
+\begin{Syntax}%
+    \Macro{\topicdef}[color]{topicID,text}
+    \Macro{\defaulttopic}{topicID}
+\end{Syntax}
+\Macro{\topicdef}{} defines \Arg{topicID} (to be used when describing a class) and associates a \Arg{text} description and a \Arg{color} (for topic highlight). \Macro{\defaulttopic}{} sets the default one (if not explicitly given when describing a class).
+\end{Macros}
+
+
+\begin{Macros}{\semdef}
+    \begin{Syntax}%
+        \Macro!{\semdef}{\oarg{pos}\xarg{cod}\marg{semID}}
+    \end{Syntax}
+This “defines” a semester, \Arg{semID}, and associates with it a \Arg{cod} (for reference) and a \Arg{pos} (to be used by, for instance, \Pack{ufrgscca-curr-graph}.)
+\end{Macros}
+
+
+\begin{Macros}{\classdef,\setclass,\classremark}
+    \begin{Syntax}%
+        \Macro!{\classdef}{\oarg{topicID}\xarg{pos}\marg{classID}\marg{cred}\marg{typ}\marg{name}\marg{desc}}
+        \Macro{\setclass}{classID}
+        \Macro{\classremark}{remark}
+    \end{Syntax}
+\Macro{\classdef}{} defines a class, associating with a \Arg{topicID}, \Arg{pos} (for \Pack{ufrgscca-curr-graph}), \Arg{classID}, number and type, \Arg{typ}, of credits, \Arg{cred}, a long name, \Arg{name} and description, \Arg{desc}. \Macro{\classremark}{} adds an extra remark to it.
+
+The following commands always refer to the “last defined” \Macro{\classdef}{} unless \Macro{\setclass}{} is used, which changes the “current class” for the following commands.
+\end{Macros}
+
+\begin{Macros}{\depdef,\altdef}
+    \begin{Syntax}%
+        \Macro!{\depdef}{\oarg{topicID}\xarg{pos}\marg{classID}}
+        \Macro{\altdef}{}
+    \end{Syntax}
+\Macro{\depdef}{} inserts/creates a “class dependency” list. The highlight color (if used) is usually defined by the current class topic (informing \Arg{topicID} changes the highlight color). \Arg{pos} is used by \Pack{ufrgscca-curr-graph} to determine the incident line angle.
+
+\Macro{\altdef}{} defines/start and alternate dependency list.
+\end{Macros}
+
+\begin{Macros}{\bibdef}
+    \begin{Syntax}%
+        \Macro{\bibdef}[type]{text}
+    \end{Syntax}
+This is used to set a list of bibliographies, one per issued command. The default \Arg{type} value is just \emph{bib}, possible values (as understood by \Pack{ufrgscca-curr-tab}) are \emph{bib}, \emph{basic} and \emph{comp}.
+\end{Macros}
+
+\subsection{List Processing Commands}
+Those are the main loop commands that go through the lists.
+\begin{Macros}{\LstClass,\LstDep,\LstTopic}
+    \begin{Syntax}
+        \Macro{\LstClass}[cmd]{semID}
+        \Macro!{\LstDep}{\oarg{cmd}\xarg{ang}\marg{classID}}
+        \Macro{\LstTopic}[cmd]{topicID}
+    \end{Syntax}
+\Arg{cmd} can be any command accepting a single argument. It will, in fact, be the one defining the way the data will be, effectively, be presented.
+
+\Macro{\LstClass}{} will process \Arg{cmd} over all classes associated with \Arg{semID}.
+
+\Macro{\LstDep}{} will process \Arg{cmd} over all dependency classes associated with \Arg{classID}.
+
+\Macro{\LstTopic}{} will process \Arg{cmd} over all classes associated with \Arg{topicID}.
+
+\end{Macros}
+
+\section{\tightul{ufrgscca-curr-tab} Package (alpha) (extended documentation)}
+This is truly a work in progress (based on some old ideas), not really tested. It shall be revised and, mostly sure, it will be changed (no compatibility guaranties).  It always pre-load \Pack{ufrgscca-curr} and \Pack{longtable}.
+
+\subsection{Tabular Presentation Commands}
+\begin{Macros}{\TabEtp,\TabTopic}
+    \begin{Syntax}%
+        \Macro!{\TabEtp}{\xarg{type}\oarg{sectioning}c\marg{semID}}
+        \Macro{\TabTopic}[type]{topicID}
+    \end{Syntax}
+\Macro{\TabEtp}{} will construct a longtable with all classes associated with \Arg{semID} (including it's dependencies and bibliography).
+
+\Macro{\TabTopic}{} will construct a longtable with all classes associated with \Arg{topicID}.
+
+\end{Macros}
+
+\section{\tightul{ufrgscca-curr-graph} Package (alpha) (extended documentation)}
+
+\subsection{Graph Presentation Command}
+Ironically, this is the “oldest” of the \Pack{-curr-} packages, but it is the less tested one, and the one whose code is more prone to fail in unexpected ways, be advised: do not try to use it, unless you know the internal code well. It always pre-load \Pack{ufrgscca-curr} (N.B. it also depends on \Pack{tikz}).
+
+\begin{Macros}{\GraphSem}
+    \begin{Syntax}%
+        \Macro{\GraphSem}[type]{semID}
+    \end{Syntax}
+It will create a dependency graph for a given \Arg{semId}. N.B. to start with, it is highly dependent on the semester sequence, one shall start with first semester and go from there.
+\end{Macros}
+
+\fi
+
+
+
+\end{document}

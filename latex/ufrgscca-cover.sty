@@ -1,0 +1,340 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-cover}
+\def\tc@tmp@altpackname{ufrgsccacover}
+\def\tc@tmp@packdesc{UFRGS/CCA cover commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+\DeclareKeys[ufrgscca-cover]{
+    report.usage = load,
+    report.if = tcif@report,
+    internship.usage = load,
+	internship.if = tcif@internship
+}
+\ProcessKeyOptions[ufrgscca-cover]\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% student commands%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cmdfactory<cover>{course}
+\cmdfactory<cover>{courseacronym}%
+\cmdfactory<cover>{graduationtitle}
+\cmdfactory<cover>{university,universityacronym,universitydivision}
+\cmdfactory<cover>{divisiongradcouncil}%
+\cmdfactory<cover>{department,classcode,classname,subject}%
+\cmdfactory<cover>{secretaryacronym,secdivisionacronym}%
+\cmdfactory<cover>{advisorname,coadvisorname}
+\cmdfactory<cover>{examinername}%
+\cmdfactory<cover>{reportspecificinfo,approvalspecificinfo}%
+\cmdfactory<cover>{advisorwidth}
+\cmdfactory<cover>{profname,coprofname}%
+%
+\advisorwidth{0.55\textwidth}%
+%
+\NewDocumentCommand{\class}{mm}{\classcode{#1}\classname{#2}}%
+%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%%%
+%%% cover pages and related macros%
+%%%%
+%%%%%%%%%%%%%%%%%%%%%%%
+\newlength{\tc@formwinvoffset}%
+\setlength{\tc@formwinvoffset}{24mm}%
+\NewDocumentCommand\tc@formtopbox{O{}+m+m}{%%
+	\begin{center}%%
+		\noindent%%
+		\parbox[t]{\textwidth}{%%
+      \centering%%
+      \vbox to \tc@formwinvoffset{%%
+        \tccover@covertopinfo%%
+				{\sc #2}%
+      }%%
+    }%
+
+		{\bf #3}\@ifundefined{#1}{}{\footnote[1]{\csname #1\endcsname}}%%
+	\end{center}%%
+}%
+
+
+%
+\NewDocumentCommand{\tccover@covertopinfo}{}{%%
+        \@ifundefined{tcdef@cover@university}{}{\MakeUppercase{\tcdef@cover@university}\\}%
+        \@ifundefined{tcdef@cover@universitydivision}{}{\MakeUppercase{\tcdef@cover@universitydivision}\\}%
+        \@ifundefined{tcdef@cover@course}{}{\MakeUppercase{\tcdef@cover@course}\\}%
+        \@ifundefined{tcdef@cover@department}{}{\MakeUppercase{\tcdef@cover@department}\\}%%
+        \@ifundefined{tcdef@cover@classname}{}{\MakeUppercase{\tcdef@cover@classcode\ --\ \tcdef@cover@classname}\\}%
+        \@ifundefined{tcdef@cover@subject}{}{\MakeUppercase{\tcdef@cover@subject}}%
+}%
+
+
+\NewDocumentCommand{\tccover@coveradvisorinfo}{}{%%
+        \@ifundefined{tc@studentA@advisor}{}{\vfill{\scshape\tcdef@cover@advisorname}:\\\null\hfill\tc@studentA@advisor}%
+        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\tcdef@core@coadvisorname}:\\\null\hfill\tc@studentA@coadvisor}%
+}%
+%
+\NewDocumentCommand{\tccover@reportadvisorinfo}{}{%%
+        \@ifundefined{tc@studentA@advisor}{}{\vfill{\scshape\iftcif@internship\tcdef@cover@advisorname\else\tcdef@cover@profname\fi}:\\\null\hfill\tc@studentA@advisor}%
+        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\iftcif@internship\tcdef@core@coadvisorname\else\tcdef@cover@coprofname\fi}:\\\null\hfill\tc@studentA@coadvisor}%
+}%
+%
+
+%%%%%%%%%%%%%%%%%%%
+\let\tc@org@maketitle\maketitle
+\RenewDocumentCommand{\maketitle}{}{\coverpages}%
+
+\NewDocumentCommand{\coverpages}{}{%%
+	\thecoverpage%that´s the first page%
+	\iftcif@report
+	\else
+      \thetitlepage%that´s the second page (for tcc)%
+      \theapprovalpage%that´s the third page (for tcc)%
+	\fi
+}%
+%
+
+%%%%%%%%%
+%%%
+%% 1st cover page%
+%%%
+%%%%%%%%%
+%%
+\newlength{\tc@coverwinwidth}\setlength{\tc@coverwinwidth}{95mm}%%
+\newlength{\tc@coverwinheight}\setlength{\tc@coverwinheight}{64mm}%%
+\newlength{\tc@coverwinvoffset}\setlength{\tc@coverwinvoffset}{112mm}%%
+\NewDocumentCommand{\location}{mm}{%%
+        \gdef\tc@city{#1}%%
+        \gdef\tc@state{#2}%%
+}%%
+
+
+\NewDocumentCommand{\thecoverpage}{}{%%
+  \begin{titlepage}%
+    \noindent\tc@covertopbox%
+    \vfill%
+	  \iftcif@report{%%
+		\@ifundefined{tc@studentA@advisor}{}{%%
+          \hspace*{\fill}\parbox[b]{\tcdef@cover@advisorwidth}{\tccover@reportadvisorinfo}%
+		  \vfill%
+        }%%
+	  }%%
+     \else\fi
+    \centerline{\tc@city}%
+	  \centerline{\tc@date}%
+  \end{titlepage}%%
+	\tc@pagebreak
+}%
+%
+%
+%%%%%%%%%
+%%%
+%% 2nd cover page (title page)%
+%%%
+%%%%%%%%%
+\NewDocumentCommand{\thetitlepage}{}{%%
+	\begin{titlepage}%
+    \noindent\tc@covertopbox%
+    \vfill%
+    \@ifundefined{tcdef@cover@reportspecificinfo}{}{%
+      \hspace*{\fill}\makebox[.55\textwidth][l]{%%
+        \parbox[b]{8.5cm}{\tcdef@cover@reportspecificinfo}%%
+      }%
+      \vfill%
+    }%
+    \@ifundefined{tc@studentA@advisor}{}{%
+      \hspace*{\fill}\parbox[b]{\tcdef@cover@advisorwidth}{%%
+        \tccover@coveradvisorinfo%
+      }%
+      \vfill%
+    }%
+    \centerline{\tc@city}%
+	  \centerline{\tc@date}%
+	\end{titlepage}%
+	\tc@pagebreak
+}%
+%
+%
+%
+\NewDocumentCommand{\tccover@studentdesc}{m}{\@ifundefined{#1}{}{\MakeUppercase{\textbf{\csname #1\endcsname\ - \csname #1ID\endcsname}}\\}}
+%
+
+
+\NewDocumentCommand\tc@covertopbox{}{%%
+  \parbox[t]{\textwidth}{%%
+    \centering%%
+    \vbox to \tc@coverwinvoffset{%%
+      \tccover@covertopinfo\vfill\tc@winbox%
+    }%
+  }%
+}%
+
+
+ \NewDocumentCommand\tc@winbox{}{%%
+       %\fbox{%
+     \parbox[b]{\tc@coverwinwidth}{%%
+       \centering\vbox to \tc@coverwinheight{%%
+         \vspace*{\fill}%
+         \iftcif@report%
+  		   \tccover@studentdesc{tc@studentA}%
+           \tccover@studentdesc{tc@studentB}%
+           \tccover@studentdesc{tc@studentC}%
+           \tccover@studentdesc{tc@studentD}%%
+         \else%
+           \tccover@studentdesc{tc@studentA}%%
+         \fi%
+         \vspace{\stretch{4}}%
+         {\large\MakeUppercase{\textbf{\@title}}\par}%
+         \vfill%
+       }%%
+	   %}%%
+       }%%
+ }%
+
+
+
+%
+%%%%%%%%%
+%%%
+%% 3rd cover page (approval page)%
+%%%
+%%%%%%%%%
+\NewDocumentCommand{\theapprovalpage}{}{%%
+	\begin{center}%
+    \noindent\tc@covertopbox%
+    \vfill%
+    \@ifundefined{tcdef@cover@approvalspecificinfo}{}{%
+      \hspace*{\fill}\makebox[.55\textwidth][l]{%%
+        \parbox[b]{8.5cm}{\tcdef@cover@approvalspecificinfo}%%
+      }%
+      \vfill%
+    }%
+    \@ifundefined{tc@studentA@advisor}{}{%
+      \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
+        \tccover@approvalpageadvisorinfo%
+      }%
+      \vfill%
+    }%
+	\@ifundefined{tc@studentA@examinerA}{}{%
+		\hspace*{\fill}\parbox[b]{1.0\textwidth}{\tcdef@cover@examinername:}%
+		\vfill%
+    \hspace*{\fill}\parbox[b]{.90\textwidth}{%%
+      \tccover@approvalpageexaminerinfo%
+    }%
+    \vfill%
+  }%
+  \@ifundefined{tcdef@core@coursecoord}{}{%
+    \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
+      \tccover@approvalpagecoordinfo%
+    }%
+    \vfill%
+  }%
+  \vfill%
+  \hfill\tc@city, \tc@date
+	\end{center}%
+	\tc@pagebreak
+}%
+%
+\NewDocumentCommand{\tccover@approvalpageadvisorinfo}{}{%%
+  \@ifundefined{tc@studentA@advisor}{}{%%
+		\vfill%
+		\tcdef@cover@advisorname: \hrulefill\\%
+		\tc@studentA@advisor, \tc@studentA@advisorinstitution\\%
+		\tc@studentA@advisortitleinfo %
+	}%
+}%
+\NewDocumentCommand{\tccover@@aprovalexaminerinfo}{m}{
+  \@ifundefined{#1}{}{%%
+  	\csname #1\endcsname, \csname #1institution\endcsname\\%
+		\csname #1titleinfo\endcsname\\%
+	}%
+}%
+\NewDocumentCommand{\tccover@approvalpageexaminerinfo}{}{%%
+		\vfill%
+		\tccover@@aprovalexaminerinfo{tc@studentA@examinerA}%
+
+		\tccover@@aprovalexaminerinfo{tc@studentA@examinerB}%
+
+		\tccover@@aprovalexaminerinfo{tc@studentA@examinerC}%
+
+		\tccover@@aprovalexaminerinfo{tc@studentA@examinerD}%
+
+		\tccover@@aprovalexaminerinfo{tc@studentA@examinerE}%
+}%
+%
+
+
+\NewDocumentCommand{\tccover@approvalpagecoordinfo}{}{%%
+  \@ifundefined{tcdef@core@coursecoord}{}{%%
+		\vfill%
+		\hrulefill\\%
+		\tcdef@core@coursecoord\\%
+		\tcdef@core@coursecoordtitle\\%
+		\tcdef@cover@course%
+	}%
+}%
+%
+
+
+

@@ -1,0 +1,166 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-curr-tab}
+\def\tc@tmp@altpackname{ufrgsccacurrtab}
+\def\tc@tmp@packdesc{UFRGS/CCA curricula tabular commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0alpha}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+\RequirePackage{longtable}
+\RequirePackage{ufrgscca-curr}
+
+\NewDocumentCommand\TabClass{m}{%
+ & #1 & \csname gr@class:#1.cred\endcsname & \csname gr@class:#1.typ\endcsname & \multicolumn{2}{J{11cm}}{\csname gr@class:#1.nam\endcsname}\\*%
+    \edef\gr@disc{#1}%
+		\ifcsdef{gr@class:#1.depA}{%
+			& & & & %
+   		& \def\gr@tab{\ }%
+			\LstDep[\TabDepX]<A>{#1}\\*%
+    }{}%
+		\ifcsdef{gr@class:#1.depB}{%
+			& & & & OU\\*%
+			& & & & %
+   		& \def\gr@tab{\ }%
+			\LstDep[\TabDepX]<B>{#1}\\*%
+		}{}%
+		\ifcsdef{gr@class:#1.depC}{%
+			& & & & OU\\*%
+			& & & & %
+   		& \def\gr@tab{\ }%
+			\LstDep[\TabDepX]<C>{#1}\\*%
+		}{}%
+		\ifshowind{\ifcsundef{gr@class:#1.remark}%
+		    {}{&       &       &  & \multicolumn{2}{l}{{\larger[2]{\color{red} \csname gr@class:#1.remark\endcsname}}}\\*}}{}%
+\xdef\gr@topic{\csname gr@class:#1.topic\endcsname}%
+&       &       &   & \multicolumn{2}{J{11cm}}{{\sc\color{\csname gr@topic:\gr@topic.color\endcsname} \csname gr@topic:\gr@topic.txt\endcsname}}\\*
+&       &       &  & \multicolumn{2}{l}{{\smaller{\sc Súmula: }}}\\*%
+&       &       &  & & {{\smaller\csname gr@class:#1.desc\endcsname}}\\ %
+\ifcsundef{gr@class:#1.bibA}{}{&       &       &  & \multicolumn{2}{l}{{\smaller{\sc Bibliografia Básica Essencial: }}}\\* &       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibA\endcsname}\\*}%
+\ifcsundef{gr@class:#1.bibB}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibB\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibC}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibC\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibD}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibD\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibE}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibE\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibF}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibF\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibG}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibG\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibH}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibH\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibI}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibI\endcsname}\\}%
+\ifcsundef{gr@class:#1.bibJ}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.bibJ\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicA}{}{&       &       &  & \multicolumn{2}{l}{{\smaller{\sc Bibliografia Básica: }}}\\* &       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicA\endcsname}\\*}%
+\ifcsundef{gr@class:#1.basicB}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicB\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicC}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicC\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicD}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicD\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicE}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicE\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicF}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicF\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicG}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicG\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicH}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicH\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicI}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicI\endcsname}\\}%
+\ifcsundef{gr@class:#1.basicJ}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.basicJ\endcsname}\\}%
+\ifcsundef{gr@class:#1.compA}{}{&       &       &  & \multicolumn{2}{l}{{\smaller{\sc Bibliografia Complementar: }}}\\* &       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compA\endcsname}\\*}%
+\ifcsundef{gr@class:#1.compB}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compB\endcsname}\\}%
+\ifcsundef{gr@class:#1.compC}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compC\endcsname}\\}%
+\ifcsundef{gr@class:#1.compD}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compD\endcsname}\\}%
+\ifcsundef{gr@class:#1.compE}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compE\endcsname}\\}%
+\ifcsundef{gr@class:#1.compF}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compF\endcsname}\\}%
+\ifcsundef{gr@class:#1.compG}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compG\endcsname}\\}%
+\ifcsundef{gr@class:#1.compH}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compH\endcsname}\\}%
+\ifcsundef{gr@class:#1.compI}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compI\endcsname}\\}%
+\ifcsundef{gr@class:#1.compJ}{}{&       &       &  & &{\smaller \textopenbullet\ \csname gr@class:#1.compJ\endcsname}\\}%
+ \\[-1.5ex]%
+}
+
+
+%%%gr@class:\gr@disc.bib\Alph{gr@class:\gr@disc.bibcnt}
+
+\NewDocumentCommand\TabDepX{m}{%
+  {
+    \ifshowind{\ifcsundef{gr@class:#1.remark}{}{\color{red}\bfseries}}{}
+     \gr@tab\    #1 (\csname gr@class:#1.et\endcsname) %
+	}
+	\def\gr@tab{E}%
+}
+
+\NewDocumentCommand\TabDep{m}{%
+    & & & & #1 (\csname gr@class:#1.et\endcsname)\\[-1pt]%
+}
+
+\NewDocumentCommand\TabEtp{D<>{ob}O{\notoc\section}m}{%
+    #2{Etapa #3}%
+    \begin{longtable}{l@{\,}l@{\ }c@{\ }c@{\ }J{5mm}@{}J{10.7cm}}%
+        \LstClass[\TabClass]{#3}%
+%        & \textbf{Total} & \textbf{\arabic{gr@cred#1}} & \textbf{#1}\\%
+    \end{longtable}%
+}
+
+\NewDocumentCommand\@TabTopic{m}{%
+ #1 & \csname gr@class:#1.cred\endcsname & \csname gr@class:#1.typ\endcsname & \csname gr@class:#1.nam\endcsname & (\csname gr@class:#1.et\endcsname)\\%
+}
+
+\NewDocumentCommand\TabTopic{O{ob}m}{%
+
+\noindent\csname gr@topic:#2.txt\endcsname
+\@ifundefined{gr@topic:#2}{\\\textbf{--No Classes Associated--}}{
+    \begin{longtable}{l@{\,}l@{\ }c@{\ }J{11.2cm}@{\,}l}\smaller%
+        \LstTopic[\@TabTopic]{#2}%
+    \end{longtable}%
+		}
+}
+
+

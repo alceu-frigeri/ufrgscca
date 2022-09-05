@@ -1,0 +1,127 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-curr-graph}
+\def\tc@tmp@altpackname{tccurrgraph}
+\def\tc@tmp@packdesc{UFRGS/CCA graph curricula commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0alpha}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+
+\RequirePackage{ufrgscca-curr}
+
+
+%%%%%%%%%%%
+%%%%%%%%%%%
+%%%%%%%%%%%
+
+\NewDocumentEnvironment{tikzGraphSem}{O{4.2:2.1}D<>{11.5:-18.5}}{%
+    \StrCut{#1}{:}{\gr@dX}{\gr@dY}
+    \StrCut{#2}{:}{\gr@xX}{\gr@yY}
+    \def\gr@Xa{0}\def\gr@Xb{\gr@xX*\gr@dX}
+    \def\gr@Ya{0}\def\gr@Yb{\gr@yY*\gr@dY}
+    \begin{tikzpicture}[%
+        disc/.style={%
+          ellipse split, double, draw, line width=2pt,%
+          every text node part/.style={font=\small\bfseries},%
+          every lower node part/.style={font=\large\bfseries,color=blue}},%
+        dep/.style={->,dotted,line width=3pt}]%
+      \begin{scope}\clip(\gr@Xa,\gr@Ya) -- (\gr@Xa,\gr@Yb) -- (\gr@Xb,\gr@Yb) -- (\gr@Xb,\gr@Ya);%
+         \filldraw[color=red](5.5*\gr@dX,-0.25*\gr@dY)node{\Huge\textbf{\GraphTitle}};%
+}{%
+      \end{scope}%
+    \end{tikzpicture}%
+}
+
+\NewDocumentCommand\GraphSem{O{ob}m}{%
+    \LstClass[\GraphClass]{#2}%
+    \draw (\csname gr@etidx:\csname gr@et:\gr@sem.idx\endcsname.pos\endcsname*\gr@dX-0.5*\gr@dX,-\gr@dY) node[disc](Et. #2){Etapa #2 \nodepart{lower} \arabic{gr@cred#1},#1};%
+}
+
+\NewDocumentCommand\GraphClass{m}{%
+    \edef\gr@topic{\csname gr@class:#1.topic\endcsname}%
+    \edef\gr@color{\csname gr@topic:\gr@topic.color\endcsname}%
+    \draw[\gr@color] (\csname gr@etidx:\csname gr@et:\gr@sem.idx\endcsname.pos\endcsname*\gr@dX-0.5*\gr@dX,\csname gr@class:#1.pos\endcsname*\gr@dY-1.25*\gr@dY) node[disc](#1){#1 \nodepart{lower} \csname gr@class:#1.cred\endcsname,\csname gr@class:#1.typ\endcsname};%
+    \LstDep[\GraphDep]{#1}%
+}
+
+\NewDocumentCommand\GraphDep{m}{%
+      \edef\gr@topic{\csname gr@class:\gr@disc.dep\gr@depSeq:#1.topic\endcsname}%
+      \xdef\gr@DepColor{\csname gr@topic:\gr@topic.color\endcsname}%
+       %\xdef\gr@DepColor{\csname gr@class:\gr@disc.dep\gr@depSeq:#1.topic\endcsname}%
+       \def\gr@angOUT{\gr@ANG} \def\gr@angIN{180-\gr@ANG}%
+       \xdef\gr@deppos{\csname gr@class:\gr@disc.dep\gr@depSeq:#1.pos\endcsname}%
+       \def\gr@depcut{\StrCut{\gr@deppos}{:}{\gr@angOUT}{\gr@ANG}}%
+       \gr@case@angle{\gr@deppos}%
+      \path[dep,\gr@DepColor] (#1)edge[out=\gr@angOUT,in=\gr@angIN] (\gr@disc);%
+}
+
+\def\gr@Z{0} \def\gr@A{30}  \def\gr@B{60}  \def\gr@C{80}
+
+\mkswitch[\gr@depcut]\gr@case@angle
+\addcase\gr@case@angle{}{\def\gr@ANG{0}}
+\addcase\gr@case@angle{A}{\def\gr@ANG{\gr@A}}
+\addcase\gr@case@angle{B}{\def\gr@ANG{\gr@B}}
+\addcase\gr@case@angle{C}{\def\gr@ANG{\gr@C}}
+\addcase\gr@case@angle{-A}{\def\gr@ANG{-\gr@A}}
+\addcase\gr@case@angle{-B}{\def\gr@ANG{-\gr@B}}
+\addcase\gr@case@angle{-C}{\def\gr@ANG{-\gr@C}}
+
+

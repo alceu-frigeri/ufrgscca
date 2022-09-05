@@ -1,0 +1,152 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-gen}
+\def\tc@tmp@altpackname{ufrgsccagen}
+\def\tc@tmp@packdesc{UFRGS/CCA generic/miscellany commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+\def\tcgen@fam{tcdef}
+\def\tcgen@factgrp{gen}%
+%
+
+\DeclareKeys[ufrgscca-gen]{
+    family.usage = load,
+	family.store = \tcgen@fam,
+
+    group.usage = load,
+	group.store = \tcgen@factgrp,
+}
+\ProcessKeyOptions[ufrgscca-gen]\relax
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% \tcgen@cdef[fam]{#1}{#2} => \gdef\<fam>@#1{#2}%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+\NewDocumentCommand{\tcgen@cdef}{O{\tcgen@fam}D<>{\tcgen@factgrp} m +m}{%
+    \expandafter\gdef\csname #1@#2@#3\endcsname{#4}%
+}%
+%
+\NewDocumentCommand{\factory}{O{\tcgen@fam}D<>{\tcgen@factgrp}m}{%
+				\expandafter\long\expandafter\xdef\csname #3\endcsname##1{\noexpand\tcgen@cdef[#1]<#2>{#3}{##1}}%
+				%\csname #3\endcsname{-default-}
+				\expandafter\def\csname #3.fam\endcsname{#1}%
+				\@ifundefined{#3undef}{}{\expandafter\gdef\csname tc@factdup@#3\endcsname{}}
+         \expandafter\def\csname #3undef\endcsname{\expandafter\let\csname #1@#2@#3\endcsname\undefined}%
+}%
+\NewDocumentCommand{\cmdfactory}{O{\tcgen@fam}D<>{\tcgen@factgrp}m}{%
+		\forcsvlist{\factory[#1]<#2>}{#3}%
+		\ifcsundef{tc@factgrplist@#2}{%
+		    \ifcsundef{tc@factgrplist}{\csgdef{tc@factgrplist}{#2}}{\csgappto{tc@factgrplist}{,#2}}%
+		    \csgdef{tc@factgrplist@#2}{#3}%
+		}{\csgappto{tc@factgrplist@#2}{,#3}}%
+}%
+%
+%
+% 'debug' auxiliary commands (mainly to find out dups, defined/undefined ones)
+%
+%
+\NewDocumentCommand{\tcgen@factcmd@prt}{m}{\@ifundefined{tc@factdup@#1}{#1}{#1 (dup)}
+\expandafter\@ifundefined\expandafter{\csname #1.fam\endcsname @#1}{\textbf{ NOT Defined} \\}{ {\csname\csname #1.fam\endcsname @#1\endcsname} \\}}
+\NewDocumentCommand{\tcgen@factcmd@def}{m}{\csname #1.fam\endcsname @\@ifundefined{tc@factdup@#1}{#1}{#1 (dup)} %
+	\expandafter\@ifundefined\expandafter{\csname #1.fam\endcsname @#1}{\textbf{ NOT Defined} \\}{ {\slshape Defined} \\} }
+%\NewDocumentCommand{\tcgen@factcmd@prt}{m}{{#1}  \\}
+%\NewDocumentCommand{\tcgen@factcmd@def}{m}{{#1} :: \@ifundefined{tc@#1}{-- \textbf{NOT Defined} --\\}{Defined \\} }
+\NewDocumentCommand{\tcgen@factgrp@prt}{m}{\tightul{#1}  \\%
+    		\expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tcgen@do\expandafter\expandafter\expandafter{\csname tc@factgrplist@#1\endcsname}%
+}
+\NewDocumentCommand{\listfactorycmds}{sO{}}{%
+    \IfBooleanTF{#1}{\def\tcgen@do##1{\tcgen@factcmd@def{##1}}}{\def\tcgen@do##1{\tcgen@factcmd@prt{##1}}}
+    \ifblank{#2}{%
+		    \ifcsundef{tc@factgrplist}{Factories Groups: \textbf{empty list}\\ }{%
+				     Factories:  \\ %
+				    \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tcgen@factgrp@prt\expandafter\expandafter\expandafter{\csname tc@factgrplist\endcsname}%
+						%
+				}
+		}{%
+		}%
+}
+
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%
+%  \mkswitch creates a switch (somewhat 'like' a programming switch)
+%    a 'default case' is associated with the switch when creating it
+%    one can add many 'cases' later on.
+%    one can have any code associated with a 'switch/case'
+%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+\NewDocumentCommand\mkswitch{O{}m}{%
+    \NewDocumentCommand{#2}{m}{%
+        \ifcsname\string#2@case@##1\endcsname\csname\string#2@case@##1\endcsname\else#1\fi%
+    }%
+}%
+\NewDocumentCommand{\addcase}{mmm}{\expandafter\def\csname\string#1@case@#2\endcsname{#3}}%
+\let\addswitchcase\addcase
+

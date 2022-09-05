@@ -1,0 +1,501 @@
+%%%==============================================================================
+%% Copyright 2022 by Alceu Frigeri
+%%
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   http://www.latex-project.org/lppl.txt
+%% and version 1.3 or later is part of all distributions of LaTeX
+%% version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status “maintained”.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.0 (2022/09/01)
+%%
+%%
+%% This work consists of the files
+%%
+%% ufrgscca.cls            main class (bundle)
+%%
+%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
+%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
+%% ufrgscca-cover.sty      cover pages macros
+%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
+%% ufrgscca-gen.sty        a switch/case macro construct and
+%%                         'macro factory', for instance to create commands used in the .def files.
+%% ufrgscca-forms.sty      forms creation macros (course specific)
+%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
+%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
+%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
+%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
+%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
+%%
+%% ufrgscca-en-base.def    locale, English, base def's (for babel)
+%% ufrgscca-en-core.def    locale, English, for -core.sty
+%% ufrgscca-en-forms.def   locale, English, for -forms.sty
+%% ufrgscca-en-coord.def   locale, English, for -coord.sty
+%%
+%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
+%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
+%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
+%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
+%%
+%% README.md               quick introduction
+%%
+%% ufrgscca.tex            LaTeX documentation
+%% ufrgscca.pdf            documentation in PDF form
+%%
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%
+%%%==============================================================================
+\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\def\tc@tmp@packname{ufrgscca-ppc}
+\def\tc@tmp@altpackname{ufrgsccappc}
+\def\tc@tmp@packdesc{UFRGS/CCA PPC commands}
+\def\tc@tmp@packdate{2022/09/01}
+\def\tc@tmp@packversion{1.0}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+
+
+\DeclareKeys[ufrgscca-ppc]{
+    showind.usage = load,
+    showind.if = @showindicators,
+
+    indlong.usage = load,
+    indlong.if = @indlongtext,
+    nocomments.usage = load,
+    nocomments.if = @indnocomments,
+}
+\ProcessKeyOptions[ufrgscca-ppc]\relax
+
+\RequirePackage{longtable}
+\RequirePackage{pdfcomment}
+\WarningFilter{latex}{name}%
+\RequirePackage[tikz]{mdframed}%
+\RequirePackage{ufrgscca-abnt}
+%\RequirePackage{ufrgscca-curr}
+\RequirePackage{ufrgscca-curr-tab}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% PPC macros
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%% pre-defined status:
+%      noref (default, still not in the text)
+%      tbd (to be done)
+%      review (in review, probably done)
+%      attention (to be looked at)
+%      done (done)
+%      NSA (not relevant)
+%      * (undefined, copy text)
+%%
+%%%%%%%%%%%%%%%%%%%
+%\iftc@ppc
+  \RenewDocumentCommand{\maketitle}{}{\tcppc@PPCcoverpages}%
+%\fi
+
+%
+\NewDocumentCommand{\tcppc@PPCcoverpages}{}{
+  \begin{titlepage}%
+    \noindent\tc@covertopbox%
+    \vfill%
+    \centerline{\tc@city}%
+	  \centerline{\tc@publyear}%
+  \end{titlepage}%%
+	\if@openright\cleardoublepage\else\clearpage\fi%%
+}%
+ \RenewDocumentCommand\tc@winbox{}{%%
+    \parbox[b]{\tc@coverwinwidth}{%%
+        \centering\vbox to \tc@coverwinheight{%%
+            \vspace*{\fill}%
+            {\large\MakeUppercase{\textbf{\@title}}\par}%
+            \vfill%
+        }%%
+    }%%
+}%
+
+%
+%
+\NewDocumentCommand{\set@statuscolor}{m}{%%
+  \@ifundefined{#1@txtcolor}{%
+    \gdef\ind@txtcolor{\csname default@txtcolor\endcsname}%%
+    \gdef\ind@bgcolor{\csname default@bgcolor\endcsname}%%
+	}{%
+    \gdef\ind@txtcolor{\csname #1@txtcolor\endcsname}%%
+    \gdef\ind@bgcolor{\csname #1@bgcolor\endcsname}%%
+  }%
+}%
+%
+%
+\newcounter{@indcounter}%
+%
+\NewDocumentCommand{\declareindicator}{st+O{noref}mmm}{%
+%#3: status #4:org #5:mark #6:short text #7:long text #8:extra text #9:'clarification text'(for inep/mec)
+  \stepcounter{@indcounter}%
+	\IfBooleanTF{#1}{\expandafter\gdef\csname @indicator#4#5star\endcsname{#1}\ifcsundef{@indicator#4lst}{\csgdef{@indicator#4lst}{#5}}{\csgappto{@indicator#4lst}{,#5}}}{}
+	\IfBooleanTF{#2}{\ifcsundef{@indicator#4lst}{\csgdef{@indicator#4lst}{#5}}{\csgappto{@indicator#4lst}{,#5}}}{}
+  \expandafter\gdef\csname @indicator#4#5status\endcsname{#3}%
+  \expandafter\gdef\csname @indicator#4#5short\endcsname{#6}%
+  \expandafter\gdef\csname @indicator#4#5long\endcsname{}%
+  \expandafter\gdef\csname @indicator#4#5extra\endcsname{}%
+  \expandafter\gdef\csname @indicator#4#5text\endcsname{}%
+  \expandafter\gdef\csname @indrefA\arabic{@indcounter}\endcsname{#4}%
+  \expandafter\gdef\csname @indrefB\arabic{@indcounter}\endcsname{#5}%
+	\newcounter{@indcount#4#5}%
+	\@ifundefined{iftcppc@indset#4view}{\expandafter\newif\csname iftcppc@indset#4view\endcsname\csname tcppc@indset#4viewtrue\endcsname}{}
+	\gdef\tcppc@indindex{#4#5}
+}%
+\NewDocumentCommand{\indicatorDesc}{+m+m}{%
+  \expandafter\gdef\csname @indicator\tcppc@indindex long\endcsname{#1}
+  \expandafter\gdef\csname @indicator\tcppc@indindex extra\endcsname{#2}
+}
+\NewDocumentCommand{\indicatorText}{+m}{%
+  \expandafter\gdef\csname @indicator\tcppc@indindex text\endcsname{#1}
+}
+
+\NewDocumentCommand{\lstind}{O{\section}O{\subsection}m}{%
+ \def\doit##1{\ifcsundef{@indicator#3##1star}{#2{\csname @indicator#3##1short\endcsname}}{#1{\csname @indicator#3##1short\endcsname}} \csname @indicator#3##1text\endcsname\par}%
+\expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\doit\expandafter\expandafter\expandafter{\csname @indicator#3lst\endcsname}
+}
+
+%
+%\newcommand{\indsetstatus}[3][attention]{\expandafter\gdef\csname @indicator#2#3status\endcsname{#1}}
+\NewDocumentCommand{\indsetstatus}{O{attention}mm}{%
+  \gdef\tcppc@indsetstatus##1{\expandafter\gdef\csname @indicator#2##1status\endcsname{#1}}%
+  \expandafter\forcsvlist\expandafter\tcppc@indsetstatus\expandafter{#3}%
+}
+%
+\NewDocumentCommand{\indsetview}{m}{\csname tcppc@indset#1viewtrue\endcsname}%
+%
+\NewDocumentCommand{\indsethide}{m}{\csname tcppc@indset#1viewfalse\endcsname}%
+%
+\NewDocumentEnvironment{listofindicators}{m}{%
+        \begin{list}{\textbf{??}}{%
+                \settowidth{\labelwidth}{#1}%
+                \setlength{\labelsep}{1em}%
+                \setlength{\itemindent}{0mm}%
+                \setlength{\leftmargin}{\labelwidth}%
+                \addtolength{\leftmargin}{\labelsep}%
+                \setlength{\rightmargin}{0mm}%
+                \setlength{\itemsep}{.1\baselineskip}%
+                \renewcommand{\makelabel}[1]{\makebox[\labelwidth][l]{##1}}%
+        }%
+}{%
+        \end{list}%
+}%
+%
+\NewDocumentCommand{\tcppc@indrefitem}{O{, }m}{%
+  \@ifundefined{r@@indlabel\tcppc@indA\tcppc@indB:#2}{}{#1 \ref{@indlabel\tcppc@indA\tcppc@indB:#2} (\pageref{@indlabel\tcppc@indA\tcppc@indB:#2})}%
+}%
+%
+\newif\iftcppc@itemdisp%
+\NewDocumentCommand{\tcppc@indicatorsitem}{m}{%%
+  \@ifundefined{@indrefA#1}{}{%%
+	  \gdef\tcppc@indA{\csname @indrefA#1\endcsname}%%
+		\gdef\tcppc@indB{\csname @indrefB#1\endcsname}%%
+		 \csname iftcppc@indset\tcppc@indA view\endcsname%
+		  \gdef\tcppc@status{\csname @indicator\tcppc@indA\tcppc@indB status\endcsname}%%
+			\iftcppc@ind@filter\expandafter\tcppc@ind@filtercase\expandafter{\tcppc@status}\else\tcppc@itemdisptrue\fi%
+			\iftcppc@itemdisp%
+  		  \set@statuscolor{\tcppc@status}%%
+	  	  \@ifundefined{theind@\tcppc@status @count}{\stepcounter{ind@default@count}}{\stepcounter{ind@\tcppc@status @count}}%%
+	      \item[\textbf{\color{\ind@txtcolor}\hypertarget{@indlabel\tcppc@indA\tcppc@indB\tcppc@ind@filterstatus}{\tcppc@indA: \tcppc@indB}}]%
+				  {\color{\ind@txtcolor}\emph{\csname @indicator\tcppc@indA\tcppc@indB short\endcsname}} \dotfill %
+					{\normalsize\color{\ind@txtcolor}\textbf{\csname @indicator\tcppc@indA\tcppc@indB status\endcsname}} %
+					\ifthenelse{\equal{\csname @indicator\tcppc@indA\tcppc@indB long\endcsname}{}}{\break}{\newline\csname @indicator\tcppc@indA\tcppc@indB long\endcsname \csname @indicator\tcppc@indA\tcppc@indB extra\endcsname\hfill\break}%%
+  		  \tcppc@indrefitem[.\dotfill]{1}%%
+	  	  \forcsvlist\tcppc@indrefitem{2,3,4,5,6,7,8,9,10,11,12,13}%
+			\fi%
+		 \fi%
+	}%%
+}%
+%
+\NewDocumentCommand{\tcppc@indicatorsbatch}{m}{\forcsvlist\tcppc@indicatorsitem{#10,#11,#12,#13,#14,#15,#16,#17,#18,#19}}%
+%
+\NewDocumentCommand{\tcppc@indicatorsBatch}{m}{\forcsvlist\tcppc@indicatorsbatch{#10,#11,#12,#13,#14,#15,#16,#17,#18,#19}}%
+%
+%
+\NewDocumentCommand{\tcppc@helpstatus}{+m}{\makebox[5mm]{}\makebox[17mm][r]{\textbf{#1}}\ \ \csname #1@text\endcsname\newline}%
+%
+\NewDocumentCommand{\tcppc@helpbf}{+m}{\textbf{\color{black}\textbackslash #1}$\,\,$}%
+\NewDocumentCommand{\tcppc@helpO}{+m}{{\color{darkteal}\textbf{[}<status>#1\textbf{]}}$\,\,$}%
+\NewDocumentCommand{\tcppc@helpM}{+m}{{\color{darkblue}\textbf{\{}#1\textbf{\}}}$\,\,$}%
+%
+\NewDocumentCommand{\helpindicators}{}{{\footnotesize%
+  \if@showindicators%
+	\begin{itemize}[nosep,label=,leftmargin=0mm]%
+	  \item \tcppc@helpbf{indsethide}\tcppc@helpM{<set>} - Hide an indicator's set%
+		\item \tcppc@helpbf{comment}\tcppc@helpO{}\tcppc@helpM{<title>}\tcppc@helpM{<comment>} - Just a comment%
+		\item \tcppc@helpbf{indref}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{<ref>}\tcppc@helpM{<comment>} - Single indicator's reference%
+		\item \tcppc@helpbf{indref*}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{<ref>}\tcppc@helpM{<comment>} -  (Short text only)%
+		\item \tcppc@helpbf{indreflst}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{\tcppc@helpO{:}<ref> , \tcppc@helpO{:}<ref> , ...}\tcppc@helpM{<comment>} - Referece list %
+		\item \tcppc@helpbf{indreflst*}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{\tcppc@helpO{:}<ref> , \tcppc@helpO{:}<ref> , ...}\tcppc@helpM{<comment>} - (Single box)%
+		\item \tcppc@helpbf{indsetstatus}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{<ref> , <ref> , ...} - Set the status of a list of indicators.%
+	\end{itemize}%
+	where status:\newline%
+		\expandafter\forcsvlist\expandafter\tcppc@helpstatus\expandafter{\ind@statuslst}%
+	\fi%
+}}%
+%
+\NewDocumentCommand{\tcppc@printcount}{+m}{\item[ ] {\color{\attention@txtcolor}\large\textbf{\makebox[15mm][r]{#1 :} \csname theind@#1@count\endcsname}}%
+}%
+%
+%
+%
+%\NewDocumentCommand{\ifshowindicators}{m}{\if@showindicators#1\fi}
+%\NewDocumentCommand{\ifthenelseshowindicators}{+m+m}{\if@showindicators#1\else#2\fi}
+\NewDocumentCommand{\ifshowind}{+m+m}{\if@showindicators#1\else#2\fi}
+%
+%
+\newif\iftcppc@ind@filter%
+\mkswitch[\tcppc@itemdispfalse]\tcppc@ind@filtercase%
+\NewDocumentCommand{\tcppc@ind@filteraux}{+m}{\addcase\tcppc@ind@filtercase{#1}{\tcppc@itemdisptrue}}%
+\NewDocumentCommand{\PrintIndicators}{O{}}{\footnotesize%
+  \if@showindicators%%
+		\def\tcppc@ind@filterstatus{#1}%
+		\ifthenelse{\equal{#1}{}}{\tcppc@ind@filterfalse}{\tcppc@ind@filtertrue\expandafter\forcsvlist\expandafter\tcppc@ind@filteraux\expandafter{#1}}%
+    \if@openright\cleardoublepage\else\clearpage\fi%%%
+  	\phantomsection%%
+		\chapter*{Indicadores #1}%\newpage%%
+    \begin{listofindicators}{EMPTY LIST . . .}%%
+		  \iftcppc@ind@filter\else\item[ ] {\color{\attention@txtcolor}\large\textbf{\the@indcounter}\ Indicadores.}\fi%%
+		  \tcppc@indicatorsbatch{}%
+		  \tcppc@indicatorsBatch{}%
+			\forcsvlist\tcppc@indicatorsBatch{1,2,3,4,5,6,7,8,9}%
+			\iftcppc@ind@filter\else\expandafter\forcsvlist\expandafter\tcppc@printcount\expandafter{\ind@statuslst}\fi%
+    \end{listofindicators}%
+  \fi%
+}%
+%
+%
+\NewDocumentCommand{\textmark}{O{attention}m}{\set@statuscolor{#1}{\color\ind@txtcolor {\textbf{!! #2 !!}}}}
+
+
+\NewDocumentCommand{\comment}{O{attention}m+m}{%
+  \if@showindicators%
+		\if@indnocomments\else%
+	    \set@statuscolor{#1}%
+      \ \hfill\parbox{0.9\textwidth}{\small%
+        \begin{mdframed}[style=indicatorsTikZ,frametitle=\tikztitle{#2}]%
+          {\footnotesize #3\par}%
+          \hfill\emph{status: }\textbf{\color{\ind@txtcolor}#1}%
+ 	      \end{mdframed}%
+        }\\[-2.7mm]%
+		\fi%
+  \fi%
+}%
+\let\remark\comment
+%
+\NewDocumentCommand{\indtext}{mm}{\csname @indicator#1#2short\endcsname}
+%
+\NewDocumentCommand{\tcppc@indhack}{smm+m}{%
+	  \csname iftcppc@indset#2view\endcsname%
+	    \set@statuscolor{\tcppc@status}%
+      \ \hfill\parbox{0.9\textwidth}{\small%%
+          \begin{mdframed}[style=indicatorsTikZ,frametitle=\tikztitle{\hyperlink{@indlabel#2#3}{#2 : #3}}]%%
+            \pdftooltip{\emph{\csname @indicator#2#3short\endcsname}}{\csname @indicator#2#3long\endcsname}\par%%
+              \if@indlongtext%%
+					      \IfBooleanF{#1}{%%
+						      \ifthenelse{\equal{\csname @indicator#2#3long\endcsname}{}}{}{\enquote{\footnotesize\csname @indicator#2#3long\endcsname}\par}%%
+						    }%
+ 				      \fi%%
+					    \if@indnocomments\else\ifthenelse{\equal{#4}{}}{}{{\emph{\color{\comments@txtcolor}{#4}}}\par}\fi%%
+            \hfill\emph{status: }\textbf{\color{\ind@txtcolor}\tcppc@status}%%
+ 	        \end{mdframed}%%
+      }\\[-2.7mm]%%
+		\fi%
+}
+
+\NewDocumentCommand{\indref}{sO{}mm+m}{%%
+  \ifthenelse{\equal{#2}{}}{}{\expandafter\gdef\csname @indicator#3#4status\endcsname{#2}}%%
+	\expandafter\gdef\expandafter\tcppc@status{\csname @indicator#3#4status\endcsname}%
+	\stepcounter{@indcount#3#4}\label{@indlabel#3#4:\csname the@indcount#3#4\endcsname}%%
+  \if@showindicators%%
+		\IfBooleanTF{#1}{\tcppc@indhack*{#3}{#4}{#5}}{\tcppc@indhack{#3}{#4}{#5}}
+  \fi%	%
+}%
+%
+%
+\newcommand{\tcppc@indreflstitem}[4][]{%
+  \ifthenelse{\equal{#1}{}}{}{\expandafter\gdef\csname @indicator#2#3status\endcsname{#1}}%
+	\expandafter\gdef\expandafter\tcppc@status{\csname @indicator#2#3status\endcsname}%
+	\stepcounter{@indcount#2#3}\label{@indlabel#2#3:\csname the@indcount#2#3\endcsname}%%
+  \set@statuscolor{\tcppc@status}%
+	\hyperlink{@indlabel#2#3}{\textbf{#3 :}}\pdftooltip{\emph{\csname @indicator#2#3short\endcsname}}{\csname @indicator#2#3long\endcsname}\par%%
+  \if@indlongtext%%
+    \ifthenelse{\equal{\csname @indicator#2#3long\endcsname}{}}{}{\enquote{\footnotesize\csname @indicator#2#3long\endcsname}\par}%%
+  \fi%%
+  \hfill\emph{status: }\textbf{\color{\ind@txtcolor}\tcppc@status\break}%%
+}%
+
+\NewDocumentCommand{\indreflst}{sO{}mmm}{%
+  \IfBooleanTF{#1}{%
+    \gdef\tcppc@indreflst##1{\StrCut{##1}{:}\tcppc@parA\tcppc@parB\IfStrEq{\tcppc@parB}{}{\tcppc@indreflstitem{#3}{\tcppc@parA}{#5}}{\expandafter\tcppc@indreflstitem\expandafter[\tcppc@parA]{#3}{\tcppc@parB}{#5}}}%
+    \if@showindicators%
+	    \csname iftcppc@indset#3view\endcsname%
+		    \ \hfill\parbox{0.9\textwidth}{\small%
+			    \begin{mdframed}[style=indicatorsTikZ,frametitle=\tikztitle{#3}]%%
+            \expandafter\forcsvlist\expandafter\tcppc@indreflst\expandafter{#4}%
+			      \if@indnocomments\else\ifthenelse{\equal{#5}{}}{}{{\emph{\color{\comments@txtcolor}{#5}}}\par}\fi%%
+				    \set@statuscolor{#2}%
+			    \end{mdframed}%
+			  }%
+		  \fi%
+	  \fi%
+	}{%
+  	\gdef\tcppc@indreflst##1{\StrCut{##1}{:}\tcppc@parA\tcppc@parB\IfStrEq{\tcppc@parB}{}{\indref{#3}{\tcppc@parA}{}}{\indref[\tcppc@parA]{#3}{\tcppc@parB}{}}}%
+	  \expandafter\forcsvlist\expandafter\tcppc@indreflst\expandafter{#4}%
+	  \comment[#2]{comment}{#5}%
+	}%
+}%
+%
+% other default colors (xcolor pack): lime, olive, orange, pink, purple.
+%
+\def\tcppc@defcolorpair#1{\colorlet{light#1}{white!85!#1}\colorlet{dark#1}{#1!70!black!100}}
+%
+%
+\definecolor{grayblack}{rgb}{0.8,0.8,0.8}%
+%
+%
+\NewDocumentCommand{\ind@defstatus}{mmm}{%
+  \newcounter{ind@#1@count}%
+  \tcppc@defcolorpair{#2}%
+	\expandafter\gdef\csname #1@txtcolor\endcsname{dark#2}%
+	\expandafter\gdef\csname #1@bgcolor\endcsname{light#2}%
+	\expandafter\gdef\csname #1@text\endcsname{#3 (#2)}%
+	\@ifundefined{ind@statuslst}{\gdef\ind@statuslst{#1}}{\edef\ind@statuslst{\ind@statuslst,#1}}%
+}%
+%
+\ind@defstatus{tbd}{gray}{To Be Done}%
+\ind@defstatus{done}{green}{Done}%
+\ind@defstatus{review}{yellow}{to be reviewed}%
+\ind@defstatus{attention}{red}{needs Attention}%
+\ind@defstatus{NSA}{brown}{NSA}%
+\ind@defstatus{noref}{magenta}{no references}%
+\ind@defstatus{EAD}{violet}{EAD}%
+\ind@defstatus{MDi}{teal}{(courseware)...}%
+\ind@defstatus{DOCs}{blue}{other DOCs}%
+\ind@defstatus{default}{cyan}{everything else}%
+%
+\def\comments@txtcolor{darkblue}%
+%
+%
+\def\ind@TikZpos{0.44}%
+\NewDocumentCommand{\tikztitle}{m}{\tikz[baseline=(current bounding box.east),outer sep=0pt,xshift=1cm,thin,color=grayblack]  \draw  (0,0) (\ind@TikZpos,0) node[anchor=west,rectangle,rounded corners,fill=white,draw] at (\ind@TikZpos,0) {#1} node[anchor=west,rectangle,rounded corners,color=black] at (\ind@TikZpos,0) {#1};}%%
+%
+%
+\mdfdefinestyle{indicatorsTikZ}{%
+  linecolor=grayblack,%%
+  linewidth=0.4pt,%
+%  skipabove=0.65\baselineskip,%
+%  skipbelow=0.5\baselineskip,%
+  skipabove=0pt,%
+  skipbelow=0pt,%
+  leftmargin =-3.5pt,%
+  rightmargin=-3.5pt,%
+  innerleftmargin=3pt,%
+  innerrightmargin=3pt,%
+  needspace=3\baselineskip,%
+  backgroundcolor=\ind@bgcolor,%
+  usetwoside=false,%
+%	innertopmargin = 3pt,%
+%	innerbottommargin = 2pt,%
+	innertopmargin = 2pt,%
+	innerbottommargin = 2pt,%
+	roundcorner = 4pt,%
+	frametitle={\tikztitle{TITLE}},%
+	frametitleaboveskip=-0.6\baselineskip,%
+	frametitlebelowskip=0pt,%
+  frametitlealignment = \raggedleft,%
+	leftline = true,%
+	rightline = true,%
+	nobreak = true,%
+}%
+
+\NewDocumentCommand{\fancyquote}{O{-2\topsep-2\parsep-2\partopsep-2\parskip}+mmm}{%
+ \vspace{#1}{%
+  \ \hfill\begin{minipage}{0.5\textwidth}\noindent\scriptsize\emph{''#2''}%
+	  {\vspace{-\parsep}\begin{flushright}\footnotesize#3\\\sc #4\end{flushright}} \end{minipage}\\
+ }}
+
+
+\NewDocumentEnvironment{ppc.quote}{}{\begin{displayquote}\begin{itshape}\smaller}{\end{itshape}\end{displayquote}}
+%\preto\displayquote{\begingroup\setlength{\leftmargini}{0mm}}
+%\appto\enddisplayquote{\endgroup}
+\RenewDocumentEnvironment{quote}{}{%
+  \list{}{\leftmargin20mm\rightmargin0mm}%
+  \item\relax%
+}{\endlist}
+%
+
+\NewDocumentCommand{\labelhack}{m}{\def\@currentlabelname{#1}}
+
+\NewDocumentCommand{\acrolist}{}{}
+\NewDocumentCommand{\acrodef}{mmm}{%
+  %\expandafter\DeclareFixedFootnote\expandafter{\csname #1\endcsname}{#3}%
+	\expandafter\def\csname #1\endcsname{\footnote{#3}}%
+	\expandafter\def\csname acrolsti:#1\endcsname{\item[#2] #3}%
+	\appto\acrolist{\item[#2] #3}%
+	\expandafter\def\csname acroS:#1\endcsname{#2}%
+	\expandafter\def\csname acroL:#1\endcsname{#3}%
+}
+\NewDocumentCommand{\acroitem}{m}{\csname acrolsti:#1\endcsname}
+\NewDocumentCommand{\printacrolist}{O{}m}{\begin{listofabbrv}[#1]{#2}\acrolist\end{listofabbrv}}
+\NewDocumentCommand{\acro}{m}{\csname acroS:#1\endcsname}
+\NewDocumentCommand{\acrol}{m}{\csname acroL:#1\endcsname}
+\NewDocumentCommand{\acrols}{m}{\csname acroL:#1\endcsname, \csname acroS:#1\endcsname}
+\NewDocumentCommand{\acrosl}{m}{\csname acroS:#1\endcsname, \csname acroL:#1\endcsname}
+\NewDocumentCommand{\acrofoot}{m}{\csname acroS:#1\endcsname\csname #1\endcsname}
+
+
+\RenewDocumentCommand{\subparagraph}{m}{}
+\RenewDocumentCommand{\part}{m}{}
+%
+%Se alguém é capaz de me convencer e me evidenciar que o que penso
+%ou faço não é correto, será com contentamento que me corrigirei; afinal,
+%procuro a verdade, a qual jamais causou danos a alguém. Aquele, porém,
+%que persevera no engano e na ignorância causa danos a si mesmo.
+
+%Observa com olho crítico seus princípios norteadores e os indivíduos
+%sensatos, tanto aquilo de que se esquivam como aquilo que buscam.
+
+%Prestei algum benefício à comunidade? Se o fiz, então prestei um
+%benefício a mim. Em todas as ocasiões tem isso sempre em mente e em lugar
+%algum deixes de abrigar esse pensamento.
+
+%%Caso ajas conforme a reta razão com referência ao que se coloca
+%diante de ti, com seriedade, firmeza, benevolência, não admitindo que nada
+%secundário te desvie de tua ação, mas conservando pura a divindade que
+%existe em ti, como se devesses restituí-la de imediato; caso te vincules a isso,
+%sem nada esperar nem fugir de nada, contente com tua atividade presente
+%conforme a natureza, a dizer e murmurar em todo som emitido de tua boca
+%uma verdade heroica, então viverás feliz. E não existe ninguém com o poder
+%de impedi-lo.
+
+%Se tu mesmo não consegues com teu esforço realizar algo, não penses
+%ser isso impossível para o ser humano; se, entretanto, algo é possível ao ser
+%humano e lhe é próprio, pensa que isso a ti também é acessível.
+
+
+%É indispensável ter compreensão, atentando para cada palavra, daquilo
+%que se diz, e sobre cada ação, deve-se ter compreensão do seu efeito. Nesse
+%caso, é necessário ver diretamente a relação do ponto de vista de sua meta,
+%ou melhor, a qual meta a ação se relaciona; quanto ao outro caso, é preciso
+%observar o significado das palavras.
+
+%Como és uma parte que ajuda a tornar um sistema social completo,
+%faz toda ação tua ser uma parte integrante completa da vida social. Assim,
+%qualquer ação tua que não tenha referência imediata ou remotamente ao fim
+%social produz em tua vida uma ruptura violenta, impedindo que seja íntegra,
+%e é de caráter sedicioso
