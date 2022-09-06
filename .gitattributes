@@ -1,0 +1,27 @@
+##
+## from https://github.com/gitattributes/gitattributes.io
+##      https://schacon.github.io/git/gitattributes.html
+##
+## Core latex/pdflatex files:
+*.tex text
+*.sty text
+*.cls text
+*.bib text
+*.def text
+
+*.gitattributes text
+*.gitignore text
+.gitattributes text
+.gitignore text
+
+# Documentation
+*.md text
+LICENSE text
+AUTHORS text
+*.md  text
+*.htm text
+README text
+
+# binaries and others
+*.pdf binary
+

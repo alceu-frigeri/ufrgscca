@@ -1,68 +1,36 @@
 %%%==============================================================================
 %% Copyright 2022 by Alceu Frigeri
 %%
+%% This work may be distributed and/or modified under the conditions of
 %%
-%% This work may be distributed and/or modified under the
-%% conditions of the LaTeX Project Public License, either version 1.3c
-%% of this license or (at your option) any later version.
-%% The latest version of this license is in
-%%   http://www.latex-project.org/lppl.txt
-%% and version 1.3 or later is part of all distributions of LaTeX
-%% version 2005/12/01 or later.
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
 %%
-%% This work has the LPPL maintenance status “maintained”.
+%% This work has the LPPL maintenance status *maintained*.
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0 (2022/09/01)
+%% This is version 1.0.1 (2022/09/06)
 %%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/ufrgscca
 %%
-%% This work consists of the files
-%%
-%% ufrgscca.cls            main class (bundle)
-%%
-%% ufrgscca-abnt.sty       abnt page geometry, and chapter/sectioning/etc. settings
-%% ufrgscca-core.sty       core macros (students related data, advisor, work title, etc.)
-%% ufrgscca-cover.sty      cover pages macros
-%% ufrgscca-lists.sty      New float environments (for code listing, for instance)
-%% ufrgscca-gen.sty        a switch/case macro construct and
-%%                         'macro factory', for instance to create commands used in the .def files.
-%% ufrgscca-forms.sty      forms creation macros (course specific)
-%% ufrgscca-coord.sty      student work coordenation related macros (course specific)
-%% ufrgscca-ppc.sty        ppc specific macros (ppc stands for Course Pedagogic Project)
-%% ufrgscca-curr.sty       curricula specific macros (as a set of semesters and class dependency lists)
-%% ufrgscca-curr-tab.sty   curricula tabular macros (to display the curricula as tables)
-%% ufrgscca-curr-graph.sty curricula graph macros (to display the curricula as a dependency graph)
-%%
-%% ufrgscca-en-base.def    locale, English, base def's (for babel)
-%% ufrgscca-en-core.def    locale, English, for -core.sty
-%% ufrgscca-en-forms.def   locale, English, for -forms.sty
-%% ufrgscca-en-coord.def   locale, English, for -coord.sty
-%%
-%% ufrgscca-ptBR-base.def  locale, Portuguese, base def`s (for babel)
-%% ufrgscca-ptBR-core.def  locale, Portuguese, for -core.sty
-%% ufrgscca-ptBR-forms.def locale, Portuguese, for -forms.sty
-%% ufrgscca-ptBR-coord.def locale, Portuguese, for -coord.sty
-%%
-%% README.md               quick introduction
-%%
-%% ufrgscca.tex            LaTeX documentation
-%% ufrgscca.pdf            documentation in PDF form
-%%
+%%%==============================================================================
 %% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
-%%
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
 \def\tc@tmp@packname{ufrgscca-coord}
 \def\tc@tmp@altpackname{ufrgsccacoord}
-  \def\tc@tmp@packdesc{UFRGS/CCA coord commands}
-\def\tc@tmp@packdate{2022/09/01}
-\def\tc@tmp@packversion{1.0}
-  \let\@exp\expandafter
-  \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-  \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+\def\tc@tmp@packdesc{UFRGS/CCA coord commands}
+\def\tc@tmp@packdate{2022/09/06}
+\def\tc@tmp@packversion{1.0.1}
+\let\@exp\expandafter
+\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
 \newif\iftcif@coord@emptyforms\tcif@coord@emptyformsfalse
 \DeclareKeys[ufrgscca-coord]{
