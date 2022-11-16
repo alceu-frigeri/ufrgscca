@@ -36,17 +36,27 @@
 \calendartitle{Calendário – \tcdef@coord@TCCperiod}
 
 \tcccalendarhead{Data/Período}{Semana Letiva}{Evento}
-\tcccalendarevent{01}{Apresentação da disciplina. Informações gerais. Reunião presencial com início às 18:30h, no Salão de Eventos do DELET.\newline {\bf Presença obrigatória.}}
-\tcccalendarevent{02}{Requerimento de matrícula. O(A) aluno(a) deve preencher o \emph{Formulário de Requerimento de Matrícula}, já com o resumo do trabalho, e encaminhá-lo ao setor de protocolos da UFRGS para abertura de processo. Posteriormente, o número do processo deve ser encaminhado por e-mail para \tccore@@ref{TCCcoord}{article} coordenador\tccore@@ref{TCCcoord}{narticle} da atividade. \newline{\bf Obs.~1}}
+\tcceventAweek{01}
+\tcccalendarevent{\tcdef@coord@tcceventAweek}{Apresentação da disciplina. Informações gerais. Reunião presencial com início às 18:30h, no Salão de Eventos do DELET.\newline {\bf Presença obrigatória.}}
+\tcceventBweek{02}
+\tcccalendarevent{\tcdef@coord@tcceventBweek}{Requerimento de matrícula. O(A) aluno(a) deve abrir processo/petição de matrícula em TCC no porta TuaUFRGS, adicionando ao mesmo o \emph{Formulário de Requerimento de Matrícula}, já com o resumo do trabalho,  a ser encaminhado a\tccore@@ref{TCCcoord}{article} coordenador\tccore@@ref{TCCcoord}{narticle} da atividade. \newline{\bf Obs.~1}}
 %\tcccalendarevent{03}{Entrega do \emph{Formulário de Inscrição}, juntamente com o resumo do trabalho, no \tcdef@cover@secdivisionacronym .}
-\tcccalendarevent{09}{Encontro presencial: Como redigir um TCC, melhores práticas. Início às 18:30h, no Salão de Eventos do DELET.}% \newline {\bf Presença obrigatória.}}
-\tcccalendarevent{09}{Entrega VIA MOODLE do \emph{Relatório Parcial}, juntamente com o \emph{Formulário de Aprovação do Relatório Parcial e Banca Examinadora} assinado pelo orientador. \newline{\bf Obs.~2}}
-\tcccalendarevent{15}{Entrega de uma cópia impressa (ou eletrônica) do Trabalho de Conclusão a cada membro da banca, juntamente com os \emph{Formulários de Avaliação} e \emph{Formulários de correções} do trabalho. Entrega VIA MOODLE de uma cópia eletrônica do trabalho juntamente com o \emph{Formulário de Aprovação para Apresentação} e os recibos de recebimento assinados e datados pelos membros das bancas.}
-\tcccalendarevent{16}{Encontro presencial: Como apresentar um TCC, melhores técnicas. Início às 18:30h, no Salão de Eventos do DELET.}% \newline {\bf Presença obrigatória.}}
-\tcccalendarevent{17}{Apresentações dos Trabalhos de Conclusão de Curso. \newline{\bf Obs.~3}}
-\tcccalendarevent{17}{Entrega VIA MOODLE dos \emph{Formulários de correções} dos membros da banca.}
-\tcccalendarevent{18}{Entrega VIA MOODLE da versão final corrigida do trabalho e o \emph{Formulário de Aprovação das Correções}. Entrega do formulário de autorização para publicação (biblioteca) assinado na secretaria do DELAE. \newline{\bf Obs.~4}}
-\tcccalendarevent{19}{Para os TCCs em RECUPERAÇÃO, entrega VIA MOODLE da versão final corrigida do trabalho e o \emph{Formulário de Aprovação das Correções}. Entrega do formulário de autorização para publicação (biblioteca) assinado na secretaria do DELAE. \newline{\bf Obs.~5}}
+\tcceventCweek{07}
+\tcccalendarevent{\tcdef@coord@tcceventCweek}{Encontro presencial: Como redigir um TCC, melhores práticas. Início às 18:30h, no Salão de Eventos do DELET.}% \newline {\bf Presença obrigatória.}}
+\tcceventDweek{09}
+\tcccalendarevent{\tcdef@coord@tcceventDweek}{Entrega VIA MOODLE do \emph{Relatório Parcial}, juntamente com o \emph{Formulário de Aprovação do Relatório Parcial e Banca Examinadora} assinado pelo orientador. \newline{\bf Obs.~2}}
+\tcceventEweek{15}
+\tcccalendarevent{\tcdef@coord@tcceventEweek}{Entrega de uma cópia impressa (ou eletrônica) do Trabalho de Conclusão a cada membro da banca, juntamente com os \emph{Formulários de Avaliação} e \emph{Formulários de correções} do trabalho. Entrega VIA MOODLE de uma cópia eletrônica do trabalho juntamente com o \emph{Formulário de Aprovação para Apresentação} e os recibos de recebimento assinados e datados pelos membros das bancas.}
+\tcceventFweek{16}
+\tcccalendarevent{\tcdef@coord@tcceventFweek}{Encontro presencial: Como apresentar um TCC, melhores técnicas. Início às 18:30h, no Salão de Eventos do DELET.}% \newline {\bf Presença obrigatória.}}
+\tcceventGweek{17}
+\tcccalendarevent{\tcdef@coord@tcceventGweek}{Apresentações dos Trabalhos de Conclusão de Curso. \newline{\bf Obs.~3}}
+\tcceventHweek{17}
+\tcccalendarevent{\tcdef@coord@tcceventHweek}{Entrega VIA MOODLE dos \emph{Formulários de correções} dos membros da banca.}
+\tcceventIweek{18}
+\tcccalendarevent{\tcdef@coord@tcceventIweek}{Entrega VIA MOODLE da versão final corrigida do trabalho e o \emph{Formulário de Aprovação das Correções}. Entrega do formulário de autorização para publicação (biblioteca) assinado na secretaria do DELAE. \newline{\bf Obs.~4}}
+\tcceventJweek{19}
+\tcccalendarevent{\tcdef@coord@tcceventJweek}{Para os TCCs em RECUPERAÇÃO, entrega VIA MOODLE da versão final corrigida do trabalho e o \emph{Formulário de Aprovação das Correções}. Entrega do formulário de autorização para publicação (biblioteca) assinado na secretaria do DELAE. \newline{\bf Obs.~5}}
 
 
 \tcccalendardesc{\begin{description}
@@ -95,3 +105,7 @@
 \cocertificatetext{atuou como co-orientador\tccore@@ref{coadvisor}{narticle} d\tccore@@ref{student}{article} alun\tccore@@ref{student}{article}\ \emph{\tccore@@ref{student}{}}\ no trabalho de conclus\~{a}o de curso intitulado \emph{\tccore@@ref{student}{title}}\ no semestre \tcdef@coord@TCCperiod.}
 
 \TCCcoordtitle{Coordenador\tccore@@ref{TCCcoord}{narticle} da atividade de ensino de\\ \tcdef@forms@formstitle\ }
+
+
+\advisornamegen{Orientador(a)}
+\advisornameplural{Orientadores}

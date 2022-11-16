@@ -40,6 +40,8 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 
+
+
 %==============================================================================
 % Declaração de opções
 %==============================================================================
@@ -105,6 +107,20 @@
 \else
     \LoadClass[12pt,twoside,openright]{report}
 \fi
+
+\iftcif@miktex
+ \def\BabelCaseHack{}
+ \ifcsdef{miktexHack}{\miktexHack}{}
+\fi
+
+\iftcif@overleaf
+ \ifcsdef{overleafHack}{\overleafHack}{}
+\fi
+
+\iftcif@texlive
+ \ifcsdef{texliveHack}{\texliveHack}{}
+\fi
+
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading

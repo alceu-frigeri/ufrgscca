@@ -49,6 +49,7 @@
 \coursecoordtitle{Coordenador\tccore@@ref{coursecoord}{narticle} de curso}
 \advisorname{Orientador\tccore@@ref{advisor}{narticle}}%
 \coadvisorname{Co-orientador\tccore@@ref{coadvisor}{narticle}}%
+
 \examinername{Banca Examinadora}%
 
 \reportspecificinfo{%

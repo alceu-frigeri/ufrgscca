@@ -95,3 +95,8 @@
 \cocertificatetext{atuou como co-orientador\tccore@@ref{coadvisor}{narticle} d\tccore@@ref{student}{article} alun\tccore@@ref{student}{article}\ \emph{\tccore@@ref{student}{}}\ no trabalho de conclus\~{a}o de curso intitulado \emph{\tccore@@ref{student}{title}}\ no semestre \tcdef@coord@TCCperiod.}
 
 \TCCcoordtitle{Coordenador\tccore@@ref{TCCcoord}{narticle} da atividade de ensino de\\ \tcdef@forms@formstitle\ }
+
+
+
+\advisornamegen{Orientador(a)}
+\advisornameplural{Orientadores}

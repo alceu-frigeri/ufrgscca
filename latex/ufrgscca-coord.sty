@@ -40,6 +40,8 @@
     checklist.if = tcif@coord@checklist,
     report.usage = general,
     report.if = tcif@coord@report,
+    reportxinfo.usage = general,
+    reportxinfo.if = tcif@coord@reportxinfo,
     boards.usage = general,
     boards.if = tcif@coord@boards,
     boarddates.usage = general,
@@ -80,6 +82,10 @@
 \cmdfactory<coord>{TCCperiod,boardstitleB,boardsOBS}%
 \cmdfactory<coord>{studentlistformtitle,studentlistactivity,studentlistdate}%
 
+\cmdfactory<coord>{advisornamegen,advisornameplural}
+\cmdfactory<coord>{tcceventAweek,tcceventBweek,tcceventCweek,tcceventDweek}
+\cmdfactory<coord>{tcceventEweek,tcceventFweek,tcceventGweek,tcceventHweek}
+\cmdfactory<coord>{tcceventIweek,tcceventJweek,tcceventKweek,tcceventLweek}
 
 
 %%% this should go to ufrgscca-coord !!!!
@@ -186,21 +192,21 @@
 \NewDocumentCommand{\NewStudent}{m+m}{%%
   \expandafter\NewDocumentCommand\csname #1\endcsname{O{}}{%%
     #2%
-    \csname #1.hook\endcsname
+    \csname #1.hook\endcsname%
     \@ifundefined{tccoord@studentboards##1}{}{\csname tccoord@studentboards##1\endcsname}%%
-    \iftcif@coord@forms@revforms
-      \tcforms@examinersForms
-    \fi
-    \iftcif@coord@forms@referral
-      \tccoord@TCCreferralletter
-    \fi
-    \iftcif@coord@forms@cocertificate
-      \tccoord@TCCcocertificateletter
-    \fi
-
+    \iftcif@coord@forms@revforms%
+      \tcforms@examinersForms%
+    \fi%
+    \iftcif@coord@forms@referral%
+      \tccoord@TCCreferralletter%
+    \fi%
+    \iftcif@coord@forms@cocertificate%
+      \tccoord@TCCcocertificateletter%
+    \fi%
+%
     \@defaultboard%
   }%%
-  \expandafter\NewDocumentCommand\csname #1.hook\endcsname{}{}
+  \expandafter\NewDocumentCommand\csname #1.hook\endcsname{}{}%
 }%
 
 
@@ -258,22 +264,8 @@
       \resizebox{\textwidth}{!}{%%
         \begin{tabular}{ccp{\tc@calendartab}}%
           \tc@tcccalendarhead\hline%
-          \tccoord@TCCcalendarline{A}%
-          \tccoord@TCCcalendarline{B}%
-          \tccoord@TCCcalendarline{C}%
-          \tccoord@TCCcalendarline{D}%
-          \tccoord@TCCcalendarline{E}%
-          \tccoord@TCCcalendarline{F}%
-          \tccoord@TCCcalendarline{G}%
-          \tccoord@TCCcalendarline{H}%
-          \tccoord@TCCcalendarline{I}%
-          \tccoord@TCCcalendarline{J}%
-          \tccoord@TCCcalendarline{K}%
-          \tccoord@TCCcalendarline{L}%
-          \tccoord@TCCcalendarline{M}%
-          \tccoord@TCCcalendarline{N}%
-          \tccoord@TCCcalendarline{O}%
-        \end{tabular}}
+          \forcsvlist{\tccoord@TCCcalendarline}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O}%
+        \end{tabular}}%
 %
     \end{center}%
     %\if@lmodern
@@ -311,36 +303,7 @@
   \tcdef@forms@formsstudentlabelgen & \tcdef@forms@studentsignaturegen\\\hline\\[2mm]%
 
 %
-  \tccoord@studentlistrow{A}
-%
-  \tccoord@studentlistrow{B}%
-  \tccoord@studentlistrow{C}%
-  \tccoord@studentlistrow{D}%
-  \tccoord@studentlistrow{E}%
-%
-  \tccoord@studentlistrow{F}%
-  \tccoord@studentlistrow{G}%
-  \tccoord@studentlistrow{H}%
-  \tccoord@studentlistrow{I}%
-  \tccoord@studentlistrow{J}%
-%
-  \tccoord@studentlistrow{K}%
-  \tccoord@studentlistrow{L}%
-  \tccoord@studentlistrow{M}%
-  \tccoord@studentlistrow{N}%
-  \tccoord@studentlistrow{O}%
-%
-  \tccoord@studentlistrow{P}%
-  \tccoord@studentlistrow{Q}%
-  \tccoord@studentlistrow{R}%
-  \tccoord@studentlistrow{S}%
-  \tccoord@studentlistrow{T}%
-%
-  \tccoord@studentlistrow{U}%
-  \tccoord@studentlistrow{V}%
-  \tccoord@studentlistrow{W}%
-  \tccoord@studentlistrow{X}%
-  \tccoord@studentlistrow{Y}%
+  \forcsvlist{\tccoord@studentlistrow}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y}
   \end{tabular}}%
   \vfill%
 %
@@ -366,7 +329,7 @@
     \@ifundefined{tc@student#1Dismiss}{%%
       \@ifundefined{tc@student#1FF}{%%
         \@ifundefined{tc@student#1time}{}{%%
-          \multirow{4}{\tc@BoardTabA}{\textbf{\csname tc@student#1\endcsname}}  & \multirow{4}{\tc@BoardTabB}{{\csname tc@student#1@advisor\endcsname}} & \csname tc@student#1@examinerA\endcsname  & \multirow{5}{\tc@BoardTabD}{\iftcif@coord@boarddates\else\csname tc@student#1date\endcsname\\\fi
+          \multirow{4}{\tc@BoardTabA}{\textbf{\csname tc@student#1\endcsname}}  & \multirow{4}{\tc@BoardTabB}{{\hspace{-0.4em}\csname tc@student#1@advisor\endcsname}\ifcsdef{tc@student#1@coadvisor}{\break\csname tc@student#1@coadvisor\endcsname}{}} & \break\csname tc@student#1@examinerA\endcsname  & \multirow{5}{\tc@BoardTabD}{\iftcif@coord@boarddates\else\csname tc@student#1date\endcsname\\\fi
              \csname tc@student#1time\endcsname\\[1mm]\csname tc@student#1local\endcsname
             }\\*%
           & & \csname tc@student#1@examinerB\endcsname & \\*%
@@ -404,6 +367,11 @@
 % TCC Boards announce table%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcounter{tccoord@@auxA}%
+\newcounter{tccoord@@auxB}%
+\NewDocumentCommand{\tccoord@@studenttestrow}{m}{%
+    \setcounter{tccoord@@auxA}{#1}\setcounter{tccoord@@auxB}{#1}\stepcounter{tccoord@@auxB} \tccoord@studentboardrow{\Alph{tccoord@@auxA}}\tccoord@testdaterow{\Alph{tccoord@@auxA}}{\Alph{tccoord@@auxB}}%
+}%
 \NewDocumentCommand{\tccoord@TCCboards}{}{%
   \stepcounter{tc@studentcount}%
   \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@TCCperiod}%
@@ -416,30 +384,9 @@
           \multicolumn{4}{c}{\textbf{\textsc{\tcdef@coord@boardstitle}}}\\\hline%
           \iftcif@coord@boarddates\else\textsc{\tcdef@forms@formsstudentlabelgen} & \textsc{\tcdef@forms@formsadvisorlabelgen} & \textsc{\tcdef@forms@formsboardtitle} & \textsc{\tcdef@forms@formstimelabel}\\\hline\fi%
           \endhead%
-                                        \tccoord@testdaterow{T}{A}%
-          \tccoord@studentboardrow{A}          \tccoord@testdaterow{A}{B}%
-          \tccoord@studentboardrow{B}          \tccoord@testdaterow{B}{C}%
-          \tccoord@studentboardrow{C}          \tccoord@testdaterow{C}{D}%
-          \tccoord@studentboardrow{D}          \tccoord@testdaterow{D}{E}%
-          \tccoord@studentboardrow{E}          \tccoord@testdaterow{E}{F}%
-%
-          \tccoord@studentboardrow{F}          \tccoord@testdaterow{F}{G}%
-          \tccoord@studentboardrow{G}          \tccoord@testdaterow{G}{H}%
-          \tccoord@studentboardrow{H}          \tccoord@testdaterow{H}{I}%
-          \tccoord@studentboardrow{I}          \tccoord@testdaterow{I}{J}%
-          \tccoord@studentboardrow{J}          \tccoord@testdaterow{J}{K}%
-%
-          \tccoord@studentboardrow{K}          \tccoord@testdaterow{K}{L}%
-          \tccoord@studentboardrow{L}          \tccoord@testdaterow{L}{M}%
-          \tccoord@studentboardrow{M}          \tccoord@testdaterow{M}{N}%
-          \tccoord@studentboardrow{N}          \tccoord@testdaterow{N}{O}%
-          \tccoord@studentboardrow{O}          \tccoord@testdaterow{O}{P}%
-%
-          \tccoord@studentboardrow{P}          \tccoord@testdaterow{P}{Q}%
-          \tccoord@studentboardrow{Q}          \tccoord@testdaterow{Q}{R}%
-          \tccoord@studentboardrow{R}          \tccoord@testdaterow{R}{S}%
-          \tccoord@studentboardrow{S}          \tccoord@testdaterow{S}{T}%
-          \tccoord@studentboardrow{T}%
+           \tccoord@testdaterow{T}{A}%
+           \forcsvlist{\tccoord@@studenttestrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19}
+          \tccoord@studentboardrow{T}% letter 'T' is 20 !
 %
         \end{longtable}%
       }%
@@ -491,7 +438,7 @@
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NewDocumentCommand{\tccoord@examinersline}{mm}{%%
-& \csname tc@student#1@examiner#2\endcsname & \csname tc@student#1@examiner#2pointA\endcsname & \csname tc@student#1@examiner#2pointB\endcsname & \csname tc@student#1@examiner#2pointC\endcsname & \csname tc@student#1@examiner#2grade\endcsname &%
+& \hspace{-0.4em}\csname tc@student#1@examiner#2\endcsname & \csname tc@student#1@examiner#2pointA\endcsname & \csname tc@student#1@examiner#2pointB\endcsname & \csname tc@student#1@examiner#2pointC\endcsname & \csname tc@student#1@examiner#2grade\endcsname &%
 }%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -508,6 +455,10 @@
 % student info (all examiners, advisor, etc.) for report and referral letters.%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tccoord@@studentrow}{m}{%
+  \setcounter{tc@studentcount}{#1}%
+  \tccoord@studentrow[tc@studentextrainfo]{\Alph{tc@studentcount}}%
+}%
 \NewDocumentCommand{\tccoord@studentrow}{O{}m}{%%
   \@ifundefined{tc@student#2}{}{%%
     \@ifundefined{tc@student#2FF}{%%
@@ -516,12 +467,14 @@
         \tccoord@examinersline{#2}{A}\\*%%
         \tccoord@examinersline{#2}{B}\\*%%
         \tccoord@examinersline{#2}{C}\\*%%
-        & \multicolumn{4}{c}{\tcdef@cover@advisorname : \csname tc@student#2@advisor\endcsname} & \textbf{\csname tc@student#2Temp\endcsname} & %%
+        & \multicolumn{4}{c}{\ifcsdef{tc@student#2@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#2@advisor\endcsname \ifcsdef{tc@student#2@coadvisor}{ /\csname tc@student#2@coadvisor\endcsname}}{} & \textbf{\csname tc@student#2Temp\endcsname} & %%
           \textbf{\tccoord@@fate{#2}}%%
-          \@ifundefined{#1}{\\}{\\*%%
+          \ifblank{#1}{\\}{\\*%%
             \multicolumn{6}{l}{\tcdef@coord@boardsworklabel: \csname tc@student#2title\endcsname}\\*%%
-            \multicolumn{6}{l}{\tccoord@studentextrainfo{#2}}\\*%
-            \multicolumn{6}{c}{{\bf \csname tc@student#2remark\endcsname}}\\%
+            \iftcif@coord@reportxinfo%
+              \multicolumn{6}{l}{\tccoord@studentextrainfo{#2}}\\*%
+              \ifcsdef{tc@student#2remark}{\multicolumn{6}{c}{{\bf \csname tc@student#2remark\endcsname}}\\}{}%
+            \fi%
           }%%
           \hline%%
       }{%%
@@ -531,19 +484,35 @@
   }%%
 }%
 %
+%
+%
+\NewDocumentCommand{\tccoord@studentxinforow}{m}{%
+    \multicolumn{6}{l}{\tccoord@studentextrainfo{#1}}\\*%
+    \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
+}%
+%
+%
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % student FF info (report)%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tccoord@@studentFFrow}{m}{%%
+  \setcounter{tc@studentcount}{#1}%
+  \tccoord@studentFFrow{\Alph{tc@studentcount}}%
+}%
 \NewDocumentCommand{\tccoord@studentFFrow}{m}{%%
   \@ifundefined{tc@student#1}{}{%%
     \@ifundefined{tc@student#1Dismiss}{%%
       \@ifundefined{tc@student#1FF}{%%
-      }{%%
+      }{\\*%%
         \multicolumn{6}{l}{\csname tc@student#1\endcsname }  & \tc@TCCgradeFF\\*%%
-        \multicolumn{6}{l}{\tccoord@studentextrainfo{#1} }  & \\*%%
-        \multicolumn{6}{l}{\tcdef@cover@advisorname : \csname tc@student#1@advisor\endcsname} & \\\hline%%
+        \iftcif@coord@reportxinfo%
+          \multicolumn{6}{l}{\tccoord@studentextrainfo{#1}}\\*%
+          \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
+        \fi%
+        \multicolumn{6}{l}{\ifcsdef{tc@student#1@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#1@advisor\endcsname\ifcsdef{tc@student#1@coadvisor}{ /\csname tc@student#1@coadvisor\endcsname}{}} & \\\hline%%
       }%%
     }{}%%
   }%%
@@ -554,14 +523,21 @@
 % student info (report), dimiss case%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\tc@studentDismissrow}[1]{%%
+\NewDocumentCommand{\tccoord@@studentDismissrow}{m}{%%
+    \setcounter{tc@studentcount}{#1}%
+    \tccoord@studentDismissrow{\Alph{tc@studentcount}}%
+}%
+\NewDocumentCommand{\tccoord@studentDismissrow}{mO{}}{%%
   \@ifundefined{tc@student#1}{}{%%
     \@ifundefined{tc@student#1FF}{%%
       \@ifundefined{tc@student#1Dismiss}{%%
-      }{%%
+      }{\ifblank{#2}{}{\setcounter{tc@studentcount}{#2}}\\*%%
         \multicolumn{6}{l}{\csname tc@student#1\endcsname} & \\*%%
-        \multicolumn{6}{l}{\tccoord@studentextrainfo{#1} } & \\*%%
-        \multicolumn{6}{l}{\tcdef@cover@advisorname : \csname tc@student#1@advisor\endcsname} & \\\hline%%
+           \iftcif@coord@reportxinfo%
+             \multicolumn{6}{l}{\tccoord@studentextrainfo{#1}}\\*%
+             \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
+           \fi%
+        \multicolumn{6}{l}{\ifcsdef{tc@student#1@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#1@advisor\endcsname\ifcsdef{tc@student#1@coadvisor}{ /\csname tc@student#1@coadvisor\endcsname}{}} & \\\hline%%
       }%%
     }{}%%
   }%%
@@ -590,127 +566,25 @@
   {%%
 %    \footnotesize%
     \tiny%
-%%
-    \tccoord@studentgrade{A}%
-    \tccoord@studentgrade{B}%
-    \tccoord@studentgrade{C}%
-    \tccoord@studentgrade{D}%
-    \tccoord@studentgrade{E}%
-    \tccoord@studentgrade{F}%
-    \tccoord@studentgrade{G}%
-    \tccoord@studentgrade{H}%
-%%
-    \tccoord@studentgrade{I}%
-    \tccoord@studentgrade{J}%
-    \tccoord@studentgrade{K}%
-    \tccoord@studentgrade{L}%
-    \tccoord@studentgrade{M}%
-    \tccoord@studentgrade{N}%
-    \tccoord@studentgrade{O}%
-    \tccoord@studentgrade{P}%
-%%
-    \tccoord@studentgrade{Q}%
-    \tccoord@studentgrade{R}%
-    \tccoord@studentgrade{S}%
-    \tccoord@studentgrade{T}%
-    \tccoord@studentgrade{U}%
-    \tccoord@studentgrade{V}%
-    \tccoord@studentgrade{W}%
-    \tccoord@studentgrade{X}%
-%%
+    \forcsvlist{\tccoord@studentgrade}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,X,Y}%
     \begin{center}%
         \begin{longtable}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }p{\tc@ReportTabC}@{\ }p{\tc@ReportTabD}@{\ }p{\tc@ReportTabE}@{\ }p{\tc@ReportTabF}@{\ }p{\tc@ReportTabG}}%
           \multicolumn{7}{c}{\tcdef@forms@formstitle\ \tcdef@coord@TCCperiod}\\\hline%
           & \tcdef@coord@boardlabel & \tc@TCCpointAlabel & \tc@TCCpointBlabel & \tc@TCCpointClabel &%
             \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
           \endhead%
-          \tccoord@studentrow[tc@studentextrainfo]{A}%
-          \tccoord@studentrow[tc@studentextrainfo]{B}%
-          \tccoord@studentrow[tc@studentextrainfo]{C}%
-          \tccoord@studentrow[tc@studentextrainfo]{D}%
-          \tccoord@studentrow[tc@studentextrainfo]{E}%
-          \tccoord@studentrow[tc@studentextrainfo]{F}%
-          \tccoord@studentrow[tc@studentextrainfo]{G}%
-          \tccoord@studentrow[tc@studentextrainfo]{H}%
-%%
-          \tccoord@studentrow[tc@studentextrainfo]{I}%
-          \tccoord@studentrow[tc@studentextrainfo]{J}%
-          \tccoord@studentrow[tc@studentextrainfo]{K}%
-          \tccoord@studentrow[tc@studentextrainfo]{L}%
-          \tccoord@studentrow[tc@studentextrainfo]{M}%
-          \tccoord@studentrow[tc@studentextrainfo]{N}%
-          \tccoord@studentrow[tc@studentextrainfo]{O}%
-          \tccoord@studentrow[tc@studentextrainfo]{P}%
-%%
-          \tccoord@studentrow[tc@studentextrainfo]{Q}%
-          \tccoord@studentrow[tc@studentextrainfo]{R}%
-          \tccoord@studentrow[tc@studentextrainfo]{S}%
-          \tccoord@studentrow[tc@studentextrainfo]{T}%
-          \tccoord@studentrow[tc@studentextrainfo]{U}%
-          \tccoord@studentrow[tc@studentextrainfo]{V}%
-          \tccoord@studentrow[tc@studentextrainfo]{W}%
-          \tccoord@studentrow[tc@studentextrainfo]{X}%
+          \forcsvlist{\tccoord@@studentrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
           \@ifundefined{tc@TCCff@flag}{}{%
             & & & & & & \\%
             & & & & & & \\%
             \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportabsents}}\\\hline%
-            \tccoord@studentFFrow{A}%
-            \tccoord@studentFFrow{B}%
-            \tccoord@studentFFrow{C}%
-            \tccoord@studentFFrow{D}%
-            \tccoord@studentFFrow{E}%
-            \tccoord@studentFFrow{F}%
-            \tccoord@studentFFrow{G}%
-            \tccoord@studentFFrow{H}%
-%%
-            \tccoord@studentFFrow{I}%
-            \tccoord@studentFFrow{J}%
-            \tccoord@studentFFrow{K}%
-            \tccoord@studentFFrow{L}%
-            \tccoord@studentFFrow{M}%
-            \tccoord@studentFFrow{N}%
-            \tccoord@studentFFrow{O}%
-            \tccoord@studentFFrow{P}%
-%%
-            \tccoord@studentFFrow{Q}%
-            \tccoord@studentFFrow{R}%
-            \tccoord@studentFFrow{S}%
-            \tccoord@studentFFrow{T}%
-            \tccoord@studentFFrow{U}%
-            \tccoord@studentFFrow{V}%
-            \tccoord@studentFFrow{W}%
-            \tccoord@studentFFrow{X}%
+            \forcsvlist{\tccoord@@studentFFrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}%
           }%
           \@ifundefined{tc@TCCdismiss@flag}{}{%
             & & & & & & \\%
             & & & & & & \\%
             \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportdismiss}}\\\hline%
-            \tc@studentDismissrow{A}%
-            \tc@studentDismissrow{B}%
-            \tc@studentDismissrow{C}%
-            \tc@studentDismissrow{D}%
-            \tc@studentDismissrow{E}%
-            \tc@studentDismissrow{F}%
-            \tc@studentDismissrow{G}%
-            \tc@studentDismissrow{H}%
-%%
-            \tc@studentDismissrow{I}%
-            \tc@studentDismissrow{J}%
-            \tc@studentDismissrow{K}%
-            \tc@studentDismissrow{L}%
-            \tc@studentDismissrow{M}%
-            \tc@studentDismissrow{N}%
-            \tc@studentDismissrow{O}%
-            \tc@studentDismissrow{P}%
-%%
-            \tc@studentDismissrow{Q}%
-            \tc@studentDismissrow{R}%
-            \tc@studentDismissrow{S}%
-            \tc@studentDismissrow{T}%
-            \tc@studentDismissrow{U}%
-            \tc@studentDismissrow{V}%
-            \tc@studentDismissrow{W}%
-            \tc@studentDismissrow{X}%
+            \forcsvlist{\tccoord@@studentDismissrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
           }%%
         \end{longtable}%%
     \end{center}%%
@@ -726,15 +600,18 @@
 % student check list row%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tccoord@@LCcheck}{mmm}{%
+    & \tccoord@check{#1}{check#2#3}%
+}%
+\NewDocumentCommand{\tccoord@@Lcheck}{mm}{%
+    \forcsvlist{\tccoord@@LCcheck{#1}{#2}}{A,B,C,D,E}\\*%
+}%
 \NewDocumentCommand{\tccoord@studentcheckrow}{m}{%%
   \@ifundefined{tc@student#1}{}{%%
     \@ifundefined{tc@student#1FF}{%%
-      \@ifundefined{tc@student#1Dismiss}{%%
+      \@ifundefined{tc@student#1Dismiss}{\\[-2ex]%%
         \multirow{4}{\tc@ReportTabA}{\csname tc@student#1\endcsname} %
-              & \tccoord@check{#1}{checkAA} &  \tccoord@check{#1}{checkAB} & \tccoord@check{#1}{checkAC} & \tccoord@check{#1}{checkAD} & \tccoord@check{#1}{checkAE}\\*%
-              & \tccoord@check{#1}{checkBA} &  \tccoord@check{#1}{checkBB} & \tccoord@check{#1}{checkBC} & \tccoord@check{#1}{checkBD} & \tccoord@check{#1}{checkBE}\\*%
-              & \tccoord@check{#1}{checkCA} &  \tccoord@check{#1}{checkCB} & \tccoord@check{#1}{checkCC} & \tccoord@check{#1}{checkCD} & \tccoord@check{#1}{checkCE}\\*%
-              & \tccoord@check{#1}{checkDA} &  \tccoord@check{#1}{checkDB} & \tccoord@check{#1}{checkDC} & \tccoord@check{#1}{checkDD} & \tccoord@check{#1}{checkDE}\\\hline%%
+              \forcsvlist{\tccoord@@Lcheck{#1}}{A,B,C,D}\hline%%
       }{}%%
     }{}%%
   }%%
@@ -756,32 +633,7 @@
         \begin{longtable}{p{\tc@ReportTabA}lllll}%
           \\\hline%
           \endhead%
-          \tccoord@studentcheckrow{A}%
-          \tccoord@studentcheckrow{B}%
-          \tccoord@studentcheckrow{C}%
-          \tccoord@studentcheckrow{D}%
-          \tccoord@studentcheckrow{E}%
-          \tccoord@studentcheckrow{F}%
-          \tccoord@studentcheckrow{G}%
-          \tccoord@studentcheckrow{H}%
-%%
-          \tccoord@studentcheckrow{I}%
-          \tccoord@studentcheckrow{J}%
-          \tccoord@studentcheckrow{K}%
-          \tccoord@studentcheckrow{L}%
-          \tccoord@studentcheckrow{M}%
-          \tccoord@studentcheckrow{N}%
-          \tccoord@studentcheckrow{O}%
-          \tccoord@studentcheckrow{P}%
-%%
-          \tccoord@studentcheckrow{Q}%
-          \tccoord@studentcheckrow{R}%
-          \tccoord@studentcheckrow{S}%
-          \tccoord@studentcheckrow{T}%
-          \tccoord@studentcheckrow{U}%
-          \tccoord@studentcheckrow{V}%
-          \tccoord@studentcheckrow{W}%
-          \tccoord@studentcheckrow{X}%
+          \forcsvlist{\tccoord@studentcheckrow}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,X,Y}%
         \end{longtable}%%
     \end{center}%%
   } %end of footnotesize%
