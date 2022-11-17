@@ -107,6 +107,8 @@ Deve conter:
 
 \formsadvisoremaillabel{Email d\tccore@@ref{advisor}{article} Orientador\tccore@@ref{advisor}{narticle}}
 
+\formscoadvisoremaillabel{Email d\tccore@@ref{coadvisor}{article} Co-Orientador\tccore@@ref{coadvisor}{narticle}}
+
 \formsreasonlabel{Justificativa}
 
 

@@ -48,7 +48,7 @@
 \cmdfactory<forms>{formsdatelabel,formstitle,formsfootnote}
 \cmdfactory<forms>{renewreqformtitle,renewreqformnotes,reqformtitle,reqformopening,reqformdesc}%
 \cmdfactory<forms>{coadvisorformtitle,coadvisorformdesc}
-\cmdfactory<forms>{formsbrieflabel,formsstudentemaillabel,formsadvisoremaillabel}
+\cmdfactory<forms>{formsbrieflabel,formsstudentemaillabel,formsadvisoremaillabel,formscoadvisoremaillabel}
 \cmdfactory<forms>{formsreasonlabel}
 \cmdfactory<forms>{examformtitle,examformdesc,examformnoteslabel}
 \cmdfactory<forms>{examformnotes,examboardformtitle,examboardformdesc}%
@@ -280,6 +280,10 @@
   \tcdef@forms@formsadvisorlabel: \tc@studentA@advisor
 
   \tcdef@forms@formscoadvisorlabel: \tc@studentA@coadvisor%
+
+  \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}%
+
 
   \vfill%
   {\bf \tcdef@forms@formsreasonlabel}:%
