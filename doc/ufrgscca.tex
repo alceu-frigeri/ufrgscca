@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.1 (2022/09/06)
+%% This is version 1.0.2 (2022/11/20)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -29,7 +29,8 @@
 \maxdeadcycles=500 %%the many marginpar statements are actually a pain.
 \newif\iffulldoc
 
-\fulldocfalse
+%\fulldocfalse
+\fulldoctrue
 
 \iffulldoc
   \dcTitle{The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion \\(extended documentation)}
@@ -38,7 +39,7 @@
 \fi
 
 \dcAuthor{Alceu Frigeri}
-\dcDate{September 2022}
+\dcDate{November 2022}
 \makeatletter
 
 
@@ -62,7 +63,7 @@
 	N.B.: This bundle requires a quite recent \LaTeX2e kernel, at least as recent as June 2022, which allows to declare package options using the new \Key{key}~=\Key{value} system and declare commands with \Macro{\NewDocumentCommand}{}, out-of-the-box.
 
 \subsection{Current Version}
-For the sake of the 'maintainers' sanity, since this is a bundle, all files are saved with the same version (bundle version), with two exceptions: \Pack{ufrgscca-curr.sty} \Pack{ufrgscca-ppc.sty} which are less tested than the others, and somewhat in what one would call 'beta' state. Better said, all files are version \ufrgsccaversion, except \Pack{ufrgscca-curr} and \Pack{ufrgscca-ppc} whose versions are \ufrgsccacurrversion.
+For the sake of the “maintainer's sanity”, since this is a bundle, all files are saved with the same version (bundle version), with two exceptions: \Pack{ufrgscca-curr.sty} \Pack{ufrgscca-ppc.sty} which are less tested than the others, and somewhat in what one would call 'beta' state. Better said, all files are version \ufrgsccaversion, except \Pack{ufrgscca-curr} and \Pack{ufrgscca-ppc} whose versions are \ufrgsccacurrversion.
 
 \section{\tightul{ufrgscca} Class}
 
@@ -82,7 +83,7 @@ Being based on the report class, one can use all class options one would with a 
 	\DescribeOption{oneside} in case the document will be printed in single side sheets, otherwise it's assumed a two-sided printing.
 	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
 	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
-	\DescribeOption{xlists} this will load the ufrgscca-lists package, for the definition of new floats/lists.
+	\DescribeOption{xlists} this will load the {\MetaFmt[Pack]\sffamily ufrgscca-lists} package, for the definition of new floats/lists.
 	\DescribeOption{xpacks} this will load a series of packages, which can be handy when writing Engineering reports: {\MetaFmt[Pack]\sffamily relsize, keyval, graphicx, mathtools, mathrsfs, amsfonts, amssymb, empheq, amsthm, ext\-arrows, mathfixs, bigdelim, circuitikz, steimenz} and tikz libraries: {\MetaFmt[Pack]\sffamily fit,  math, calc, shapes.geometry, shapes.misc, shapes.multipart, graphs, 3d, positioning, shadows, babel}. One is advised to look after each package documentation (ctan.org) for further information.
 	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
 	\DescribeOption{internship} in case the doc is an internship report.
@@ -92,6 +93,7 @@ Being based on the report class, one can use all class options one would with a 
 	\DescribeOption{showframes} for layout proof only, it will draw frames around each page main parts.
 	\DescribeOption{showlabels} it will put a reference mark in each label created, and print out it's name.
 	\DescribeOption{nofontwarning} in case of \Pack{ufrgscca-ppc} is loaded, it will suppress some font related warnings.
+	\DescribeOption{nolocal} this will suppress the loading of any local.tex file, which would, otherwise, be loaded.
 	\DescribeOption{dctools} this will change page layout and base class to article, it is meant to document the class itself.
 	\DescribeOption{texlive} this is a reserved key, in case some workaround for texlive is needed.
 	\DescribeOption{overleaf} this is a reserved key, in case some workaround for overleaf is needed.
@@ -114,6 +116,19 @@ The \Pack{hyperref} package, sometimes, gets the \Macro{\autoref}{} name wrong (
 The default \Arg{sep} being a comma, and the default \Arg{spc} being empty space.
 
 \end{Macros}
+
+\subsection{Class Known Hooks}
+\begin{Macros}{\miktexHack,\overleafHack,\livetexHack}
+    \begin{Syntax}%
+        \Macro{\miktexHack}{}
+        \Macro{\overleafHack}{}
+        \Macro{\livetexHack}{}
+    \end{Syntax}
+    In case some workaround is needed due an unexpected error (when upgrading packages/\TeX system) the class “knows” about those three hooks.
+    They will be executed if, and only if, they are user defined and the corresponding package option is used, i.e., for example, for the hook \Macro{\miktexHack}{} to be used/called by the class \Packlst{ufrgscca}, one has to: a)~defined it and b)~use the class option \Option{miktex}.
+\end{Macros}
+
+
 \section{\tightul{ufrgscca-abnt} Package}
 This package is the one that sets the page layout (using \Packlst{geometry, titlesec, titletoc}) and adjusts the main float environments (figure, tables, captions).
 It can be used as a stand alone package, regardless of the underlying class.
@@ -677,6 +692,16 @@ One can (should) use the commands listed at \autonameref{core-commands}, and the
 		\Macro{\TCCperiod}{semester}
 	\end{Syntax}
 Use \Macro{\tcccalendareventdate}{} to set the date of a given 'event' (the list of 'calendar events' are (might have been) set in the \emph{ufrgscca-ptBR-coord.def} or \emph{ufrgscca-en-coord.def} file). \Macro{boardstitleB}{} sets a 2nd title line for the 'boards schedule report'. \Macro{\boardsOBS}{} allows to add an observation (\Arg{obs}) for the 'boards schedule report', finally, \Macro{\TCCperiod} sets the current semester value.
+\end{Macros}
+
+\begin{Macros}{\tcceventAweek,\tcceventBweek,.,.,.,.,\tcceventJweek}
+    \begin{Syntax}%
+        \Macro{\tcceventAweek}{week num.}
+        \Macro{\tcceventBweek}{week num.}
+        \ensuremath{\cdots}
+        \Macro{\tcceventJweek}{week num.}
+    \end{Syntax}
+    Those macros allow to change the default week value for the calendar's events.
 \end{Macros}
 
 
