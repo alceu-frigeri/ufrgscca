@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.2 (2022/11/20)
+%% This is version 1.0.2 (2022/11/18)
 %%
 %% The list of files that compose this work can be found  in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,7 +27,7 @@
 \def\tc@tmp@packname{ufrgscca-en-base}
 \def\tc@tmp@altpackname{ufrgsccaenbase}
 \def\tc@tmp@packdesc{UFRGS/CCA English base defs}
-\def\tc@tmp@packdate{2022/11/20}
+\def\tc@tmp@packdate{2022/11/18}
 \def\tc@tmp@packversion{1.0.2}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
