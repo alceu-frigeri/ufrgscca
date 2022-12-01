@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.2 (2022/11/18)
+%% This is version 1.0.3 (2022/12/01)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-cover}
 \def\tc@tmp@altpackname{ufrgsccacover}
 \def\tc@tmp@packdesc{UFRGS/CCA cover commands}
-\def\tc@tmp@packdate{2022/11/18}
-\def\tc@tmp@packversion{1.0.2}
+\def\tc@tmp@packdate{2022/12/01}
+\def\tc@tmp@packversion{1.0.3}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -100,12 +100,12 @@
 
 \NewDocumentCommand{\tccover@coveradvisorinfo}{}{%%
         \@ifundefined{tc@studentA@advisor}{}{\vfill{\scshape\tcdef@cover@advisorname}:\\\null\hfill\tc@studentA@advisor}%
-        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\tcdef@core@coadvisorname}:\\\null\hfill\tc@studentA@coadvisor}%
+        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\tcdef@cover@coadvisorname}:\\\null\hfill\tc@studentA@coadvisor}%
 }%
 %
 \NewDocumentCommand{\tccover@reportadvisorinfo}{}{%%
         \@ifundefined{tc@studentA@advisor}{}{\vfill{\scshape\iftcif@internship\tcdef@cover@advisorname\else\tcdef@cover@profname\fi}:\\\null\hfill\tc@studentA@advisor}%
-        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\iftcif@internship\tcdef@core@coadvisorname\else\tcdef@cover@coprofname\fi}:\\\null\hfill\tc@studentA@coadvisor}%
+        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\iftcif@internship\tcdef@cover@coadvisorname\else\tcdef@cover@coprofname\fi}:\\\null\hfill\tc@studentA@coadvisor}%
 }%
 %
 

@@ -119,7 +119,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.0.2 (this)
+* Version 1.0.3 (this)
+    - ufrgscca-cover typo correction
+
+* Version 1.0.2
     - ufrgscca-coord code cleanup
     - documentation cleanup (typos)
     - adding class hooks (in case an emergency workaround is needed)
