@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.3 (2022/12/01)
+%% This is version 1.0.4 (2022/12/15)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -82,6 +82,8 @@ Being based on the report class, one can use all class options one would with a 
 	\DescribeOption{openright} in case of printed material, this will assure that a \Macro{\chapter}{} always starts at an odd page, which is relevant in case of printing out (double sided) the document.
 	\DescribeOption{oneside} in case the document will be printed in single side sheets, otherwise it's assumed a two-sided printing.
 	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
+    \DescribeOption{pretextontoc} “pre-text” elements, like “list of$\dots$” will be inserted in the “table of contents”.
+    \DescribeOption{timesroman} will set the default font to Roman (using the obsolete mathptmx package, based on  a free replacement of the proprietary Times New Roman (by Microsoft) and Times Roman (By Adobe)) instead of the default Latin Modern Roman font. As a side effect, the package \Pack{microtype} isn't loaded (can't be used), resulting in a worst overall layout. NB. The alternative (newer and maintained) packages newtxtext/newtxmath can't be used due to some packages incompatibilities.
 	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
 	\DescribeOption{xlists} this will load the {\MetaFmt[Pack]\sffamily ufrgscca-lists} package, for the definition of new floats/lists.
 	\DescribeOption{xpacks} this will load a series of packages, which can be handy when writing Engineering reports: {\MetaFmt[Pack]\sffamily relsize, keyval, graphicx, mathtools, mathrsfs, amsfonts, amssymb, empheq, amsthm, ext\-arrows, mathfixs, bigdelim, circuitikz, steimenz} and tikz libraries: {\MetaFmt[Pack]\sffamily fit,  math, calc, shapes.geometry, shapes.misc, shapes.multipart, graphs, 3d, positioning, shadows, babel}. One is advised to look after each package documentation (ctan.org) for further information.

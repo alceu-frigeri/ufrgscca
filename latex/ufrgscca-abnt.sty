@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.3 (2022/12/01)
+%% This is version 1.0.4 (2022/12/15)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-abnt}
 \def\tc@tmp@altpackname{ufrgsccaabnt}
 \def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
-\def\tc@tmp@packdate{2022/12/01}
-\def\tc@tmp@packversion{1.0.3}
+\def\tc@tmp@packdate{2022/12/15}
+\def\tc@tmp@packversion{1.0.4}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -38,6 +38,9 @@
 \DeclareKeys[ufrgscca-abnt]{
     strict-abnt.usage = load,
 		strict-abnt.if = tcif@strictabnt,
+
+        pretextontoc.usage = load,
+        pretextontoc.if = tcif@pretextontoc,
 
 		chapternopagenum.usage = load,
 		chapternopagenum.if = tcif@chapternopagenum,
@@ -72,7 +75,7 @@
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading
 %%%%%%%%%%%%%%%%%%%%%
-\RequirePackage[english,brazilian]{babel}%
+\RequirePackage[english,brazilian]{babel}% see ufrgscca.cls in case of newtx* being loaded!
 \RequirePackage{csquotes}%
 
 \iftcif@strictabnt
@@ -148,7 +151,10 @@
 %%%
 %%% typeset adjusting {package microtype}
 %%%
+\iftcif@timesroman\else%
 \iftcif@nomicrotype\else\RequirePackage[tracking,kerning,spacing,babel]{microtype}\fi%
+\fi
+%\iftcif@nomicrotype\else\RequirePackage[babel]{microtype}\fi%
 %
 % pdftex native protruding
 %
@@ -197,8 +203,8 @@
 \def\tc@lblmargin{22mm}
 \contentsmargin{2.2em}
 \def\tc@dotspacing{0.5pc}
-\titlecontents{chapter}[\tc@lblmargin]{\vspace{3mm}\normalfont\scshape\selectfont}{\contentslabel{\tc@lblmargin}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}
-\titlecontents{section}[\tc@lblmargin]{\vspace{1mm}}{\contentslabel{\tc@lblmargin}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\contentspage}
+\titlecontents{chapter}[\tc@lblmargin]{\vspace{2.5mm}\normalfont\scshape\selectfont}{\contentslabel{\tc@lblmargin}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}
+\titlecontents{section}[\tc@lblmargin]{\vspace{0.75mm}}{\contentslabel{\tc@lblmargin}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\contentspage}
 
 \dottedcontents{subsection}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
 
@@ -284,11 +290,14 @@
 
 \defbibheading{bibliography}[\refname]{\nonum\chapter{#1}\pagestyle{bibliography}}
 
-\let\tc@temp@listoffigures\listoffigures
-\def\listoffigures{\tc@temp@listoffigures\addcontentsline{toc}{chapter}{\MakeUppercase\listfigurename}}
+\iftcif@pretextontoc
+    \let\tc@temp@listoffigures\listoffigures
+    \def\listoffigures{\tc@temp@listoffigures\addcontentsline{toc}{chapter}{\textsc\listfigurename}}
 %%
-\let\tc@temp@listoftables\listoftables
-\def\listoftables{\tc@temp@listoftables\addcontentsline{toc}{chapter}{\MakeUppercase\listtablename}}
+    \let\tc@temp@listoftables\listoftables
+    \def\listoftables{\tc@temp@listoftables\addcontentsline{toc}{chapter}{\textsc\listtablename}}
+\fi
+
 %%
 
 
@@ -296,7 +305,11 @@
 \NewDocumentCommand{\NewChapListEnv}{mm}{
     \NewDocumentEnvironment{#1}{O{}m}{%
         \settowidth{\tc@lblwidth}{##2***}%
-        \nonum\chapter{\MakeUppercase{#2}}%
+        \iftcif@pretextontoc
+            \nonum\chapter{\textsc{#2}}%
+        \else
+            \notoc\chapter{\textsc{#2}}%
+        \fi
         \begin{description}[tcc,noindent,leftmargin=\tc@lblwidth,labelwidth=!,##1]%
 		}{\end{description}}
 }

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.3 (2022/12/01)
+%% This is version 1.0.4 (2022/12/15)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca}
 \def\tc@tmp@altpackname{ufrgscca}
 \def\tc@tmp@packdesc{UFRGS/CCA  class}
-\def\tc@tmp@packdate{2022/12/01}
-\def\tc@tmp@packversion{1.0.3}
+\def\tc@tmp@packdate{2022/12/15}
+\def\tc@tmp@packversion{1.0.4}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -35,7 +35,6 @@
 
 \RequirePackage{etex}
 \RequirePackage{etoolbox}
-\RequirePackage{lmodern}%
 
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
@@ -55,6 +54,12 @@
     english.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
     relnum.usage = load,
     relnum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\PassOptionsToPackage{\CurrentOption}{ufrgscca-lists}\OptionNotUsed},
+
+    pretextontoc.usage = load,
+    pretextontoc.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+	timesroman.usage = load,
+    timesroman.if = tcif@timesroman,
+
     oneside.usage = load,
     oneside.code = {\AtEndOfClass{\@twosidefalse}\OptionNotUsed},
     strict-abnt.usage = load,
@@ -102,10 +107,25 @@
 \DeclareUnknownKeyHandler[tc]{\PassOptionsToClass{\CurrentOption}{report}}
 \ProcessKeyOptions[tc]\relax
 
+\iftcif@timesroman
+    \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
+    \RequirePackage{mathptmx}
+%    \RequirePackage[scale=1.05,looser]{newtxtext}%
+%    \RequirePackage[scale=1.05]{newtxmath}%
+%    \PackageWarning{ufrgscca}{Fonts newtxtext and newtxmath loaded. Those are free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
+%    \PackageWarning{ufrgscca}{newtxtext and newtxmath are based on URW Nimbus Roman with some extra math support. Again, those are not real Times Roman nor Times New Roman}
+    \PackageWarning{ufrgscca}{(obsolete) package mathptmx loaded. It loads a free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
+    \PackageWarning{ufrgscca}{package microtype is suppressed, resulting in a subpar layout. Again, the “Roman” font used isn't a true Times Roman nor Times New Roman}
+
+\else
+    \RequirePackage{lmodern}%
+\fi
+
 \iftcif@dctools
     \LoadClass[12pt]{article}
 \else
     \LoadClass[12pt,twoside,openright]{report}
+%    \LoadClass[12pt]{report}
 \fi
 
 \iftcif@miktex

@@ -119,7 +119,11 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.0.3 (this)
+* Version 1.0.4 (this)
+    - added some package options: pretextontoc and timesroman
+    - changed default included elements in the Table of Contents (related to the new options, see documentation)
+
+* Version 1.0.3
     - ufrgscca-cover typo correction
 
 * Version 1.0.2
