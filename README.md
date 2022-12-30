@@ -123,6 +123,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - added a package options yearsonly
     - added some forms (internship related, see documentation)
     - added some coord related reports (see documentation)
+    - documentation update
 
 * Version 1.0.4
     - added some package options: pretextontoc and timesroman
