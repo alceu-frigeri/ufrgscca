@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-abnt}
 \def\tc@tmp@altpackname{ufrgsccaabnt}
 \def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -41,6 +41,10 @@
 
         pretextontoc.usage = load,
         pretextontoc.if = tcif@pretextontoc,
+
+        yearsonly.usage = load,
+        yearsonly.if = tcif@yearsonly,
+
 
 		chapternopagenum.usage = load,
 		chapternopagenum.if = tcif@chapternopagenum,
@@ -450,7 +454,11 @@
 			October\or November\or December%%
 		\fi%%
 	}%%
-	\def\tc@date{\tc@publmonth~\tc@publyear}%%
+    \iftcif@yearsonly
+        \def\tc@date{\tc@publyear}%%
+    \else
+    	\def\tc@date{\tc@publmonth~\tc@publyear}%%
+    \fi
 }%
 %
 %para portugues%
@@ -466,9 +474,14 @@
 			Outubro\or Novembro\or Dezembro%%
 		\fi%%
 	}%%
-	\def\tc@date{\tc@publmonth\ de~\tc@publyear}%%
+    \iftcif@yearsonly
+        \def\tc@date{\tc@publyear}%%
+    \else
+        \def\tc@date{\tc@publmonth~\tc@publyear}%%
+    \fi
 }%
 %
+\def\tc@monthyeardate{\tc@publmonth~\tc@publyear}
 %
 % Mainly for 'cover pages'
 \def\tc@pagebreak{\if@openright\cleardoublepage\else\clearpage\fi}

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-coord}
 \def\tc@tmp@altpackname{ufrgsccacoord}
 \def\tc@tmp@packdesc{UFRGS/CCA coord commands}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -58,15 +58,17 @@
 \ProcessKeyOptions[ufrgscca-coord]\relax
 \NewDocumentCommand{\setreports}{m}{\SetKeys[ufrgscca-coord]{#1}}
 
+
 \def\c@one#1:#2:{\csname #1\endcsname}
 \def\c@two#1:#2:{\csname #1\endcsname[newpage]}
 \def\tccoord@split#1:#2:#3#4#5,{#4#1:#2:}
 \NewDocumentCommand{\tccoord@student@exec}{m}{\tccoord@split#1::\c@two\c@one\empty,}
 
 \RequirePackage{longtable}
-\RequirePackage{ufrgscca-forms}
 \RequirePackage{ufrgscca-gen}
 \RequirePackage{ufrgscca-core}
+\RequirePackage{ufrgscca-forms}
+\RequirePackage{pgfcalendar}
 
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -88,21 +90,37 @@
 \cmdfactory<coord>{tcceventIweek,tcceventJweek,tcceventKweek,tcceventLweek}
 
 
+\cmdfactory<coord>{internshipreferralopening,internshipreferralfatetext,internshipgrades,internshipreferralfailFF}
+\cmdfactory<coord>{internshipreferralexamapprovedtext,internshipreferralexamfailtext}
+\cmdfactory<coord>{internshipreferralexamhardapprovedtext,internshipreferralexamhardfailtext}
+
+
 %%% this should go to ufrgscca-coord !!!!
-\NewDocumentCommand{\TCCgrades}{mmmmm}{%
+
+\NewDocumentCommand{\grades}{mmmmm}{%
   \gdef\tc@TCCgradeA{#1}%
   \gdef\tc@TCCgradeB{#2}%
   \gdef\tc@TCCgradeC{#3}%
   \gdef\tc@TCCgradeD{#4}%
   \gdef\tc@TCCgradeFF{#5}%
+  \gdef\tc@gradeA{#1}%
+  \gdef\tc@gradeB{#2}%
+  \gdef\tc@gradeC{#3}%
+  \gdef\tc@gradeD{#4}%
+  \gdef\tc@gradeFF{#5}%
 }%
-%
+\let\TCCgrades\grades%
 %%% this should go to ufrgscca-coord !!!!
-\NewDocumentCommand{\TCCgradesN}{mmm}{%
+
+\NewDocumentCommand{\gradesN}{mmm}{%
   \gdef\tc@TCCgradeAN{#1}%
   \gdef\tc@TCCgradeBN{#2}%
   \gdef\tc@TCCgradeCN{#3}%
+  \gdef\tc@gradeAN{#1}%
+  \gdef\tc@gradeBN{#2}%
+  \gdef\tc@gradeCN{#3}%
 }%
+\let\TCCgradesN\gradesN
 
 
 %%%%%%%%%
@@ -111,13 +129,15 @@
 \NewDocumentCommand{\tccoord@studentExam}{m}{%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Exam\endcsname{#1}%
 }%
-    \NewDocumentCommand{\tccoord@studentFF}{}{%
+\NewDocumentCommand{\tccoord@studentFF}{}{%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}FF\endcsname{1}%
   \gdef\tc@TCCff@flag{1}%
+  \gdef\tc@ff@flag{1}%
 }%
 \NewDocumentCommand{\tccoord@studentDismiss}{}{%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Dismiss\endcsname{1}%
   \gdef\tc@TCCdismiss@flag{1}%
+  \gdef\tc@dismiss@flag{1}%
 }%
 \NewDocumentCommand{\studentFate}{O{}}{%%
   \ifthenelse{\equal{#1}{C}}{%%
@@ -150,6 +170,28 @@
   \expandafter\gdef\csname date:#1\endcsname{#2}%
 }%
 %
+
+%\def\c@one#1:#2:{\csname #1\endcsname}
+%\def\c@two#1:#2:{\csname #1\endcsname[newpage]}
+
+\NewDocumentCommand{\studentturnindate}{m}{\tccoord@studentdatesplit#1,}
+%23/12/2022
+
+\def\tccoord@studentdatesplit#1/#2/#3,{
+   \pgfcalendarifdate{#3-#2-#1}{at least=\tc@internshipcommitB+1}{\tccoord@studentFF}{}
+   \pgfcalendarifdate{#3-#2-#1}{between=\tc@internshipcommitA+1 and \tc@internshipcommitB}{\tccoord@studentExam{X}}{}
+   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}date\endcsname{#1/#2/#3}%
+}
+
+\NewDocumentCommand{\intershipcommitdates}{mm}{%
+    \tccoord@commitdatesplit#1,A,%
+    \tccoord@commitdatesplit#2,B,%
+}
+
+\def\tccoord@commitdatesplit#1/#2/#3,#4,{
+   \expandafter\xdef\csname tc@internshipcommit#4\endcsname{#3-#2-#1}%
+   \expandafter\xdef\csname tc@internshipcommit#4#4\endcsname{#1/#2/#3}%
+}
 
 %%%%%%%%%
 %%%%%%%%% ufrgscca-coord !?!!
@@ -207,6 +249,18 @@
     \@defaultboard%
   }%%
   \expandafter\NewDocumentCommand\csname #1.hook\endcsname{}{}%
+}%
+
+
+\NewDocumentCommand{\NewInternshipStudent}{m+m}{%%
+    \expandafter\NewDocumentCommand\csname #1\endcsname{O{}}{%%
+        #2%
+        \csname #1.hook\endcsname%
+        \iftcif@coord@forms@referral%
+        \tccoord@internshipreferalletter%
+        \fi%
+    }%%
+    \expandafter\NewDocumentCommand\csname #1.hook\endcsname{}{}%
 }%
 
 
@@ -426,11 +480,19 @@
 \NewDocumentCommand{\tccoord@studentgrade}{m}{%%
   \@ifundefined{tc@student#1}{}{%
     \expandafter\edef\csname tc@student#1Temp\endcsname{%%
-\fpeval{round((\csname tc@student#1@examinerAgrade\endcsname + \csname tc@student#1@examinerBgrade\endcsname + \csname tc@student#1@examinerCgrade\endcsname)/3,2,1)}%
+\fpeval{round((\csname tc@student#1@examinerAgrade\endcsname + \csname tc@student#1@examinerBgrade\endcsname + \csname tc@student#1@examinerCgrade\endcsname )/3,2,1)}%
     }%
   }%
 }%
 %
+
+\NewDocumentCommand{\tccoord@internshipstudentgrade}{m}{%
+  \@ifundefined{tc@student#1}{}{%
+    \expandafter\edef\csname tc@student#1Temp\endcsname{%%
+        \fpeval{round((2 * (\csname tc@student#1@supervisorgradeA\endcsname + \csname tc@student#1@supervisorgradeB\endcsname) + \csname tc@student#1@tutorgrade\endcsname + \csname tc@student#1@internshipcoordgrade\endcsname )/28,2,1)}%
+    }%
+  }%
+}
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -777,6 +839,87 @@
 }%
 %
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship referal letter%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tccoord@internshipreferalletter}{}{%
+ \@ifundefined{tc@student\Alph{tc@studentcount}Dismiss}{%
+  \tc@formtopbox{\tcdef@forms@formsinternshiptitle}{}%
+
+  \noindent\tcdef@coord@internshipreferralopening%
+  \vfill%
+  \tccoord@internshipstudentgrade{\Alph{tc@studentcount}}
+
+  \@ifundefined{tc@student\Alph{tc@studentcount}FF}{%
+    \@ifundefined{tc@student\Alph{tc@studentcount}Exam}{%
+        \tcdef@coord@internshipreferralfatetext
+
+        \vfill%
+        \tcdef@coord@internshipgrades%
+    }{
+    %%% in Exam...
+      \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{X}}{%..report past due date
+        \ifthenelse{1 = \fpeval{\tccore@@ref{student}{Temp} < \tc@TCCgradeCN}}{%
+            \tccoord@studentExam{D}%
+            \tcdef@coord@internshipreferralexamfailtext
+            \vfill%
+            \tcdef@coord@internshipgrades%
+            \vfill%
+        }{%
+            \tccoord@studentExam{C}%
+            \tcdef@coord@internshipreferralexamapprovedtext
+            \vfill%
+            \tcdef@coord@internshipgrades%
+            \vfill%
+        }
+      }{%%... in Exam due 'report form'
+            \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{D}}{%
+                \tcdef@coord@internshipreferralexamhardfailtext
+                \vfill%
+                \tcdef@coord@internshipgrades%
+                \vfill%
+            }{%
+                \tcdef@coord@internshipreferralexamhardapprovedtext
+                \vfill%
+                \tcdef@coord@internshipgrades%
+                \vfill%
+            }%
+      }
+    }
+  }{
+   %%% FF... failed/report not delivered.
+   \tcdef@coord@internshipreferralfailFF
+  }
+
+    \vfill%
+
+
+    \vfill%
+\begin{flushright}%
+    \tc@city, \tc@publday\ de \tc@publmonth\ de \tc@publyear .%
+    \vfill %
+
+    \tcdef@core@internshipcoordtitle%
+    \vfill%
+
+    $\overline{\text{\tcdef@core@internshipcoord}}$%
+\end{flushright}%
+\vfill%
+
+
+\pagebreak%
+}{}
+}
+%
+%
+%
+
+
+
+
 \NewDocumentCommand{\tccoord@calendarfill}{}{%
 %
   \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
@@ -814,6 +957,21 @@
     \tccoord@studentlistform%
   \fi%
 }%%
+
+
+\NewDocumentCommand{\internshipreports}{O{}m}{%%
+    \setreports{#1}
+    \@ifundefined{tcdef@coord@list#2}{}{%
+        \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tccoord@student@exec\expandafter\expandafter\expandafter{\csname tcdef@coord@list#2\endcsname}
+    }
+    \iftcif@coord@checklist%
+    \tccoord@TCCchecklist%
+    \fi%
+    \iftcif@coord@report%
+    \tccoord@TCCreport%
+    \fi%
+}%%
+
 
 %%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%

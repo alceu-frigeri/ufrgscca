@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-cover}
 \def\tc@tmp@altpackname{ufrgsccacover}
 \def\tc@tmp@packdesc{UFRGS/CCA cover commands}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -36,7 +36,7 @@
     report.usage = load,
     report.if = tcif@report,
     internship.usage = load,
-	internship.if = tcif@internship
+	internship.if = tcif@internship,
 }
 \ProcessKeyOptions[ufrgscca-cover]\relax
 
@@ -57,6 +57,9 @@
 \cmdfactory<cover>{reportspecificinfo,approvalspecificinfo}%
 \cmdfactory<cover>{advisorwidth}
 \cmdfactory<cover>{profname,coprofname}%
+\cmdfactory<cover>{tutorname,supervisorname}%
+\cmdfactory<cover>{internshiptitle}%
+\cmdfactory<cover>{internshipinfo}%
 %
 \advisorwidth{0.55\textwidth}%
 %
@@ -113,14 +116,27 @@
 \let\tc@org@maketitle\maketitle
 \RenewDocumentCommand{\maketitle}{}{\coverpages}%
 
+
 \NewDocumentCommand{\coverpages}{}{%%
-	\thecoverpage%that´s the first page%
-	\iftcif@report
-	\else
-      \thetitlepage%that´s the second page (for tcc)%
-      \theapprovalpage%that´s the third page (for tcc)%
-	\fi
+    \thecoverpage%that´s the first page%
+    \thetitlepage%that´s the second page (for tcc)%
+    \tccapprovalpage%that´s the third page (for tcc)%
 }%
+
+\iftcif@report
+  \RenewDocumentCommand{\coverpages}{}{%%
+    \thecoverpage%that´s the first page%
+  }%
+\fi
+
+\iftcif@internship
+  \AtBeginDocument{\title{\tcdef@cover@internshiptitle}}
+  \RenewDocumentCommand{\coverpages}{}{%%
+    \thecoverpage%that´s the first page%
+    \internapprovalpage%that´s the second page (for internship)%
+  }%
+\fi
+
 %
 
 %%%%%%%%%
@@ -228,7 +244,7 @@
 %% 3rd cover page (approval page)%
 %%%
 %%%%%%%%%
-\NewDocumentCommand{\theapprovalpage}{}{%%
+\NewDocumentCommand{\tccapprovalpage}{}{%%
 	\begin{center}%
     \noindent\tc@covertopbox%
     \vfill%
@@ -259,10 +275,58 @@
     \vfill%
   }%
   \vfill%
-  \hfill\tc@city, \tc@date
+  \hfill\tc@city, \tc@monthyeardate
 	\end{center}%
 	\tc@pagebreak
 }%
+%
+%
+%
+%
+%
+%%%%%%%%%
+%%%
+%% 2nd cover page (internship, approval page)%
+%%%
+%%%%%%%%%
+\NewDocumentCommand{\internapprovalpage}{}{%%
+    \begin{center}%
+        \noindent\tc@covertopbox%
+        \vfill%
+        \@ifundefined{tcdef@cover@internshipinfo}{}{%
+            \hspace*{\fill}\makebox[.55\textwidth][l]{%%
+                \parbox[b]{8.5cm}{\tcdef@cover@internshipinfo}%%
+            }%
+            \vfill%
+        }%
+        \@ifundefined{tc@studentA@tutor}{}{%
+            \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
+                \tccover@approvalpagetutorinfo%
+            }%
+            \vfill%
+        }%
+        \@ifundefined{tc@studentA@supervisor}{}{%
+            \vfill%
+            \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
+                \tccover@approvalpagesupervisorinfo%
+            }%
+            \vfill%
+        }%
+        \@ifundefined{tcdef@core@coursecoord}{}{%
+            \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
+                \tccover@approvalpageinternshipcoordinfo%
+            }%
+            \vfill%
+        }%
+        \vfill%
+        \hfill\tc@city, \tc@monthyeardate
+    \end{center}%
+    \tc@pagebreak
+}%
+%
+%
+%
+%
 %
 \NewDocumentCommand{\tccover@approvalpageadvisorinfo}{}{%%
   \@ifundefined{tc@studentA@advisor}{}{%%
@@ -272,6 +336,15 @@
 		\tc@studentA@advisortitleinfo %
 	}%
 }%
+\NewDocumentCommand{\tccover@approvalpagetutorinfo}{}{%%
+    \@ifundefined{tc@studentA@tutor}{}{%%
+        \vfill%
+        \tcdef@cover@tutorname: \hrulefill\\%
+        \tc@studentA@tutor, \tc@studentA@tutorinstitution\\%
+        \tc@studentA@tutortitleinfo %
+    }%
+}%
+
 \NewDocumentCommand{\tccover@@aprovalexaminerinfo}{m}{
   \@ifundefined{#1}{}{%%
   	\csname #1\endcsname, \csname #1institution\endcsname\\%
@@ -291,6 +364,15 @@
 		\tccover@@aprovalexaminerinfo{tc@studentA@examinerE}%
 }%
 %
+\NewDocumentCommand{\tccover@approvalpagesupervisorinfo}{}{%%
+  \vfill%
+  \@ifundefined{tc@studentA@supervisor}{}{%%
+      \tcdef@cover@supervisorname: \hrulefill\\%
+    \tc@studentA@supervisor, \tc@studentA@supervisorregister\\%
+    \tc@studentA@supervisoroffice\\%
+  }%
+}%
+%
 
 
 \NewDocumentCommand{\tccover@approvalpagecoordinfo}{}{%%
@@ -303,6 +385,15 @@
 	}%
 }%
 %
+\NewDocumentCommand{\tccover@approvalpageinternshipcoordinfo}{}{%%
+    \@ifundefined{tcdef@core@internshipcoord}{}{%%
+        \vfill%
+        \hrulefill\\%
+        \tcdef@core@internshipcoord\\%
+        \tcdef@core@internshipcoordtitle\\%
+        \tcdef@cover@course%
+    }%
+}%
 
 
 

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,7 +22,7 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\documentclass[dctools,english]{ufrgscca} % tcbundle  tcpack tcmain
+\documentclass[dctools,english,tocdepth=3,secdepth=3]{ufrgscca} % tcbundle  tcpack tcmain
 \usepackage{democodetools}
 \usepackage{ufrgscca-curr}
 
@@ -83,6 +83,7 @@ Being based on the report class, one can use all class options one would with a 
 	\DescribeOption{oneside} in case the document will be printed in single side sheets, otherwise it's assumed a two-sided printing.
 	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
     \DescribeOption{pretextontoc} “pre-text” elements, like “list of$\dots$” will be inserted in the “table of contents”.
+    \DescribeOption{yearsonly} Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).
     \DescribeOption{timesroman} will set the default font to Roman (using the obsolete mathptmx package, based on  a free replacement of the proprietary Times New Roman (by Microsoft) and Times Roman (By Adobe)) instead of the default Latin Modern Roman font. As a side effect, the package \Pack{microtype} isn't loaded (can't be used), resulting in a worst overall layout. NB. The alternative (newer and maintained) packages newtxtext/newtxmath can't be used due to some packages incompatibilities.
 	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
 	\DescribeOption{xlists} this will load the {\MetaFmt[Pack]\sffamily ufrgscca-lists} package, for the definition of new floats/lists.
@@ -109,7 +110,7 @@ Being based on the report class, one can use all class options one would with a 
 		\Macro{\annexref}{label}
 		\Macro!{\autoannexref}{\oarg{sep}\marg{label}\oarg{spc}}
 	\end{Syntax}
-The \Pack{hyperref} package, sometimes, gets the \Macro{\autoref}{} name wrong (when referencing an annex), therefore the \Macro{\annexref}{label} will assure the correct annex name is used.
+The \Pack{hyperref} package, sometimes, gets the \Macro{\autoref}{} name wrong (when referencing an annex), the \Macro{\annexref}{label} will assure the correct annex name is used.
 
 \Macro{\autonameref}{label} produces an entry of the form `\Macro{\autoref}{label} \Arg{sep} \Macro{\nameref}{label} \Arg{spc}'
 
@@ -145,6 +146,7 @@ Take note that \Pack{biblatex} is loaded with the \textbf{\Option{biber}} option
 	\DescribeOption{chapternopagenum} to suppress the page numbers at chapters begin.
 	\DescribeOption{relnum} by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.
 	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
+    \DescribeOption{yearsonly} Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).
 	\DescribeOption{nomicrotype} in some rare cases, \Pack{microtype} might hurt page layout, this allows the suppression of \Pack{microtype}.
 	\DescribeOption{showframes} for layout proof only, it will draw frames around each page main parts.
 	\DescribeOption{showlabels} it will put a reference mark in each label created, and print out it's name.
@@ -443,6 +445,15 @@ Those commands are only of use when using \Pack{ufrgscca-forms}. \Macro{\tccbrie
 \end{Macros}
  \Arg{coordinator denomination} and \Arg{course coordinator denomination} are the full 'job title' of their position. \Arg{gender} can be either 'm' or 'f'.
 
+\begin{Macros}{\internshipcoord,\internshipcoordtitle}
+    \begin{Syntax}%
+        \Macro!{\internshipcoord}{\oarg{(title) full name}\oarg{gender}}
+        \Macro{\internshipcoordtitle}{internship coordinator denomination}
+    \end{Syntax}
+\end{Macros}
+\Arg{coordinator denomination} and \Arg{internship coordinator denomination} are the full 'job title' of their position. \Arg{gender} can be either 'm' or 'f'.
+
+
 \subsection{Core Specific Commands}\label{core-specific-commands}
 
 The following commands are more or less self-explanatory, \Arg{ID} is the student's university ID. \Arg{Nproc} is the process/request number. \Arg{gender} can be either 'm' or 'f'.
@@ -485,6 +496,22 @@ The following commands are more or less self-explanatory, \Arg{ID} is the studen
 		\Macro{\altexaminerinfo}{Institut,title-info,email,phone}
 	\end{Syntax}
 \end{Macros}
+
+\begin{Macros}{\tutor,\tutorinfo}%,\tutorgender}
+\begin{Syntax}%
+    ~\Macro!{\tutor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
+    \Macro{\tutorinfo}{Institut,title-info,email,phone}
+\end{Syntax}
+\end{Macros}
+
+\begin{Macros}{\supervisor,\supervisorinfo}%,\tutorgender}
+\begin{Syntax}%
+    ~\Macro!{\supervisor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
+    \Macro{\supervisorinfo}{register,office,email,phone}
+\end{Syntax}
+\end{Macros}
+
+N.B. Macros \Macro{\advisor}{}, \Macro{\coadvisor}{}, \Macro{\examiner}{} and \Macro{\altexaminer}{} are meant to be used in a 'final work' doc. The Macros \Macro{\tutor}{} and \Macro{\supervisor}{} in case of an internship report.
 
 
 \section{\tightul{ufrgscca-cover} Package}
@@ -542,6 +569,9 @@ This package defines just two user commands to generate specific forms needed at
     \DescribeOption+{receipts} Receipts forms (one per board member).
     \DescribeOption+{examinersforms} Grades and correction forms (per board member).
     \DescribeOption+{rectifyapprovalform} Corrections approval  form.
+    \DescribeOption+{internreqform} Internship Registration requirement form.
+    \DescribeOption+{internsupervisorform} Internship Supervisor evaluation form.
+    \DescribeOption+{interntutorform} Internship tutor evaluation form.
 \end{Options+}
 
 \end{Macros}
@@ -677,7 +707,7 @@ The \emph{report document} to be created is composed of 2 main parts:
 \begin{enumerate}[tcc,arabic,miditemsep]
 	\item A global preamble, where one sets
 	\begin{enumerate}[tcc,alpha*,noitemsep]
-		\item the current semester, Course/TCC coordinator names, etc. ,
+		\item the current semester, Course/TCC/internship coordinator names, etc. ,
 		\item auxiliary data, like students \emph{check list} items and
 		\item students data.
 	\end{enumerate}
@@ -686,6 +716,36 @@ The \emph{report document} to be created is composed of 2 main parts:
 
 \subsubsection{Global Commands I}
 One can (should) use the commands listed at \autonameref{core-commands}, and these below:
+
+\begin{Macros}{\checkdef}%,\checklist}
+\begin{Syntax}%
+    \Macro{\checkdef}{checkLC,check-item,check-text}
+\end{Syntax}
+Whereas one has a '4x5 alphabetic matrix', lines A to D, columns A to E. \Arg{checkLC} being one element of that matrix (from checkAA up to checkDE), \Arg{chek-item} is a free identifier (to be used with the \Macro{\checklist}{}), and \Arg{check-text} the text to appear in the 'check list report'.  So, for instance:
+
+\begin{stcode}[st=d.check]
+    \checkdef{checkAA}{tcc-part}{Rel. Parcial}        % this creates the 'check item' tcc-part and associates it with the AA position (first line, first column), display text 'Rel. Parcial'
+    \checkdef{checkBA}{partOK}{Aprov. Rel. Parcial}   % this creates 'partOK' and associates it with BA position
+
+    \checkdef{checkAB}{board}{Banca def.}             %
+    \checkdef{checkBB}{board-date}{Data defesa}       % 'board-date' is associated with the BB position
+
+    \checkdef{checkAE}{tcc-final}{TCC final}          %
+    \checkdef{checkBE}{approval}{Aprovação Correções} %
+    \checkdef{checkDE}{exam}{Em Exame}                % 'exam' (display 'Em Exame') is associated with the DE position
+    %%
+    %%
+    %% later on, one can use (inside a \NewStudent command)
+    \checklist{tcc-part,partOK,exam}                  % this will, for a given student, 'mark' the 'tcc-part', 'partOK' and 'exam' items.
+\end{stcode}
+
+
+\DisplayCode[emph={{tcc-part},partOK,board,board-date,{tcc-final},approval,exam}]{d.check}
+
+Be aware that, \Macro{\checkdef}{} can and should be only used at the preamble, whereas \Macro{\checklist}{} can only be used at the 'student data definition' context (meaning, inside the \Macro{\NewStudent}{} command).
+\end{Macros}\\
+
+\paragraph{Final Work Specific}
 
 \begin{Macros}{\tcccalendareventdate,\boardstitleB,\boardsOBS,\TCCperiod}
 	\begin{Syntax}%
@@ -707,34 +767,16 @@ Use \Macro{\tcccalendareventdate}{} to set the date of a given 'event' (the list
     Those macros allow to change the default week value for the calendar's events.
 \end{Macros}
 
+\paragraph{Internship Specific}
 
-\begin{Macros}{\checkdef}%,\checklist}
-	\begin{Syntax}%
-		\Macro{\checkdef}{checkLC,check-item,check-text}
-	\end{Syntax}
-Whereas one has a '4x5 alphabetic matrix', lines A to D, columns A to E. \Arg{checkLC} being one element of that matrix (from checkAA up to checkDE), \Arg{chek-item} is a free identifier (to be used with the \Macro{\checklist}{}), and \Arg{check-text} the text to appear in the 'check list report'.  So, for instance:
-
-\begin{stcode}[st=d.check]
-	\checkdef{checkAA}{tcc-part}{Rel. Parcial}        % this creates the 'check item' tcc-part and associates it with the AA position (first line, first column), display text 'Rel. Parcial'
-	\checkdef{checkBA}{partOK}{Aprov. Rel. Parcial}   % this creates 'partOK' and associates it with BA position
-
-	\checkdef{checkAB}{board}{Banca def.}             %
-	\checkdef{checkBB}{board-date}{Data defesa}       % 'board-date' is associated with the BB position
-
-	\checkdef{checkAE}{tcc-final}{TCC final}          %
-	\checkdef{checkBE}{approval}{Aprovação Correções} %
-	\checkdef{checkDE}{exam}{Em Exame}                % 'exam' (display 'Em Exame') is associated with the DE position
-	%%
-	%%
-	%% later on, one can use (inside a \NewStudent command)
-	\checklist{tcc-part,partOK,exam}                  % this will, for a given student, 'mark' the 'tcc-part', 'partOK' and 'exam' items.
-\end{stcode}
-
-
-\DisplayCode[emph={{tcc-part},partOK,board,board-date,{tcc-final},approval,exam}]{d.check}
-
-Be aware that, \Macro{\checkdef}{} can and should be only used at the preamble, whereas \Macro{\checklist}{} can only be used at the 'student data definition' context (meaning, inside the \Macro{\NewStudent}{} command).
+\begin{Macros}{\intershipcommitdates}
+    \begin{Syntax}%
+        \Macro{\intershipcommitdates}{date I}{date II}
+    \end{Syntax}
+    Use \Macro{\intershipcommitdates}{} to set the semester deadlines. Both dates must be given in the dd/mm/yyyy format.
+    \Arg{date I} is the deadline for a given report still be fully evaluated. After \Arg{date I} the given internship will be in “exam”. If the student report isn't submitted until \Arg{date II} the student will fail with an “FF” grade.
 \end{Macros}
+
 
 
 \subsubsection{Global Commands II}\label{new-student}
@@ -772,6 +814,42 @@ Be aware that, \Macro{\checkdef}{} can and should be only used at the preamble, 
 N.B. Internally, \Macro{\NewStudent}{} will create a command named \Macro{\studentname}{}, with a \emph{hook} named \Macro{\studentname.hook}{} (the dot is part of the hook's name).
 \end{Macros}
 
+
+\begin{Macros}{\NewInternshipStudent}
+    \begin{Syntax}%
+        \Macro{\NewInternshipStudent}{studentname,code}
+    \end{Syntax}
+    This is the main command describing each \Arg{student} associated internship, tutor and advisor. In \Arg{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \Macro{\begin{document}}{}), to describe a student internship.
+        So, for instance:
+        \begin{stcode}[st=d.newstudentB]
+            \NewStudent{Artur}{
+                \student{last}{first}[m]
+
+                \studentinfo[]{243716}{email@somewhere}
+
+                \internship{Empresa I}{P\&D}{10/10/22}{20/12/22}{2 Meses}
+
+                \supervisor[Eng. I]{do Supervisor}{Nome}[m]
+                \supervisorinfo{crea I}{posição/cargo}{email}{ramal}
+
+                \internshipsupervisorgrades{4}{4}{4}{4}{5}
+                \internshipsupervisorgrades{4}{4}{4}{4}{5}
+                \internshiptutorgrades{90}
+                \internshipcoordgrades{90}
+
+                \tutor[Prof.~Dr.]{do Tutor I}{Nome}[m]
+                \tutorinfo{UFRGS}{Instituição I-- Cidade, País}{email}{ramal}
+
+                \studentFate[Dismiss]  %% FF or Dismiss ??
+            }
+        \end{stcode}
+
+        \DisplayCode{d.newstudentB}
+
+        N.B. Internally, \Macro{\NewInternshipStudent}{} will create a command named \Macro{\studentname}{}, with a \emph{hook} named \Macro{\studentname.hook}{} (the dot is part of the hook's name).
+    \end{Macros}
+
+
 \subsubsection{Student Specific Commands}\label{student-specific-commands}
 \begin{Macros}{\studentFate}
 	\begin{Syntax}%
@@ -779,6 +857,16 @@ N.B. Internally, \Macro{\NewStudent}{} will create a command named \Macro{\stude
 	\end{Syntax}
 This assigns the \Arg{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \Arg{fate} can be either C or D (in case a student got in exam), FF for those that haven't finished the work or 'Dismiss' for those that, for whatever reason, got dismissed. The default is 'do nothing' (no \Arg{fate} assigned)
 \end{Macros}
+
+\begin{Macros}{\checklist}
+    \begin{Syntax}%
+        \Macro{\checklist}{csv-checkitems}
+    \end{Syntax}
+    \Arg{csv-checkitems} is a csv list of valid 'items' (the ones defined by \Macro{\checkdef}{}) and it will 'mark' (check) the corresponding items for a given student.
+\end{Macros}
+
+
+\paragraph{Final Student Work Specific ones}
 
 \begin{Macros}{\studenttimeslot,\timeslot}
 	\begin{Syntax}%
@@ -833,12 +921,37 @@ Normally, the default, it's assumed that the student's advisor will also be a me
 Quite obvious, this set the grades given by an examiner (the one defined by the 'last' \Macro{\examiner}{} before this.).
 \end{Macros}
 
-\begin{Macros}{\checklist}
-	\begin{Syntax}%
-		\Macro{\checklist}{csv-checkitems}
-	\end{Syntax}
- \Arg{csv-checkitems} is a csv list of valid 'items' (the ones defined by \Macro{\checkdef}{}) and it will 'mark' (check) the corresponding items for a given student.
+\paragraph{Internship Specific Ones}
+
+\begin{Macros}{\studentturnindate}
+    \begin{Syntax}%
+        \Macro{\studentturnindate}{date}
+    \end{Syntax}
+    The date, in which, the student submitted the Internship Report. Beware, the date must be in the day/month/year format.
 \end{Macros}
+
+\begin{Macros}{\internshipsupervisorgrades}
+    \begin{Syntax}
+        \Macro{\internshipsupervisor}{N1,N2,N3,N4,N5}
+    \end{Syntax}
+    Quite obvious, this set the grades given by the supervisor, it's meant to be used twice for the two 'grades blocks'.
+\end{Macros}
+
+\begin{Macros}{\internshiptutorgrades}
+    \begin{Syntax}%
+        \Macro{\internshipgrades}{N1}
+    \end{Syntax}
+    Quite obvious, this set the grade given by the student tutor.
+\end{Macros}
+
+\begin{Macros}{\internshipcoordgrades}
+    \begin{Syntax}%
+        \Macro{\internshipcoordgrades}{N1}
+    \end{Syntax}
+    Quite obvious, this set the grade given by the Internship Coordinator.
+\end{Macros}
+
+\paragraph{Setting Commands}
 
 
 \begin{Macros}{\addtostudent}
@@ -866,10 +979,17 @@ This command will define/create a list named \Arg{listID} composed of a csv \Arg
 	\begin{Syntax}%
 		\Macro{\tcreports}[rep-list]{listID}
 	\end{Syntax}
-	This is the main command, to be used only once, at the end of the file. It will typeset the reports, as set by \Macro{\setreports}{}, using the student list identified by \Arg{listID}.
+	This is the main command (final work reports), to be used only once, at the end of the file. It will typeset the reports, as set by \Macro{\setreports}{}, using the student list identified by \Arg{listID}.
     \Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
 \end{Macros}
 
+\begin{Macros}{\internshipreports}
+    \begin{Syntax}%
+        \Macro{\internshipreports}[rep-list]{listID}
+    \end{Syntax}
+    This is the main command (internship reports), to be used only once, at the end of the file. It will typeset the reports, as set by \Macro{\setreports}{}, using the student list identified by \Arg{listID}.
+    \Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
+\end{Macros}
 
 \section{\tightul{ufrgscca-ppc} Package (beta) (extended documentation)}
 This contains a set of auxiliary commands to keep track of many \emph{indicators} whilst writing  a \emph{PPC document} (which is going to be evaluated based on said \emph{indicators}, though the track of those \emph{indicators} themselves shall not appear in the final version of it). Keep in mind, when considering the use of it: “it works as is” but it hasn't being properly debugged, and it might change “as needed locally”.

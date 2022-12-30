@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found  in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 \def\tc@tmp@packname{ufrgscca-ptBR-core}
 \def\tc@tmp@altpackname{ufrgsccaptbrcore}
 \def\tc@tmp@packdesc{UFRGS/CCA Portuguese core defs}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 
@@ -50,6 +50,17 @@
 \advisorname{Orientador\tccore@@ref{advisor}{narticle}}%
 \coadvisorname{Co-orientador\tccore@@ref{coadvisor}{narticle}}%
 
+
+\internshiptitle{Relatório de Estágio Supervisionado Obrigatório em \tcdef@cover@course}
+\internshipcoord{Atual Coordenador(a) de Estágios}
+\internshipcoordtitle{Coord\tccore@@ref{internshipcoord}{narticle}. da Atividade de Estágio Supervisionado Obrigatório}
+\internshipinfo{%
+Este Relatório foi julgado adequado para a obtenção do conceito final na \textsl{Atividade de Estágio Supervisionado Obrigatório}
+em \emph{\tcdef@cover@course\ } e aprovado em sua forma final pel\tccore@@ref{tutor}{article} Tutor\tccore@@ref{tutor}{narticle},
+Supervisor\tccore@@ref{supervisor}{narticle} e Coordenador\tccore@@ref{internshipcoord}{narticle} da Atividade.
+}%
+
+
 \examinername{Banca Examinadora}%
 
 \reportspecificinfo{%
@@ -66,5 +77,7 @@
 
 \profname{Professor\tccore@@ref{advisor}{narticle}}
 \coprofname{Professor\tccore@@ref{coadvisor}{narticle}}
+\tutorname{Tutor\tccore@@ref{tutor}{narticle}}
+\supervisorname{Supervisor\tccore@@ref{supervisor}{narticle}}
 
 

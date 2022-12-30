@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-forms}
 \def\tc@tmp@altpackname{ufrgsccaforms}
 \def\tc@tmp@packdesc{UFRGS/CCA forms commands}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -58,6 +58,23 @@
 \cmdfactory<forms>{reviewformtitle,reviewformdesc,reviewformfootnoteB,reviewformfootnote}
 \cmdfactory<forms>{formsrectifyOKdesc}
 
+\cmdfactory<forms>{reqformdescgen}
+\cmdfactory<forms>{formsinternshiptitle,reqforminternshipdesc,internshipreqformnotes}
+\cmdfactory<forms>{formstutorlabel,formstutoremaillabel}
+\cmdfactory<forms>{formssupervisorlabel,formssupervisoremaillabel}
+\cmdfactory<forms>{formsinternshipstartlabel,formsinternshipendlabel,formsinternshiplengthlabel,formsinternshipregisterlabel}
+\cmdfactory<forms>{reqforminternshipinfo}
+\cmdfactory<forms>{supervisorsignature,tutorsignature,internshipcoordsignature}
+\cmdfactory<forms>{formssupervisorlabel}
+\cmdfactory<forms>{supervisorformtitle}
+\cmdfactory<forms>{tutorformtitle}
+\cmdfactory<forms>{internshipstudentinfo,internshipsupervisorinfo,internshiptutorinfo,internshipcompanyinfo,internshipperiod}
+\cmdfactory<forms>{internshipcoordinfo}
+
+\cmdfactory<forms>{internsupervisorgradesform,internsupervisornote,internsupervisorcomments}
+\cmdfactory<forms>{internshiptutorcomments,internshipcoordcomments}
+\cmdfactory<forms>{interntutorgrade,interncoordgrade}
+
 \NewDocumentCommand{\TCCpointsweight}{mmm}{%
   \gdef\tc@TCCpointAweight{#1}%
   \gdef\tc@TCCpointBweight{#2}%
@@ -70,6 +87,8 @@
   \gdef\tc@TCCpointClabel{#3}%
 }%
 %
+
+
 
 
 \iftcif@english%
@@ -219,6 +238,128 @@
   \vfill%
   \pagebreak%
 }%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship requirement form%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@internreqform}{}{%
+    \tc@formtopbox[tcdef@forms@internshipreqformnotes]{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@reqformtitle}%
+
+    \vfill%
+
+    \tcdef@forms@reqformopening%
+    \vfill%
+
+    \tcdef@forms@reqforminternshipdesc%
+    \vfill%
+
+    \tcdef@forms@reqforminternshipinfo%
+
+
+ %   {\bf \tcdef@forms@formsbrieflabel}:%\footnote[1]{\tcdef@forms@renewreqformnotes}%
+
+    \vfill%
+%    \tcdef@core@tccbrief%
+
+    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@supervisorsignature}}\hfill%
+    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@tutorsignature}}%
+
+    \hfill%
+    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}%
+    \pagebreak%
+}%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship Supervisor's form (grades)%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@internsupervisorform}{}{%
+    \tc@formtopbox[tcdef@forms@internsupervisornote]{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@supervisorformtitle}%
+    %
+    \vfill%
+    \tcdef@forms@internshipstudentinfo\\%
+    \tcdef@forms@internshipsupervisorinfo\\%
+    \tcdef@forms@internshipperiod
+    \vfill%
+    \tcdef@forms@internsupervisorgradesform%
+
+    \vfill%
+
+    \tcdef@forms@internsupervisorcomments \tcdef@core@formsblanklinesB
+
+   \vfill%
+
+    \tcforms@formsigdate{\tcdef@forms@supervisorsignature}%
+
+    \pagebreak%
+}%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship tutor's form (grades)%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@interntutorform}{}{%
+    \tc@formtopbox{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@tutorformtitle}%
+    %
+    \vfill%
+    \tcdef@forms@internshipstudentinfo\\%
+    \tcdef@forms@internshiptutorinfo\\%
+    \tcdef@forms@internshipperiod
+    \vfill%
+    \tcdef@forms@interntutorgrade%
+
+    \vfill%
+
+    \tcdef@forms@internshiptutorcomments \tcdef@core@formsblanklinesB
+
+    \vfill%
+
+    \tcforms@formsigdate{\tcdef@forms@tutorsignature}%
+ %   \hline
+    \vfill%
+
+    \tcdef@forms@interncoordgrade%
+    \vfill
+
+    \tcdef@forms@internshipcoordcomments \tcdef@core@formsblanklinesB
+    \vfill%
+
+    \tcforms@formsigdate{\tcdef@forms@internshipcoordsignature}%
+
+    \pagebreak%
+}%
+%
+%
+%
+\newcounter{tc@supervisorgradecount}[tc@studentcount]%
+\NewDocumentCommand{\internshipsupervisorgrades}{mmmmm}{%%
+    \stepcounter{tc@supervisorgradecount}%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}A\endcsname{#1}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}B\endcsname{#2}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}C\endcsname{#3}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}D\endcsname{#4}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}E\endcsname{#5}%%
+    \ifthenelse{\equal{#1}{}}{%%
+        \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorgrade\Alph{tc@supervisorgradecount}\endcsname{0}%
+    }{%%
+        \expandafter\edef\csname tc@student\Alph{tc@studentcount}@supervisorgrade\Alph{tc@supervisorgradecount}\endcsname{\fpeval{ #1 + #2 +  #3 + #4 + #5} }%
+    }%
+}%
+
+\NewDocumentCommand{\internshiptutorgrades}{m}{%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@tutorgrade\endcsname{#1}%%
+}%
+\NewDocumentCommand{\internshipcoordgrades}{m}{%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@internshipcoordgrade\endcsname{#1}%%
+}%
+
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -485,7 +626,7 @@
 % set of blank lines%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\cmdfactory<core>{formsblanklines}
+\cmdfactory<core>{formsblanklines,formsblanklinesB}
 \formsblanklines{\hrulefill\\%
 
 \hrulefill\\%
@@ -501,9 +642,26 @@
 \hrulefill%
 }%
 %
+\formsblanklinesB{\hrulefill\\%
+
+    \hrulefill\\%
+
+    \hrulefill\\%
+
+    \hrulefill\\%
+
+    \hrulefill\\%
+}%
+%
 
 
 \DeclareKeys[forms]{
+  internreqform.usage = general,
+  internreqform.code = {\tcforms@internreqform},
+  internsupervisorform.usage = general,
+  internsupervisorform.code = {\tcforms@internsupervisorform},
+  interntutorform.usage = general,
+  interntutorform.code = {\tcforms@interntutorform},
   reqform.usage = general,
   reqform.code = {\tcforms@reqform},
   coadvisor.usage = general,

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found  in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 \def\tc@tmp@packname{ufrgscca-ptBR-forms}
 \def\tc@tmp@altpackname{ufrgsccaptbrforms}
 \def\tc@tmp@packdesc{UFRGS/CCA Portuguese forms defs}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 
@@ -62,6 +62,8 @@
 \formsaltexaminerlabel{Suplente}
 \formstimelabel{Horário}
 
+\formssupervisorlabel{Supervisor\tccore@@ref{supervisor}{narticle}}
+
 
 %\formstopicAlabel{Conteúdo}
 %\formstopicBlabel{Trabalho Escrito}
@@ -93,11 +95,107 @@ Deve conter:
 
 \reqformtitle{Formul\'{a}rio de Requerimento de Matr\'{i}cula}
 \reqformopening{Ilm\tccore@@ref{coursecoord}{article}. Sr\tccore@@ref{coursecoord}{narticle}.\par
- Coordenador\tccore@@ref{coursecoord}{narticle} da  Comissão de Graduação do Curso em \tcdef@cover@course  {da \tcdef@cover@universityacronym\ }}
+ Coordenador\tccore@@ref{coursecoord}{narticle} da  Comissão de Graduação do Curso em \tcdef@cover@course\  {da \tcdef@cover@universityacronym\ }}
 %\reqformopening{algo}
 
-\reqformdesc{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} neste período letivo no curso \emph{\tcdef@cover@course\ }, desta universidade, portador\tccore@@ref{student}{narticle} do cartão de identificação n$^o$ \tc@studentAID\ vem por meio desta solicitar matrícula na atividade de ensino de \tcdef@forms@formstitle}
+\reqformdescgen{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} neste período letivo no curso \emph{\tcdef@cover@course\ }, desta universidade, portador\tccore@@ref{student}{narticle} do cartão de identificação n$^o$ \tc@studentAID\ vem por meio desta solicitar matrícula na atividade de ensino}
 
+
+\reqformdesc{\tcdef@forms@reqformdescgen\ \tcdef@forms@formstitle}
+
+\formsinternshiptitle{Estágio Supervisionado Obrigatório}% em \tcdef@cover@course}
+
+\reqforminternshipdesc{\tcdef@forms@reqformdescgen\ \tcdef@forms@formsinternshiptitle}
+
+\supervisorsignature{Assinatura\ \ d\tccore@@ref{supervisor}{article}\ \ Supervisor\tccore@@ref{supervisor}{narticle}}
+\tutorsignature{Assinatura\ \ d\tccore@@ref{tutor}{article}\ \ Tutor\tccore@@ref{tutor}{narticle}}
+\internshipcoordsignature{Assinatura\ \ d\tccore@@ref{internshipcoord}{article}\ \ Coordenador\tccore@@ref{internshipcoord}{narticle}}
+
+\supervisorformtitle{Formulário de Avaliação do Supervisor (Pela Empresa)}
+\tutorformtitle{Formulário de Avaliação do Tutor e Coordenador}
+
+\interntutorgrade{Avaliação d\tccore@@ref{tutor}{article} Prof\tccore@@ref{tutor}{narticle}. Tutor\tccore@@ref{tutor}{narticle}:\emptybox}
+
+\interncoordgrade{Avaliação d\tccore@@ref{internshipcoord}{article} Prof\tccore@@ref{internshipcoord}{narticle}. Coordenador\tccore@@ref{internshipcoord}{narticle}:\emptybox}
+
+
+\reqforminternshipinfo{%
+   \tcdef@forms@formsstudentemaillabel : {\bf \tc@studentAemail} %
+\vspace{2mm}
+
+Tutor : \tc@studentA@tutor%
+
+Email do Tutor: {\bf \tccore@@ref{tutor}{email}}%
+\hfill Ramal: {\bf \tccore@@ref{tutor}{phone}}%
+\vspace{2mm}
+
+
+Empresa: {\bf \tccore@@ref{internship}{company}}%
+
+Área de Atividade: {\bf \tccore@@ref{internship}{field}}%
+\vspace{2mm}
+
+Supervisor\tccore@@ref{supervisor}{narticle}: {\bf \tccore@@ref{supervisor}{}} \hfill CREA: {\bf \tccore@@ref{supervisor}{register}}
+
+Cargo: {\bf \tccore@@ref{supervisor}{office}}\hfill Email: {\bf \tccore@@ref{supervisor}{email}} \hfill Fone: {\bf \tccore@@ref{supervisor}{phone}}   %
+\vspace{2mm}
+
+Data de Início: {\bf \tccore@@ref{internship}{start}}\hfill Previsão de Término: {\bf \tccore@@ref{internship}{end}}\hfill Duração: {\bf \tccore@@ref{internship}{length}}
+}
+
+\internshipreqformnotes{O prazo final de entrega do relatório é até 21 dias antes do término do período letivo posterior à    inscrição na atividade. Relatórios não entregues até esta data serão considerados \textbf{\emph{Em Exame}}. Relatórios não entregues até 14 dias antes do término do período letivo considerado implicam a atribuição de \textbf{\emph{conceito FF}}, com o consequente encerramento do processo.}
+
+\internshipstudentinfo{
+    Aluno: \textbf{\tccore@@ref{student}{}}\hfill Cartão:\textbf{\tccore@@ref{student}{ID}}%
+}
+\internshipcompanyinfo{%
+    Empresa: {\bf \tccore@@ref{internship}{company}}\\%
+Área de Atividade: {\bf \tccore@@ref{internship}{field}}%
+}
+\internshipsupervisorinfo{
+    Supervisor:  \textbf{\tccore@@ref{supervisor}{}} \hfill crea:\textbf{\tccore@@ref{supervisor}{register}}%
+}
+\internshiptutorinfo{
+Tutor:  \textbf{\tccore@@ref{tutor}{}}%
+}
+\internshipcoordinfo{
+Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
+}
+
+
+\internshipperiod{
+    Período do Estágio de: {\bf \tccore@@ref{internship}{start}} até: {\bf \tccore@@ref{internship}{end}}
+}
+
+\def\emptybox{\framebox[3em]{\color{white}W}}
+
+\internsupervisorgradesform{
+\begin{itemize}[tcc,nosep]
+ \item Grupo I - Aspectos Profissionais
+   \begin{enumerate}[tcc,nosep]
+     \item \textbf{Qualidade do Trabalho}:\emptybox\\ {\footnotesize considerar a qualidade do trabalho tendo em vista o que seria desejável}
+     \item \textbf{Engenhosidade}:\emptybox\\ {\footnotesize capacidade de sugerir, projetar ou executar modificações ou inovações.}
+     \item \textbf{Conhecimentos}:\emptybox\\ {\footnotesize conhecimento demonstrado no desenvolvimento das atividades programadas.}
+     \item \textbf{Cumprimentos das Tarefas}:\emptybox\\ {\footnotesize     considerar o volume de atividades cumpridas dentro de um padrão razoável.}
+     \item \textbf{Iniciativa}:\emptybox\\ {\footnotesize iniciativa para desenvolver suas atividades sem dependências de outros.}
+   \end{enumerate}
+ \item Grupo II - Aspectos Humanos
+    \begin{enumerate}[tcc,nosep]
+     \item \textbf{Assiduidade}:\emptybox\\ {\footnotesize cumprimento do horário do estágio e ausência de falhas}
+\item \textbf{Disciplina}:\emptybox\\ {\footnotesize observância das normas e regulamentos internos da empresa.}
+\item \textbf{Sociabilidade}:\emptybox\\ {\footnotesize facilidade de se integrar com colegas e ambiente de trabalho.}
+\item \textbf{Cooperação}:\emptybox\\ {\footnotesize     disposição para cooperar com colegas e para atender a atividades..}
+\item \textbf{Senso de Responsabilidade}:\emptybox\\ {\footnotesize zelo pelo material, equipamentos e bens da empresa.}
+    \end{enumerate}
+\end{itemize}
+}
+
+\internsupervisorcomments{Considerações Complementares:}
+\internshiptutorcomments{Considerações do Prof. Tutor sobre o Estágio:}
+\internshipcoordcomments{Considerações Finais do Prof. Coordenador sobre o Estágio:}
+
+\internsupervisornote{Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}
+}
 \coadvisorformtitle{Requerimento de Autorização de Co-Orientação}
 \coadvisorformdesc{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} na atividade de TCC neste período letivo, vem por meio desta solicitar autorização para registro de co-orientador de TCC, conforme justificativa abaixo.}
 

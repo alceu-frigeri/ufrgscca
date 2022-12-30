@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.4 (2022/12/15)
+%% This is version 1.0.5 (2022/12/30)
 %%
 %% The list of files that compose this work can be found  in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 \def\tc@tmp@packname{ufrgscca-en-forms}
 \def\tc@tmp@altpackname{ufrgsccaenforms}
 \def\tc@tmp@packdesc{UFRGS/CCA English forms defs}
-\def\tc@tmp@packdate{2022/12/15}
-\def\tc@tmp@packversion{1.0.4}
+\def\tc@tmp@packdate{2022/12/30}
+\def\tc@tmp@packversion{1.0.5}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 
@@ -78,6 +78,7 @@
 \formsdatelabel{Data}
 \formstitle{Trabalho de Conclusão de Curso em \tcdef@cover@course}
 \formsfootnote{Entregar a cada membro da banca juntamente com a cópia do trabalho.}
+
 
 
 \renewreqformtitle{Formulário de Renovação da Inscrição na Atividade de Ensino Trabalho de Conclusão em \tcdef@cover@course}

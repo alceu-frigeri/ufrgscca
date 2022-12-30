@@ -119,7 +119,12 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 
-* Version 1.0.4 (this)
+* Version 1.0.5 (this)
+    - added a package options yearsonly
+    - added some forms (internship related, see documentation)
+    - added some coord related reports (see documentation)
+
+* Version 1.0.4
     - added some package options: pretextontoc and timesroman
     - changed default included elements in the Table of Contents (related to the new options, see documentation)
 
