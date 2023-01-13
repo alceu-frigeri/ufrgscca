@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.5 (2022/12/30)
+%% This is version 1.0.6 (2023/01/13)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -84,12 +84,13 @@ Being based on the report class, one can use all class options one would with a 
 	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
     \DescribeOption{pretextontoc} “pre-text” elements, like “list of$\dots$” will be inserted in the “table of contents”.
     \DescribeOption{yearsonly} Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).
-    \DescribeOption{timesroman} will set the default font to Roman (using the obsolete mathptmx package, based on  a free replacement of the proprietary Times New Roman (by Microsoft) and Times Roman (By Adobe)) instead of the default Latin Modern Roman font. As a side effect, the package \Pack{microtype} isn't loaded (can't be used), resulting in a sub-optimal overall layout. NB. The alternative (newer and maintained) packages newtxtext/newtxmath can't be used due to some packages incompatibilities.
+    \DescribeOption{timesroman} will set the default font to Roman (using the obsolete mathptmx package, based on  a free replacement of the proprietary Times New Roman (by Microsoft) and Times Roman (By Adobe)) instead of the default Latin Modern Roman font. As a side effect, the package \Pack{microtype} isn't loaded (can't be used), resulting in a sub-optimal overall layout. NB. The alternative (newer and maintained) packages \Pack{newtxtext}/\Pack{newtxmath} can't be used due to some packages incompatibilities.
 	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
 	\DescribeOption{xlists} this will load the {\MetaFmt[Pack]\sffamily ufrgscca-lists} package, for the definition of new floats/lists.
 	\DescribeOption{xpacks} this will load a series of packages, which can be handy when writing Engineering reports: {\MetaFmt[Pack]\sffamily relsize, keyval, graphicx, mathtools, mathrsfs, amsfonts, amssymb, empheq, amsthm, ext\-arrows, mathfixs, bigdelim, circuitikz, steimenz} and tikz libraries: {\MetaFmt[Pack]\sffamily fit,  math, calc, shapes.geometry, shapes.misc, shapes.multipart, graphs, 3d, positioning, shadows, babel}. One is advised to look after each package documentation (ctan.org) for further information.
 	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
 	\DescribeOption{internship} in case the doc is an internship report.
+	\DescribeOption{nonrequired} in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.
 	\DescribeOption{forms} in the process of submitting a student final work/report, there is a series of forms to be submitted, this allows the customization  of said forms in a simple  way.
 	\DescribeOption{chapternopagenum} to suppress the page numbers at chapters begin.
 	\DescribeOption{nomicrotype} in some rare cases, \Pack{microtype} might hurt page layout, this allows the suppression of \Pack{microtype}.
@@ -520,7 +521,9 @@ This package is the one that sets the front pages, depending on the kind of 'rep
 \subsection{Package Options}
 \begin{Options}
 	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
-	\DescribeOption{internship} in case the report is a internship one.
+    \DescribeOption{internship} in case the doc is an internship report.
+    \DescribeOption{nonrequired} in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.
+
 \end{Options}
 
 \subsection{Defined Commands}

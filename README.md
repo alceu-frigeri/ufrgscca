@@ -118,9 +118,12 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
+* Version 1.0.6 (this)
+    - added a package option: nonrequired (ref. internship, see documentation)
+    - documentation update
 
-* Version 1.0.5 (this)
-    - added a package options yearsonly
+* Version 1.0.5
+    - added a package option: yearsonly
     - added some forms (internship related, see documentation)
     - added some coord related reports (see documentation)
     - documentation update
