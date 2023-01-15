@@ -1,5 +1,5 @@
 %%%==============================================================================
-%% Copyright 2022 by Alceu Frigeri
+%% Copyright 2022-23 by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.6 (2023/01/13)
+%% This is version 1.0.7 (2023/01/18)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-abnt}
 \def\tc@tmp@altpackname{ufrgsccaabnt}
 \def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
-\def\tc@tmp@packdate{2023/01/13}
-\def\tc@tmp@packversion{1.0.6}
+\def\tc@tmp@packdate{2023/01/18}
+\def\tc@tmp@packversion{1.0.7}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -217,6 +217,7 @@
 \dottedcontents{figure}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
 \dottedcontents{table}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
 
+\renewcommand{\restoreapp}{} % to reset appendix counters each time (from appendix doc)
 \RenewDocumentEnvironment{appendix}{O{\defappendixpagename}O{\defappendixname}}{%
        \titleformat{\chapter}{\bfseries\Large\sffamily}{#2 \thechapter\hspace{1.5ex}-}{2ex}{\MakeUppercase}%
 			 \titlecontents{chapter}[\tc@lblmargin]{\vspace{3mm}\sc}{\hspace{-\tc@lblmargin}{#2~\thecontentslabel\ -\enspace}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}

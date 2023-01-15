@@ -46,7 +46,7 @@ Please do not use the issue page for generic help on how to use the package.
 * git: https://github.com/alceu-frigeri/ufrgscca
 
 -------------
-Copyright 2022 by Alceu Frigeri
+Copyright 2022-23 by Alceu Frigeri
 
  This work may be distributed and/or modified under the
  conditions of
@@ -118,6 +118,9 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
+* Version 1.0.7 (this)
+    - fixed a counter bug when mixing annex with appendix
+
 * Version 1.0.6 (this)
     - added a package option: nonrequired (ref. internship, see documentation)
     - documentation update
