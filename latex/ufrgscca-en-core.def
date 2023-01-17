@@ -12,9 +12,9 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.7 (2023/01/18)
+%% This is version 1.0.7 (2023/01/17)
 %%
-%% The list of files that compose this work can be found  in the README.md file at
+%% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
 %%
 %%%==============================================================================
@@ -23,11 +23,10 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \makeatletter
-
 \def\tc@tmp@packname{ufrgscca-en-core}
 \def\tc@tmp@altpackname{ufrgsccaencore}
 \def\tc@tmp@packdesc{UFRGS/CCA English core defs}
-\def\tc@tmp@packdate{2023/01/18}
+\def\tc@tmp@packdate{2023/01/17}
 \def\tc@tmp@packversion{1.0.7}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}

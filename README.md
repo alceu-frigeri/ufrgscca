@@ -119,9 +119,9 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 * Version 1.0.7 (this)
-    - fixed a counter bug when mixing annex with appendix
+    - fixed a counter bug when mixing annex with appendix environments
 
-* Version 1.0.6 (this)
+* Version 1.0.6
     - added a package option: nonrequired (ref. internship, see documentation)
     - documentation update
 
