@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.0.7 (2023/01/17)
+%% This is version 1.0.8 (2023/01/28)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-ptBR-core}
 \def\tc@tmp@altpackname{ufrgsccaptbrcore}
 \def\tc@tmp@packdesc{UFRGS/CCA Portuguese core defs}
-\def\tc@tmp@packdate{2023/01/17}
-\def\tc@tmp@packversion{1.0.7}
+\def\tc@tmp@packdate{2023/01/28}
+\def\tc@tmp@packversion{1.0.8}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 

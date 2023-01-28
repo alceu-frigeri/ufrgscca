@@ -118,7 +118,10 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.0.7 (this)
+* Version 1.0.8 (this)
+    - fixed another counter bug (related to relnum option)
+
+* Version 1.0.7
     - fixed a counter bug when mixing annex with appendix environments
 
 * Version 1.0.6
