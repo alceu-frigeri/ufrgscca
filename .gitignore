@@ -18,6 +18,9 @@
 ## TeXstudio
 *.txss2
 
+## WinEdt
+*.prj
+
 ## Intermediate documents:
 *.dvi
 *.xdv

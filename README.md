@@ -118,7 +118,11 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.0.8 (this)
+* Version 1.9 (this)
+    - changing the version system to a more reasonable x.y 
+    - fine tuning the List of Figures/Tables spacing (in case of relnum==false) 
+
+* Version 1.0.8
     - fixed another counter bug (related to relnum option)
 
 * Version 1.0.7
