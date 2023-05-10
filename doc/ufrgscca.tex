@@ -1,3 +1,6 @@
+% !TEX program = pdflatex
+% !TEX ext =  --interaction=nonstopmode --enable-etex --enable-write18
+% !BIB program = none
 %%%==============================================================================
 %% Copyright 2022-23 by Alceu Frigeri
 %%
@@ -12,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.9 (2023/05/08)
+%% This is version 1.10 (2023/05/11)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,274 +25,338 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\documentclass[dctools,english,tocdepth=3,secdepth=3]{ufrgscca} % tcbundle  tcpack tcmain
-\usepackage{democodetools}
+\documentclass[article,nogeometry,english,tocdepth=3,secdepth=3]{ufrgscca} % tcbundle  tcpack tcmain
+\usepackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.5cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
+\usepackage{codedescribe}
 \usepackage{ufrgscca-curr}
 
 \maxdeadcycles=500 %% the many marginpar statements are actually a pain.
-\newif\iffulldoc
 
+\newif\iffulldoc
 %\fulldocfalse
 \fulldoctrue
 
-\iffulldoc
-  \dcTitle{The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion \\(extended documentation)}
-\else
-  \dcTitle{The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion}
-\fi
-
-\dcAuthor{Alceu Frigeri}
-%\dcDate{January 2023}
-\dcDate{\monthname\space\number\year}
-\makeatletter
-
-
 \begin{document}
 
-	\dcMakeTitle
 
+\iffulldoc
+\tstitle{
+  author={Alceu Frigeri\footnote{\tsverb{https://github.com/alceu-frigeri/ufrgscca}}},
+  date={\monthname\space\number\year},
+  title={The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion \\(extended documentation)}
+  }
+\else
+\tstitle{
+  author={Alceu Frigeri\footnote{\tsverb{https://github.com/alceu-frigeri/ufrgscca}}},
+  date={\monthname\space\number\year},
+  title={The ufrgscca, and associated, Packages\\ Version \ufrgsccaversion}
+  }
+\fi
 
-	\begin{dcAbstract}
-		This bundled is aimed at producing undergraduate students final work/report at UFRGS/EE (Engineering School at the Federal University of Rio Grande do Sul), closely following ABNT rules (Brazilian Association for Technical Norms). It is composed of a main class, \Pack{ufrgscca}, and a set of auxiliary packages, some of which can be used independently.
+	\begin{tsabstract}
+		This bundled is aimed at producing undergraduate students final work/report at UFRGS/EE (Engineering School at the Federal University of Rio Grande do Sul), closely following ABNT rules (Brazilian Association for Technical Norms). It is composed of a main class, \tsobj[pkg]{ufrgscca}, and a set of auxiliary packages, some of which can be used independently.
 
-	\end{dcAbstract}
+	\end{tsabstract}
 
 \tableofcontents
 
 	\section{Introduction}
 	\emph{ABNT} rules can be quite challenging some times (read: bibliography style/references) and sometimes just odd (line spacing, front matter, page layout), nevertheless it is a \emph{Brazilian Standard} for typography whose students at UFRGS should grow cherished to follow.
 
-	In short, as of version \ufrgsccaversion\space the bundle is composed of a class, \Pack{ufrgscca} (based on the standard \LaTeX2e \Pack{report} class), which pre-loads all other, as needed, packages: \Packlst{ufrgscca-abnt, ufrgscca-core, ufrgscca-cover, ufrgscca-forms, ufrgscca-gen, ufrgscca-lists, ufrgscca-curr, ufrgscca-coord, ufrgscca-ppc}.
+	In short, as of version \ufrgsccaversion\space the bundle is composed of a class, \tsobj[pkg]{ufrgscca} (based on the standard \LaTeX2e \tsobj[pkg]{report} class), which pre-loads all other, as needed, packages: \tsobj[pkg]{ufrgscca-abnt, ufrgscca-core, ufrgscca-cover, ufrgscca\-forms, ufrgscca-gen, ufrgscca-lists, ufrgscca-curr, ufrgscca-coord, ufrgscca-ppc}.
 
-	N.B.: This bundle requires a quite recent \LaTeX2e kernel, at least as recent as June 2022, which allows to declare package options using the new \Key{key}~=\Key{value} system and declare commands with \Macro{\NewDocumentCommand}{}, out-of-the-box.
+\begin{tsremark}[N.B.:]
+	This bundle requires a quite recent \LaTeX2e kernel, at least as recent as June 2022, which allows to declare package options using the \tsobj[key]{key}~=\tsobj[key]{value} system and declare commands with \tsmacro{\NewDocumentCommand}{}, out-of-the-box.
+\end{tsremark}
 
 \subsection{Current Version}
-For the sake of the “maintainer's sanity”, since this is a bundle, all files are saved with the same version (bundle version), with two exceptions: \Pack{ufrgscca-curr.sty} \Pack{ufrgscca-ppc.sty} which are less tested than the others, and somewhat in what one would call 'beta' state. Better said, all files are version \ufrgsccaversion, except \Pack{ufrgscca-curr} and \Pack{ufrgscca-ppc} whose versions are \ufrgsccacurrversion.
+For the sake of the “maintainer's sanity”, since this is a bundle, all files are saved with the same version (bundle version), with two exceptions: \tsobj[pkg]{ufrgscca-curr.sty} \tsobj[pkg]{ufrgscca-ppc.sty} which are less tested than the others, and somewhat in what one would call 'beta' state. Better said, all files are version \ufrgsccaversion, except \tsobj[pkg]{ufrgscca-curr} and \tsobj[pkg]{ufrgscca-ppc} whose versions are \ufrgsccacurrversion.
 
 \section{\tightul{ufrgscca} Class}
 
-The following packages are always pre-loaded: {\MetaFmt[Pack]\sffamily etex, etoolbox, lmodern, fontenc (T1), inputenc (utf8), silence, ufrgscca-abnt, ufrgscca-gen, ufrgscca-cover, ufrgscca-core, hyperref} and (if it exists) a \emph{local.tex} file.
+The following packages are always pre-loaded: \tsobj[pkg]{etex, etoolbox, lmodern, fontenc (T1), inputenc (utf8), silence, ufrgscca-abnt, ufrgscca-gen}, \tsobj[pkg]{ ufrgscca-cover, ufrgscca-core, hyperref} and (if it exists) a \emph{local.tex} file.
 
-Other set of auxiliary packages are also pre-loaded, depending on the class options used, and finally it loads (normally) the \Pack{report} class (the exception being if one uses the \Option{dctools} option).
+Other set of auxiliary packages are also pre-loaded, depending on the class options used, and finally it loads (normally) the \tsobj[pkg]{report} class (the exception being if one uses the \tsobj[option]{dctools} option).
 
 Being based on the report class, one can use all class options one would with a report, plus the ones listed below.
 \subsection{Class Options}
-\begin{Options}
-	\DescribeOption{tocdepth} use: \KeyUse{tocdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 3 (\Macro{\subsubsection}{}).
-	\DescribeOption{secdepth} use: \KeyUse{secdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 4 (\Macro{\paragraph}{}).
-	\DescribeOption{english} the default language being Portuguese, this option changes locale to English.
-	\DescribeOption{brazilian} in some rare cases (to be further investigated) babel seems to get confused about which language is active, this “shouldn't be necessary” but one can explicitly tell babel to use THIS language (which should, otherwise, be the default one).
-	\DescribeOption{relnum} by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.
-	\DescribeOption{openright} in case of printed material, this will assure that a \Macro{\chapter}{} always starts at an odd page, which is relevant in case of printing out (double sided) the document.
-	\DescribeOption{oneside} in case the document will be printed in single side sheets, otherwise it's assumed a two-sided printing.
-	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
-    \DescribeOption{pretextontoc} “pre-text” elements, like “list of$\dots$” will be inserted in the “table of contents”.
-    \DescribeOption{yearsonly} Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).
-    \DescribeOption{timesroman} will set the default font to Roman (using the obsolete mathptmx package, based on  a free replacement of the proprietary Times New Roman (by Microsoft) and Times Roman (By Adobe)) instead of the default Latin Modern Roman font. As a side effect, the package \Pack{microtype} isn't loaded (can't be used), resulting in a sub-optimal overall layout. NB. The alternative (newer and maintained) packages \Pack{newtxtext}/\Pack{newtxmath} can't be used due to some packages incompatibilities.
-	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
-	\DescribeOption{xlists} this will load the {\MetaFmt[Pack]\sffamily ufrgscca-lists} package, for the definition of new floats/lists.
-	\DescribeOption{xpacks} this will load a series of packages, which can be handy when writing Engineering reports: {\MetaFmt[Pack]\sffamily relsize, keyval, graphicx, mathtools, mathrsfs, amsfonts, amssymb, empheq, amsthm, ext\-arrows, mathfixs, bigdelim, circuitikz, steimenz} and tikz libraries: {\MetaFmt[Pack]\sffamily fit,  math, calc, shapes.geometry, shapes.misc, shapes.multipart, graphs, 3d, positioning, shadows, babel}. One is advised to look after each package documentation (ctan.org) for further information.
-	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
-	\DescribeOption{internship} in case the doc is an internship report.
-	\DescribeOption{nonrequired} in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.
-	\DescribeOption{forms} in the process of submitting a student final work/report, there is a series of forms to be submitted, this allows the customization  of said forms in a simple  way.
-	\DescribeOption{chapternopagenum} to suppress the page numbers at chapters begin.
-	\DescribeOption{nomicrotype} in some rare cases, \Pack{microtype} might hurt page layout, this allows the suppression of \Pack{microtype}.
-	\DescribeOption{showframes} for layout proof only, it will draw frames around each page main parts.
-	\DescribeOption{showlabels} it will put a reference mark in each label created, and print out it's name.
-	\DescribeOption{nofontwarning} in case of \Pack{ufrgscca-ppc} is loaded, it will suppress some font related warnings.
-	\DescribeOption{nolocal} this will suppress the loading of any local.tex file, which would, otherwise, be loaded.
-	\DescribeOption{dctools} this will change page layout and base class to article, it is meant to document the class itself.
-	\DescribeOption{texlive} this is a reserved key, in case some workaround for texlive is needed.
-	\DescribeOption{overleaf} this is a reserved key, in case some workaround for overleaf is needed.
-	\DescribeOption{miktex} this is a reserved key, in case some workaround for miktex is needed.
-\end{Options}
+\begin{describelist}{option}
+	\describe {tocdepth} { use: \tsobj[key]Use{tocdepth}{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 3 (\tsmacro{\subsubsection}{}).}
+
+	\describe {secdepth} { use: \tsobj[key]Use{secdepth}{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 4 (\tsmacro{\paragraph}{}).}
+
+	\describe {english} { the default language being Portuguese, this option changes locale to English.}
+
+	\describe {brazilian} { in some rare cases (to be further investigated) babel seems to get confused about which language is active, this “shouldn't be necessary” but one can explicitly tell babel to use THIS language (which should, otherwise, be the default one).}
+
+	\describe {relnum} { by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.}
+
+	\describe {openright} { in case of printed material, this will assure that a \tsmacro{\chapter}{} always starts at an odd page, which is relevant in case of printing out (double sided) the document.}
+
+	\describe {oneside} { in case the document will be printed in single side sheets, otherwise it's assumed a two-sided printing.}
+
+	\describe {strict-abnt} {to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).}
+
+    \describe {pretextontoc} { “pre-text” elements, like “list of$\dots$” will be inserted in the “table of contents”.}
+
+    \describe {yearsonly} { Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).}
+
+    \describe {timesroman} { will set the default font to Roman (using the obsolete mathptmx package, based on  a free replacement of the proprietary 
+    Times New Roman (by Microsoft) and Times Roman (By Adobe)) instead of the default Latin Modern Roman font. 
+    As a side effect, the package \tsobj[pkg]{microtype} isn't loaded (can't be used), resulting in a sub-optimal overall layout. 
+    NB. The alternative (newer and maintained) packages \tsobj[pkg]{newtxtext}/\tsobj[pkg]{newtxmath} can't be used due to some packages incompatibilities.}
+
+	\describe {repeatfields} { in case of authors with multiple publications, their names will be repeated for each entry. 
+In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.}
+
+	\describe {xlists} { this will load the \tsobj[pkg]{ufrgscca-lists} package, for the definition of new floats/lists.}
+
+	\describe {xpacks} { this will load a series of packages, which can be handy when writing Engineering reports:
+       \tsobj[pkg]{relsize, keyval, graphicx, mathtools, mathrsfs, amsfonts, amssymb, empheq, amsthm, ext\-arrows, mathfixs, bigdelim, circuitikz, steimenz} 
+       and tikz libraries: \tsobj[pkg]{ fit,  math, calc, shapes.geometry, shapes.misc, shapes.multipart, graphs, 3d, positioning, shadows, babel}. 
+       One is advised to look after each package documentation (ctan.org) for further information.}
+%\end{describelist}
+
+%\begin{describelist}{option}
+ %some random text, inserted here...
+
+	\describe {report} { in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).}
+
+	\describe {internship} { in case the doc is an internship report.}
+
+	\describe {nonrequired} { in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.}
+
+	\describe {forms} { in the process of submitting a student final work/report, there is a series of forms to be submitted, this allows the customization  of said forms in a simple  way.}
+
+	\describe {chapternopagenum} { to suppress the page numbers at chapters begin.}
+
+	\describe {nomicrotype} { in some rare cases, \tsobj[pkg]{microtype} might hurt page layout, this allows the suppression of \tsobj[pkg]{microtype}.}
+
+	\describe {showframes} { for layout proof only, it will draw frames around each page main parts.}
+
+	\describe {showlabels} { it will put a reference mark in each label created, and print out it's name.}
+
+	\describe {nofontwarning} { in case of \tsobj[pkg]{ufrgscca-ppc} is loaded, it will suppress some font related warnings.}
+
+	\describe {nolocal} { this will suppress the loading of any local.tex file, which would, otherwise, be loaded.}
+
+	\describe {article} { this will load the  class  \tsobj[pkg]{article} instead of \tsobj[pkg]{report}, it's meant to document the class itself.}
+
+	\describe {nogeometry} { the package \tsobj[pkg]{geometry} won't be loaded. In case one wants to fully customize the page geometry}
+
+	\describe {texlive} { this is a reserved key, in case some workaround for texlive is needed.}
+
+	\describe {overleaf} { this is a reserved key, in case some workaround for overleaf is needed.}
+
+	\describe {miktex} { this is a reserved key, in case some workaround for miktex is needed.}
+\end{describelist}
 
 \subsection{Class Declared Commands}
-\begin{Macros}{\autonameref,\annexref,\autoannexref}
-	\begin{Syntax}%
-		\Macro!{\autonameref}{\oarg{sep}\marg{label}\oarg{spc}}
-		\Macro{\annexref}{label}
-		\Macro!{\autoannexref}{\oarg{sep}\marg{label}\oarg{spc}}
-	\end{Syntax}
-The \Pack{hyperref} package, sometimes, gets the \Macro{\autoref}{} name wrong (when referencing an annex), the \Macro{\annexref}{label} will assure the correct annex name is used.
+\begin{codedescribe}{\autonameref,\annexref,\autoannexref}
+	\begin{codesyntax}%
+		\tsobj[code]{\autonameref}{\tsobj[oarg]{sep}\tsobj[marg]{label}\tsobj[oarg]{spc}}
+		\tsmacro{\annexref}{label}
+		\tsobj[code]{\autoannexref}{\tsobj[oarg]{sep}\tsobj[marg]{label}\tsobj[oarg]{spc}}
+	\end{codesyntax}
+The \tsobj[pkg]{hyperref} package, sometimes, gets the \tsmacro{\autoref}{} name wrong (when referencing an annex), the \tsmacro{\annexref}{label} will assure the correct annex name is used.
 
-\Macro{\autonameref}{label} produces an entry of the form `\Macro{\autoref}{label} \Arg{sep} \Macro{\nameref}{label} \Arg{spc}'
+\tsmacro{\autonameref}{label} produces an entry of the form `\tsmacro{\autoref}{label} \tsobj[meta]{sep} \tsmacro{\nameref}{label} \tsobj[meta]{spc}'
 
-\Macro{\autoannexref}{label} produces an entry of the form `\Macro{\annexref}{label} \Arg{sep} \Macro{\nameref}{label} \Arg{spc}'
+\tsmacro{\autoannexref}{label} produces an entry of the form `\tsmacro{\annexref}{label} \tsobj[meta]{sep} \tsmacro{\nameref}{label} \tsobj[meta]{spc}'
 
-The default \Arg{sep} being a comma, and the default \Arg{spc} being empty space.
+The default \tsobj[meta]{sep} being a comma, and the default \tsobj[meta]{spc} being empty space.
 
-\end{Macros}
+\end{codedescribe}
 
 \subsection{Class Known Hooks}
-\begin{Macros}{\miktexHack,\overleafHack,\livetexHack}
-    \begin{Syntax}%
-        \Macro{\miktexHack}{}
-        \Macro{\overleafHack}{}
-        \Macro{\livetexHack}{}
-    \end{Syntax}
+\begin{codedescribe}{\miktexHack,\overleafHack,\livetexHack}
+    \begin{codesyntax}%
+        \tsmacro{\miktexHack}{}
+        \tsmacro{\overleafHack}{}
+        \tsmacro{\livetexHack}{}
+    \end{codesyntax}
     In case some workaround is needed due an unexpected error (when upgrading packages/\TeX system) the class “knows” about those three hooks.
-    They will be executed if, and only if, they are user defined and the corresponding package option is used, i.e., for example, for the hook \Macro{\miktexHack}{} to be used/called by the class \Packlst{ufrgscca}, one has to: a)~defined it and b)~use the class option \Option{miktex}.
-\end{Macros}
+    They will be executed if, and only if, they are user defined and the corresponding package option is used, i.e., for example, for the hook \tsmacro{\miktexHack}{} to be used/called by the class \tsobj[pkg]{ufrgscca}, one has to: a)~define it and b)~use the class option \tsobj[option]{miktex}.
+\end{codedescribe}
 
 
 \section{\tightul{ufrgscca-abnt} Package}
-This package is the one that sets the page layout (using \Packlst{geometry, titlesec, titletoc}) and adjusts the main float environments (figure, tables, captions).
+This package is the one that sets the page layout (using \tsobj[pkg]{geometry, titlesec, titletoc}) and adjusts the main float environments (figure, tables, captions).
 It can be used as a stand alone package, regardless of the underlying class.
 
-The following packages are always pre-loaded: {\MetaFmt[Pack]\sffamily babel, csquotes, geometry, appendix, titlesec, titletoc, enumitem, chngctr, caption, biblatex, microtype, array, nicematrix, contour} and {\MetaFmt[Pack]\sffamily soul}.
+The following packages are always pre-loaded: \tsobj[pkg]{ babel, csquotes, geometry, appendix, titlesec, titletoc, enumitem, chngctr, caption, biblatex, microtype, array, nicematrix, contour, soul}.
 
-Take note that \Pack{biblatex} is loaded with the \textbf{\Option{biber}} option, to correctly handle ABNT biography style.
+Take note that \tsobj[pkg]{biblatex} is loaded with the \textbf{\tsobj[option]{biber}} option, to correctly handle ABNT biography style.
 
 \subsection{Package Options}
-\begin{Options}
-	\DescribeOption{strict-abnt} to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).
-	\DescribeOption{chapternopagenum} to suppress the page numbers at chapters begin.
-	\DescribeOption{relnum} by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.
-	\DescribeOption{repeatfields} in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.
-    \DescribeOption{yearsonly} Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).
-	\DescribeOption{nomicrotype} in some rare cases, \Pack{microtype} might hurt page layout, this allows the suppression of \Pack{microtype}.
-	\DescribeOption{showframes} for layout proof only, it will draw frames around each page main parts.
-	\DescribeOption{showlabels} it will put a reference mark in each label created, and print out it's name.
-	\DescribeOption{tocdepth} use: \KeyUse{tocdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 3 (\Macro{\subsubsection}{}).
-	\DescribeOption{secdepth} use: \KeyUse{secdepth}{number}, whereas \Meta{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \Macro{\chapter}{} for report based classes, 1 being \Macro{\section}{}, and so on.) The default value being 4 (\Macro{\paragraph}{}).
-	\DescribeOption{dctools}  this will change page layout and base class to article, it is meant to document the class itself.
-\end{Options}
 
-\begin{Macros}{\keyword}
-	\begin{Syntax}%
-		\Macro{\keyword}{keyword}
-	\end{Syntax}
-\end{Macros}
+
+\begin{describelist}{option}
+	\describe {strict-abnt} {to assure asymmetric margins, as defined by ABNT: inner ones greater than outer ones, which matters if you are going to print the doc and make a book of it, but makes it odd to look at in a computer screen, reason by which the current default setting is for symmetric margins (same text width).}
+
+ 	\describe {chapternopagenum} { to suppress the page numbers at chapters begin.}
+
+	\describe {relnum} { by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.}
+
+	\describe {repeatfields} { in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.}
+
+    \describe {yearsonly} { Cover pages, at their bottom, will display the years only (instead of the default mouth year construct).}
+    
+  \describe {yearsonly}{ Cover pages, at their bottom, will display the years only, instead of the default mouth year construct.}
+  
+	\describe {nomicrotype} { in some rare cases, \tsobj[pkg]{microtype} might hurt page layout, this allows the suppression of \tsobj[pkg]{microtype}.}
+
+	\describe {showframes} { for layout proof only, it will draw frames around each page main parts.}
+
+	\describe {showlabels} { it will put a reference mark in each label created, and print out it's name.}
+
+	\describe {tocdepth} { use: \tsobj[key]{tocdepth}=\tsobj[meta]{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 3 (\tsmacro{\subsubsection}{}).}
+
+	\describe {secdepth} { use: \tsobj[key]{secdepth}=\tsobj[meta]{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 4 (\tsmacro{\paragraph}{}).}
+
+	\describe {dctools} {  this will change page layout and base class to article, it is meant to document the class itself.}
+\end{describelist}
+
+
+\subsection{Commands}
+
+\begin{codedescribe}{\keyword}
+	\begin{codesyntax}%
+		\tsmacro{\keyword}{keyword}
+	\end{codesyntax}
   This command can be invoked many times, it will construct a list of keywords to be used when printing out the abstract environment.
+\end{codedescribe}
 
-\begin{Macros}{\sourcecitation,\note}
-	\begin{Syntax}%
-		\Macro{\sourcecitation}{source}
-		\Macro{\note}{text}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\sourcecitation,\note}
+	\begin{codesyntax}
+		\tsmacro{\sourcecitation}{source}
+		\tsmacro{\note}{text}
+	\end{codesyntax}
 When describing floating elements (like figure, tables, circuits) one always has to cite the source of it, and in some cases it might be necessary to add a special note. Those assure uniformity when doing that.
+\end{codedescribe}
 
-\begin{Macros}{\nonum,\notoc}
-	\begin{Syntax}%
-		\Macro!{\nonum}{\Macro{\chapter}{chap.title}}
-		\Macro!{\nonum}{\Macro{\section}{sec.title}}
-		\Macro!{\notoc}{\Macro{\chapter}{chap.title}}
-		\Macro!{\notoc}{\Macro{\section}{sec.title}}
-	\end{Syntax}
-\end{Macros}
-In some cases, it might be necessary to create a numberless chapters or sections. Those two commands can be used as a \emph{prefix} to any sectioning command. Whilst \Macro{\nonum}{} will just suppress the sectioning number, the \Macro{\notoc}{} will also suppress it from the table of contents.
+\begin{codedescribe}{\nonum,\notoc}
+	\begin{codesyntax}%
+		\tsobj[code]{\nonum}{\tsmacro{\chapter}{chap.title}}
+		\tsobj[code]{\nonum}{\tsmacro{\section}{sec.title}}
+		\tsobj[code]{\notoc}{\tsmacro{\chapter}{chap.title}}
+		\tsobj[code]{\notoc}{\tsmacro{\section}{sec.title}}
+	\end{codesyntax}
+In some cases, it might be necessary to create a numberless chapters or sections. Those two commands can be used as a \emph{prefix} to any sectioning command. Whilst \tsmacro{\nonum}{} will just suppress the sectioning number, the \tsmacro{\notoc}{} will also suppress it from the table of contents.
+\end{codedescribe}
 
-\begin{stcode}[st=demononum]
+\begin{codestore}[st=demononum]
 	\nonum\chapter{some title} %this one will appear in the toc
 	\notoc\section{some other title} %this won't even appear in the toc
-\end{stcode}
-\DisplayCode[emph={nonum,notoc}]{demononum}
+\end{codestore}
+\tscode*[emph={nonum,notoc}]{demononum}
 
-\begin{Macros}{\tightul}
-	\begin{Syntax}%
-		\Macro{\tightul}{text}
-	\end{Syntax}
-\end{Macros}
-This will \emph{underline} a short text, take note that \Meta{text} `can't be broken' (think paragraph justification), which can lead to \emph{text overflows} and bad justification.
+\begin{codedescribe}{\tightul}
+	\begin{codesyntax}%
+		\tsmacro{\tightul}{text}
+	\end{codesyntax}
+This will \emph{underline} a short text, take note that \tsobj[meta]{text} `can't be broken' (think paragraph justification), which can lead to \emph{text overflows} and bad justification.
+\end{codedescribe}
 
-\begin{stcode}[st=demotight]
+\begin{codestore}[st=demotight]
 	\tightul{Some text example}%
-\end{stcode}
+\end{codestore}
 
-\TabbedDemoCode[emph={tightul}]{demotight}[-0.75ex]
+\tsdemo[emph={tightul}]{demotight}[-0.75ex]
 
-\begin{Macros}{\NewChapListEnv}
-	\begin{Syntax}%
-		\Macro{\NewChapListEnv}{envname,displayname}
-	\end{Syntax}
-\end{Macros}
-This is the command used to created those \emph{chapter like} lists, like `List of Symbols' or `List of acronyms'. With it, a new environment is created, \Arg{envname}, with an associated `numberless' chapter name \Arg{displayname}. The newly created environment will implement a \emph{description} like environment (thanks to \Pack{enumitem}) with an optional and a mandatory argument (see below).
+\begin{codedescribe}{\NewChapListEnv}
+	\begin{codesyntax}%
+		\tsmacro{\NewChapListEnv}{envname,displayname}
+	\end{codesyntax}
+\end{codedescribe}
+This is the command used to created those \emph{chapter like} lists, like `List of Symbols' or `List of acronyms'. With it, a new environment is created, \tsobj[meta]{envname}, with an associated `numberless' chapter name \tsobj[meta]{displayname}. The newly created environment will implement a \emph{description} like environment (thanks to \tsobj[pkg]{enumitem}) with an optional and a mandatory argument (see below).
 
-\begin{stcode}[st=d.newchapenv]
+\begin{codestore}[st=d.newchapenv]
 	\def\listabbrvname{Lista de Abreviaturas}
 	\NewChapListEnv{listofabbrv}{\listabbrvname} % this is the actual code used in ufrgscca-abnt.sty
-\end{stcode}
-\DisplayCode{d.newchapenv}
+\end{codestore}
+\tscode*{d.newchapenv}
 
-\begin{Macros}{\date,\today,\monthname}
-	\begin{Syntax}%
-		\Macro{\date}[day]{month,year}
-		\Macro{\today}{}
-		\Macro{\monthname}{}
-	\end{Syntax}
-\end{Macros}
-The command \Macro{\date}{} is redefined, to allow a separation between the many arguments \Arg{day}, \Arg{month} and \Arg{year}. If not called by the user it \emph{defaults} to current month / year. \Macro{\today}{} returns the current \emph{locale} date, whilst \Macro{\monthname}{} returns the \emph{locale} name of the current month.
+\begin{codedescribe}{\date,\today,\monthname}
+	\begin{codesyntax}%
+		\tsmacro{\date}[day]{month,year}
+		\tsmacro{\today}{}
+		\tsmacro{\monthname}{}
+	\end{codesyntax}
+\end{codedescribe}
+The command \tsmacro{\date}{} is redefined, to allow a separation between the many arguments \tsobj[meta]{day}, \tsobj[meta]{month} and \tsobj[meta]{year}. If not called by the user it \emph{defaults} to current month / year. \tsmacro{\today}{} returns the current \emph{locale} date, whilst \tsmacro{\monthname}{} returns the \emph{locale} name of the current month.
 
 
 \subsection{Environments}
 
-\begin{Envs}{abstract}
-	\begin{Syntax}%
-		\Macro{\begin{abstract}}[lang]{keywords}\ldots\Macro{\end{abstract}}{}
-	\end{Syntax}
-	The standard environment \Env{abstract} is redefined as a numberless chapter based on the current locale (default: Portuguese), at the end of it the keywords list created with \Macro{\keyword}{} will be added.
-\end{Envs}
+\begin{codedescribe}[env]{abstract}
+	\begin{codesyntax}%
+		\tsmacro{\begin{abstract}}[lang]{keywords}\ldots\tsmacro{\end{abstract}}{}
+	\end{codesyntax}
+	The standard environment \tsobj[env]{abstract} is redefined as a numberless chapter based on the current locale (default: Portuguese), at the end of it the keywords list created with \tsmacro{\keyword}{} will be added.
+\end{codedescribe}
 
-\begin{stcode}[st=d.abstract]
+\begin{codestore}[st=d.abstract]
 	\keyword{a keyword}
 	\keyword{another keyword}
 	\begin{abstract} some short summary of things\ldots
 	\end{abstract}
-\end{stcode}
-\DisplayCode{d.abstract}
+\end{codestore}
+\tscode*{d.abstract}
 
-\begin{Envs}{otherabstract}
-	\begin{Syntax}%
-		\Macro{\begin{otherabstract}}[lang]{keywords}\ldots\Macro{\end{otherabstract}}{}
-	\end{Syntax}
+\begin{codedescribe}[env]{otherabstract}
+	\begin{codesyntax}%
+		\tsmacro{\begin{otherabstract}}[lang]{keywords}\ldots\tsmacro{\end{otherabstract}}{}
+	\end{codesyntax}
 This is the environment to create an abstract in a language other than the default one.
-The default value for \Arg{lang} is english, and it can be any value that \Pack{babel} understands. The \Arg{keywords} are just a list of keywords which will be added at the end of the \emph{otherabstract}.
-\end{Envs}
+The default value for \tsobj[meta]{lang} is english, and it can be any value that \tsobj[pkg]{babel} understands. The \tsobj[meta]{keywords} are just a list of keywords which will be added at the end of the \emph{otherabstract}.
+\end{codedescribe}
 
-\begin{stcode}[st=d.oabstract]
+\begin{codestore}[st=d.oabstract]
 	\begin{otherabstract}[english]{a keyword, another keyword} some short summary of things\ldots
 	\end{otherabstract}
-\end{stcode}
-\DisplayCode{d.oabstract}
+\end{codestore}
+\tscode*{d.oabstract}
 
 
-\begin{Envs}{listofabbrv,listofsymbols}
-	\begin{Syntax}%
-	\Macro{\begin{listofabbrv}}[enum-opt]{ABBRV}\ldots\Macro{\end{listofabbrv}}{}
-	\Macro{\begin{listofsymbols}}[enum-opt]{SYMB}\ldots\Macro{\end{listofsymbols}}{}
-	\end{Syntax}
-\end{Envs}
-Both environments create a description like list preceded by a numberless (\Macro{\nonum}{}) chapter. \Arg{enum-opt} is any \Pack{enumitem} list valid key. Whereas \Arg{ABBRV} / \Arg{SYMB} are just the `biggest' abbreviation/symbol to be used as a tab reference.
+\begin{codedescribe}[env]{listofabbrv,listofsymbols}
+	\begin{codesyntax}%
+	\tsmacro{\begin{listofabbrv}}[enum-opt]{ABBRV}\ldots\tsmacro{\end{listofabbrv}}{}
+	\tsmacro{\begin{listofsymbols}}[enum-opt]{SYMB}\ldots\tsmacro{\end{listofsymbols}}{}
+	\end{codesyntax}
+\end{codedescribe}
+Both environments create a description like list preceded by a numberless (\tsmacro{\nonum}{}) chapter. \tsobj[meta]{enum-opt} is any \tsobj[pkg]{enumitem} list valid key. Whereas \tsobj[meta]{ABBRV} / \tsobj[meta]{SYMB} are just the `biggest' abbreviation/symbol to be used as a tab reference.
 
-\begin{Envs}{appendix,annex}
-	\begin{Syntax}%
-		\Macro{\begin{appendix}}{}.... \Macro{\end{appendix}}{}
-		\Macro{\begin{annex}}{}.... \Macro{\end{annex}}{}
-	\end{Syntax}
-\end{Envs}
+\begin{codedescribe}[env]{appendix,annex}
+	\begin{codesyntax}%
+		\tsmacro{\begin{appendix}}{}.... \tsmacro{\end{appendix}}{}
+		\tsmacro{\begin{annex}}{}.... \tsmacro{\end{annex}}{}
+	\end{codesyntax}
+\end{codedescribe}
 Those two environments start the appendices and annex chapters (using locale). Chapters are  alphabetic \emph{numbered} (starting at A).
 \subsection{Tabular New Columns}
-Thanks to \Pack{array} some new columns types are defined:
-\begin{Values}
-	\DescribeValue{P} \Value{P\marg{width}} Normal text, ragged left.
-	\DescribeValue{B} \Value{B\marg{width}} Bold text, ragged left.
-	\DescribeValue{C} \Value{C\marg{width}} Normal text, centered.
-	\DescribeValue{R} \Value{R\marg{width}} Normal text, ragged left.
-	\DescribeValue{L} \Value{L\marg{width}} Normal text, ragged right.
-	\DescribeValue{J} \Value{J\marg{width}} Normal text, justified.
+Thanks to \tsobj[pkg]{array} some new columns types are defined:
+\begin{describelist}{value}
+	\describe {P} { \tsobj[value]{P\{\tsobj[marg]{width}\}} Normal text, ragged left.}
 
-	\end{Values}
+	\describe {B} { \tsobj[value]{B\{\tsobj[marg]{width}\}} Bold text, ragged left.}
+	\describe {C} { \tsobj[value]{C\{\tsobj[marg]{width}\}} Normal text, centered.}
+	\describe {R} { \tsobj[value]{R\{\tsobj[marg]{width}\}} Normal text, ragged left.}
+	\describe {L} { \tsobj[value]{L\{\tsobj[marg]{width}\}} Normal text, ragged right.}
+	\describe {J} { \tsobj[value]{J\{\tsobj[marg]{width}\}} Normal text, justified.}
+	\end{describelist}
+
+
+
 \subsection{enumitem Extra Keys}
-Besides the \emph{default} keys defined by the \Pack{enumitem} package a few others are defined for author's convenience:
-\begin{Keys}
-	\DescribeKey{ppc, tcc} \Key{ppc} and \Key{tcc} are alias of each other, and just assure that lists indentation will be the same as paragraphs default.
-	\DescribeKey{parindent} with \Key{parindent}, the list number/mark is aligned with paragraph indentation.
-	\DescribeKey{noindent} \Key{noindent} removes the label indentation.
+Besides the \emph{default} keys defined by the \tsobj[pkg]{enumitem} package a few others are defined for author's convenience:
 
-	\begin{stcode}[st=enumA]
+\begin{describelist}{key}
+	\describe {ppc, tcc} {\tsobj[key]{ppc} and \tsobj[key]{tcc} are alias of each other, and just assure that lists indentation will be the same as paragraphs default.}
+	\describe {parindent} { with \tsobj[key]{parindent}, the list number/mark is aligned with paragraph indentation.}
+	\describe {noindent} { \tsobj[key]{noindent} removes the label indentation.}
+\newpage
+	\begin{codestore}[st=enumA]
 \begin{enumerate}[tcc]
 	\item some A
 	\item some B
@@ -308,13 +375,14 @@ Besides the \emph{default} keys defined by the \Pack{enumitem} package a few oth
 \end{enumerate}
 
 New paragraph, for reference.
-\end{stcode}
+\end{codestore}
 
-	\TabbedDemoCode[parindent=org]{enumA}
+%	\tsdemo*[parindent=org]{enumA}
+	\tsdemo{enumA}
 
-	\DescribeKey{tight} allows for very tight lists (no indentation) to be used, for instance, inside quotes. N.B. don't use it in normal paragraph mode, otherwise the labels will spill outside the default text window.
-	\DescribeKey{miditemsep} \Key{miditemsep} halves items separation, as an alternative to \Key{noitemsep} from \Pack{enumitem}
-	\begin{stcode}[st=enumB]
+	\describe {tight} { allows for very tight lists (no indentation) to be used, for instance, inside quotes. N.B. don't use it in normal paragraph mode, otherwise the labels will spill outside the default text window.}
+	\describe {miditemsep} { \tsobj[key]{miditemsep} halves items separation, as an alternative to \tsobj[key]{noitemsep} from \tsobj[pkg]{enumitem}}
+	\begin{codestore}[st=enumB]
 	\begin{enumerate}[tcc]
 		\item some A
 		\item some B
@@ -327,41 +395,59 @@ New paragraph, for reference.
 		\item some A
 		\item some B
 	\end{enumerate}
-\end{stcode}
+\end{codestore}
 
-\TabbedDemoCode{enumB}
+\tsdemo{enumB}
 
 
-	\DescribeKey{arabic} That's the \emph{default} enumerate style. Arabic numbers, starting at 1, followed by a dot.
-	\DescribeKey{arabic)} Label will be constructed as number followed by a parenthesis.
-	\DescribeKey{(arabic)} Label will be enclosed by parenthesis.
-	\DescribeKey{arabic*} (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final dot.
-	\DescribeKey{arabic*)} (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final parenthesis.
+	\describe {bullet} { for simple itemized lists, it will replace the default black dot by an `open bullet'}
+\newpage
+	\begin{codestore}[st=enumD]
+	\begin{itemize}[tcc,miditemsep]
+		\item some A
+		\item some B
+		\item some C
+	\end{itemize}
+	\begin{itemize}[tcc,bullet,miditemsep]
+		\item some A
+		\item some B
+		\item some C
+	\end{itemize}
+\end{codestore}
 
-	\DescribeKey{roman} This and below keys are the same as the arabic ones, but using lower case roman numbers.
-	\DescribeKey{roman)} lower case roman number, followed by a parenthesis.
-	\DescribeKey{(roman)} enclosed by parenthesis.
-	\DescribeKey{roman*} preceding one followed by roman number and a final dot.
-	\DescribeKey{roman*)} same, followed by a final parenthesis.
+\tsdemo{enumD}
 
-	\DescribeKey{Roman} This and below keys are the same as the arabic ones, but using upper case roman numbers.
-	\DescribeKey{Roman)} upper case roman number, followed by a parenthesis.
-	\DescribeKey{(Roman)} enclosed by parenthesis.
-	\DescribeKey{Roman*} preceding one followed by roman number and a final dot.
-	\DescribeKey{Roman*)} same, followed by a final parenthesis.
 
-	\DescribeKey{alpha} This and below keys are the same as the arabic ones, but using lower case alpha numbers.
-	\DescribeKey{alpha)} lower case alpha number, followed by a parenthesis.
-	\DescribeKey{(alpha)} enclosed by parenthesis.
-	\DescribeKey{alpha*} preceding one followed by alpha number and a final dot.
-	\DescribeKey{alpha*)} same, followed by a final parenthesis.
+	\describe {arabic} { That's the \emph{default} enumerate style. Arabic numbers, starting at 1, followed by a dot.}
+	\describe {arabic)} { Label will be constructed as number followed by a parenthesis.}
+	\describe {(arabic)} { Label will be enclosed by parenthesis.}
+	\describe {arabic*} { (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final dot.}
+	\describe {arabic*)} { (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final parenthesis.}
 
-	\DescribeKey{Alpha} This and below keys are the same as the arabic ones, but using upper case alpha numbers.
-	\DescribeKey{Alpha)} upper case roman number, followed by a parenthesis.
-	\DescribeKey{(Alpha)} enclosed by parenthesis.
-	\DescribeKey{Alpha*} preceding one followed by roman number and a final dot.
-	\DescribeKey{Alpha*)} same, followed by a final parenthesis.
-	\begin{stcode}[st=enumC]
+	\describe {roman} { This and below keys are the same as the arabic ones, but using lower case roman numbers.}
+	\describe {roman)} { lower case roman number, followed by a parenthesis.}
+	\describe {(roman)} { enclosed by parenthesis.}
+	\describe {roman*} { preceding one followed by roman number and a final dot.}
+	\describe {roman*)} { same, followed by a final parenthesis.}
+
+	\describe {Roman} { This and below keys are the same as the arabic ones, but using upper case roman numbers.}
+	\describe {Roman)} { upper case roman number, followed by a parenthesis.}
+	\describe {(Roman)} { enclosed by parenthesis.}
+	\describe {Roman*} { preceding one followed by roman number and a final dot.}
+	\describe {Roman*)} { same, followed by a final parenthesis.}
+
+	\describe {alpha} { This and below keys are the same as the arabic ones, but using lower case alpha numbers.}
+	\describe {alpha)} { lower case alpha number, followed by a parenthesis.}
+	\describe {(alpha)} { enclosed by parenthesis.}
+	\describe {alpha*} { preceding one followed by alpha number and a final dot.}
+	\describe {alpha*)} { same, followed by a final parenthesis.}
+
+	\describe {Alpha} { This and below keys are the same as the arabic ones, but using upper case alpha numbers.}
+	\describe {Alpha)} { upper case roman number, followed by a parenthesis.}
+	\describe {(Alpha)} { enclosed by parenthesis.}
+	\describe {Alpha*} { preceding one followed by roman number and a final dot.}
+	\describe {Alpha*)} { same, followed by a final parenthesis.}
+	\begin{codestore}[st=enumC]
 	\begin{enumerate}[tcc,roman]
 		\item some A
 		\item some B
@@ -387,212 +473,201 @@ New paragraph, for reference.
 		\end{enumerate}
 		\item some C
 	\end{enumerate}
-\end{stcode}
+\end{codestore}
 
-\TabbedDemoCode{enumC}
-
-	\DescribeKey{bullet} for simple itemized lists, it will replace the default black dot by an `open bullet'
-	\begin{stcode}[st=enumD]
-	\begin{itemize}[tcc,miditemsep]
-		\item some A
-		\item some B
-		\item some C
-	\end{itemize}
-	\begin{itemize}[tcc,bullet,miditemsep]
-		\item some A
-		\item some B
-		\item some C
-	\end{itemize}
-\end{stcode}
-
-\TabbedDemoCode{enumD}
+\tsdemo{enumC}
 
 
-\end{Keys}
+\end{describelist}
+
+
+
 
 \section{\tightul{ufrgscca-core} Package}
-The \Pack{ufrgscca-core} package defines a set of commands for authors, students, advisors and examiners names and related info. It is needed by most/all of the tc bundled packages.
+The \tsobj[pkg]{ufrgscca-core} package defines a set of commands for author's, student's, advisor's examiner's names and related info. It is needed by most/all of the bundled packages.
 
 \subsection{Core Forms Commands}
-\begin{Macros}{\tccbrief,\tcccoadvisorbrief,\tccadvisorsreview}
-	\begin{Syntax}%
-		\Macro{\tccbrief}{brief}
-		\Macro{\tcccoadvisorbrief}{brief}
-		\Macro{\tccadvisorsreview}{brief}
-	\end{Syntax}
-Those commands are only of use when using \Pack{ufrgscca-forms}. \Macro{\tccbrief}{} sets the work initial summary, \Macro{\tcccoadvisorbrief}{} sets the justification for having a co-advisor, \Macro{\tccadvisorsreview}{} sets the advisor's review.
-\end{Macros}
+\begin{codedescribe}{\tccbrief,\tcccoadvisorbrief,\tccadvisorsreview}
+	\begin{codesyntax}%
+		\tsmacro{\tccbrief}{brief}
+		\tsmacro{\tcccoadvisorbrief}{brief}
+		\tsmacro{\tccadvisorsreview}{brief}
+	\end{codesyntax}
+Those commands are only of use when using \tsobj[pkg]{ufrgscca-forms}. \tsmacro{\tccbrief}{} sets the work initial summary, \tsmacro{\tcccoadvisorbrief}{} sets the justification for having a co-advisor, \tsmacro{\tccadvisorsreview}{} sets the advisor's review.
+\end{codedescribe}
 
 \subsection{Core Global Commands}\label{core-commands}
 
-\begin{Macros}{\location}
-	\begin{Syntax}%
-		\Macro{\location}{city,state}
-	\end{Syntax}
-	To redefine the default values of \Arg{city} and \Arg{state} (Porto Alegre and RS).\\
-\end{Macros}
+\begin{codedescribe}{\location}
+	\begin{codesyntax}%
+		\tsmacro{\location}{city,state}
+	\end{codesyntax}
+	To redefine the default values of \tsobj[meta]{city} and \tsobj[meta]{state} (Porto Alegre and RS).\\
+\end{codedescribe}
 
-\begin{Macros}{\TCCcoord,\TCCcoordtitle}
-	\begin{Syntax}%
-		\Macro!{\TCCcoord}{\marg{(title) full name}\oarg{gender}}
-		\Macro{\TCCcoordtitle}{coordinator denomination}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\TCCcoord,\TCCcoordtitle}
+	\begin{codesyntax}%
+		\tsobj[code]{\TCCcoord}{\tsobj[marg]{(title) full name}\tsobj[oarg]{gender}}
+		\tsmacro{\TCCcoordtitle}{coordinator denomination}
+	\end{codesyntax}
+\end{codedescribe}
 
-\begin{Macros}{\coursecoord,\coursecoordtitle}
-	\begin{Syntax}%
-		\Macro!{\coursecoord}{\oarg{(title) full name}\oarg{gender}}
-		\Macro{\coursecoordtitle}{course coordinator denomination}
-	\end{Syntax}
-\end{Macros}
- \Arg{coordinator denomination} and \Arg{course coordinator denomination} are the full 'job title' of their position. \Arg{gender} can be either 'm' or 'f'.
+\begin{codedescribe}{\coursecoord,\coursecoordtitle}
+	\begin{codesyntax}%
+		\tsobj[code]{\coursecoord}{\tsobj[oarg]{(title) full name}\tsobj[oarg]{gender}}
+		\tsmacro{\coursecoordtitle}{course coordinator denomination}
+	\end{codesyntax}
+\end{codedescribe}
+ \tsobj[meta]{coordinator denomination} and \tsobj[meta]{course coordinator denomination} are the full 'job title' of their position. \tsobj[meta]{gender} can be either 'm' or 'f'.
 
-\begin{Macros}{\internshipcoord,\internshipcoordtitle}
-    \begin{Syntax}%
-        \Macro!{\internshipcoord}{\oarg{(title) full name}\oarg{gender}}
-        \Macro{\internshipcoordtitle}{internship coordinator denomination}
-    \end{Syntax}
-\end{Macros}
-\Arg{coordinator denomination} and \Arg{internship coordinator denomination} are the full 'job title' of their position. \Arg{gender} can be either 'm' or 'f'.
+\begin{codedescribe}{\internshipcoord,\internshipcoordtitle}
+    \begin{codesyntax}%
+        \tsobj[code]{\internshipcoord}{\tsobj[oarg]{(title) full name}\tsobj[oarg]{gender}}
+        \tsmacro{\internshipcoordtitle}{internship coordinator denomination}
+    \end{codesyntax}
+\end{codedescribe}
+\tsobj[meta]{coordinator denomination} and \tsobj[meta]{internship coordinator denomination} are the full 'job title' of their position. \tsobj[meta]{gender} can be either 'm' or 'f'.
 
 
 \subsection{Core Specific Commands}\label{core-specific-commands}
 
-The following commands are more or less self-explanatory, \Arg{ID} is the student's university ID. \Arg{Nproc} is the process/request number. \Arg{gender} can be either 'm' or 'f'.
+The following commands are more or less self-explanatory, \tsobj[meta]{ID} is the student's university ID. \tsobj[meta]{Nproc} is the process/request number. \tsobj[meta]{gender} can be either 'm' or 'f'.
 
 
-\begin{Macros}{\author,\authorinfo,\student,\studentinfo}%,\studentgender}
-	\begin{Syntax}%
-		~\Macro!{ \author}{\marg{last}\marg{first}\oarg{gender}}
-		\Macro{\authorinfo}[Nproc]{ID,email}
-		\Macro!{\student}{\marg{last}\marg{first}\oarg{gender}}
-		\Macro{\studentinfo}[Nproc]{ID,email}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\author,\authorinfo,\student,\studentinfo}%,\studentgender}
+	\begin{codesyntax}
+		\tsobj[code]{ \author}{\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+		\tsmacro{\authorinfo}[Nproc]{ID,email}
+		\tsobj[code]{\student}{\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+		\tsmacro{\studentinfo}[Nproc]{ID,email}
+	\end{codesyntax}
+\end{codedescribe}
 
 
-\begin{Macros}{\advisor,\advisorinfo}%,\advisorgender}
-	\begin{Syntax}%
-		~\Macro!{\advisor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
-		\Macro{\advisorinfo}{Institut,title-info,email,phone}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\advisor,\advisorinfo}%,\advisorgender}
+	\begin{codesyntax}
+		\tsobj[code]{\advisor}{\tsobj[oarg]{title}\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+		\tsmacro{\advisorinfo}{Institut,title-info,email,phone}
+	\end{codesyntax}
+\end{codedescribe}
 
-\begin{Macros}{\coadvisor,\coadvisorinfo}%,\coadvisorgender}
-	\begin{Syntax}%
-		~\Macro!{\coadvisor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
-		\Macro{\coadvisorinfo}{Institut,title-info,email,phone}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\coadvisor,\coadvisorinfo}%,\coadvisorgender}
+	\begin{codesyntax}
+		\tsobj[code]{\coadvisor}{\tsobj[oarg]{title}\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+		\tsmacro{\coadvisorinfo}{Institut,title-info,email,phone}
+	\end{codesyntax}
+\end{codedescribe}
 
-\begin{Macros}{\examiner,\examinerinfo}%,\examinergender}
-	\begin{Syntax}%
-		~\Macro!{\examiner}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
-		\Macro{\examinerinfo}{Institut,title-info,email,phone}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\examiner,\examinerinfo}%,\examinergender}
+	\begin{codesyntax}
+		\tsobj[code]{\examiner}{\tsobj[oarg]{title}\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+		\tsmacro{\examinerinfo}{Institut,title-info,email,phone}
+	\end{codesyntax}
+\end{codedescribe}
 
-\begin{Macros}{\altexaminer,\altexaminerinfo}%,\altexaminergender}
-	\begin{Syntax}%
-		~\Macro!{\altexaminer}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
-		\Macro{\altexaminerinfo}{Institut,title-info,email,phone}
-	\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\altexaminer,\altexaminerinfo}%,\altexaminergender}
+	\begin{codesyntax}
+		\tsobj[code]{\altexaminer}{\tsobj[oarg]{title}\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+		\tsmacro{\altexaminerinfo}{Institut,title-info,email,phone}
+	\end{codesyntax}
+\end{codedescribe}
 
-\begin{Macros}{\tutor,\tutorinfo}%,\tutorgender}
-\begin{Syntax}%
-    ~\Macro!{\tutor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
-    \Macro{\tutorinfo}{Institut,title-info,email,phone}
-\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\tutor,\tutorinfo}%,\tutorgender}
+\begin{codesyntax}
+    \tsobj[code]{\tutor}{\tsobj[oarg]{title}\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+    \tsmacro{\tutorinfo}{Institut,title-info,email,phone}
+\end{codesyntax}
+\end{codedescribe}
 
-\begin{Macros}{\supervisor,\supervisorinfo}%,\tutorgender}
-\begin{Syntax}%
-    ~\Macro!{\supervisor}{\oarg{title}\marg{last}\marg{first}\oarg{gender}}
-    \Macro{\supervisorinfo}{register,office,email,phone}
-\end{Syntax}
-\end{Macros}
+\begin{codedescribe}{\supervisor,\supervisorinfo}%,\tutorgender}
+\begin{codesyntax}
+    \tsobj[code]{\supervisor}{\tsobj[oarg]{title}\tsobj[marg]{last}\tsobj[marg]{first}\tsobj[oarg]{gender}}
+    \tsmacro{\supervisorinfo}{register,office,email,phone}
+\end{codesyntax}
+\end{codedescribe}
 
-N.B. Macros \Macro{\advisor}{}, \Macro{\coadvisor}{}, \Macro{\examiner}{} and \Macro{\altexaminer}{} are meant to be used in a 'final work' doc. The Macros \Macro{\tutor}{} and \Macro{\supervisor}{} in case of an internship report.
+\begin{tsremark}[N.B.:]
+The commands \tsmacro{\advisor}{}, \tsmacro{\coadvisor}{}, \tsmacro{\examiner}{} and \tsmacro{\altexaminer}{} are meant to be used in a 'final work' doc. The Macros \tsmacro{\tutor}{} and \tsmacro{\supervisor}{} in case of an internship report.
+\end{tsremark}
 
 
 \section{\tightul{ufrgscca-cover} Package}
 This package is the one that sets the front pages, depending on the kind of 'report' being generated. The default being to generate 3 cover pages: an identification on, followed by presentation one, then an referral/approval one.
 
 \subsection{Package Options}
-\begin{Options}
-	\DescribeOption{report} in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).
-    \DescribeOption{internship} in case the doc is an internship report.
-    \DescribeOption{nonrequired} in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.
+\begin{describelist}{option}
+	\describe {report} { in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).}
+    \describe {internship} { in case the doc is an internship report.}
+    \describe {nonrequired} { in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.}
 
-\end{Options}
+\end{describelist}
 
 \subsection{Defined Commands}
-\begin{Macros}{\maketitle}
-	\begin{Syntax}%
-		\Macro{\maketitle}{}
-	\end{Syntax}
+\begin{codedescribe}{\maketitle}
+	\begin{codesyntax}%
+		\tsmacro{\maketitle}{}
+	\end{codesyntax}
 This is the only main command, which will typeset the front matter. It requires that all \emph{specific info} be already set up (like work title, author's name, affiliation, etc.)
-\end{Macros}
+\end{codedescribe}
 
 
-\begin{Macros}{\course,\courseacronym,\graduationtitle,\university,\universityacronym,%
+\begin{codedescribe}{\course,\courseacronym,\graduationtitle,\university,\universityacronym,%
 		\universitydivision,\divisiongradcouncil,\department,\classcode,\classname,\subject}
-\begin{Syntax}%
-	\Macro{\course}{arg}
-	\Macro{\courseacronym}{arg}
-	\Macro{\graduationtitle}{arg}
-	\Macro{\university}{arg}
-	\Macro{\universityacronym}{arg}
-	\Macro{\universitydivision}{arg}
-	\Macro{\divisiongradcouncil}{arg}
-	\Macro{\department}{arg}
-	\Macro{\classcode}{arg}
-	\Macro{\classname}{arg}
-	\Macro{\subject}{arg}
-\end{Syntax}
+\begin{codesyntax}%
+	\tsmacro{\course}{arg}
+	\tsmacro{\courseacronym}{arg}
+	\tsmacro{\graduationtitle}{arg}
+	\tsmacro{\university}{arg}
+	\tsmacro{\universityacronym}{arg}
+	\tsmacro{\universitydivision}{arg}
+	\tsmacro{\divisiongradcouncil}{arg}
+	\tsmacro{\department}{arg}
+	\tsmacro{\classcode}{arg}
+	\tsmacro{\classname}{arg}
+	\tsmacro{\subject}{arg}
+\end{codesyntax}
 In case some customization is needed, one can change them as needed. The default values are set for the \emph{control and automation} course at UFRGS/EE.
-\end{Macros}
+\end{codedescribe}
 
 \section{\tightul{ufrgscca-forms} Package}
 This package defines just two user commands to generate specific forms needed at UFRGS/EE.
 \subsection{Forms Defined Commands}\label{forms.commands}
-\begin{Macros}{\tcforms,\tcemptyforms}
-	\begin{Syntax}%
-\Macro{\tcforms}{formslist}
-\Macro{\tcemptyforms}{formslist}
-\end{Syntax}
-\Macro{\tcforms}{} will generate the many forms (\Arg{formslist}) using the information from \emph{local.tex}, whilst \Macro{\tcemptyforms}{} will generate said forms with 'blanks' (to be fulfilled by hand, for instance).
+\begin{codedescribe}{\tcforms,\tcemptyforms}
+	\begin{codesyntax}%
+\tsmacro{\tcforms}{formslist}
+\tsmacro{\tcemptyforms}{formslist}
+\end{codesyntax}
+The command \tsmacro{\tcforms}{} will generate the many forms (\tsobj[meta]{formslist}) using the information from \emph{local.tex}, whilst \tsmacro{\tcemptyforms}{} will generate said forms with 'blanks' (to be fulfilled by hand, for instance).
 
-\Arg{formslist} is a csv list of any of:
-\begin{Options+}
-    \DescribeOption+{reqform} Registration requirement form.
-    \DescribeOption+{coadvisor} Coadvisor justification form.
-    \DescribeOption+{boardsapproval} Boards approval form.
-    \DescribeOption+{advisorsapproval} Advisors approval form.
-    \DescribeOption+{receipts} Receipts forms (one per board member).
-    \DescribeOption+{examinersforms} Grades and correction forms (per board member).
-    \DescribeOption+{rectifyapprovalform} Corrections approval  form.
-    \DescribeOption+{internreqform} Internship Registration requirement form.
-    \DescribeOption+{internsupervisorform} Internship Supervisor evaluation form.
-    \DescribeOption+{interntutorform} Internship tutor evaluation form.
-\end{Options+}
+\tsobj[meta]{formslist} is a csv list of any of:
+\begin{describelist*}{option}
+    \describe {reqform} { Registration requirement form.}
+    \describe {coadvisor} { Coadvisor justification form.}
+    \describe {boardsapproval} { Boards approval form.}
+    \describe {advisorsapproval} { Advisors approval form.}
+    \describe {receipts} { Receipts forms (one per board member).}
+    \describe {examinersforms} { Grades and correction forms (per board member).}
+    \describe {rectifyapprovalform} { Corrections approval  form.}
+    \describe {internreqform} { Internship Registration requirement form.}
+    \describe {internsupervisorform} { Internship Supervisor evaluation form.}
+    \describe {interntutorform} { Internship tutor evaluation form.}
+\end{describelist*}
 
-\end{Macros}
+\end{codedescribe}
 
 
 \section{\tightul{ufrgscca-lists} Package}
-The following packages are always pre-loaded: {\MetaFmt[Pack]\sffamily newfloat, listings} and \Pack{xcolor}.
-It defines a new \emph{floating environment}. Combined with \Pack{listings} one can typeset exempts of \emph{code listing}.
+The following packages are always pre-loaded: \tsobj[pkg]{ newfloat, listings, xcolor}.
+It defines a new \emph{floating environment}. Combined with \tsobj[pkg]{listings} one can typeset exempts of \emph{code listing}.
 
 \subsection{Environment}
-\begin{Envs}{codelist}
-	\begin{Syntax}%
-		\Macro{\begin{codelist}}{}\ldots \Macro{\end{codelist}}{}
-	\end{Syntax}
-\Macro{\caption}{} will be named 'Listing' (Listagem).
+\begin{codedescribe}[env]{codelist}
+	\begin{codesyntax}%
+		\tsmacro{\begin{codelist}}{}\ldots \tsmacro{\end{codelist}}{}
+	\end{codesyntax}
+\tsmacro{\caption}{} will be named 'Listing' (Listagem).
 
-\begin{stcode}[st=d.listing]
+\begin{codestore}[st=d.listing]
 	\begin{codelist}[htbp]
 		\caption{sample C code}
 		\label{code01}
@@ -605,28 +680,28 @@ It defines a new \emph{floating environment}. Combined with \Pack{listings} one 
 		\end{lstlisting}
 		{\sourcecitation{\textcite{Garg:SMA-2000}}}
 	\end{codelist}
-\end{stcode}
-\DisplayCode{d.listing}
+\end{codestore}
+\tscode*{d.listing}
 
-\end{Envs}
+\end{codedescribe}
 
 \subsection{Declared Commands}
-\begin{Macros}{listofcodelist}
-	\begin{Syntax}%
-		\Macro{\listofcodelist}{}
-	\end{Syntax}
-This will create the 'List of ...' associated with the previous environment.
-\end{Macros}
+\begin{codedescribe}{listofcodelist}
+	\begin{codesyntax}%
+		\tsmacro{\listofcodelist}{}
+	\end{codesyntax}
+This will create the 'List of ...' associated with the \tsobj[env]{codelist} environment.
+\end{codedescribe}
 
 \iffulldoc
 
-\begin{Macros}{\DeclareNewFloat}
-	\begin{Syntax}%
-		\Macro{\DeclareNewFloat}{env-name,file-ext,listname,listofname}
-	\end{Syntax}
-A new float environment, named \Env{env-name}, will be created. Captions will be associated (numbered) as \textbf{\Arg{listname} num:}. Finally, an associated command \Macro{\listof...}{} will be defined, using \Arg{listofname} as a numberless \Macro{\chapter}{} title.
+\begin{codedescribe}{\DeclareNewFloat}
+	\begin{codesyntax}%
+		\tsmacro{\DeclareNewFloat}{env-name,file-ext,listname,listofname}
+	\end{codesyntax}
+A new float environment, named \tsobj[env]{env-name}, will be created. Captions will be associated (numbered) as \textbf{\tsobj[meta]{listname} num:}. Finally, an associated command \tsmacro{\listof...}{} will be defined, using \tsobj[meta]{listofname} as a numberless \tsmacro{\chapter}{} title.
 
-\begin{stcode}[st=d.float]
+\begin{codestore}[st=d.float]
 	\def\listingname{Listing}%
 	\def\listlistingname{List of Listings}%
 	\DeclareNewFloat{codelist}{lox}{\listingname}{\listlistingname}%%
@@ -634,10 +709,10 @@ A new float environment, named \Env{env-name}, will be created. Captions will be
  	%%
  	%% the list of, will be created as
  	\listofcodelist
-\end{stcode}
+\end{codestore}
 
-\DisplayCode[emph={codelist,listofcodelist}]{d.float}
-\end{Macros}
+\tscode*[emph={codelist,listofcodelist}]{d.float}
+\end{codedescribe}
 \fi
 
 \iffulldoc
@@ -646,72 +721,72 @@ Just two set of commands are defined, one is kind of a 'command factory' aimed a
 
 
 \subsection{Package Options}
-\begin{Options}
-	\DescribeOption{family} sets the family name, defaults to \Value{tcdef}.
-	\DescribeOption{group} sets the group name, defaults to \Value{gen}.
-\end{Options}
+\begin{describelist}{option}
+	\describe {family} { sets the family name, defaults to \tsobj[value]{tcdef}.}
+	\describe {group} { sets the group name, defaults to \tsobj[value]{gen}.}
+\end{describelist}
 
 \subsection{Defined Commands}
-\begin{Macros}{\cmdfactory,\factory,\tcgen@cdef}
-	\begin{Syntax}%
-		\Macro!{\cmdfactory}{\oarg{fam}\xarg{grp}\marg{cmd-list}}
-		\Macro!{\factory}{\oarg{fam}\xarg{grp}\marg{cmd}}
-		\Macro!{\tcgen@cdef}{\oarg{fam}\xarg{grp}\marg{cmd}\marg{new-val}}
-	\end{Syntax}
-	\Macro{\cmdfactory}{} is the actual command meant to be used (the other two are just auxiliary ones). \Arg{cmd-lst} is a csv list of commands. \Arg{fam} is the command \emph{family} (defaults to \emph{tcdef}) and \Arg{grp} is the family group (defaults to \emph{gen}).
+\begin{codedescribe}{\cmdfactory,\factory,\tcgen@cdef}
+	\begin{codesyntax}%
+		\tsobj[code]{\cmdfactory}{\tsobj[oarg]{fam}\tsobj[xarg]{grp}\tsobj[marg]{cmd-list}}
+		\tsobj[code]{\factory}{\tsobj[oarg]{fam}\tsobj[xarg]{grp}\tsobj[marg]{cmd}}
+		\tsobj[code]{\tcgen@cdef}{\tsobj[oarg]{fam}\tsobj[xarg]{grp}\tsobj[marg]{cmd}\tsobj[marg]{new-val}}
+	\end{codesyntax}
+	\tsmacro{\cmdfactory}{} is the actual command meant to be used (the other two are just auxiliary ones). \tsobj[meta]{cmd-lst} is a csv list of commands. \tsobj[meta]{fam} is the command \emph{family} (defaults to \emph{tcdef}) and \tsobj[meta]{grp} is the family group (defaults to \emph{gen}).
 
-	The newly created commands will be based on \Macro{\tcgen@cdef}{} (the actual assigment command) having the form \Macro{\cmd}{new-val}, accepting a single mandatory value. Internally \Arg{new-val} will be stored in a macro likely named \Macro{\fam@grp@cmd}{}.
+	The newly created commands will be based on \tsmacro{\tcgen@cdef}{} (the actual assigment command) having the form \tsmacro{\cmd}{new-val}, accepting a single mandatory value. Internally \tsobj[meta]{new-val} will be stored in a macro likely named \tsmacro{\fam@grp@cmd}{}.
 
-    \Macro{\factory}{} is basically the same as \Macro{\cmdfactory}{}, whilst to create just one new command (it is the command called by \Macro{\cmdfactory}{} via \Macro{\forcsvlist}{}.)
-\end{Macros}
+    \tsmacro{\factory}{} is basically the same as \tsmacro{\cmdfactory}{}, whilst to create just one new command (it is the command called by \tsmacro{\cmdfactory}{} via \tsmacro{\forcsvlist}{}.)
+\end{codedescribe}
 
-\begin{Macros}{\mkswitch,\addcase}
-	\begin{Syntax}%
-		\Macro{\mkswitch}[default]{sw-name}
-		\Macro{\addcase}{sw-name,str-case,code}
-	\end{Syntax}
-	\Macro{mkswitch}{} will create a command, \Macro{\sw-name}{case}, which will behave like a switch/case in other programming languages. \Arg{default} is the code to be executed in case a \emph{switching value} isn't defined.
-	\Macro{\addcase}{} adds \emph{cases}, one by one, to the switch. \Arg{str-case} can be any \Macro{\csname}{} valid name. \Arg{code} is the code to be executed.
+\begin{codedescribe}{\mkswitch,\addcase}
+	\begin{codesyntax}%
+		\tsmacro{\mkswitch}[default]{sw-name}
+		\tsmacro{\addcase}{sw-name,str-case,code}
+	\end{codesyntax}
+	\tsmacro{mkswitch}{} will create a command, \tsmacro{\sw-name}{case}, which will behave like a switch/case in other programming languages. \tsobj[meta]{default} is the code to be executed in case a \emph{switching value} isn't defined.
+	\tsmacro{\addcase}{} adds \emph{cases}, one by one, to the switch. \tsobj[meta]{str-case} can be any \tsmacro{\csname}{} valid name. \tsobj[meta]{code} is the code to be executed.
 
-	\begin{stcode}[st=d.switch]
+	\begin{codestore}[st=d.switch]
 		\mkswitch[\gr@depcut]\gr@case@angle
 		\addcase\gr@case@angle{}{\def\gr@ANG{0}}
 		\addcase\gr@case@angle{A}{\def\gr@ANG{\gr@A}}
 		%%
 		%% actual use of the switch
 		\gr@case@angle{A}  % this will result in \def\gr@ANG{\gr@A}
-	\end{stcode}
-	\DisplayCode{d.switch}
-\end{Macros}
+	\end{codestore}
+	\tscode*{d.switch}
+\end{codedescribe}
 \fi
 
 \iffulldoc
 \section{\tightul{ufrgscca-coord} Package (extended documentation)}
 This package defines a set of auxiliary commands meant to support the Professor coordinating students work.
-it will always pre-load the \Pack{longtable} and \Pack{ufrgscca-forms} packages. One can select the reports/forms to be generated using the package options or the command \Macro{\setreports}{keys}
+it will always pre-load the \tsobj[pkg]{longtable} and \tsobj[pkg]{ufrgscca-forms} packages. One can select the reports/forms to be generated using the package options or the command \tsmacro{\setreports}{keys}
 
 N.B. It might be also useful to use the commands defined at \autonameref{forms.commands}.
 
 \subsection{Package/Report Options}\label{ufrgscca-coord.options}
-\begin{Options}
-	\DescribeOption{calendar} Calendar for the period.
-	\DescribeOption{checklist} a students check list.
-	\DescribeOption{report} a student control report.
-	\DescribeOption{reportxinfo} report additional info.
-	\DescribeOption{boards} exam board dates.
-	\DescribeOption{boarddates} exam board dates with highlighted dates.
-	\DescribeOption{studentlist} a simple student list.
-	\DescribeOption{revforms} per student reviews forms.
-	\DescribeOption{referral} per student referral letters.
-	\DescribeOption{cocertificate} per student coadvisor certificate letter (if any).
-\end{Options}
+\begin{describelist}{option}
+	\describe {calendar} { Calendar for the period.}
+	\describe {checklist} { a students check list.}
+	\describe {report} { a student control report.}
+	\describe {reportxinfo} { report additional info.}
+	\describe {boards} { exam board dates.}
+	\describe {boarddates} { exam board dates with highlighted dates.}
+	\describe {studentlist} { a simple student list.}
+	\describe {revforms} { per student reviews forms.}
+	\describe {referral} { per student referral letters.}
+	\describe {cocertificate} { per student coadvisor certificate letter (if any).}
+\end{describelist}
 
 \subsection{Defined Commands}
 The \emph{report document} to be created is composed of 2 main parts:
 \begin{enumerate}[tcc,arabic,miditemsep]
 	\item A global preamble, where one sets
 	\begin{enumerate}[tcc,alpha*,noitemsep]
-		\item the current semester, Course/TCC/internship coordinator names, etc. ,
+		\item the current semester, Course/TCC/internship coordinator's names, etc. ,
 		\item auxiliary data, like students \emph{check list} items and
 		\item students data.
 	\end{enumerate}
@@ -721,13 +796,13 @@ The \emph{report document} to be created is composed of 2 main parts:
 \subsubsection{Global Commands I}
 One can (should) use the commands listed at \autonameref{core-commands}, and these below:
 
-\begin{Macros}{\checkdef}%,\checklist}
-\begin{Syntax}%
-    \Macro{\checkdef}{checkLC,check-item,check-text}
-\end{Syntax}
-Whereas one has a '4x5 alphabetic matrix', lines A to D, columns A to E. \Arg{checkLC} being one element of that matrix (from checkAA up to checkDE), \Arg{chek-item} is a free identifier (to be used with the \Macro{\checklist}{}), and \Arg{check-text} the text to appear in the 'check list report'.  So, for instance:
+\begin{codedescribe}{\checkdef}%,\checklist}
+\begin{codesyntax}%
+    \tsmacro{\checkdef}{checkLC,check-item,check-text}
+\end{codesyntax}
+Whereas one has a '4x5 alphabetic matrix', lines A to D, columns A to E. \tsobj[meta]{checkLC} being one element of that matrix (from checkAA up to checkDE), \tsobj[meta]{chek-item} is a free identifier (to be used with the \tsmacro{\checklist}{}), and \tsobj[meta]{check-text} the text to appear in the 'check list report'.  So, for instance:
 
-\begin{stcode}[st=d.check]
+\begin{codestore}[st=d.check]
     \checkdef{checkAA}{tcc-part}{Rel. Parcial}        % this creates the 'check item' tcc-part and associates it with the AA position (first line, first column), display text 'Rel. Parcial'
     \checkdef{checkBA}{partOK}{Aprov. Rel. Parcial}   % this creates 'partOK' and associates it with BA position
 
@@ -741,57 +816,58 @@ Whereas one has a '4x5 alphabetic matrix', lines A to D, columns A to E. \Arg{ch
     %%
     %% later on, one can use (inside a \NewStudent command)
     \checklist{tcc-part,partOK,exam}                  % this will, for a given student, 'mark' the 'tcc-part', 'partOK' and 'exam' items.
-\end{stcode}
+\end{codestore}
 
 
-\DisplayCode[emph={{tcc-part},partOK,board,board-date,{tcc-final},approval,exam}]{d.check}
+\tscode*[emph={{tcc-part},partOK,board,board-date,{tcc-final},approval,exam}]{d.check}
 
-Be aware that, \Macro{\checkdef}{} can and should be only used at the preamble, whereas \Macro{\checklist}{} can only be used at the 'student data definition' context (meaning, inside the \Macro{\NewStudent}{} command).
-\end{Macros}\\
+Be aware that, \tsmacro{\checkdef}{} can and should be only used at the preamble, whereas \tsmacro{\checklist}{} can only be used at the 'student data definition' context (meaning, inside the \tsmacro{\NewStudent}{} command).
+\end{codedescribe}\\
+
 
 \paragraph{Final Work Specific}
 
-\begin{Macros}{\tcccalendareventdate,\boardstitleB,\boardsOBS,\TCCperiod}
-	\begin{Syntax}%
-		\Macro{\tcccalendareventdate}{date}
-		\Macro{\boardstitleB}{titleB}
-		\Macro{\boardsOBS}{obs}
-		\Macro{\TCCperiod}{semester}
-	\end{Syntax}
-Use \Macro{\tcccalendareventdate}{} to set the date of a given 'event' (the list of 'calendar events' are (might have been) set in the \emph{ufrgscca-ptBR-coord.def} or \emph{ufrgscca-en-coord.def} file). \Macro{boardstitleB}{} sets a 2nd title line for the 'boards schedule report'. \Macro{\boardsOBS}{} allows to add an observation (\Arg{obs}) for the 'boards schedule report', finally, \Macro{\TCCperiod} sets the current semester value.
-\end{Macros}
+\begin{codedescribe}{\tcccalendareventdate,\boardstitleB,\boardsOBS,\TCCperiod}
+	\begin{codesyntax}%
+		\tsmacro{\tcccalendareventdate}{date}
+		\tsmacro{\boardstitleB}{titleB}
+		\tsmacro{\boardsOBS}{obs}
+		\tsmacro{\TCCperiod}{semester}
+	\end{codesyntax}
+Use \tsmacro{\tcccalendareventdate}{} to set the date of a given 'event' (the list of 'calendar events' are (might have been) set in the \emph{ufrgscca-ptBR-coord.def} or \emph{ufrgscca-en-coord.def} file). \tsmacro{boardstitleB}{} sets a 2nd title line for the 'boards schedule report'. \tsmacro{\boardsOBS}{} allows to add an observation (\tsobj[meta]{obs}) for the 'boards schedule report', finally, \tsmacro{\TCCperiod} sets the current semester value.
+\end{codedescribe}
 
-\begin{Macros}{\tcceventAweek,\tcceventBweek,.,.,.,.,\tcceventJweek}
-    \begin{Syntax}%
-        \Macro{\tcceventAweek}{week num.}
-        \Macro{\tcceventBweek}{week num.}
+\begin{codedescribe}{\tcceventAweek,\tcceventBweek,.,.,.,.,\tcceventJweek}
+    \begin{codesyntax}%
+        \tsmacro{\tcceventAweek}{week num.}
+        \tsmacro{\tcceventBweek}{week num.}
         \ensuremath{\cdots}
-        \Macro{\tcceventJweek}{week num.}
-    \end{Syntax}
+        \tsmacro{\tcceventJweek}{week num.}
+    \end{codesyntax}
     Those macros allow to change the default week value for the calendar's events.
-\end{Macros}
+\end{codedescribe}
 
 \paragraph{Internship Specific}
 
-\begin{Macros}{\intershipcommitdates}
-    \begin{Syntax}%
-        \Macro{\intershipcommitdates}{date I}{date II}
-    \end{Syntax}
-    Use \Macro{\intershipcommitdates}{} to set the semester deadlines. Both dates must be given in the dd/mm/yyyy format.
-    \Arg{date I} is the deadline for a given report still be fully evaluated. After \Arg{date I} the given internship will be in “exam”. If the student report isn't submitted until \Arg{date II} the student will fail with an “FF” grade.
-\end{Macros}
+\begin{codedescribe}{\intershipcommitdates}
+    \begin{codesyntax}%
+        \tsmacro{\intershipcommitdates}{date I}{date II}
+    \end{codesyntax}
+    Use \tsmacro{\intershipcommitdates}{} to set the semester deadlines. Both dates must be given in the dd/mm/yyyy format.
+    \tsobj[meta]{date I} is the deadline for a given report still be fully evaluated. After \tsobj[meta]{date I} the given internship will be in “exam”. If the student report isn't submitted until \tsobj[meta]{date II} the student will fail with an “FF” grade.
+\end{codedescribe}
 
 
 
 \subsubsection{Global Commands II}\label{new-student}
 
-\begin{Macros}{\NewStudent}
-	\begin{Syntax}%
-		\Macro{\NewStudent}{studentname,code}
-	\end{Syntax}
-	This is the main command describing each \Arg{student} associated work, advisor and exam board. In \Arg{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \Macro{\begin{document}}{}), to describe a student work.
+\begin{codedescribe}{\NewStudent}
+	\begin{codesyntax}%
+		\tsmacro{\NewStudent}{studentname,code}
+	\end{codesyntax}
+	This is the main command describing each \tsobj[meta]{student} associated work, advisor and exam board. In \tsobj[meta]{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \tsmacro{\begin{document}}{}), to describe a student work.
 	So, for instance:
-	\begin{stcode}[st=d.newstudent]
+	\begin{codestore}[st=d.newstudent]
 \NewStudent{Artur}{
 	\student{last}{first}[m]
 
@@ -811,21 +887,23 @@ Use \Macro{\tcccalendareventdate}{} to set the date of a given 'event' (the list
 
 	\studentFate[Dismiss]  %% FF or Dismiss ??
 }
-\end{stcode}
+\end{codestore}
 
-\DisplayCode{d.newstudent}
+\tscode*{d.newstudent}
 
-N.B. Internally, \Macro{\NewStudent}{} will create a command named \Macro{\studentname}{}, with a \emph{hook} named \Macro{\studentname.hook}{} (the dot is part of the hook's name).
-\end{Macros}
+\begin{tsremark}[N.B.:]
+Internally, \tsmacro{\NewStudent}{} will create a command named \tsmacro{\studentname}{}, with a \emph{hook} named \tsmacro{\studentname.hook}{} (the dot is part of the hook's name).
+\end{tsremark}
+\end{codedescribe}
 
 
-\begin{Macros}{\NewInternshipStudent}
-    \begin{Syntax}%
-        \Macro{\NewInternshipStudent}{studentname,code}
-    \end{Syntax}
-    This is the main command describing each \Arg{student} associated internship, tutor and advisor. In \Arg{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \Macro{\begin{document}}{}), to describe a student internship.
+\begin{codedescribe}{\NewInternshipStudent}
+    \begin{codesyntax}%
+        \tsmacro{\NewInternshipStudent}{studentname,code}
+    \end{codesyntax}
+    This is the main command describing each \tsobj[meta]{student} associated internship, tutor and advisor. In \tsobj[meta]{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \tsmacro{\begin{document}}{}), to describe a student internship.
         So, for instance:
-        \begin{stcode}[st=d.newstudentB]
+        \begin{codestore}[st=d.newstudentB]
             \NewStudent{Artur}{
                 \student{last}{first}[m]
 
@@ -846,60 +924,61 @@ N.B. Internally, \Macro{\NewStudent}{} will create a command named \Macro{\stude
 
                 \studentFate[Dismiss]  %% FF or Dismiss ??
             }
-        \end{stcode}
+        \end{codestore}
 
-        \DisplayCode{d.newstudentB}
-
-        N.B. Internally, \Macro{\NewInternshipStudent}{} will create a command named \Macro{\studentname}{}, with a \emph{hook} named \Macro{\studentname.hook}{} (the dot is part of the hook's name).
-    \end{Macros}
+        \tscode*{d.newstudentB}
+\begin{tsremark}[N.B.:]
+         Internally, \tsmacro{\NewInternshipStudent}{} will create a command named \tsmacro{\studentname}{}, with a \emph{hook} named \tsmacro{\studentname.hook}{} (the dot is part of the hook's name).
+\end{tsremark}         
+    \end{codedescribe}
 
 
 \subsubsection{Student Specific Commands}\label{student-specific-commands}
-\begin{Macros}{\studentFate}
-	\begin{Syntax}%
-		\Macro{\studentFate}[fate]{}
-	\end{Syntax}
-This assigns the \Arg{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \Arg{fate} can be either C or D (in case a student got in exam), FF for those that haven't finished the work or 'Dismiss' for those that, for whatever reason, got dismissed. The default is 'do nothing' (no \Arg{fate} assigned)
-\end{Macros}
+\begin{codedescribe}{\studentFate}
+	\begin{codesyntax}%
+		\tsmacro{\studentFate}[fate]{}
+	\end{codesyntax}
+This assigns the \tsobj[meta]{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \tsobj[meta]{fate} can be either C or D (in case a student got in exam), FF for those that haven't finished the work or 'Dismiss' for those that, for whatever reason, got dismissed. The default is 'do nothing' (no \tsobj[meta]{fate} assigned)
+\end{codedescribe}
 
-\begin{Macros}{\checklist}
-    \begin{Syntax}%
-        \Macro{\checklist}{csv-checkitems}
-    \end{Syntax}
-    \Arg{csv-checkitems} is a csv list of valid 'items' (the ones defined by \Macro{\checkdef}{}) and it will 'mark' (check) the corresponding items for a given student.
-\end{Macros}
+\begin{codedescribe}{\checklist}
+    \begin{codesyntax}%
+        \tsmacro{\checklist}{csv-checkitems}
+    \end{codesyntax}
+    \tsobj[meta]{csv-checkitems} is a csv list of valid 'items' (the ones defined by \tsmacro{\checkdef}{}) and it will 'mark' (check) the corresponding items for a given student.
+\end{codedescribe}
 
 
 \paragraph{Final Student Work Specific ones}
 
-\begin{Macros}{\studenttimeslot,\timeslot}
-	\begin{Syntax}%
-		\Macro{\studenttimeslot}[local]{date,time}
-		\Macro{\timeslot}[local]{date,time}
-	\end{Syntax}
-\Macro{\timeslot}{} is just an alias of \Macro{\studenttimeslot}{}. They set, for the Boards Report, the \Arg{local}, \Arg{date} and \Arg{time} in which a student will have its work presented. Those commands are meant to be used 'inside' a \Macro{\NewStudent}{} command.
-\end{Macros}
+\begin{codedescribe}{\studenttimeslot,\timeslot}
+	\begin{codesyntax}%
+		\tsmacro{\studenttimeslot}[local]{date,time}
+		\tsmacro{\timeslot}[local]{date,time}
+	\end{codesyntax}
+\tsmacro{\timeslot}{} is just an alias of \tsmacro{\studenttimeslot}{}. They set, for the Boards Report, the \tsobj[meta]{local}, \tsobj[meta]{date} and \tsobj[meta]{time} in which a student will have its work presented. Those commands are meant to be used 'inside' a \tsmacro{\NewStudent}{} command.
+\end{codedescribe}
 
 
 
-\begin{Macros}{\studentTCCtitle,\TCCtitle,\studentremark}
-	\begin{Syntax}%
-		\Macro{\studentTCCtitle}{title}
-		\Macro{\TCCtitle}{title}
-		\Macro{\studentremark}{remark}
-	\end{Syntax}
-\end{Macros}
-\Macro{\TCCtitle}{} is also just an alias to \Macro{\studentTCCtitle}{} which just 'defines' the current student “work's title”. \Macro{\studentremark}{} just inserts a \Arg{remark}, which will appear in the \emph{report}'s report (\ldots report option).
+\begin{codedescribe}{\studentTCCtitle,\TCCtitle,\studentremark}
+	\begin{codesyntax}%
+		\tsmacro{\studentTCCtitle}{title}
+		\tsmacro{\TCCtitle}{title}
+		\tsmacro{\studentremark}{remark}
+	\end{codesyntax}
+\end{codedescribe}
+\tsmacro{\TCCtitle}{} is also just an alias to \tsmacro{\studentTCCtitle}{} which just 'defines' the current student “work's title”. \tsmacro{\studentremark}{} just inserts a \tsobj[meta]{remark}, which will appear in the \emph{report}'s report (\ldots report option).
 
 
-\begin{Macros}{\DistinctBoard,\DefaultBoard}
-	\begin{Syntax}%
-		\Macro{\DistinctBoard}{}
-		\Macro{\DefaultBoard}{}
-	\end{Syntax}
-Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \Macro{\DistinctBoard}{} after informing a student's name (via \Macro{\student}{}) and before informing its advisor name (via \Macro{\advisor}{}). For instance:
+\begin{codedescribe}{\DistinctBoard,\DefaultBoard}
+	\begin{codesyntax}%
+		\tsmacro{\DistinctBoard}{}
+		\tsmacro{\DefaultBoard}{}
+	\end{codesyntax}
+Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \tsmacro{\DistinctBoard}{} after informing a student's name (via \tsmacro{\student}{}) and before informing its advisor name (via \tsmacro{\advisor}{}). For instance:
 
-	\begin{stcode}[st=d.distinct]
+	\begin{codestore}[st=d.distinct]
 	\NewStudent{Artur}{
 		\student{last}{first}[m]
 
@@ -911,334 +990,336 @@ Normally, the default, it's assumed that the student's advisor will also be a me
 		\examiner{Comparsi Laranja}{Rafael Antônio} % the 2nd
 		\examiner{Ventura Bayan Henriques}{Renato}  % the 3rd
 	}
-\end{stcode}
+\end{codestore}
 
-\DisplayCode[emph={DistinctBoard}]{d.distinct}
-\end{Macros}
+\tscode*[emph={DistinctBoard}]{d.distinct}
+\end{codedescribe}
 
 
 
-\begin{Macros}{\examinergrades}
-	\begin{Syntax}%
-		\Macro{\examinersgrades}{N1,N2,N3}
-	\end{Syntax}
-Quite obvious, this set the grades given by an examiner (the one defined by the 'last' \Macro{\examiner}{} before this.).
-\end{Macros}
+\begin{codedescribe}{\examinergrades}
+	\begin{codesyntax}%
+		\tsmacro{\examinersgrades}{N1,N2,N3}
+	\end{codesyntax}
+Quite obvious, this set the grades given by an examiner (the one defined by the 'last' \tsmacro{\examiner}{} before this.).
+\end{codedescribe}
 
 \paragraph{Internship Specific Ones}
 
-\begin{Macros}{\studentturnindate}
-    \begin{Syntax}%
-        \Macro{\studentturnindate}{date}
-    \end{Syntax}
+\begin{codedescribe}{\studentturnindate}
+    \begin{codesyntax}%
+        \tsmacro{\studentturnindate}{date}
+    \end{codesyntax}
     The date, in which, the student submitted the Internship Report. Beware, the date must be in the day/month/year format.
-\end{Macros}
+\end{codedescribe}
 
-\begin{Macros}{\internshipsupervisorgrades}
-    \begin{Syntax}
-        \Macro{\internshipsupervisor}{N1,N2,N3,N4,N5}
-    \end{Syntax}
+\begin{codedescribe}{\internshipsupervisorgrades}
+    \begin{codesyntax}
+        \tsmacro{\internshipsupervisor}{N1,N2,N3,N4,N5}
+    \end{codesyntax}
     Quite obvious, this set the grades given by the supervisor, it's meant to be used twice for the two 'grades blocks'.
-\end{Macros}
+\end{codedescribe}
 
-\begin{Macros}{\internshiptutorgrades}
-    \begin{Syntax}%
-        \Macro{\internshipgrades}{N1}
-    \end{Syntax}
+\begin{codedescribe}{\internshiptutorgrades}
+    \begin{codesyntax}%
+        \tsmacro{\internshipgrades}{N1}
+    \end{codesyntax}
     Quite obvious, this set the grade given by the student tutor.
-\end{Macros}
+\end{codedescribe}
 
-\begin{Macros}{\internshipcoordgrades}
-    \begin{Syntax}%
-        \Macro{\internshipcoordgrades}{N1}
-    \end{Syntax}
+\begin{codedescribe}{\internshipcoordgrades}
+    \begin{codesyntax}%
+        \tsmacro{\internshipcoordgrades}{N1}
+    \end{codesyntax}
     Quite obvious, this set the grade given by the Internship Coordinator.
-\end{Macros}
+\end{codedescribe}
 
 \paragraph{Setting Commands}
 
 
-\begin{Macros}{\addtostudent}
-	\begin{Syntax}%
-		\Macro{\addtostudent}{student,code}
-	\end{Syntax}
-\Arg{code} will be appended to the command created with \Macro{\NewStudent}{}. \Arg{student} must be an already defined one, whilst \Arg{code} can be anything valid in the context of a \Macro{\NewStudent}{} as described in \autonameref{new-student}.
-\end{Macros}
+\begin{codedescribe}{\addtostudent}
+	\begin{codesyntax}%
+		\tsmacro{\addtostudent}{student,code}
+	\end{codesyntax}
+\tsobj[meta]{code} will be appended to the command created with \tsmacro{\NewStudent}{}. \tsobj[meta]{student} must be an already defined one, whilst \tsobj[meta]{code} can be anything valid in the context of a \tsmacro{\NewStudent}{} as described in \autonameref{new-student}.
+\end{codedescribe}
 
-\begin{Macros}{\setreports}
-	\begin{Syntax}%
-		\Macro{\setreports}{rep-list}
-	\end{Syntax}
-	\Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
-\end{Macros}
+\begin{codedescribe}{\setreports}
+	\begin{codesyntax}%
+		\tsmacro{\setreports}{rep-list}
+	\end{codesyntax}
+	\tsobj[meta]{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
+\end{codedescribe}
 
-\begin{Macros}{\setstudentlist}
-	\begin{Syntax}%
-		\Macro{\setstudentlist}{listID,list}
-	\end{Syntax}
-This command will define/create a list named \Arg{listID} composed of a csv \Arg{list}~ of student names (as defined by \Macro{\Newstudent}{}).
-\end{Macros}
+\begin{codedescribe}{\setstudentlist}
+	\begin{codesyntax}%
+		\tsmacro{\setstudentlist}{listID,list}
+	\end{codesyntax}
+This command will define/create a list named \tsobj[meta]{listID} composed of a csv \tsobj[meta]{list}~ of student names (as defined by \tsmacro{\Newstudent}{}).
+\end{codedescribe}
 
-\begin{Macros}{\tcreports}
-	\begin{Syntax}%
-		\Macro{\tcreports}[rep-list]{listID}
-	\end{Syntax}
-	This is the main command (final work reports), to be used only once, at the end of the file. It will typeset the reports, as set by \Macro{\setreports}{}, using the student list identified by \Arg{listID}.
-    \Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
-\end{Macros}
+\begin{codedescribe}{\tcreports}
+	\begin{codesyntax}%
+		\tsmacro{\tcreports}[rep-list]{listID}
+	\end{codesyntax}
+	This is the main command (final work reports), to be used only once, at the end of the file. It will typeset the reports, as set by \tsmacro{\setreports}{}, using the student list identified by \tsobj[meta]{listID}.
+    \tsobj[meta]{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
+\end{codedescribe}
 
-\begin{Macros}{\internshipreports}
-    \begin{Syntax}%
-        \Macro{\internshipreports}[rep-list]{listID}
-    \end{Syntax}
-    This is the main command (internship reports), to be used only once, at the end of the file. It will typeset the reports, as set by \Macro{\setreports}{}, using the student list identified by \Arg{listID}.
-    \Arg{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
-\end{Macros}
+\begin{codedescribe}{\internshipreports}
+    \begin{codesyntax}%
+        \tsmacro{\internshipreports}[rep-list]{listID}
+    \end{codesyntax}
+    This is the main command (internship reports), to be used only once, at the end of the file. It will typeset the reports, as set by \tsmacro{\setreports}{}, using the student list identified by \tsobj[meta]{listID}.
+    \tsobj[meta]{rep-list} is a csv list of keys as defined at \autonameref{ufrgscca-coord.options}.
+\end{codedescribe}
 
 \section{\tightul{ufrgscca-ppc} Package (beta) (extended documentation)}
 This contains a set of auxiliary commands to keep track of many \emph{indicators} whilst writing  a \emph{PPC document} (which is going to be evaluated based on said \emph{indicators}, though the track of those \emph{indicators} themselves shall not appear in the final version of it). Keep in mind, when considering the use of it: “it works as is” but it hasn't being properly debugged, and it might change “as needed locally”.
 
-The packages \Pack{longtable}, \Pack{pdfcomment}, \Pack{mdframed} and \Pack{ufrgscca-curr} will always be pre-loaded.
+The packages \tsobj[pkg]{longtable}, \tsobj[pkg]{pdfcomment}, \tsobj[pkg]{mdframed} and \tsobj[pkg]{ufrgscca-curr} will always be pre-loaded.
 
 \subsection{Package Options}
-\begin{Options}
-\DescribeOption{showind} (for drafts) it will display the report indicators, of those indicators whose family wasn't set to hide.
-\DescribeOption{indlong} (for drafts) when displaying an indicator, the long version of them will be used.
-\DescribeOption{nocomments} (for drafts) comments (created with the command \Macro{\comment}) will be suppressed.
-\end{Options}
+\begin{describelist}{option}
+\describe {showind} { (for drafts) it will display the report indicators, of those indicators whose family wasn't set to hide.}
+\describe {indlong} { (for drafts) when displaying an indicator, the long version of them will be used.}
+\describe {nocomments} { (for drafts) comments (created with the command \tsmacro{\comment}) will be suppressed.}
+\end{describelist}
 
 \subsection{Defined Commands}
-\begin{Macros}{\maketitle}
-    \begin{Syntax}%
-        \Macro{\maketitle}{}
-    \end{Syntax}
-\Macro{\maketitle}{} is redefined for the specifics of a \emph{PPC document}.
-\end{Macros}
+\begin{codedescribe}{\maketitle}
+    \begin{codesyntax}%
+        \tsmacro{\maketitle}{}
+    \end{codesyntax}
+The command \tsmacro{\maketitle}{} is redefined for the specifics of a \emph{PPC document}.
+\end{codedescribe}
 
-The next few commands use a finite set of \Arg{status} which are a pre-defined list of:
-\begin{Values+}
-    \DescribeValue+{tbd} “To Be Done”%
-    \DescribeValue+{done} “Done”%
-    \DescribeValue+{review} “to be reviewed”%
-    \DescribeValue+{attention} Needs Attention%
-    \DescribeValue+{NSA} NSA (portuguese for “do not apply”)%
-    \DescribeValue+{noref} no references%
-    \DescribeValue+{EAD} EAD (portuguese for “distance learning”)%
-    \DescribeValue+{MDi} course ware (portuguese for “didactic material”) %
-    \DescribeValue+{DOCs} other DOCs%
-    \DescribeValue+{default} everything else%
-\end{Values+}
+The next few commands use a finite set of \tsobj[meta]{status} which are a pre-defined list of:
+\begin{describelist*}{value}
+    \describe {tbd} { “To Be Done”}
+    \describe {done} { “Done”}
+    \describe {review} { “to be reviewed”}
+    \describe {attention} { Needs Attention}
+    \describe {NSA} { NSA (portuguese for “do not apply”)}
+    \describe {noref} { no references}
+    \describe {EAD} { EAD (portuguese for “distance learning”)}
+    \describe {MDi} { course ware (portuguese for “didactic material”) }
+    \describe {DOCs} { other DOCs}
+    \describe {default} { everything else}
+\end{describelist*}
 
-\begin{Macros}{\declareindicator, \indicatorDesc, \indicatorText}
-	\begin{Syntax}%
-		\Macro{\declareindicator}<*+>[status]{fam,ID,text}
-		\Macro{\indicatorDesc}{longdesc,extra}
-		\Macro{\indicatorText}{text}
-	\end{Syntax}
-\Macro{\declareindicator}{} is the command to create/define a given “indicator”. \Arg{fam} set's its \emph{family} group, \Arg{ID} is the particular ID/term used to reference it (in a family of indicators), \Arg{text} is a short text describing it (it is the text displayed when using the \Macro{\indref}{} below.). \Macro{\indicatorDesc}{} adds a \Arg{longdesc} (long description) and \Arg{extra} (extra long description) to a defined \Macro{\declareindicator}{} (it will add those text fields to the “last declared one”). \Arg{longdesc} will also be displayed when using the \Macro{\indref}{} commands, but only if the \Option{indlong} option was used. The \Arg{extra} will only be used/displayed with the \Macro{\PrintIndicators}{} command. Finally, \Macro{indicatorText}{} adds a remark \Arg{text}, which will be also printed out when using  \Macro{\lstind}{} (akin of an explanation/remark field.)
-\end{Macros}
+\begin{codedescribe}{\declareindicator, \indicatorDesc, \indicatorText}
+	\begin{codesyntax}%
+		\tsmacro{\declareindicator}<*+>[status]{fam,ID,text}
+		\tsmacro{\indicatorDesc}{longdesc,extra}
+		\tsmacro{\indicatorText}{text}
+	\end{codesyntax}
+\tsmacro{\declareindicator}{} is the command to create/define a given “indicator”. \tsobj[meta]{fam} set's its \emph{family} group, \tsobj[meta]{ID} is the particular ID/term used to reference it (in a family of indicators), \tsobj[meta]{text} is a short text describing it (it is the text displayed when using the \tsmacro{\indref}{} below.). \tsmacro{\indicatorDesc}{} adds a \tsobj[meta]{longdesc} (long description) and \tsobj[meta]{extra} (extra long description) to a defined \tsmacro{\declareindicator}{} (it will add those text fields to the “last declared one”). \tsobj[meta]{longdesc} will also be displayed when using the \tsmacro{\indref}{} commands, but only if the \tsobj[option]{indlong} option was used. The \tsobj[meta]{extra} will only be used/displayed with the \tsmacro{\PrintIndicators}{} command. Finally, \tsmacro{indicatorText}{} adds a remark \tsobj[meta]{text}, which will be also printed out when using  \tsmacro{\lstind}{} (akin of an explanation/remark field.)
+\end{codedescribe}
 
-\begin{Macros}{\indsetstatus, \indsetview, \indsethide}
-	\begin{Syntax}%
-	\Macro{\indsetstatus}[status]{fam,ID}
-	\Macro{\indsetview}{fam}
-	\Macro{\indsethide}{fam}
-\end{Syntax}
-\Macro{indsetstatus}{} sets the \Arg{status} of a given indicator defined by \Arg{fam} and \Arg{ID}. \Macro{\indsetview}{} and \Macro{indsethide} set the visibility (or not) of a given “family” of indicators, meaning, if those indicators are going to be visible or not (command \Macro{\indref}{}, for instance) if the option \Option{showind} is in use.
-\end{Macros}
+\begin{codedescribe}{\indsetstatus, \indsetview, \indsethide}
+	\begin{codesyntax}%
+	\tsmacro{\indsetstatus}[status]{fam,ID}
+	\tsmacro{\indsetview}{fam}
+	\tsmacro{\indsethide}{fam}
+\end{codesyntax}
+\tsmacro{indsetstatus}{} sets the \tsobj[meta]{status} of a given indicator defined by \tsobj[meta]{fam} and \tsobj[meta]{ID}. \tsmacro{\indsetview}{} and \tsmacro{indsethide} set the visibility (or not) of a given “family” of indicators, meaning, if those indicators are going to be visible or not (command \tsmacro{\indref}{}, for instance) if the option \tsobj[option]{showind} is in use.
+\end{codedescribe}
 
-\begin{Macros}{\lstind}
-	\begin{Syntax}%
-	\Macro{\lstind}[seclvl1,seclvl2]{fam}
-\end{Syntax}
-\Macro{\lstind}{} will produce a sectioning like list, \Arg{seclvl1} defaults to \Macro{\section}{} and \Arg{seclvl2} defaults to \Macro{\subsection}{}, those indicators marked with an \textbf{*} (when creating them) will be issued with \Arg{seclvl1}, those marked with an \textbf{+} will be issued with \Arg{seclvl2}. The indicator's short text will be the sectioning title, whilst the indicator's 'text' (the one assigned with \Macro{indicatorText}{} will be the sectioning body.)
-\end{Macros}
+\begin{codedescribe}{\lstind}
+	\begin{codesyntax}%
+	\tsmacro{\lstind}[seclvl1,seclvl2]{fam}
+\end{codesyntax}
+\tsmacro{\lstind}{} will produce a sectioning like list, \tsobj[meta]{seclvl1} defaults to \tsmacro{\section}{} and \tsobj[meta]{seclvl2} defaults to \tsmacro{\subsection}{}, those indicators marked with an \textbf{*} (when creating them) will be issued with \tsobj[meta]{seclvl1}, those marked with an \textbf{+} will be issued with \tsobj[meta]{seclvl2}. The indicator's short text will be the sectioning title, whilst the indicator's 'text' (the one assigned with \tsmacro{indicatorText}{} will be the sectioning body.)
+\end{codedescribe}
 
-\begin{Macros}{\PrintIndicators}
-    \begin{Syntax}%
-        \Macro{\PrintIndicators}[fam]{}
-    \end{Syntax}
-    \Macro{\PrintIndicators}{} will produce a “list of contents” like list (with cross reference to all used \Macro{\indref}{} pages). It will either issue a list of all \Macro{\declareindicator}, or just the ones belonging to \Arg{fam}. \Arg{fam} can be a csv list of families. Each entry will be composed by indicator's “family”, “ID”, “short text”, “long text” and “extra description” but not the text issued with \Macro{\indicatorText}{}.
-\end{Macros}
+\begin{codedescribe}{\PrintIndicators}
+    \begin{codesyntax}%
+        \tsmacro{\PrintIndicators}[fam]{}
+    \end{codesyntax}
+    \tsmacro{\PrintIndicators}{} will produce a “list of contents” like list (with cross reference to all used \tsmacro{\indref}{} pages). It will either issue a list of all \tsmacro{\declareindicator}, or just the ones belonging to \tsobj[meta]{fam}. \tsobj[meta]{fam} can be a csv list of families. Each entry will be composed by indicator's “family”, “ID”, “short text”, “long text” and “extra description” but not the text issued with \tsmacro{\indicatorText}{}.
+\end{codedescribe}
 
 
-\begin{Macros}{\helpindicators}
-	\begin{Syntax}%
-	\Macro{\helpindicators}{}
-\end{Syntax}
+\begin{codedescribe}{\helpindicators}
+	\begin{codesyntax}%
+	\tsmacro{\helpindicators}{}
+\end{codesyntax}
 This will just prints, middle text, a quick “help text” listing the few main “indicators related command” (to help out those less \LaTeXe~ savvy writers.)
-\end{Macros}
+\end{codedescribe}
 
-\begin{Macros}{ \ifshowind}
-    \begin{Syntax}%
-        \Macro{\ifshowind}{code-ifshow,code-ifnot}
-    \end{Syntax}
-Just a helping command, based on the package options. If the option \Option{showind} was used, \Arg{code-ifshow} is executed, otherwise \Arg{code-ifnot}.
-\end{Macros}
-
-
-\begin{Macros}{\textmark, \comment}
-	\begin{Syntax}%
-	\Macro{\textmark}[status]{text}
-	\Macro{\comment}[status]{title,text}
-\end{Syntax}
-Those are annotation, remark commands. The difference being that \Macro{\textmark}{} will just highlight the \Arg{text} (using \Arg{status} “format”), whilst \Macro{comment}{} will create a “remark box” (the same used when inserting an indicator's reference, commands below). N.B. \Macro{\comment}{} is suppressed unless the option \Option{showind} is used.
-\end{Macros}
-
-\begin{Macros}{\indref,\indreflst}
-	\begin{Syntax}%
-	\Macro{\indref}<*>[status]{fam,ID,comment}
-	\Macro{\indreflst}<*>[status]{fam,IDlist,comment}
-\end{Syntax}
-\Macro{\indref}{} creates a box (\Pack{TikZ} based \Pack{mdframed} ) of the indicator denoted by  \Arg{fam} and \Arg{ID}. The family and IDs will be issued as the “frame title”, the current indicator's \Arg{status} will be printed out (the whole box will be highlighted accordly), the short version of the indicator will be used (the long version will “appear” as a \Pack{pdfcomment}), finally any \Arg{comment} will be added to the text box. Each \Macro{\indref}{} box will have a link to the indicator's list (issued with \Macro{\PrintIndicators}{}). If the optional argument \Arg{status} is used, the indicator's status will be updated accordly. The star version also prints the indicator's long text.
-
-\Macro{\indreflst}{} behaves similarly, with the difference that \Arg{IDlist} is a csv list of IDs (same family), moreover, each item of said list can have the form either just \Arg{ID} or \Arg{status:ID}, in the last form, that ID will have its status updated, as well.
-\end{Macros}
-
-\begin{Macros}{\fancyquote}
-	\begin{Syntax}%
-	\Macro{\fancyquote}[vspc]{text,author,dateref}
-\end{Syntax}
-As quick “quote” hack, \Macro{\fancyquote}{} will typesets a \Arg{text} (small size, italic  text, in a minipage environment) followed by \Arg{author} and \Arg{dateref}. This is meant to be used after a \Macro{\chapter}{} or \Macro{\section}{} commands. \Arg{vspc} is to be used in case one has to adjust the vertical space between the sectioning command, and the quote one.
-\end{Macros}
+\begin{codedescribe}{ \ifshowind}
+    \begin{codesyntax}%
+        \tsmacro{\ifshowind}{code-ifshow,code-ifnot}
+    \end{codesyntax}
+Just a helping command, based on the package options. If the option \tsobj[option]{showind} was used, \tsobj[meta]{code-ifshow} is executed, otherwise \tsobj[meta]{code-ifnot}.
+\end{codedescribe}
 
 
-\begin{Macros}{\labelhack}
-    \begin{Syntax}%
-        \Macro{\labelhack}{text}
-    \end{Syntax}
-As the name implies, it is a hack. In some cases (which we haven't manage to found why/what), \Pack{hyperref} would fail miserably when using the \Macro{\nameref}{} (in some cases getting the sectioning correct, but not the name!). This just assures that \Macro{\nameref}{} will use the correct sectioning name in those cases.
-\begin{stcode}[st=d.labelhack]
+\begin{codedescribe}{\textmark, \comment}
+	\begin{codesyntax}%
+	\tsmacro{\textmark}[status]{text}
+	\tsmacro{\comment}[status]{title,text}
+\end{codesyntax}
+Those are annotation, remark commands. The difference being that \tsmacro{\textmark}{} will just highlight the \tsobj[meta]{text} (using \tsobj[meta]{status} “format”), whilst \tsmacro{comment}{} will create a “remark box” (the same used when inserting an indicator's reference, commands below).
+\begin{tsremark}[N.B.:]
+ The command \tsmacro{\comment}{} is suppressed unless the option \tsobj[option]{showind} is used.
+ \end{tsremark}
+\end{codedescribe}
+
+\begin{codedescribe}{\indref,\indreflst}
+	\begin{codesyntax}%
+	\tsmacro{\indref}<*>[status]{fam,ID,comment}
+	\tsmacro{\indreflst}<*>[status]{fam,IDlist,comment}
+\end{codesyntax}
+\tsmacro{\indref}{} creates a box (\tsobj[pkg]{TikZ} based \tsobj[pkg]{mdframed} ) of the indicator denoted by  \tsobj[meta]{fam} and \tsobj[meta]{ID}. The family and IDs will be issued as the “frame title”, the current indicator's \tsobj[meta]{status} will be printed out (the whole box will be highlighted accordly), the short version of the indicator will be used (the long version will “appear” as a \tsobj[pkg]{pdfcomment}), finally any \tsobj[meta]{comment} will be added to the text box. Each \tsmacro{\indref}{} box will have a link to the indicator's list (issued with \tsmacro{\PrintIndicators}{}). If the optional argument \tsobj[meta]{status} is used, the indicator's status will be updated accordly. The star version also prints the indicator's long text.
+
+\tsmacro{\indreflst}{} behaves similarly, with the difference that \tsobj[meta]{IDlist} is a csv list of IDs (same family), moreover, each item of said list can have the form either just \tsobj[meta]{ID} or \tsobj[meta]{status:ID}, in the last form, that ID will have its status updated, as well.
+\end{codedescribe}
+
+\begin{codedescribe}{\fancyquote}
+	\begin{codesyntax}%
+	\tsmacro{\fancyquote}[vspc]{text,author,dateref}
+\end{codesyntax}
+As quick “quote” hack, \tsmacro{\fancyquote}{} will typesets a \tsobj[meta]{text} (small size, italic  text, in a minipage environment) followed by \tsobj[meta]{author} and \tsobj[meta]{dateref}. This is meant to be used after a \tsmacro{\chapter}{} or \tsmacro{\section}{} commands. \tsobj[meta]{vspc} is to be used in case one has to adjust the vertical space between the sectioning command, and the quote one.
+\end{codedescribe}
+
+
+\begin{codedescribe}{\labelhack}
+    \begin{codesyntax}%
+        \tsmacro{\labelhack}{text}
+    \end{codesyntax}
+As the name implies, it is a hack. In some cases (which we haven't manage to found why/what), \tsobj[pkg]{hyperref} would fail miserably when using the \tsmacro{\nameref}{} (in some cases getting the sectioning correct, but not the name!). This just assures that \tsmacro{\nameref}{} will use the correct sectioning name in those cases.
+\begin{codestore}[st=d.labelhack]
     \section{this section}\labelhack{this section}\label{somelabel}
-\end{stcode}
-\DisplayCode[codeprefix={For Example:},emph={labelhack}]{d.labelhack}
-\end{Macros}
+\end{codestore}
+\tscode*[codeprefix={For Example:},emph={labelhack}]{d.labelhack}
+\end{codedescribe}
 
-\begin{Macros}{\acrodef, \acro,\acrol,\acrols,\acrosl,\acrofoot,\printacrolist}
-    \begin{Syntax}%
-        \Macro{\acrodef}{acroID}{acronym}{long}
-        \Macro{\acro}{acroID}
-        \Macro{\acrol}{acroID}
-        \Macro{\acrols}{acroID}
-        \Macro{\acrosl}{acroID}
-        \Macro{\acrofoot}{acroID}
-        \Macro{\printacrolist}[enumkeys]{widest}
-    \end{Syntax}
-Those are yet another acronym hack. \Macro{\acrodef}{} “creates” an acronym, identified by \Arg{acroID}, whose short (acronym) version is \Arg{acronym} and the long version in \Arg{long}. \Macro{\acro}{} just typesets the \Arg{acronym}, \Macro{\acrol}{} the \Arg{long} version.
-\Macro{\acrols}{} typesets the the long version followed by the short (using a comma as separator).
-\Macro{\acrosl}{} prints the short version first. Finally, \Macro{\acrofoot}{} typesets the short version in text and the long as a footnote. \Macro{\printacrolist}{} creates a description list based on the \Env{listofabbrv} environment.
-\end{Macros}
+\begin{codedescribe}{\acrodef, \acro,\acrol,\acrols,\acrosl,\acrofoot,\printacrolist}
+    \begin{codesyntax}%
+        \tsmacro{\acrodef}{acroID}{acronym}{long}
+        \tsmacro{\acro}{acroID}
+        \tsmacro{\acrol}{acroID}
+        \tsmacro{\acrols}{acroID}
+        \tsmacro{\acrosl}{acroID}
+        \tsmacro{\acrofoot}{acroID}
+        \tsmacro{\printacrolist}[enumkeys]{widest}
+    \end{codesyntax}
+Those are yet another acronym hack. \tsmacro{\acrodef}{} “creates” an acronym, identified by \tsobj[meta]{acroID}, whose short (acronym) version is \tsobj[meta]{acronym} and the long version in \tsobj[meta]{long}. \tsmacro{\acro}{} just typesets the \tsobj[meta]{acronym}, \tsmacro{\acrol}{} the \tsobj[meta]{long} version.
+\tsmacro{\acrols}{} typesets the the long version followed by the short (using a comma as separator).
+\tsmacro{\acrosl}{} prints the short version first. Finally, \tsmacro{\acrofoot}{} typesets the short version in text and the long as a footnote. \tsmacro{\printacrolist}{} creates a description list based on the \tsobj[env]{listofabbrv} environment.
+\end{codedescribe}
 
 \subsection{Environments}
-\begin{Envs}{ppc.quote}
-    \begin{Syntax}%
-    \Macro{\begin{ppc.quote}}{} \ldots \Macro{\end{ppc.quote}}{}
-    \end{Syntax}
-\end{Envs}
+\begin{codedescribe}[env]{ppc.quote}
+    \begin{codesyntax}%
+    \tsmacro{\begin{ppc.quote}}{} \ldots \tsmacro{\end{ppc.quote}}{}
+    \end{codesyntax}
+\end{codedescribe}
 This is just a tailored “quote” environment, using almost all page width, just in a smaller font size.
 
 \section{\tightul{ufrgscca-curr} Package (beta) (extended documentation)}
 This package is mostly in beta state, some parts of it should be identified as  alpha state. Those are mostly rushed out adaptations of other “solutions at hand”. Literally, try to use it at your own peril.
 
-The background of it: To have the ability to “describe” (store the information in a “structured way”) an University Course curricula and later on have the possibility to presented that same information in many different ways (including a dependence graph). To an extended, most of it is done (and working), but hopeless lacking more testing and debugging.
+The background of it: To have the ability to “describe” (store the information in a “structured way”) an University Course Curricula and  have the possibility, later, to presented that same information in many different ways (including a dependence graph). To an extended, most of it is done (and working), but hopeless lacking more testing and debugging.
 
-Why is it included in the bundle? Well, it is needed, in part for completeness, by \Pack{ufrgscca-ppc} which is “locally important”.
+Why is it included in the bundle? Well, it is needed, in part for completeness, by \tsobj[pkg]{ufrgscca-ppc}, which is “locally important”.
 
 \subsection{Commands Creating the many lists}
-The following commands “describe” a curricula, whereas one is a sequence of semesters \Arg{semID}, each semester is composed by a list of classes, \Arg{classID}, and each class has a list of dependencies, \Arg{classID} as \Macro{\depdef}{}. All those lists are stored as csv lists, so “processing them” can be systematized.
+The following commands “describe” a curricula, whereas one is a sequence of semesters \tsobj[meta]{semID}, each semester is composed by a list of classes, \tsobj[meta]{classID}, and each class has a list of dependencies, \tsobj[meta]{classID} as \tsmacro{\depdef}{}. All those lists are stored as csv lists, so “processing them” can be systematized.
 
-\begin{Macros}{\topicdef,\defaulttopic}
-\begin{Syntax}%
-    \Macro{\topicdef}[color]{topicID,text}
-    \Macro{\defaulttopic}{topicID}
-\end{Syntax}
-\Macro{\topicdef}{} defines \Arg{topicID} (to be used when describing a class) and associates a \Arg{text} description and a \Arg{color} (for topic highlight). \Macro{\defaulttopic}{} sets the default one (if not explicitly given when describing a class).
-\end{Macros}
-
-
-\begin{Macros}{\semdef}
-    \begin{Syntax}%
-        \Macro!{\semdef}{\oarg{pos}\xarg{cod}\marg{semID}}
-    \end{Syntax}
-This “defines” a semester, \Arg{semID}, and associates with it a \Arg{cod} (for reference) and a \Arg{pos} (to be used by, for instance, \Pack{ufrgscca-curr-graph}.)
-\end{Macros}
+\begin{codedescribe}{\topicdef,\defaulttopic}
+\begin{codesyntax}%
+    \tsmacro{\topicdef}[color]{topicID,text}
+    \tsmacro{\defaulttopic}{topicID}
+\end{codesyntax}
+\tsmacro{\topicdef}{} defines \tsobj[meta]{topicID} (to be used when describing a class) and associates a \tsobj[meta]{text} description and a \tsobj[meta]{color} (for topic highlight). \tsmacro{\defaulttopic}{} sets the default one (if not explicitly given when describing a class).
+\end{codedescribe}
 
 
-\begin{Macros}{\classdef,\setclass,\classremark}
-    \begin{Syntax}%
-        \Macro!{\classdef}{\oarg{topicID}\xarg{pos}\marg{classID}\marg{cred}\marg{typ}\marg{name}\marg{desc}}
-        \Macro{\setclass}{classID}
-        \Macro{\classremark}{remark}
-    \end{Syntax}
-\Macro{\classdef}{} defines a class, associating with a \Arg{topicID}, \Arg{pos} (for \Pack{ufrgscca-curr-graph}), \Arg{classID}, number and type, \Arg{typ}, of credits, \Arg{cred}, a long name, \Arg{name} and description, \Arg{desc}. \Macro{\classremark}{} adds an extra remark to it.
+\begin{codedescribe}{\semdef}
+    \begin{codesyntax}%
+        \tsobj[code]{\semdef}{\tsobj[oarg]{pos}\tsobj[xarg]{cod}\tsobj[marg]{semID}}
+    \end{codesyntax}
+This “defines” a semester, \tsobj[meta]{semID}, and associates with it a \tsobj[meta]{cod} (for reference) and a \tsobj[meta]{pos} (to be used by, for instance, \tsobj[pkg]{ufrgscca-curr-graph}.)
+\end{codedescribe}
 
-The following commands always refer to the “last defined” \Macro{\classdef}{} unless \Macro{\setclass}{} is used, which changes the “current class” for the following commands.
-\end{Macros}
 
-\begin{Macros}{\depdef,\altdef}
-    \begin{Syntax}%
-        \Macro!{\depdef}{\oarg{topicID}\xarg{pos}\marg{classID}}
-        \Macro{\altdef}{}
-    \end{Syntax}
-\Macro{\depdef}{} inserts/creates a “class dependency” list. The highlight color (if used) is usually defined by the current class topic (informing \Arg{topicID} changes the highlight color). \Arg{pos} is used by \Pack{ufrgscca-curr-graph} to determine the incident line angle.
+\begin{codedescribe}{\classdef,\setclass,\classremark}
+    \begin{codesyntax}%
+        \tsobj[code]{\classdef}{\tsobj[oarg]{topicID}\tsobj[xarg]{pos}\tsobj[marg]{classID}\tsobj[marg]{cred}\tsobj[marg]{typ}\tsobj[marg]{name}\tsobj[marg]{desc}}
+        \tsmacro{\setclass}{classID}
+        \tsmacro{\classremark}{remark}
+    \end{codesyntax}
+\tsmacro{\classdef}{} defines a class, associating with a \tsobj[meta]{topicID}, \tsobj[meta]{pos} (for \tsobj[pkg]{ufrgscca-curr-graph}), \tsobj[meta]{classID}, number and type, \tsobj[meta]{typ}, of credits, \tsobj[meta]{cred}, a long name, \tsobj[meta]{name} and description, \tsobj[meta]{desc}. \tsmacro{\classremark}{} adds an extra remark to it.
 
-\Macro{\altdef}{} defines/start and alternate dependency list.
-\end{Macros}
+The following commands always refer to the “last defined” \tsmacro{\classdef}{} unless \tsmacro{\setclass}{} is used, which changes the “current class” for the following commands.
+\end{codedescribe}
 
-\begin{Macros}{\bibdef}
-    \begin{Syntax}%
-        \Macro{\bibdef}[type]{text}
-    \end{Syntax}
-This is used to set a list of bibliographies, one per issued command. The default \Arg{type} value is just \emph{bib}, possible values (as understood by \Pack{ufrgscca-curr-tab}) are \emph{bib}, \emph{basic} and \emph{comp}.
-\end{Macros}
+\begin{codedescribe}{\depdef,\altdef}
+    \begin{codesyntax}%
+        \tsobj[code]{\depdef}{\tsobj[oarg]{topicID}\tsobj[xarg]{pos}\tsobj[marg]{classID}}
+        \tsmacro{\altdef}{}
+    \end{codesyntax}
+\tsmacro{\depdef}{} inserts/creates a “class dependency” list. The highlight color (if used) is usually defined by the current class topic (informing \tsobj[meta]{topicID} changes the highlight color). \tsobj[meta]{pos} is used by \tsobj[pkg]{ufrgscca-curr-graph} to determine the incident line angle.
+
+\tsmacro{\altdef}{} defines/start and alternate dependency list.
+\end{codedescribe}
+
+\begin{codedescribe}{\bibdef}
+    \begin{codesyntax}%
+        \tsmacro{\bibdef}[type]{text}
+    \end{codesyntax}
+This is used to set a list of bibliographies, one per issued command. The default \tsobj[meta]{type} value is just \emph{bib}, possible values (as understood by \tsobj[pkg]{ufrgscca-curr-tab}) are \emph{bib}, \emph{basic} and \emph{comp}.
+\end{codedescribe}
 
 \subsection{List Processing Commands}
 Those are the main loop commands that go through the lists.
-\begin{Macros}{\LstClass,\LstDep,\LstTopic}
-    \begin{Syntax}
-        \Macro{\LstClass}[cmd]{semID}
-        \Macro!{\LstDep}{\oarg{cmd}\xarg{ang}\marg{classID}}
-        \Macro{\LstTopic}[cmd]{topicID}
-    \end{Syntax}
-\Arg{cmd} can be any command accepting a single argument. It will, in fact, be the one defining the way the data will be, effectively, be presented.
+\begin{codedescribe}{\LstClass,\LstDep,\LstTopic}
+    \begin{codesyntax}
+        \tsmacro{\LstClass}[cmd]{semID}
+        \tsobj[code]{\LstDep}{\tsobj[oarg]{cmd}\tsobj[xarg]{ang}\tsobj[marg]{classID}}
+        \tsmacro{\LstTopic}[cmd]{topicID}
+    \end{codesyntax}
+\tsobj[meta]{cmd} can be any command accepting a single argument. It will, in fact, be the one defining the way the data will be, effectively, be presented.
 
-\Macro{\LstClass}{} will process \Arg{cmd} over all classes associated with \Arg{semID}.
+\tsmacro{\LstClass}{} will process \tsobj[meta]{cmd} over all classes associated with \tsobj[meta]{semID}.
 
-\Macro{\LstDep}{} will process \Arg{cmd} over all dependency classes associated with \Arg{classID}.
+\tsmacro{\LstDep}{} will process \tsobj[meta]{cmd} over all dependency classes associated with \tsobj[meta]{classID}.
 
-\Macro{\LstTopic}{} will process \Arg{cmd} over all classes associated with \Arg{topicID}.
+\tsmacro{\LstTopic}{} will process \tsobj[meta]{cmd} over all classes associated with \tsobj[meta]{topicID}.
 
-\end{Macros}
+\end{codedescribe}
 
-\section{\tightul{ufrgscca-curr-tab} Package (alpha) (extended documentation)}
-This is truly a work in progress (based on some old ideas), not really tested. It shall be revised and, mostly sure, it will be changed (no compatibility guaranties).  It always pre-load \Pack{ufrgscca-curr} and \Pack{longtable}.
+\section{\tightul{ufrgscca-curr-tab} Package (alpha) (ex\-tend\-ed documentation)}
+This is truly a work in progress (based on some old ideas), not really tested. It shall be revised and, mostly sure, it will be changed (no compatibility guaranties).  It always pre-load \tsobj[pkg]{ufrgscca-curr} and \tsobj[pkg]{longtable}.
 
 \subsection{Tabular Presentation Commands}
-\begin{Macros}{\TabEtp,\TabTopic}
-    \begin{Syntax}%
-        \Macro!{\TabEtp}{\xarg{type}\oarg{sectioning}c\marg{semID}}
-        \Macro{\TabTopic}[type]{topicID}
-    \end{Syntax}
-\Macro{\TabEtp}{} will construct a longtable with all classes associated with \Arg{semID} (including it's dependencies and bibliography).
+\begin{codedescribe}{\TabEtp,\TabTopic}
+    \begin{codesyntax}%
+        \tsobj[code]{\TabEtp}{\tsobj[xarg]{type}\tsobj[oarg]{sectioning}c\tsobj[marg]{semID}}
+        \tsmacro{\TabTopic}[type]{topicID}
+    \end{codesyntax}
+\tsmacro{\TabEtp}{} will construct a longtable with all classes associated with \tsobj[meta]{semID} (including it's dependencies and bibliography).
 
-\Macro{\TabTopic}{} will construct a longtable with all classes associated with \Arg{topicID}.
+\tsmacro{\TabTopic}{} will construct a longtable with all classes associated with \tsobj[meta]{topicID}.
 
-\end{Macros}
+\end{codedescribe}
 
 \section{\tightul{ufrgscca-curr-graph} Package (alpha) (extended documentation)}
 
 \subsection{Graph Presentation Command}
-Ironically, this is the “oldest” of the \Pack{-curr-} packages, but it is the less tested one, and the one whose code is more prone to fail in unexpected ways, be advised: do not try to use it, unless you know the internal code well. It always pre-load \Pack{ufrgscca-curr} (N.B. it also depends on \Pack{tikz}).
+Ironically, this is the “oldest” of the \tsobj[pkg]{-curr-} packages, but it is the less tested one, and the one whose code is more prone to fail in unexpected ways, be advised: do not try to use it, unless you know the internal code well. It always pre-load \tsobj[pkg]{ufrgscca-curr} (N.B. it also depends on \tsobj[pkg]{tikz}).
 
-\begin{Macros}{\GraphSem}
-    \begin{Syntax}%
-        \Macro{\GraphSem}[type]{semID}
-    \end{Syntax}
-It will create a dependency graph for a given \Arg{semId}. N.B. to start with, it is highly dependent on the semester sequence, one shall start with first semester and go from there.
-\end{Macros}
+\begin{codedescribe}{\GraphSem}
+    \begin{codesyntax}%
+        \tsmacro{\GraphSem}[type]{semID}
+    \end{codesyntax}
+It will create a dependency graph for a given \tsobj[meta]{semId}. N.B. to start with, it is highly dependent on the semester sequence, one shall start with first semester and go from there.
+\end{codedescribe}
 
 \fi
-
 
 
 \end{document}

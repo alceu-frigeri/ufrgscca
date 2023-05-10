@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.9 (2023/05/08)
+%% This is version 1.10 (2023/05/11)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca}
 \def\tc@tmp@altpackname{ufrgscca}
 \def\tc@tmp@packdesc{UFRGS/CCA  class}
-\def\tc@tmp@packdate{2023/05/08}
-\def\tc@tmp@packversion{1.9}
+\def\tc@tmp@packdate{2023/05/11}
+\def\tc@tmp@packversion{1.10}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -104,8 +104,11 @@
 	miktex.usage = load,
 	miktex.if = tcif@miktex,
 
-	dctools.usage = load,
-	dctools.if = tcif@dctools,
+	article.usage = load,
+	article.if = tcif@article,
+
+	nogeometry.usage = load,
+	nogeometry.if = tcif@nogeometry,
 }
 
 \DeclareUnknownKeyHandler[tc]{\PassOptionsToClass{\CurrentOption}{report}}
@@ -125,7 +128,7 @@
     \RequirePackage{lmodern}%
 \fi
 
-\iftcif@dctools
+\iftcif@article
     \LoadClass[12pt]{article}
 \else
     \LoadClass[12pt,twoside,openright]{report}

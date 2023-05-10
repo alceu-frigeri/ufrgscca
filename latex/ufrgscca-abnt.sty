@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.9 (2023/05/08)
+%% This is version 1.10 (2023/05/11)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-abnt}
 \def\tc@tmp@altpackname{ufrgsccaabnt}
 \def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
-\def\tc@tmp@packdate{2023/05/08}
-\def\tc@tmp@packversion{1.9}
+\def\tc@tmp@packdate{2023/05/11}
+\def\tc@tmp@packversion{1.10}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -69,9 +69,8 @@
 		nomicrotype.usage = load,
 		nomicrotype.if = tcif@nomicrotype,
 
-
-		dctools.usage = load,
-		dctools.if = tcif@dctools,
+		article.usage = load,
+		article.if = tcif@article,
 }
 
 \ProcessKeyOptions[ufrgscca-abnt]\relax
@@ -85,8 +84,8 @@
 \iftcif@strictabnt
   \RequirePackage[a4paper,inner=2cm,outer=3cm,top=3cm,bottom=2cm,twoside]{geometry}
 \else
-  \iftcif@dctools
-    \RequirePackage[a4paper,margin=5cm,right=2cm,marginparwidth=4.5cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
+  \iftcif@nogeometry
+%    \RequirePackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.75cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
   \else
     \RequirePackage[a4paper,inner=2.5cm,outer=2.5cm,top=3cm,bottom=2cm,twoside]{geometry}
   \fi
@@ -205,7 +204,7 @@
   \def\tc@chapterspc{\vspace{2.5mm}}
   \def\tc@sectionspc{\vspace{0.75mm}}
   
-\iftcif@dctools
+\iftcif@article
 \else
 \iftcif@relnum%
 %  \def\tc@chapterspc{\vspace{2.5mm}}
@@ -289,7 +288,7 @@
 %%%
 %%% Relative/Absolute counters... {package chngcntr}
 %%%
-\iftcif@dctools
+\iftcif@article
 \else
 \iftcif@relnum%
   \counterwithin{figure}{chapter}%

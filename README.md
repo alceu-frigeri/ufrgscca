@@ -118,7 +118,11 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.9 (this)
+* Version 1.10 (this)
+    - documentation review: typos and formating
+	- added options 'article' and 'nogeometry' (see documentation)
+
+* Version 1.9 
     - changing the version system to a more reasonable x.y 
     - fine tuning the List of Figures/Tables spacing (in case of relnum==false) 
 
