@@ -355,7 +355,7 @@ Besides the \emph{default} keys defined by the \tsobj[pkg]{enumitem} package a f
 	\describe {ppc, tcc} {\tsobj[key]{ppc} and \tsobj[key]{tcc} are alias of each other, and just assure that lists indentation will be the same as paragraphs default.}
 	\describe {parindent} { with \tsobj[key]{parindent}, the list number/mark is aligned with paragraph indentation.}
 	\describe {noindent} { \tsobj[key]{noindent} removes the label indentation.}
-\newpage
+
 	\begin{codestore}[st=enumA]
 \begin{enumerate}[tcc]
 	\item some A
@@ -396,12 +396,12 @@ New paragraph, for reference.
 		\item some B
 	\end{enumerate}
 \end{codestore}
-
+\newpage
 \tsdemo{enumB}
 
 
 	\describe {bullet} { for simple itemized lists, it will replace the default black dot by an `open bullet'}
-\newpage
+
 	\begin{codestore}[st=enumD]
 	\begin{itemize}[tcc,miditemsep]
 		\item some A
@@ -639,6 +639,8 @@ This package defines just two user commands to generate specific forms needed at
 \end{codesyntax}
 The command \tsmacro{\tcforms}{} will generate the many forms (\tsobj[meta]{formslist}) using the information from \emph{local.tex}, whilst \tsmacro{\tcemptyforms}{} will generate said forms with 'blanks' (to be fulfilled by hand, for instance).
 
+\end{codedescribe}
+
 \tsobj[meta]{formslist} is a csv list of any of:
 \begin{describelist*}{option}
     \describe {reqform} { Registration requirement form.}
@@ -652,8 +654,6 @@ The command \tsmacro{\tcforms}{} will generate the many forms (\tsobj[meta]{form
     \describe {internsupervisorform} { Internship Supervisor evaluation form.}
     \describe {interntutorform} { Internship tutor evaluation form.}
 \end{describelist*}
-
-\end{codedescribe}
 
 
 \section{\tightul{ufrgscca-lists} Package}
@@ -866,6 +866,7 @@ Use \tsmacro{\tcccalendareventdate}{} to set the date of a given 'event' (the li
 		\tsmacro{\NewStudent}{studentname,code}
 	\end{codesyntax}
 	This is the main command describing each \tsobj[meta]{student} associated work, advisor and exam board. In \tsobj[meta]{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \tsmacro{\begin{document}}{}), to describe a student work.
+\end{codedescribe}
 	So, for instance:
 	\begin{codestore}[st=d.newstudent]
 \NewStudent{Artur}{
@@ -894,7 +895,6 @@ Use \tsmacro{\tcccalendareventdate}{} to set the date of a given 'event' (the li
 \begin{tsremark}[N.B.:]
 Internally, \tsmacro{\NewStudent}{} will create a command named \tsmacro{\studentname}{}, with a \emph{hook} named \tsmacro{\studentname.hook}{} (the dot is part of the hook's name).
 \end{tsremark}
-\end{codedescribe}
 
 
 \begin{codedescribe}{\NewInternshipStudent}
@@ -902,35 +902,33 @@ Internally, \tsmacro{\NewStudent}{} will create a command named \tsmacro{\studen
         \tsmacro{\NewInternshipStudent}{studentname,code}
     \end{codesyntax}
     This is the main command describing each \tsobj[meta]{student} associated internship, tutor and advisor. In \tsobj[meta]{code} one should use the commands defined in \autonameref{core-specific-commands}, and \autonameref{student-specific-commands} (although one can use  any valid \LaTeXe~ preamble code, keep in mind those will be executed BEFORE \tsmacro{\begin{document}}{}), to describe a student internship.
+    \end{codedescribe}
         So, for instance:
         \begin{codestore}[st=d.newstudentB]
-            \NewStudent{Artur}{
-                \student{last}{first}[m]
+  \NewStudent{Artur}{
+      \student{last}{first}[m]
+      \studentinfo[]{243716}{email@somewhere}
+      \internship{Empresa I}{P\&D}{10/10/22}{20/12/22}{2 Meses}
 
-                \studentinfo[]{243716}{email@somewhere}
+      \supervisor[Eng. I]{do Supervisor}{Nome}[m]
+      \supervisorinfo{crea I}{posição/cargo}{email}{ramal}
 
-                \internship{Empresa I}{P\&D}{10/10/22}{20/12/22}{2 Meses}
+      \internshipsupervisorgrades{4}{4}{4}{4}{5}
+      \internshipsupervisorgrades{4}{4}{4}{4}{5}
+      \internshiptutorgrades{90}
+      \internshipcoordgrades{90}
 
-                \supervisor[Eng. I]{do Supervisor}{Nome}[m]
-                \supervisorinfo{crea I}{posição/cargo}{email}{ramal}
+      \tutor[Prof.~Dr.]{do Tutor I}{Nome}[m]
+      \tutorinfo{UFRGS}{Instituição I-- Cidade, País}{email}{ramal}
 
-                \internshipsupervisorgrades{4}{4}{4}{4}{5}
-                \internshipsupervisorgrades{4}{4}{4}{4}{5}
-                \internshiptutorgrades{90}
-                \internshipcoordgrades{90}
-
-                \tutor[Prof.~Dr.]{do Tutor I}{Nome}[m]
-                \tutorinfo{UFRGS}{Instituição I-- Cidade, País}{email}{ramal}
-
-                \studentFate[Dismiss]  %% FF or Dismiss ??
-            }
-        \end{codestore}
+      \studentFate[Dismiss]  %% FF or Dismiss ??
+  }
+\end{codestore}
 
         \tscode*{d.newstudentB}
 \begin{tsremark}[N.B.:]
          Internally, \tsmacro{\NewInternshipStudent}{} will create a command named \tsmacro{\studentname}{}, with a \emph{hook} named \tsmacro{\studentname.hook}{} (the dot is part of the hook's name).
 \end{tsremark}         
-    \end{codedescribe}
 
 
 \subsubsection{Student Specific Commands}\label{student-specific-commands}
@@ -976,7 +974,9 @@ This assigns the \tsobj[meta]{fate} of a student, for those cases that one canno
 		\tsmacro{\DistinctBoard}{}
 		\tsmacro{\DefaultBoard}{}
 	\end{codesyntax}
-Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \tsmacro{\DistinctBoard}{} after informing a student's name (via \tsmacro{\student}{}) and before informing its advisor name (via \tsmacro{\advisor}{}). For instance:
+Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \tsmacro{\DistinctBoard}{} after informing a student's name (via \tsmacro{\student}{}) and before informing its advisor name (via \tsmacro{\advisor}{}). 
+\end{codedescribe}
+For example:
 
 	\begin{codestore}[st=d.distinct]
 	\NewStudent{Artur}{
@@ -993,8 +993,6 @@ Normally, the default, it's assumed that the student's advisor will also be a me
 \end{codestore}
 
 \tscode*[emph={DistinctBoard}]{d.distinct}
-\end{codedescribe}
-
 
 
 \begin{codedescribe}{\examinergrades}
