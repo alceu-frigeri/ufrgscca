@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.10 (2023/05/11)
+%% This is version 1.11 (2023/05/29)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -30,7 +30,7 @@
 \usepackage{codedescribe}
 \usepackage{ufrgscca-curr}
 
-\maxdeadcycles=500 %% the many marginpar statements are actually a pain.
+%\maxdeadcycles=500 %% the many marginpar statements are actually a pain.
 
 \newif\iffulldoc
 %\fulldocfalse
@@ -632,7 +632,7 @@ In case some customization is needed, one can change them as needed. The default
 \section{\tightul{ufrgscca-forms} Package}
 This package defines just two user commands to generate specific forms needed at UFRGS/EE.
 \subsection{Forms Defined Commands}\label{forms.commands}
-\begin{codedescribe}{\tcforms,\tcemptyforms}
+\begin{codedescribe}[code,update=2023/05/29]{\tcforms,\tcemptyforms}
 	\begin{codesyntax}%
 \tsmacro{\tcforms}{formslist}
 \tsmacro{\tcemptyforms}{formslist}
@@ -643,17 +643,24 @@ The command \tsmacro{\tcforms}{} will generate the many forms (\tsobj[meta]{form
 
 \tsobj[meta]{formslist} is a csv list of any of:
 \begin{describelist*}{option}
-    \describe {reqform} { Registration requirement form.}
-    \describe {coadvisor} { Coadvisor justification form.}
-    \describe {boardsapproval} { Boards approval form.}
-    \describe {advisorsapproval} { Advisors approval form.}
-    \describe {receipts} { Receipts forms (one per board member).}
-    \describe {examinersforms} { Grades and correction forms (per board member).}
-    \describe {rectifyapprovalform} { Corrections approval  form.}
+    \describe {reqform-I} {}
+    \describe {reqform-II} { Registration requirement form.}
+    \describe {coadvisor-I} {}
+    \describe {coadvisor-II} { Coadvisor justification form.}
+    \describe {boardsapproval-I} {}
+    \describe {boardsapproval-II} { Boards approval form.}
+    \describe {advisorsapproval-I} {}
+    \describe {advisorsapproval-II} { Advisors approval form.}
+    \describe {receipts-II} { Receipts forms (one per board member).}
+    \describe {examinersforms-I} {}
+    \describe {examinersforms-II} { Grades and correction forms (per board member).}
+    \describe {rectifyapproval-I} {}
+    \describe {rectifyapproval-II} { Corrections approval  form.}
     \describe {internreqform} { Internship Registration requirement form.}
     \describe {internsupervisorform} { Internship Supervisor evaluation form.}
     \describe {interntutorform} { Internship tutor evaluation form.}
 \end{describelist*}
+Please note that those '-I' regards TCC-I, while '-II' regards TCC-II.
 
 
 \section{\tightul{ufrgscca-lists} Package}
@@ -827,15 +834,24 @@ Be aware that, \tsmacro{\checkdef}{} can and should be only used at the preamble
 
 \paragraph{Final Work Specific}
 
-\begin{codedescribe}{\tcccalendareventdate,\boardstitleB,\boardsOBS,\TCCperiod}
+\begin{codedescribe}{\boardstitleB,\boardsOBS,\TCCperiod}
 	\begin{codesyntax}%
-		\tsmacro{\tcccalendareventdate}{date}
 		\tsmacro{\boardstitleB}{titleB}
 		\tsmacro{\boardsOBS}{obs}
 		\tsmacro{\TCCperiod}{semester}
 	\end{codesyntax}
-Use \tsmacro{\tcccalendareventdate}{} to set the date of a given 'event' (the list of 'calendar events' are (might have been) set in the \emph{ufrgscca-ptBR-coord.def} or \emph{ufrgscca-en-coord.def} file). \tsmacro{boardstitleB}{} sets a 2nd title line for the 'boards schedule report'. \tsmacro{\boardsOBS}{} allows to add an observation (\tsobj[meta]{obs}) for the 'boards schedule report', finally, \tsmacro{\TCCperiod} sets the current semester value.
+ \tsmacro{boardstitleB}{} sets a 2nd title line for the 'boards schedule report'. \tsmacro{\boardsOBS}{} allows to add an observation (\tsobj[meta]{obs}) for the 'boards schedule report', finally, \tsmacro{\TCCperiod} sets the current semester value.
 \end{codedescribe}
+
+\begin{codedescribe}[code,update=2023/05/29]{\tcccalendarreset,\tcccalendarevent,\tcccalendareventdate}
+	\begin{codesyntax}%
+    \tsmacro{\tcccalendarreset}{}
+    \tsmacro{\tcccalendarevent}{week,description}
+		\tsmacro{\tcccalendareventdate}{date}
+	\end{codesyntax}
+With \tsobj{\tcccalendarevent} one defines the many calendar events. \tsobj[marg]{week} defines the event's week, and  \tsobj[marg]{description} the associated text. Furthermore \tsobj{\tcccalendareventdate} defines the associated \tsobj[marg]{date}. \tsobj{\tcccalendarevent} is, normally, pre-set in the \emph{ufrgscca-ptBR-coord.def} file, but can be redefined using first \tsobj{\tcccalendarreset}.
+\end{codedescribe}
+
 
 \begin{codedescribe}{\tcceventAweek,\tcceventBweek,.,.,.,.,\tcceventJweek}
     \begin{codesyntax}%
@@ -1280,7 +1296,7 @@ Those are the main loop commands that go through the lists.
         \tsobj[code]{\LstDep}{\tsobj[oarg]{cmd}\tsobj[xarg]{ang}\tsobj[marg]{classID}}
         \tsmacro{\LstTopic}[cmd]{topicID}
     \end{codesyntax}
-\tsobj[meta]{cmd} can be any command accepting a single argument. It will, in fact, be the one defining the way the data will be, effectively, be presented.
+\tsobj[meta]{cmd} can be any command accepting a single argument. It will, in fact, be the one defining the way the data will, effectively, be presented.
 
 \tsmacro{\LstClass}{} will process \tsobj[meta]{cmd} over all classes associated with \tsobj[meta]{semID}.
 
@@ -1290,7 +1306,7 @@ Those are the main loop commands that go through the lists.
 
 \end{codedescribe}
 
-\section{\tightul{ufrgscca-curr-tab} Package (alpha) (ex\-tend\-ed documentation)}
+\section{\tightul{ufrgscca-curr-tab} Package (beta) (ex\-tend\-ed documentation)}
 This is truly a work in progress (based on some old ideas), not really tested. It shall be revised and, mostly sure, it will be changed (no compatibility guaranties).  It always pre-load \tsobj[pkg]{ufrgscca-curr} and \tsobj[pkg]{longtable}.
 
 \subsection{Tabular Presentation Commands}
@@ -1305,7 +1321,7 @@ This is truly a work in progress (based on some old ideas), not really tested. I
 
 \end{codedescribe}
 
-\section{\tightul{ufrgscca-curr-graph} Package (alpha) (extended documentation)}
+\section{\tightul{ufrgscca-curr-graph} Package (beta) (extended documentation)}
 
 \subsection{Graph Presentation Command}
 Ironically, this is the “oldest” of the \tsobj[pkg]{-curr-} packages, but it is the less tested one, and the one whose code is more prone to fail in unexpected ways, be advised: do not try to use it, unless you know the internal code well. It always pre-load \tsobj[pkg]{ufrgscca-curr} (N.B. it also depends on \tsobj[pkg]{tikz}).

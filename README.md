@@ -78,6 +78,10 @@ The Current Maintainer of this work is Alceu Frigeri
       'macro factory', for instance to create commands used in the .def files.
 * ufrgscca-forms.sty
     - forms creation macros (course specific)
+* ufrgscca-formsTR.sty
+    - forms creation macros (course specific, include by ufrgs-forms)
+* ufrgscca-formsintern.sty
+    - forms creation macros (course specific, include by ufrgs-forms)
 * ufrgscca-coord.sty
     - student work coordenation related macros (course specific)
 * ufrgscca-ppc.sty
@@ -118,7 +122,11 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.10 (this)
+* Version 1.11 (this)
+    - added many forms (TCC-I/II related, see documentation)
+    - documentation describing the new options.
+
+* Version 1.10
     - documentation review: typos and formating
 	- added options 'article' and 'nogeometry' (see documentation)
 

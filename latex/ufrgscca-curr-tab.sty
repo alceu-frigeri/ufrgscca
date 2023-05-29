@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.10 (2023/05/11)
+%% This is version 1.11 (2023/05/29)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-curr-tab}
 \def\tc@tmp@altpackname{ufrgsccacurrtab}
 \def\tc@tmp@packdesc{UFRGS/CCA curricula tabular commands}
-\def\tc@tmp@packdate{2023/05/11}
-\def\tc@tmp@packversion{1.10alpha}
+\def\tc@tmp@packdate{2023/05/29}
+\def\tc@tmp@packversion{1.11beta}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -106,7 +106,7 @@
 }
 
 \NewDocumentCommand\TabDep{m}{%
-    & & & & #1 (\csname gr@class:#1.et\endcsname)\\[-1pt]%
+    & & & & & #1 - \csname gr@class:#1.nam\endcsname\ (\csname gr@class:#1.et\endcsname)\\[-0.1ex]%
 }
 
 \NewDocumentCommand\TabEtp{D<>{ob}O{\notoc\section}m}{%
@@ -131,4 +131,33 @@
 		}
 }
 
+
+\NewDocumentCommand\TabClassCompact{m}{%
+ & #1 & \csname gr@class:#1.cred\endcsname & \csname gr@class:#1.typ\endcsname & \multicolumn{2}{J{11cm}}{\csname gr@class:#1.nam\endcsname}\\*%
+    \edef\gr@disc{#1}%
+		\ifcsdef{gr@class:#1.depA}{%
+			\LstDep[\TabDep]<A>{#1}%
+    }{}%
+		\ifcsdef{gr@class:#1.depB}{%
+			& & & & OU\\*%
+			& & & & %
+   		& \def\gr@tab{\ }%
+			\LstDep[\TabDepX]<B>{#1}%
+		}{}%
+		\ifcsdef{gr@class:#1.depC}{%
+			& & & & OU\\*%
+			& & & & %
+   		& \def\gr@tab{\ }%
+			\LstDep[\TabDepX]<C>{#1}%
+		}{}%
+}
+
+\NewDocumentCommand\TabEtpCompact{D<>{ob}O{}m}{%
+    %#2{Etapa #3}%
+    \begin{tabular}{l@{\,}l@{\ }c@{\ }c@{\ }J{4mm}@{}J{10cm}}%
+    &{\larger\textbf{Etapa #3}}\\
+        \LstClass[\TabClassCompact]{#3}%
+%        & \textbf{Total} & \textbf{\arabic{gr@cred#1}} & \textbf{#1}\\%
+    \end{tabular}%
+}
 

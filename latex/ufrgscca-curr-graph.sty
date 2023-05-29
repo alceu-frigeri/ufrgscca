@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.10 (2023/05/11)
+%% This is version 1.11 (2023/05/29)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-curr-graph}
 \def\tc@tmp@altpackname{tccurrgraph}
 \def\tc@tmp@packdesc{UFRGS/CCA graph curricula commands}
-\def\tc@tmp@packdate{2023/05/11}
-\def\tc@tmp@packversion{1.10alpha}
+\def\tc@tmp@packdate{2023/05/29}
+\def\tc@tmp@packversion{1.11beta}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -52,7 +52,7 @@
           every lower node part/.style={font=\large\bfseries,color=blue}},%
         dep/.style={->,dotted,line width=3pt}]%
       \begin{scope}\clip(\gr@Xa,\gr@Ya) -- (\gr@Xa,\gr@Yb) -- (\gr@Xb,\gr@Yb) -- (\gr@Xb,\gr@Ya);%
-         \filldraw[color=red](5.5*\gr@dX,-0.25*\gr@dY)node{\Huge\textbf{\GraphTitle}};%
+         \filldraw[color=red](0.5*\gr@xX*\gr@dX,-0.25*\gr@dY)node{\Huge\textbf{\GraphTitle}};%
 }{%
       \end{scope}%
     \end{tikzpicture}%
@@ -91,5 +91,11 @@
 \addcase\gr@case@angle{-A}{\def\gr@ANG{-\gr@A}}
 \addcase\gr@case@angle{-B}{\def\gr@ANG{-\gr@B}}
 \addcase\gr@case@angle{-C}{\def\gr@ANG{-\gr@C}}
+\addcase\gr@case@angle{A*}{\def\gr@ANG{\gr@A}\def\gr@angIN{180+\gr@ANG}}
+\addcase\gr@case@angle{B*}{\def\gr@ANG{\gr@B}\def\gr@angIN{180+\gr@ANG}}
+\addcase\gr@case@angle{C*}{\def\gr@ANG{\gr@C}\def\gr@angIN{180+\gr@ANG}}
+\addcase\gr@case@angle{-A*}{\def\gr@ANG{-\gr@A}\def\gr@angIN{180+\gr@ANG}}
+\addcase\gr@case@angle{-B*}{\def\gr@ANG{-\gr@B}\def\gr@angIN{180+\gr@ANG}}
+\addcase\gr@case@angle{-C*}{\def\gr@ANG{-\gr@C}\def\gr@angIN{180+\gr@ANG}}
 
 

@@ -1,0 +1,148 @@
+%%%==============================================================================
+%% Copyright 2022-23 by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.11 (2023/05/29)
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/ufrgscca
+%%
+%%%==============================================================================
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%%==============================================================================
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship requirement form%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@internreqform}{}{%
+    \tc@formtopbox[tcdef@forms@internshipreqformnotes]{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@reqformtitle}%
+
+    \vfill%
+
+    \tcdef@forms@reqformopening%
+    \vfill%
+
+    \tcdef@forms@reqforminternshipdesc%
+    \vfill%
+
+    \tcdef@forms@reqforminternshipinfo%
+
+
+ %   {\bf \tcdef@forms@formsbrieflabel}:%\footnote[1]{\tcdef@forms@renewreqformnotes}%
+
+    \vfill%
+%    \tcdef@core@tccbrief%
+
+    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@supervisorsignature}}\hfill%
+    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@tutorsignature}}%
+
+    \hfill%
+    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}%
+    \pagebreak%
+}%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship Supervisor's form (grades)%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@internsupervisorform}{}{%
+    \tc@formtopbox[tcdef@forms@internsupervisornote]{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@supervisorformtitle}%
+    %
+    \vfill%
+    \tcdef@forms@internshipstudentinfo\\%
+    \tcdef@forms@internshipsupervisorinfo\\%
+    \tcdef@forms@internshipperiod
+    \vfill%
+    \tcdef@forms@internsupervisorgradesform%
+
+    \vfill%
+
+    \tcdef@forms@internsupervisorcomments \tcdef@core@formsblanklinesB
+
+   \vfill%
+
+    \tcforms@formsigdate{\tcdef@forms@supervisorsignature}%
+
+    \pagebreak%
+}%
+%
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% Internship tutor's form (grades)%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@interntutorform}{}{%
+    \tc@formtopbox{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@tutorformtitle}%
+    %
+    \vfill%
+    \tcdef@forms@internshipstudentinfo\\%
+    \tcdef@forms@internshiptutorinfo\\%
+    \tcdef@forms@internshipperiod
+    \vfill%
+    \tcdef@forms@interntutorgrade%
+
+    \vfill%
+
+    \tcdef@forms@internshiptutorcomments \tcdef@core@formsblanklinesB
+
+    \vfill%
+
+    \tcforms@formsigdate{\tcdef@forms@tutorsignature}%
+ %   \hline
+    \vfill%
+
+    \tcdef@forms@interncoordgrade%
+    \vfill
+
+    \tcdef@forms@internshipcoordcomments \tcdef@core@formsblanklinesB
+    \vfill%
+
+    \tcforms@formsigdate{\tcdef@forms@internshipcoordsignature}%
+
+    \pagebreak%
+}%
+%
+%
+%
+\newcounter{tc@supervisorgradecount}[tc@studentcount]%
+\NewDocumentCommand{\internshipsupervisorgrades}{mmmmm}{%%
+    \stepcounter{tc@supervisorgradecount}%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}A\endcsname{#1}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}B\endcsname{#2}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}C\endcsname{#3}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}D\endcsname{#4}%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}E\endcsname{#5}%%
+    \ifthenelse{\equal{#1}{}}{%%
+        \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorgrade\Alph{tc@supervisorgradecount}\endcsname{0}%
+    }{%%
+        \expandafter\edef\csname tc@student\Alph{tc@studentcount}@supervisorgrade\Alph{tc@supervisorgradecount}\endcsname{\fpeval{ #1 + #2 +  #3 + #4 + #5} }%
+    }%
+}%
+
+\NewDocumentCommand{\internshiptutorgrades}{m}{%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@tutorgrade\endcsname{#1}%%
+}%
+\NewDocumentCommand{\internshipcoordgrades}{m}{%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@internshipcoordgrade\endcsname{#1}%%
+}%
+

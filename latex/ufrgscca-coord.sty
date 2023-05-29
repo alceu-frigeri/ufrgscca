@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.10 (2023/05/11)
+%% This is version 1.11 (2023/05/29)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,16 +26,18 @@
 \def\tc@tmp@packname{ufrgscca-coord}
 \def\tc@tmp@altpackname{ufrgsccacoord}
 \def\tc@tmp@packdesc{UFRGS/CCA coord commands}
-\def\tc@tmp@packdate{2023/05/11}
-\def\tc@tmp@packversion{1.10}
+\def\tc@tmp@packdate{2023/05/29}
+\def\tc@tmp@packversion{1.11}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
 \newif\iftcif@coord@emptyforms\tcif@coord@emptyformsfalse
 \DeclareKeys[ufrgscca-coord]{
-    calendar.usage = general,
-    calendar.if = tcif@coord@calendar,
+    calendar-I.usage = general,
+    calendar-I.if = tcif@coord@calendarI,
+    calendar-II.usage = general,
+    calendar-II.if = tcif@coord@calendarII,
     checklist.usage = general,
     checklist.if = tcif@coord@checklist,
     report.usage = general,
@@ -283,7 +285,13 @@
         \expandafter\gdef\csname tc@tcccalendarevent\Alph{tc@calendareventdatecount}date\endcsname{#1}%%
 }%
 %
-
+\NewDocumentCommand{\tccoord@calendarlinereset}{m}{\@ifundefined{tc@tcccalendarevent#1week}{}{\csundef{tc@tcccalendarevent#1week}}}%
+%
+\NewDocumentCommand{\tcccalendarreset}{}{
+  \forcsvlist{\tccoord@calendarlinereset}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O}%
+  \setcounter{tc@calendareventcount}{0}%%
+  \setcounter{tc@calendareventdatecount}{0}%
+}
 
 %
 \NewDocumentCommand{\examinergrades}{mmm}{%%
@@ -309,7 +317,30 @@
 %%%
 %%
 %%%
-\NewDocumentCommand{\tccoord@TCCcalendar}{}{%
+\NewDocumentCommand{\tccoord@TCCcalendarI}{}{%
+  \tc@formtopbox{\tcdef@forms@formstitleTR}{\tcdef@coord@calendartitle}%
+%
+  { \footnotesize%
+    \begin{center}
+%
+      \resizebox{\textwidth}{!}{%%
+        \begin{tabular}{ccp{\tc@calendartab}}%
+          \tc@tcccalendarhead\hline%
+          \forcsvlist{\tccoord@TCCcalendarline}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O}%
+        \end{tabular}}%
+%
+    \end{center}%
+    %\if@lmodern
+      \tiny
+    %\fi
+    \tcdef@coord@tcccalendardesc%
+  }%
+  \vfill%
+%
+  \pagebreak%
+}%
+%
+\NewDocumentCommand{\tccoord@TCCcalendarII}{}{%
   \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@calendartitle}%
 %
   { \footnotesize%
@@ -938,8 +969,11 @@
 \NewDocumentCommand{\tcreports}{O{}m}{%%
   \setreports{#1}
   \tccoord@calendarfill%
-  \iftcif@coord@calendar%
-    \tccoord@TCCcalendar%
+  \iftcif@coord@calendarI%
+    \tccoord@TCCcalendarI%
+  \fi%
+  \iftcif@coord@calendarII%
+    \tccoord@TCCcalendarII%
   \fi%
   \@ifundefined{tcdef@coord@list#2}{}{%
   \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tccoord@student@exec\expandafter\expandafter\expandafter{\csname tcdef@coord@list#2\endcsname}

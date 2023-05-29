@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.10 (2023/05/11)
+%% This is version 1.11 (2023/05/29)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-forms}
 \def\tc@tmp@altpackname{ufrgsccaforms}
 \def\tc@tmp@packdesc{UFRGS/CCA forms commands}
-\def\tc@tmp@packdate{2023/05/11}
-\def\tc@tmp@packversion{1.10}
+\def\tc@tmp@packdate{2023/05/29}
+\def\tc@tmp@packversion{1.11}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
@@ -45,17 +45,24 @@
 \cmdfactory<forms>{formstimelabel,formsworktitlelabel,formstemptitlelabel}
 \cmdfactory<forms>{formsstudentIDlabel,formsemaillabel,formsphonelabel}
 \cmdfactory<forms>{agreelabel,continuelabel}
-\cmdfactory<forms>{formsdatelabel,formstitle,formsfootnote}
+\cmdfactory<forms>{formsdatelabel,formstitle,formstitleTR,formsfootnote}
 \cmdfactory<forms>{renewreqformtitle,renewreqformnotes,reqformtitle,reqformopening,reqformdesc}%
+\cmdfactory<forms>{reqformdescTR}%
 \cmdfactory<forms>{coadvisorformtitle,coadvisorformdesc}
 \cmdfactory<forms>{formsbrieflabel,formsstudentemaillabel,formsadvisoremaillabel,formscoadvisoremaillabel}
 \cmdfactory<forms>{formsreasonlabel}
 \cmdfactory<forms>{examformtitle,examformdesc,examformnoteslabel}
 \cmdfactory<forms>{examformnotes,examboardformtitle,examboardformdesc}%
+\cmdfactory<forms>{examboardformtitleTMP,examboardformdescTMP}%
 \cmdfactory<forms>{formsboardtitle,advisorapprovalformtitle,advisorapprovalformdesc,advisorapprovalformdescB}
 \cmdfactory<forms>{rectifyapprovalformtitle,rectifyapprovalformdesc}%
+\cmdfactory<forms>{rectifyapprovalTRformdesc}%
 \cmdfactory<forms>{receiptformtitle,receiptformfootnote,receiptformdesc}%
 \cmdfactory<forms>{reviewformtitle,reviewformdesc,reviewformfootnoteB,reviewformfootnote}
+\cmdfactory<forms>{formsTRtitle,TRformfootnote}
+\cmdfactory<forms>{TRboardformtitle,TRformfootnote}
+\cmdfactory<forms>{reqArgument}
+
 \cmdfactory<forms>{formsrectifyOKdesc}
 
 \cmdfactory<forms>{reqformdescgen}
@@ -96,6 +103,14 @@
 \else%
 \input{ufrgscca-ptBR-forms.def}%
 \fi%
+
+\input{ufrgscca-formsTR.sty}
+\input{ufrgscca-formsintern.sty}
+
+
+
+
+
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -167,15 +182,62 @@
 % TCC description (for many forms)%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tcforms@tccdesc}{}{%%
-  \tcdef@forms@formsstudentlabel : {\bf \tc@studentA} \hfill \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}%
-
-  \tcdef@forms@formsworktitlelabel : {\bf \@title}\\[-4mm]%
-
-  \tcdef@forms@formsadvisorlabel : {\bf \tc@studentA@advisor}\\%
-}%
+%\NewDocumentCommand{\tcforms@tccdesc}{}{%%
+%  \noindent\tcdef@forms@formsstudentlabel : {\bf \tc@studentA} \hfill \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}%
 %
+%  \noindent\tcdef@forms@formsworktitlelabel : {\bf \@title}\\[-4mm]%
+%
+%  \noindent\tcdef@forms@formsadvisorlabel : {\bf \tc@studentA@advisor}\\%
+%}%
+%
+\NewDocumentCommand{\tcforms@tccdesc}{}{%%
+  \tcforms@studentIDheader
+  
+  \tcforms@advisorIDheader
+}%
 
+
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% TCC (new) generic form %
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% parameters:
+% #1 : footnote for 'form title'
+% #2 : form 'heading title' (TCC I, for instance)
+% #3 : 'form title'
+% #4 : form oppening
+% #5 : form body
+% #6 : form closing
+%
+\NewDocumentCommand{\tcforms@genform}{O{}mmmmm}{%
+  \tc@formtopbox[tcdef@forms@formsfootnote]{\tcdef@forms@formstitle}{\tcdef@forms@examformtitle}%
+%
+  \vfill%
+   #4
+  \vfill%
+  #5
+  \vfill%
+  #6
+  \pagebreak
+}
+
+
+\NewDocumentCommand{\tcforms@studentIDheader}{}{
+  \noindent\tcdef@forms@formsstudentlabel : {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}\\%
+  \noindent\tcdef@forms@formsworktitlelabel : \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}\\
+}
+
+\NewDocumentCommand{\tcforms@examinerIDheader}{m}{
+  %\tccore@examiners{#1}
+  \noindent\tcdef@forms@formsexaminerlabel :  \textbf{\csname tc@student\Alph{tc@studentcount}@#1\endcsname}%
+}
+
+\NewDocumentCommand{\tcforms@advisorIDheader}{}{
+  \noindent\tcdef@forms@formsadvisorlabel :  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}%
+}
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -187,8 +249,11 @@
   \tc@formtopbox[tcdef@forms@formsfootnote]{\tcdef@forms@formstitle}{\tcdef@forms@examformtitle}%
 %
   \vfill%
-  \tcdef@forms@formsstudentlabel : {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\\%
-  \tcdef@forms@formsexaminerlabel :  \csname tc@student\Alph{tc@studentcount}@#1\endcsname%
+%  \tcdef@forms@formsstudentlabel : {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\\%
+%  \tcdef@forms@formsexaminerlabel :  \csname tc@student\Alph{tc@studentcount}@#1\endcsname%
+  \tcforms@studentIDheader
+  
+  \tcforms@examinerIDheader{#1}
   \vfill%
   \tcdef@forms@examformdesc%
 
@@ -225,8 +290,11 @@
   \tc@formtopbox[tcdef@forms@reviewformfootnote]{\tcdef@forms@formstitle}{\tcdef@forms@reviewformtitle}%
 
   \vfill%
-  \tcdef@forms@formsstudentlabel : {\bf \expandafter\csname tc@student\Alph{tc@studentcount}\endcsname}\\%
-  \tcdef@forms@formsexaminerlabel : \expandafter\csname tc@student\Alph{tc@studentcount}@#1\endcsname%
+%  \tcdef@forms@formsstudentlabel : {\bf \expandafter\csname tc@student\Alph{tc@studentcount}\endcsname}\\%
+%  \tcdef@forms@formsexaminerlabel : \expandafter\csname tc@student\Alph{tc@studentcount}@#1\endcsname%
+  \tcforms@studentIDheader
+  
+  \tcforms@examinerIDheader{#1}
   \vfill%
   \resizebox{0.9\textwidth}{!}{%%
     \tcdef@forms@reviewformdesc%
@@ -239,126 +307,7 @@
   \pagebreak%
 }%
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% Internship requirement form%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tcforms@internreqform}{}{%
-    \tc@formtopbox[tcdef@forms@internshipreqformnotes]{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@reqformtitle}%
 
-    \vfill%
-
-    \tcdef@forms@reqformopening%
-    \vfill%
-
-    \tcdef@forms@reqforminternshipdesc%
-    \vfill%
-
-    \tcdef@forms@reqforminternshipinfo%
-
-
- %   {\bf \tcdef@forms@formsbrieflabel}:%\footnote[1]{\tcdef@forms@renewreqformnotes}%
-
-    \vfill%
-%    \tcdef@core@tccbrief%
-
-    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@supervisorsignature}}\hfill%
-    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@tutorsignature}}%
-
-    \hfill%
-    \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}%
-    \pagebreak%
-}%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% Internship Supervisor's form (grades)%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tcforms@internsupervisorform}{}{%
-    \tc@formtopbox[tcdef@forms@internsupervisornote]{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@supervisorformtitle}%
-    %
-    \vfill%
-    \tcdef@forms@internshipstudentinfo\\%
-    \tcdef@forms@internshipsupervisorinfo\\%
-    \tcdef@forms@internshipperiod
-    \vfill%
-    \tcdef@forms@internsupervisorgradesform%
-
-    \vfill%
-
-    \tcdef@forms@internsupervisorcomments \tcdef@core@formsblanklinesB
-
-   \vfill%
-
-    \tcforms@formsigdate{\tcdef@forms@supervisorsignature}%
-
-    \pagebreak%
-}%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% Internship tutor's form (grades)%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tcforms@interntutorform}{}{%
-    \tc@formtopbox{\tcdef@forms@formsinternshiptitle}{\tcdef@forms@tutorformtitle}%
-    %
-    \vfill%
-    \tcdef@forms@internshipstudentinfo\\%
-    \tcdef@forms@internshiptutorinfo\\%
-    \tcdef@forms@internshipperiod
-    \vfill%
-    \tcdef@forms@interntutorgrade%
-
-    \vfill%
-
-    \tcdef@forms@internshiptutorcomments \tcdef@core@formsblanklinesB
-
-    \vfill%
-
-    \tcforms@formsigdate{\tcdef@forms@tutorsignature}%
- %   \hline
-    \vfill%
-
-    \tcdef@forms@interncoordgrade%
-    \vfill
-
-    \tcdef@forms@internshipcoordcomments \tcdef@core@formsblanklinesB
-    \vfill%
-
-    \tcforms@formsigdate{\tcdef@forms@internshipcoordsignature}%
-
-    \pagebreak%
-}%
-%
-%
-%
-\newcounter{tc@supervisorgradecount}[tc@studentcount]%
-\NewDocumentCommand{\internshipsupervisorgrades}{mmmmm}{%%
-    \stepcounter{tc@supervisorgradecount}%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}A\endcsname{#1}%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}B\endcsname{#2}%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}C\endcsname{#3}%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}D\endcsname{#4}%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorpoint\Alph{tc@supervisorgradecount}E\endcsname{#5}%%
-    \ifthenelse{\equal{#1}{}}{%%
-        \expandafter\def\csname tc@student\Alph{tc@studentcount}@supervisorgrade\Alph{tc@supervisorgradecount}\endcsname{0}%
-    }{%%
-        \expandafter\edef\csname tc@student\Alph{tc@studentcount}@supervisorgrade\Alph{tc@supervisorgradecount}\endcsname{\fpeval{ #1 + #2 +  #3 + #4 + #5} }%
-    }%
-}%
-
-\NewDocumentCommand{\internshiptutorgrades}{m}{%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@tutorgrade\endcsname{#1}%%
-}%
-\NewDocumentCommand{\internshipcoordgrades}{m}{%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@internshipcoordgrade\endcsname{#1}%%
-}%
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -386,11 +335,29 @@
   \tcdef@forms@formsadvisoremaillabel : {\bf \tc@studentA@advisoremail}%
   \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@advisorphone}%
 
-  {\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
+
+  \@ifundefined{tc@studentA@coadvisor}{%
+    \tcdef@forms@formscoadvisorlabel : \rule{\tc@namerule}{.1pt}%
+  
+    \tcdef@forms@formscoadvisoremaillabel : {\bf \rule{\tc@emailrule}{.1pt}}%
+    \hfill \tcdef@forms@formsphonelabel : {\bf \rule{\tc@phonerule}{.1pt}}%
+	}
+  {
+    \tcdef@forms@formscoadvisorlabel : \tc@studentA@coadvisor%
+  
+    \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
+    \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}%
+  }%
+
+  %{\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
 
   \vfill%
-  \tcdef@core@tccbrief%
+  \tcdef@forms@reqArgument
+  
 
+  \tcdef@core@tccArgument%
+
+  \vfill
   \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}\hfill%
   \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}%
   \pagebreak%
@@ -471,6 +438,7 @@
 }%
 %
 %
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % TCC Board approval form%
@@ -509,6 +477,43 @@
 %
 %
 %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% TCC Board approval form%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tcforms@examboardformTMP}{}{%
+  \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@forms@examboardformtitleTMP}%
+
+  \vfill%
+
+  \tcforms@tccdesc%
+
+  \vfill%
+  \begin{center}
+    \tcdef@forms@formsboardtitle
+  \end{center}%
+
+  \tcforms@examinerdesc{studentA}{examinerA}%
+
+  \tcforms@examinerdesc{studentA}{examinerB}%
+
+  \tcforms@examinerdesc{studentA}{examinerC}%
+
+  \tcforms@examinerdesc[\tcdef@forms@formsaltexaminerlabel]{studentA}{altexaminerA}%
+
+  \vfill%
+
+  \tcdef@forms@examboardformdescTMP%
+  \vfill%
+
+  \tcforms@formsigdate{\tcdef@forms@advisorsignature}%
+  \vfill%
+
+  \pagebreak%
+}%
+%
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -520,9 +525,9 @@
 
   \vfill%
 
-  \tcforms@tccdesc%
+  \tcforms@tccdesc\\%
 
-  \tcdef@forms@formsboardlabel : {\bf \csname tc@student\Alph{tc@studentcount}@#1\endcsname }%
+  \noindent\tcdef@forms@formsboardlabel : {\bf \csname tc@student\Alph{tc@studentcount}@#1\endcsname }%
 
   \vfill%
   \tcdef@forms@receiptformdesc {\bf \tc@studentA},\ \ \ \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}.%
@@ -664,19 +669,47 @@
   interntutorform.code = {\tcforms@interntutorform},
   reqform.usage = general,
   reqform.code = {\tcforms@reqform},
+  reqform-II.usage = general,
+  reqform-II.code = {\tcforms@reqform},
   coadvisor.usage = general,
   coadvisor.code = {\tcforms@coadvisorform},
-  boardsapproval.usage = general,
-  boardsapproval.code = {\tcforms@examboardform},
+  coadvisor-II.usage = general,
+  coadvisor-II.code = {\tcforms@coadvisorform},
+  boardapproval.usage = general,
+  boardapproval.code = {\tcforms@examboardform},
+  boardapproval-II.usage = general,
+  boardapproval-II.code = {\tcforms@examboardform},
+  boardapproval-IIb.usage = general,
+  boardapproval-IIb.code = {\tcforms@examboardformTMP},
   advisorsapproval.usage = general,
   advisorsapproval.code = {\tcforms@advisorapprovalform},
+  advisorsapproval-II.usage = general,
+  advisorsapproval-II.code = {\tcforms@advisorapprovalform},
   receipts.usage = general,
   receipts.code = {\tcforms@receiptforms},
+  receipts-II.usage = general,
+  receipts-II.code = {\tcforms@receiptforms},
   examinersforms.usage = general,
   examinersforms.code = {\tcforms@examinersForms},
+  examinersforms-II.usage = general,
+  examinersforms-II.code = {\tcforms@examinersForms},
   rectifyapproval.usage = general,
   rectifyapproval.code = {\tcforms@rectifyapprovalform},
-}
+  rectifyapproval-II.usage = general,
+  rectifyapproval-II.code = {\tcforms@rectifyapprovalform},
+  reqform-I.usage = general,
+  reqform-I.code = {\tcforms@reqTRform},
+  coadvisor-I.usage = general,
+  coadvisor-I.code = {\tcforms@coadvisorTRform},
+  examinersforms-I.usage = general,
+  examinersforms-I.code = {\tcforms@examinersTRforms},
+  advisorsapproval-I.usage = general,
+  advisorsapproval-I.code = {\tcforms@advisorTRapprovalform},
+  boardapproval-I.usage = general,
+  boardapproval-I.code = {\tcforms@advisorTRboardform},
+  rectifyapproval-I.usage = general,
+  rectifyapproval-I.code = {\tcforms@rectifyTRapprovalform},
+  }
 
 
 \NewDocumentCommand{\tcforms}{m}{%

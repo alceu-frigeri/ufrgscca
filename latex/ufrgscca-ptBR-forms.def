@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.10 (2023/05/11)
+%% This is version 1.11 (2023/05/29)
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -26,8 +26,8 @@
 \def\tc@tmp@packname{ufrgscca-ptBR-forms}
 \def\tc@tmp@altpackname{ufrgsccaptbrforms}
 \def\tc@tmp@packdesc{UFRGS/CCA Portuguese forms defs}
-\def\tc@tmp@packdate{2023/05/11}
-\def\tc@tmp@packversion{1.10}
+\def\tc@tmp@packdate{2023/05/29}
+\def\tc@tmp@packversion{1.11}
 \let\@exp\expandafter
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 
@@ -77,11 +77,18 @@
 \continuelabel{Continua...}
 
 \formsdatelabel{Data}
-\formstitle{Trabalho de Conclusão de Curso}% em  \tcdef@cover@course}
+\formstitle{Trabalho de Conclusão de Curso II}% em  \tcdef@cover@course}
+\formstitleTR{Trabalho de Conclusão de Curso I}% em  \tcdef@cover@course}
 \formsfootnote{Entregar a cada membro da banca juntamente com a cópia do trabalho.}
 
 
 \renewreqformtitle{Formulário de Renovação da Inscrição na Atividade de Ensino Trabalho de Conclusão em \tcdef@cover@course}
+
+\reqArgument{ \noindent O Tema do Trabalho e Orientador (Co-orientador) seguem sendo os mesmos de TCC I ?
+\begin{itemize}[tcc,noitemsep]
+ \item[$\Box$] SIM
+ \item[$\Box$] NÃO, neste caso \textbf{justifique} a mudança no espaço a seguir:
+ \end{itemize}}
 
 \renewreqformnotes{O resumo deve ser curto, i.e., não deve exceder este espaço. O texto deve ser escrito em parágrafo único, e por se tratar de proposta, poderá utilizar tempo futuro e não necessita ter motivação ou justificativa.\\
 Deve conter:
@@ -97,10 +104,12 @@ Deve conter:
  Coordenador\tccore@@ref{coursecoord}{narticle} da  Comissão de Graduação do Curso em \tcdef@cover@course\  {da \tcdef@cover@universityacronym\ }}
 %\reqformopening{algo}
 
-\reqformdescgen{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} neste período letivo no curso \emph{\tcdef@cover@course\ }, desta universidade, portador\tccore@@ref{student}{narticle} do cartão de identificação n$^o$ \tc@studentAID\ vem por meio desta solicitar matrícula na atividade de ensino}
+\reqformdescgen{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} neste período letivo no curso \emph{\tcdef@cover@course\ }, desta universidade, portador\tccore@@ref{student}{narticle} do cartão de identificação n$^o$ \tc@studentAID\ vem por meio deste solicitar matrícula na atividade de ensino}
 
 
 \reqformdesc{\tcdef@forms@reqformdescgen\ \tcdef@forms@formstitle}
+
+\reqformdescTR{\tcdef@forms@reqformdescgen\ \tcdef@forms@formstitleTR}
 
 \formsinternshiptitle{Estágio Supervisionado Obrigatório}% em \tcdef@cover@course}
 
@@ -196,7 +205,7 @@ Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
 \internsupervisornote{Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}
 }
 \coadvisorformtitle{Requerimento de Autorização de Co-Orientação}
-\coadvisorformdesc{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} na atividade de TCC neste período letivo, vem por meio desta solicitar autorização para registro de co-orientador de TCC, conforme justificativa abaixo.}
+\coadvisorformdesc{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tc@studentA , REGULARMENTE MATRICULAD\tccore@@ref{student}{Article} na atividade de TCC neste período letivo, vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.}
 
 \formsbrieflabel{Resumo}
 
@@ -217,9 +226,13 @@ Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
 
 \examformnotes{\ \\Posteriormente, \tccore@@ref{TCCcoord}{article} professor\tccore@@ref{TCCcoord}{narticle} coordenador\tccore@@ref{TCCcoord}{narticle} calculará a nota final atribuída por cada membro da banca examinadora, de acordo com a seguinte ponderação:\\[2mm] {\bf Nota Final Banca = \tc@TCCpointAweight\ x \tc@TCCpointAlabel\  + \tc@TCCpointBweight\ x \tc@TCCpointBlabel\  + \tc@TCCpointCweight\ x \tc@TCCpointClabel\ } \\[2mm] A média final da atividade será dada pela média das notas finais (calculadas com a expressão acima) atribuidas por cada um dos membros da banca examinadora.}
 
-\examboardformtitle{Formulário de Aprovação do Relatório Parcial e Banca Examinadora}
+\examboardformtitle{Formulário de Aprovação da Banca Examinadora}
 
-\examboardformdesc{Aprovo o Relatório Parcial e nominata da Banca Examinadora acima relacionada.}
+\examboardformtitleTMP{Formulário de Aprovação do Relatório Parcial e Banca Examinadora}
+
+\examboardformdescTMP{Aprovo o Relatório Parcial e nominata da Banca Examinadora acima relacionada.}
+
+\examboardformdesc{Aprovo a nominata da Banca Examinadora acima relacionada.}
 
 \formsboardtitle{Banca Examinadora}
 
@@ -233,8 +246,16 @@ Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
 
 \rectifyapprovalformdesc{\begin{description}
 \item[Observação 1:] A nota final será a já atribuída pela Banca Examinadora no momento da Defesa. Caso a versão final corrigida do trabalho mais este formulário não sejam entregues até a data estipulada, o conceito do aluno passará a ser {\bf D}.
-\item[Observação 2:] A assinatura d\tccore@@ref{advisor}{article} orientador\tccore@@ref{advisor}{narticle} é obrigatória, entretanto a assinatura dos membros da banca só é necessária caso o(a) mesmo(a) tenha marcado a opção "$\Box$ Revisarei o trabalho depois de corrigido" no \emph{Formulário de Correções}.
+\item[Observação 2:] A assinatura d\tccore@@ref{advisor}{article} orientador\tccore@@ref{advisor}{narticle} é obrigatória, entretanto a assinatura dos membros da banca só é necessária caso o(a) mesmo(a) tenha marcado a opção ''$\Box$ Revisarei o trabalho depois de corrigido'' no \emph{Formulário de Correções}.
 \end{description}}
+
+\rectifyapprovalTRformdesc{\begin{description}
+\item[Observação 1:] A nota final será a já atribuída pela Banca Examinadora via o \emph{\tcdef@forms@formsTRtitle}. 
+Caso a versão final corrigida do trabalho mais este formulário não sejam entregues até a data estipulada, o conceito do aluno passará a ser {\bf D}.
+\item[Observação 2:] A assinatura d\tccore@@ref{advisor}{article} orientador\tccore@@ref{advisor}{narticle} é obrigatória, 
+entretanto a assinatura dos membros da banca só é necessária caso o(a) mesmo(a) tenha marcado a opção ''$\Box$ Revisarei o trabalho depois de corrigido'' no \emph{\tcdef@forms@formsTRtitle}.
+\end{description}}
+
 
 \receiptformtitle{Recibo de entrega de cópia da versão final do Trabalho de Conclusão}
 
@@ -244,33 +265,45 @@ Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
 
 
 \reviewformtitle{Formulário de Correções}
-\reviewformdesc{Correções: \parbox[t]{.8\textwidth}{
-	\begin{description}[tcc,noitemsep]
-	\item[$\Box$] Nenhuma
-	\item[$\Box$] Ortográfica
-	\item[$\Box$] Regras de Escrita
-	\item[$\Box$] Equações
-	\item[$\Box$] Resumo
-	\item[$\Box$] Abstract
-	\item[$\Box$] Índice
-	\item[$\Box$] Introdução
-	\item[$\Box$] Conclusões
-	\item[$\Box$] Corpo do Trabalho
-	\item[$\Box$] Resultados
-	\item[$\Box$] Adicionar mais exemplos
-	\item[$\Box$] Figuras
-	\item[$\Box$] Tabelas
-	\item[$\Box$] {\bf Reescrever tudo}\footnotemark[2]
-	\item[$\Box$] Outras: \\
+\reviewformdesc{O texto submetido:
+ \parbox[t]{.75\textwidth}{
+    \begin{itemize}[tcc,nosep]
+     \item[$\Box$] Está adequado, dispensando correções do texto.
+     \item[$\Box$] Está adequado, sendo necessário correções, conforme a
+      seguir (e anotações anexas).
+      	\begin{description}[tcc,noitemsep]
+        	\item[$\Box$] Ortográfica
+        	\item[$\Box$] Regras de Escrita
+        	\item[$\Box$] Equações
+        	\item[$\Box$] Resumo
+        	\item[$\Box$] Abstract
+        	\item[$\Box$] Índice
+        	\item[$\Box$] Introdução
+        	\item[$\Box$] Conclusões
+        	\item[$\Box$] Corpo do Trabalho
+        	\item[$\Box$] Resultados
+        	\item[$\Box$] Adicionar mais exemplos
+        	\item[$\Box$] Figuras
+        	\item[$\Box$] Tabelas
+        \end{description}
+     \item[$\Box$] Necessita ser revisto/re-escrito,\footnotemark[2] e: 
+       \begin{itemize}
+         \item[$\Box$] basta a revisão final do texto pelo orientador,
+         \item[$\Box$] revisarei o trabalho depois de corrigido.
+       \end{itemize}
+	\item[$\Box$] Outras considerações (se necessário): \\
 	\begin{tabular}{p{0.7\textwidth}}
 	~\\\hline
 	~\\\hline
 	~\\\hline
 	~\\\hline
 	\end{tabular}\\[-1mm]
-	\item[$\Box$] {\bf Revisarei o trabalho depois de corrigido}%\footnotemark[2]
-	\end{description}}
+	\end{itemize}}
 }
+
+
+\formsTRtitle{Formulário de Avaliação do Trabalho}
+\TRformfootnote{Entregar a cada revisor do texto, juntamente com uma cópia do trabalho.}
 
 \reviewformfootnoteB{Neste caso \tccore@@ref{student}{article} alun\tccore@@ref{student}{article} estará em EXAME e receberá conceito final C ou D, conforme revisão final do texto.}
 
