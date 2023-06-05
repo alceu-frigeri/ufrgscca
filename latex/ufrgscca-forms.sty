@@ -739,22 +739,209 @@
 
 
 \RequirePackage{expl3}
+\RequirePackage{starray}
 \ExplSyntaxOn
-\prop_new:N \__ufrgscca_forms_prop
 
-\NewDocumentCommand{\FormSet}{mm+m}{
-  \prop_put:Nnn \__ufrgscca_forms_prop {#1.#2}{#3}
+\def\tc@IDrule{30mm}%
+\def\tc@emailrule{40mm}%
+\def\tc@namerule{50mm}%
+\def\tc@titlerule{40mm}%
+\def\tc@phonerule{20mm}%
+\def\tc@agreerule{25mm}%
+\def\tc@daterule{15mm}%
+
+\dim_new:N \l__ufrgscca_ID_rule_dim
+\dim_new:N \l__ufrgscca_email_rule_dim
+\dim_new:N \l__ufrgscca_name_rule_dim
+\dim_new:N \l__ufrgscca_title_rule_dim
+\dim_new:N \l__ufrgscca_phone_rule_dim
+\dim_new:N \l__ufrgscca_agree_rule_dim
+\dim_new:N \l__ufrgscca_date_rule_dim
+
+\dim_set:Nn \l__ufrgscca_ID_rule_dim {30mm}
+\dim_set:Nn \l__ufrgscca_email_rule_dim {40mm}
+\dim_set:Nn \l__ufrgscca_name_rule_dim {50mm}
+\dim_set:Nn \l__ufrgscca_title_rule_dim {40mm}
+\dim_set:Nn \l__ufrgscca_phone_rule_dim {20mm}
+\dim_set:Nn \l__ufrgscca_agree_rule_dim {25mm}
+\dim_set:Nn \l__ufrgscca_date_rule_dim {15mm}
+
+
+
+
+\starray_new:n {student}
+\starray_def_from_keyval:nn {student}
+ {
+  first_name = Nome~do ,
+  last_name = Estudante ,
+  Nproc = (N. SEI) ,
+  ID    = N.~ do~ Cartão , 
+  email = email ,
+  worktitle = work ~title ,
+  advisor . struct = {
+    first = nome ,
+    last = family name ,
+    institution = uni,
+    title = info ,
+    email = email ,
+    phone = phone ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  reviewer . struct = {
+    first = nome ,
+    last = family name ,
+    institution = uni,
+    title = info ,
+    email = email ,
+    phone = phone ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  altreviewer . struct = {
+    first = nome ,
+    last = family name ,
+    institution = uni,
+    title = info ,
+    email = email ,
+    phone = phone ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  interncompany = company ,
+  internfield = field ,
+  internstart = start ,
+  internend = end ,
+  internlenght = lenght 
+ }
+
+%\starray_show_def:n {student}
+
+\prop_new:N \l__ufrgscca_forms_prop
+\starray_new:n {activity}
+\starray_def_from_keyval:nn {activity}
+  {
+    name = Nome~ da~ Atividade ,
+    acronym = ACRO ,
+    coord . struct = 
+      {
+        name = Nome~ do(a)~ Coordenador(a) ,
+        title = Coordenador(a)~ de ,
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+      }
+  }
+%  \starray_show_def:n {activity}
+\starray_new_term:nn {activity}{course} % yeah, CCA as an activity...
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{tccI}
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{tccII}
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{internship}
+\starray_new_term:nn {activity.coord}{}
+%\starray_show_terms:n {activity}
+%
+%
+\NewDocumentCommand{\SetActivityX}{mm} {
+  \starray_set_from_keyval:nn {activity[#1]}{#2}
 }
 
-\NewDocumentCommand{\NewForm}{m} {
+\NewDocumentCommand{\SetActivity}{mmm} {
+  \starray_set_prop:nnn {activity[#1]}{name}{#3}
+  \starray_set_prop:nnn {activity[#1]}{acronym}{#2}
+}
+ 
+\NewDocumentCommand{\SetActivityCoordTitle}{mm} {
+  \starray_set_prop:nnn {activity[#1].coord}{title}{#2}
+}
+
+\NewDocumentCommand{\SetActivityCoord}{mmO{}}{
+  \starray_gset_prop:nnn {activity[#1].coord}{name}{#2}
+  \str_if_eq:nnT {#3}{m}
+    {
+      \starray_gset_from_keyval:nn {activity[#1]}
+        {
+          coord = {
+          article = o ,
+          Article = O ,
+          narticle =  ,
+          Narticle =  ,
+          carticle = ao ,
+          Carticle = Ao 
+          }
+        }      
+    }
+  \str_if_eq:nnT {#3}{f}
+    {
+      \starray_gset_from_keyval:nn {activity[#1]}
+        {
+          coord = {
+          article = a ,
+          Article = A ,
+          narticle = a ,
+          Narticle = A ,
+          carticle = à ,
+          Carticle = À 
+          }
+        }
+    }
+}
+
+\NewDocumentCommand{\Activity}{mm}{
+  \starray_get_prop:nn {activity[#1]}{#2}
+}
+\NewDocumentCommand{\ActivityCoord}{mm}{
+  \starray_get_prop:nn {activity[#1].coord}{#2}
+}
+
+\prop_new:N \l__ufrgscca_headings_prop
+\prop_set_from_keyval:Nn \l__ufrgscca_headings_prop 
+  {
+    university = Universidade~ Federal~ do~ Rio~ Grande~ do~ Sul ,
+    acronym = UFRGS ,
+    unit = Escola~ de~ Engenharia ,
+    secretary = SACAD/EE     
+  }
+  
+\NewDocumentCommand{\SetHeadings}{m}{
+  \prop_set_from_keyval:Nn \l__ufrgscca_headings_prop {#1}
+}
+
+\prop_new:N \l__ufrgscca_labels_prop
+\NewDocumentCommand{\SetLabels}{m}{
+  \prop_set_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
+}
+
+\NewDocumentCommand{\SetForm}{mm+m}{
+  \prop_put:Nnn \l__ufrgscca_forms_prop {#1.#2}{#3}
+}
+
+\NewDocumentCommand{\MakeForm}{m} {
 %\prop_show:N \__ufrgscca_forms_prop
   \tcforms@genform
-    { \prop_item:Nn \__ufrgscca_forms_prop {#1.heading} }
-    { \prop_item:Nn \__ufrgscca_forms_prop {#1.title} }
-    { \prop_item:Nn \__ufrgscca_forms_prop {#1.footnote} }
-    { \prop_item:Nn \__ufrgscca_forms_prop {#1.opening} }    
-    { \prop_item:Nn \__ufrgscca_forms_prop {#1.body} }
-    { \prop_item:Nn \__ufrgscca_forms_prop {#1.closing} }
+    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.heading} }
+    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.title} }
+    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.footnote} }
+    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.opening} }    
+    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.body} }
+    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.closing} }
   }
   
 \ExplSyntaxOff
