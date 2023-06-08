@@ -23,6 +23,7 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\RequirePackage{expl3}
 \def\tc@tmp@packname{ufrgscca}
 \def\tc@tmp@altpackname{ufrgscca}
 \def\tc@tmp@packdesc{UFRGS/CCA  class}
