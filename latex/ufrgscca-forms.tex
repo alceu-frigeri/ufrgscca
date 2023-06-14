@@ -1,0 +1,696 @@
+%%%==============================================================================
+%% Copyright 2022-23 by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 1.11 (2023/05/29)
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/ufrgscca
+%%
+%%%==============================================================================
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%%==============================================================================
+\makeatletter
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+\SetTermKeys{%
+  title.tccI                = Trabalho de Conclusão de Curso I ,
+  title.tccII               = Trabalho de Conclusão de Curso II ,  
+  %
+  title.requestform         = Formulário de Requerimento de Matrícula ,
+  title.coadvisorform       = Requerimento de Autorização de Co-Orientação ,
+  title.boardapproval       = Formulário de Aprovação da Banca Examinadora ,
+  title.advisorsapproval-I  = Formulário de Aprovação para Avaliação ,
+  title.advisorsapproval-II = Formulário de Aprovação para Apresentação ,
+  title.receipts            = Recibo de entrega de cópia da versão final do Trabalho de Conclusão ,
+  title.reviewersform       = Formulário de Avaliação ,
+  title.correctionsform     = Formulário de Correções ,
+  title.rectifyapproval     = Formulário de Aprovação das Correções ,
+  %
+  footnote.reviewersform    = Entregar a cada membro da banca juntamente com a cópia do trabalho. , %%% TCC I / II
+  footnote.receipts         = Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC. , %%% TCC II
+  footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} %%% TCC II
+}
+
+\SetLabels{%
+  advisor                   = Orientador\tccore@@ref{advisor}{narticle} ,
+  advisor.gen               = Orientador(a) ,
+  coadvisor                 = Co-orientador\tccore@@ref{coadvisor}{narticle} ,
+  coadvisor.gen             = Co-orientador(a) ,
+  reviewer                  = Avaliador\tccore@@ref{examiner}{narticle} ,
+  altreviewer               = Suplente ,  
+  student                   = Alun\tccore@@ref{student}{article} ,
+  student.gen               = Aluno(a) ,
+  signature.student         = Assinatura\ \ d\tccore@@ref{student}{article}\ \ Alun\tccore@@ref{student}{article} ,
+  signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
+  signature.advisor         = Assinatura\ \ d\tccore@@ref{advisor}{article}\ \ Orientador\tccore@@ref{advisor}{narticle} ,
+  signature.coadvisor       = Assinatura\ \ d\tccore@@ref{coadvisor}{article}\ \ Co-orientador\tccore@@ref{coadvisor}{narticle} ,
+  signature.reviewer        = Assinatura\ \ d\tccore@@ref{examiner}{article}\ \ Avaliador\tccore@@ref{examiner}{narticle} ,
+  signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
+  signature.gen             = Assinatura ,
+}
+
+
+%  internreqform.code = {\tcforms@internreqform},
+%  internsupervisorform.code = {\tcforms@internsupervisorform},
+%  interntutorform.code = {\tcforms@interntutorform},
+\SetForm{internshiprequest}{heading}{}
+\SetForm{internshipsupervisorform}{heading}{}
+\SetForm{internshiptutorform}{heading}{}
+
+
+%  coadvisor-I.code = {\tcforms@coadvisorTRform},
+%  examinersforms-I.code = {\tcforms@examinersTRforms},
+%  advisorsapproval-I.code = {\tcforms@advisorTRapprovalform},
+%  boardapproval-I.code = {\tcforms@advisorTRboardform},
+%  rectifyapproval-I.code = {\tcforms@rectifyTRapprovalform},
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% TCC - I
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  req form - I
+%%%%%%%%%%%%%%%
+\SetForm{request-I}{heading}{\GetTerm{title.tccI}}
+
+%%%
+\SetForm{request-I}{title}{\GetTerm{title.requestform}}
+
+%%%
+\SetForm{request-I}{opening}{\tcdef@forms@reqformopening}
+
+%%%
+\SetForm{request-I}{body}{%
+  \tcdef@forms@reqformdescTR%
+  \vfill%
+
+  \tcdef@forms@formstemptitlelabel : \@title %
+
+  \tcdef@forms@formsstudentemaillabel : {\bf \tc@studentAemail} %
+
+  \tcdef@forms@formsadvisorlabel : \tc@studentA@advisor%
+
+  \tcdef@forms@formsadvisoremaillabel : {\bf \tc@studentA@advisoremail}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@advisorphone}%
+
+  {\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
+
+  \vfill%
+  \tcdef@core@tccbrief%
+}
+
+%%%
+\SetForm{request-I}{closing}{%
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}\hfill%
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}%
+}%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  coadvisor - I
+%%%%%%%%%%%%%%%
+\SetForm{coadvisor-I}{heading}{\GetTerm{title.tccI}}
+
+%%%
+\SetForm{coadvisor-I}{title}{\GetTerm{title.coadvisorform}}
+
+%%%
+\SetForm{coadvisor-I}{opening}{%
+  \@ifundefined{tc@studentA@coadvisor}{%
+    \coadvisor{\rule{\tc@namerule}{.1pt}}{}%
+    \coadvisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+    }{}%
+  \tcdef@forms@reqformopening%
+}
+
+%%%
+\SetForm{coadvisor-I}{body}{%
+  \tcdef@forms@coadvisorformdesc%
+  \vfill%
+
+  \tcdef@forms@formstemptitlelabel : \@title %
+
+  \tcdef@forms@formsadvisorlabel: \tc@studentA@advisor
+
+  \tcdef@forms@formscoadvisorlabel: \tc@studentA@coadvisor%
+
+  \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}\\%
+
+  {\bf \tcdef@forms@formsreasonlabel}:%
+  \vfill
+
+  \tcdef@core@tcccoadvisorbrief%    !!!! What a Hell ?!?!?!
+}
+
+%%%
+\SetForm{coadvisor-I}{closing}{%
+
+  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
+
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}\hfill%
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@coadvisorsignature}}%
+}%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  board approval - I
+%%%%%%%%%%%%%%%
+\SetForm{boardapproval-I}{heading}{\GetTerm{title.tccI}}
+
+%%%
+\SetForm{boardapproval-I}{title}{\GetTerm{title.boardapproval}}
+
+%%%
+\SetForm{boardapproval-I}{opening}{\tcforms@tccdesc}
+
+%%%
+\SetForm{boardapproval-I}{body}{  \begin{center}
+    \tcdef@forms@formsboardtitle
+  \end{center}%
+
+  \tcforms@examinerdesc{studentA}{examinerB}%
+
+  \tcforms@examinerdesc{studentA}{examinerC}%
+
+  \vfill%
+
+  Aprovo a Banca Examinadora acima relacionada.%
+}
+
+%%%
+\SetForm{boardapproval-I}{closing}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  advisor's approval - I
+%%%%%%%%%%%%%%%
+\SetForm{advisorsapproval-I}{heading}{\GetTerm{title.tccI}}
+
+%%%
+\SetForm{advisorsapproval-I}{title}{\GetTerm{title.advisorsapproval-I}}
+
+%%%
+\SetForm{advisorsapproval-I}{opening}{\tcforms@tccdesc}
+
+%%%
+\SetForm{advisorsapproval-I}{body}{%
+  \tcdef@forms@advisorapprovalformdesc%
+
+  \vfill%
+
+  \tcdef@core@tccadvisorsreview%
+
+  \vfill%
+  Aprovo a versão final do trabalho submetido pel\tccore@@ref{student}{article} alun\tccore@@ref{student}{article} e 
+  considero \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} para avaliação pela Banca Examinadora.%
+}
+
+%%%
+\SetForm{advisorsapproval-I}{closing}{
+  \tcforms@formsigdate{\tcdef@forms@advisorsignature}%
+  \vfill%
+
+  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
+}%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  examiner's form - I
+%%%%%%%%%%%%%%%
+\SetForm{examinersform-I}{heading}{\GetTerm{title.tccI}}
+
+%%%
+\SetForm{examinersform-I}{title}{\GetTerm{title.reviewersform}}
+
+%%%
+\SetForm{examinersform-I}{footnote}{\GetTerm{footnote.reviewersform}}
+
+%%%
+\SetForm{examinersform-I}{opening}{%
+  \tcdef@forms@formsstudentlabel : {\bf \expandafter\csname tc@student\Alph{tc@studentcount}\endcsname}\\[-4mm]%
+  
+  \noindent\tcdef@forms@formsworktitlelabel : {\bf \@title}\\%
+  
+  \tcdef@forms@formsexaminerlabel : \expandafter\csname tc@student\Alph{tc@studentcount}@#1\endcsname\\[-4mm]%
+  
+  {\scriptsize {\textsl{(favor retornar este diretamente à coordenação de TCC.)}}}
+  }
+
+%%%
+\SetForm{examinersform-I}{body}{%  
+   O trabalho submetido\footnotemark[2]:
+
+     \begin{enumerate}[tcc,nosep]
+     \item \emptybox\  \textbf{Enquadramento do Tema}. {\footnotesize(peso:2)}\\ {\footnotesize Quão bem o mesmo se enquadra no perfil de um formando em Eng. de Controle e Automação.}
+     \item \emptybox\ \textbf{Revisão Bibliográfica}. {\footnotesize(peso:2)}\\ {\footnotesize A revisão apresentada é adequada, suficiente, para o tema do trabalho?}
+     \item \emptybox\ \textbf{Abordagem/Plano de Trabalho Proposto}. {\footnotesize(peso:2)}\\ {\footnotesize Considerar se a abordagem, plano de trabalho proposto, é adequada e factivel.}
+     \item \emptybox\ \textbf{Redação}. {\footnotesize(peso:1)}\\ {\footnotesize     Considerar a qualidade do trabalho escrito apresentado.}
+     \item { O Trabalho Submetido}
+     \begin{itemize}[tcc,nosep]
+       \item[$\Box$] Está adequado, dispensando correções do texto.
+       \item[$\Box$] Está adequado, sendo necessário correções, conforme anotações anexas.
+       \item[$\Box$] Necessita ser revisto/re-escrito,\footnotemark[3] e: 
+       \begin{itemize}
+         \item[$\Box$] basta a revisão final do texto pelo orientador,
+         \item[$\Box$] revisarei o trabalho depois de corrigido.
+       \end{itemize}
+     \end{itemize} 
+   \end{enumerate}
+   
+Outras considerações, parecer (se necessário): \\
+
+	\begin{tabular}{p{0.9\textwidth}}
+	~\\\hline
+	~\\\hline
+	~\\\hline
+	~\\\hline
+  ~\\\hline
+	~\\\hline
+	\end{tabular}\\[-1mm]
+  \footnotetext[2]{Use a escala: \begin{enumerate*}\item Péssimo  \item Deficitário \item Bom \item Muito Bom \item Excelente \end{enumerate*}}%
+  \footnotetext[3]{\tcdef@forms@reviewformfootnoteB}%
+}
+
+%%%
+\SetForm{examinersform-I}{closing}{%
+  \tcforms@formsigdate{\tcdef@forms@examinersignature}%
+}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  rectify approval - I
+%%%%%%%%%%%%%%%
+\SetForm{rectifyapproval-I}{heading}{\GetTerm{title.tccI}}
+
+%%%
+\SetForm{rectifyapproval-I}{title}{\GetTerm{title.rectifyapproval}}
+
+%%%
+\SetForm{rectifyapproval-I}{opening}{\tcforms@tccdesc}
+
+%%%
+\SetForm{rectifyapproval-I}{body}{  \tcdef@forms@rectifyapprovalTRformdesc%
+
+  \vfill%
+
+  \tcforms@rectifyexaminersig[\tcdef@forms@formsadvisorlabel]{tc@studentA@advisor}%
+}
+
+%%%
+\SetForm{rectifyapproval-I}{closing}{ \@ifundefined{tc@nBoard}{}{%
+    \tcforms@rectifyexaminersig{tc@studentA@examinerA}%
+  }%
+
+  \tcforms@rectifyexaminersig{tc@studentA@examinerB}%
+
+  \tcforms@rectifyexaminersig{tc@studentA@examinerC}%
+ }
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+
+
+%  reqform.code = {\tcforms@reqform},
+%  reqform-II.code = {\tcforms@reqform},
+%  coadvisor.code = {\tcforms@coadvisorform},
+%  coadvisor-II.code = {\tcforms@coadvisorform},
+%  boardapproval.code = {\tcforms@examboardform},
+%  boardapproval-II.code = {\tcforms@examboardform},
+%  boardapproval-IIb.code = {\tcforms@examboardformTMP},
+%  advisorsapproval.code = {\tcforms@advisorapprovalform},
+%  advisorsapproval-II.code = {\tcforms@advisorapprovalform},
+%  receipts.code = {\tcforms@receiptforms},
+%  receipts-II.code = {\tcforms@receiptforms},
+%  examinersforms.code = {\tcforms@examinersForms},
+%  examinersforms-II.code = {\tcforms@examinersForms},
+%  rectifyapproval.code = {\tcforms@rectifyapprovalform},
+%  rectifyapproval-II.code = {\tcforms@rectifyapprovalform},
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% TCC - II
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  req form - II
+%%%%%%%%%%%%%%%
+\SetForm{request-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{request-II}{title}{\GetTerm{title.requestform}}
+
+%%%
+\SetForm{request-II}{opening}{\tcdef@forms@reqformopening}
+
+%%%
+\SetForm{request-II}{body}{
+\tcdef@forms@reqformdesc%
+  \vfill%
+
+  \tcdef@forms@formstemptitlelabel : \@title %
+
+  \tcdef@forms@formsstudentemaillabel : {\bf \tc@studentAemail} %
+
+  \tcdef@forms@formsadvisorlabel : \tc@studentA@advisor%
+
+  \tcdef@forms@formsadvisoremaillabel : {\bf \tc@studentA@advisoremail}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@advisorphone}%
+
+
+  \@ifundefined{tc@studentA@coadvisor}{%
+    \tcdef@forms@formscoadvisorlabel : \rule{\tc@namerule}{.1pt}%
+  
+    \tcdef@forms@formscoadvisoremaillabel : {\bf \rule{\tc@emailrule}{.1pt}}%
+    \hfill \tcdef@forms@formsphonelabel : {\bf \rule{\tc@phonerule}{.1pt}}%
+	}
+  {
+    \tcdef@forms@formscoadvisorlabel : \tc@studentA@coadvisor%
+  
+    \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
+    \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}%
+  }%
+
+  %{\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
+
+  \vfill%
+  \tcdef@forms@reqArgument
+  
+
+  \tcdef@core@tccArgument%
+
+}
+
+%%%
+\SetForm{request-II}{closing}{
+ \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}\hfill%
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}%
+}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%
+%%  coadvisor - II
+%%%%%%%%%%%%%%%
+\SetForm{coadvisor-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{coadvisor-II}{title}{\GetTerm{title.coadvisorform}}
+
+%%%
+\SetForm{coadvisor-II}{opening}{%
+  \@ifundefined{tc@studentA@coadvisor}{%
+    \coadvisor{\rule{\tc@namerule}{.1pt}}{}%
+    \coadvisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
+    }{}%
+
+  \tcdef@forms@reqformopening%
+}
+
+%%%
+\SetForm{coadvisor-II}{body}{%
+  \tcdef@forms@coadvisorformdesc%
+  \vfill%
+
+  \tcdef@forms@formstemptitlelabel : \@title %
+
+  \tcdef@forms@formsadvisorlabel: \tc@studentA@advisor%
+
+  \tcdef@forms@formscoadvisorlabel: \tc@studentA@coadvisor%
+
+  \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}%
+
+
+  \vfill%
+  {\bf \tcdef@forms@formsreasonlabel}:%
+
+  \tcdef@core@tcccoadvisorbrief%    !!!! What a Hell ?!?!?!
+}
+
+%%%
+\SetForm{coadvisor-II}{closing}{%
+  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
+
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}\hfill%
+  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@coadvisorsignature}}%
+}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+
+
+%%%%%%%%%%%%%%%
+%%  board approval - II
+%%%%%%%%%%%%%%%
+\SetForm{boardapproval-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{boardapproval-II}{title}{\GetTerm{title.boardapproval}}
+
+%%%
+\SetForm{boardapproval-II}{opening}{\tcforms@tccdesc}
+
+%%%
+\SetForm{boardapproval-II}{body}{%
+  \begin{center}
+    \tcdef@forms@formsboardtitle
+  \end{center}%
+
+  \tcforms@examinerdesc{studentA}{examinerA}%
+
+  \tcforms@examinerdesc{studentA}{examinerB}%
+
+  \tcforms@examinerdesc{studentA}{examinerC}%
+
+  \tcforms@examinerdesc[\tcdef@forms@formsaltexaminerlabel]{studentA}{altexaminerA}%
+
+  \vfill%
+
+  \tcdef@forms@examboardformdesc%
+}
+
+%%%
+\SetForm{boardapproval-II}{closing}{  \tcforms@formsigdate{\tcdef@forms@advisorsignature}}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  advisor's approval - II
+%%%%%%%%%%%%%%%
+\SetForm{advisorsapproval-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{advisorsapproval-II}{title}{\GetTerm{title.advisorsapproval-II}}
+
+%%%
+\SetForm{advisorsapproval-II}{opening}{  \tcforms@tccdesc}
+
+%%%
+\SetForm{advisorsapproval-II}{body}{  \tcdef@forms@advisorapprovalformdesc%
+
+  \vfill%
+
+  \tcdef@core@tccadvisorsreview%
+
+  \vfill%
+  \tcdef@forms@advisorapprovalformdescB%
+}
+
+%%%
+\SetForm{advisorsapproval-II}{closing}{ \tcforms@formsigdate{\tcdef@forms@advisorsignature}%
+  \vfill%
+
+  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
+ }
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  receipts - II
+%%%%%%%%%%%%%%%
+\SetForm{receipts-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{receipts-II}{title}{\GetTerm{title.receipts}}
+
+%%%
+\SetForm{receipts-II}{footnote}{\GetTerm{footnote.receipts}}
+
+%%%
+\SetForm{receipts-II}{opening}{  \tcforms@tccdesc\\%
+
+  \noindent\tcdef@forms@formsboardlabel : {\bf \csname tc@student\Alph{tc@studentcount}@#1\endcsname }%
+}
+
+%%%
+\SetForm{receipts-II}{body}{ \tcdef@forms@receiptformdesc {\bf \tc@studentA},\ \ \ \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}.%
+
+  \vfill%
+
+  \tcforms@formsigdate{\tcdef@forms@boardsignature}%
+}
+
+%%%
+\SetForm{receipts-II}{closing}{}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  examiner's form - II
+%%%%%%%%%%%%%%%
+\SetForm{examinersform-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{examinersform-II}{title}{\GetTerm{title.reviewersform}}
+
+%%%
+\SetForm{examinersform-II}{footnote}{\GetTerm{footnote.reviewersform}}
+
+%%%
+\SetForm{examinersform-II}{opening}{  \tcforms@studentIDheader
+  
+  \tcforms@examinerIDheader{#1}
+}
+
+%%%
+\SetForm{examinersform-II}{body}{ \tcdef@forms@examformdesc%
+
+  \vfill%
+
+  \begin{center}
+    \begin{tabular}{|c|c|c|}%
+      \hline%
+      \tc@TCCpointAlabel & \tc@TCCpointBlabel & \tc@TCCpointClabel \\\hline%
+      & & \\\hline
+    \end{tabular}%
+  \end{center}%
+}
+
+%%%
+\SetForm{examinersform-II}{closing}{ \tcforms@formsigdate{\tcdef@forms@examinersignature}%
+  \vfill%
+  \begin{description}
+    \item[\tcdef@forms@examformnoteslabel:] \tcdef@forms@examformnotes
+  \end{description}%
+}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%
+%%  examiner's form - II
+%%%%%%%%%%%%%%%
+\SetForm{correctionsform-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{correctionsform-II}{title}{\GetTerm{title.correctionsform}}
+
+%%%
+\SetForm{correctionsform-II}{footnote}{\GetTerm{footnote.correctionsform}}
+
+%%%
+\SetForm{correctionsform-II}{opening}{  \tcforms@studentIDheader
+  
+  \tcforms@examinerIDheader{#1}
+}
+
+%%%
+\SetForm{correctionsform-II}{body}{  \resizebox{0.9\textwidth}{!}{%%
+    \tcdef@forms@reviewformdesc%
+  }%
+  \footnotetext[2]{\tcdef@forms@reviewformfootnoteB}%
+}
+
+%%%
+\SetForm{correctionsform-II}{closing}{ \tcforms@formsigdate{\tcdef@forms@examinersignature}%
+ }
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%
+%%  rectify approval - II
+%%%%%%%%%%%%%%%
+\SetForm{rectifyapproval-II}{heading}{\GetTerm{title.tccII}}
+
+%%%
+\SetForm{rectifyapproval-II}{title}{\GetTerm{title.rectifyapproval}}
+
+%%%
+\SetForm{rectifyapproval-II}{opening}{  \tcforms@tccdesc}
+
+%%%
+\SetForm{rectifyapproval-II}{body}{  \tcdef@forms@rectifyapprovalformdesc%
+
+  \vfill%
+
+  \tcforms@rectifyexaminersig[\tcdef@forms@formsadvisorlabel]{tc@studentA@advisor}%
+}
+
+%%%
+\SetForm{rectifyapproval-II}{closing}{%
+ \@ifundefined{tc@nBoard}{}{%
+    \tcforms@rectifyexaminersig{tc@studentA@examinerA}%
+  }%
+
+  \tcforms@rectifyexaminersig{tc@studentA@examinerB}%
+
+  \tcforms@rectifyexaminersig{tc@studentA@examinerC}%
+
+  \tcforms@rectifyexaminersig{tc@studentA@altexaminerA}%
+}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+
+
+

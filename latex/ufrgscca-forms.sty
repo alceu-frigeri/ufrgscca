@@ -122,10 +122,6 @@
 \input{ufrgscca-formsintern.sty}
 
 
-
-
-
-
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -227,7 +223,7 @@
 % #6 : form closing
 %
 \NewDocumentCommand{\tcforms@genform}{mmmmmm}{%
-  \tc@formtopbox[#3]{#1}{#2}%
+  \tc@Nformtopbox[#3]{#1}{#2}%
 %
   \vfill%
    #4
@@ -754,6 +750,7 @@
 \dim_new:N \l__ufrgscca_email_rule_dim
 \dim_new:N \l__ufrgscca_name_rule_dim
 \dim_new:N \l__ufrgscca_title_rule_dim
+\dim_new:N \l__ufrgscca_worktitle_rule_dim
 \dim_new:N \l__ufrgscca_phone_rule_dim
 \dim_new:N \l__ufrgscca_agree_rule_dim
 \dim_new:N \l__ufrgscca_date_rule_dim
@@ -761,7 +758,8 @@
 \dim_set:Nn \l__ufrgscca_ID_rule_dim {30mm}
 \dim_set:Nn \l__ufrgscca_email_rule_dim {40mm}
 \dim_set:Nn \l__ufrgscca_name_rule_dim {50mm}
-\dim_set:Nn \l__ufrgscca_title_rule_dim {40mm}
+\dim_set:Nn \l__ufrgscca_title_rule_dim {30mm}
+\dim_set:Nn \l__ufrgscca_worktitle_rule_dim {60mm}
 \dim_set:Nn \l__ufrgscca_phone_rule_dim {20mm}
 \dim_set:Nn \l__ufrgscca_agree_rule_dim {25mm}
 \dim_set:Nn \l__ufrgscca_date_rule_dim {15mm}
@@ -772,19 +770,21 @@
 \starray_new:n {student}
 \starray_def_from_keyval:nn {student}
  {
-  first_name = Nome~do ,
-  last_name = Estudante ,
-  Nproc = (N. SEI) ,
-  ID    = N.~ do~ Cartão , 
-  email = email ,
-  worktitle = work ~title ,
+  first_name = ,
+  last_name = ,
+  name = \rule{\l__ufrgscca_name_rule_dim}{.1pt} ,
+  Nproc = \rule{\l__ufrgscca_ID_rule_dim}{.1pt} ,
+  ID    = \rule{\l__ufrgscca_ID_rule_dim}{.1pt} , 
+  email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+  worktitle = \rule{\l__ufrgscca_worktitle_rule_dim}{.1pt} ,
   advisor . struct = {
-    first = nome ,
-    last = family name ,
-    institution = uni,
-    title = info ,
-    email = email ,
-    phone = phone ,    
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title__dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -793,12 +793,13 @@
         Carticle = Ao(À) 
   } ,
   reviewer . struct = {
-    first = nome ,
-    last = family name ,
-    institution = uni,
-    title = info ,
-    email = email ,
-    phone = phone ,    
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title__dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -807,12 +808,13 @@
         Carticle = Ao(À) 
   } ,
   altreviewer . struct = {
-    first = nome ,
-    last = family name ,
-    institution = uni,
-    title = info ,
-    email = email ,
-    phone = phone ,    
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title__dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -911,6 +913,15 @@
   \starray_get_prop:nn {activity[#1].coord}{#2}
 }
 
+\prop_new:N \l__ufrgscca_cterms_prop
+\NewDocumentCommand{\SetTermKeys}{m}{
+  \prop_set_from_keyval:Nn \l__ufrgscca_cterms_prop {#1}
+}
+\NewDocumentCommand{\GetTerm}{m}{
+  \prop_item:Nn \l__ufrgscca_cterms_prop {#1}
+}
+
+
 \prop_new:N \l__ufrgscca_headings_prop
 \prop_set_from_keyval:Nn \l__ufrgscca_headings_prop 
   {
@@ -923,10 +934,23 @@
 \NewDocumentCommand{\SetHeadings}{m}{
   \prop_set_from_keyval:Nn \l__ufrgscca_headings_prop {#1}
 }
+\NewDocumentCommand{\GetHeading}{m}{
+  \prop_item:Nn \l__ufrgscca_headings_prop {#1}
+}
+
 
 \prop_new:N \l__ufrgscca_labels_prop
+%\prop_set_from_keyval:Nn \l__ufrgscca_labels_prop
+%  {
+%    signature = Assinatura ,
+%    boardmember = Membro da Banca
+%  }
+
 \NewDocumentCommand{\SetLabels}{m}{
   \prop_set_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
+}
+\NewDocumentCommand{\GetLabel}{m}{
+  \prop_item:Nn \l__ufrgscca_labels_prop {#1}
 }
 
 \NewDocumentCommand{\SetForm}{mm+m}{
@@ -934,15 +958,32 @@
 }
 
 \NewDocumentCommand{\MakeForm}{m} {
-%\prop_show:N \__ufrgscca_forms_prop
-  \tcforms@genform
-    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.heading} }
-    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.title} }
-    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.footnote} }
-    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.opening} }    
-    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.body} }
-    { \prop_item:Nn \l__ufrgscca_forms_prop {#1.closing} }
+	\begin{center}%%
+		\noindent%%
+		\parbox[t]{\textwidth}{%%
+      \centering%%
+      \vbox to \tc@formwinvoffset{%%
+        \tccover@covertopinfo%%
+				{\sc \prop_item:Nn \l__ufrgscca_forms_prop {#1.heading}}%
+      }%%
+    }\par%
+
+		{\bf \prop_item:Nn \l__ufrgscca_forms_prop {#1.title}}
+      \prop_if_in:NnTF \l__ufrgscca_forms_prop {#1.footnote}
+        {\footnote[1]{\prop_item:Nn \l__ufrgscca_forms_prop {#1.footnote}}}%%
+        {}
+	\end{center}%%
+%
+  \vfill%
+   \prop_item:Nn \l__ufrgscca_forms_prop {#1.opening}
+  \vfill%
+  \prop_item:Nn \l__ufrgscca_forms_prop {#1.body}
+  \vfill%
+  \prop_item:Nn \l__ufrgscca_forms_prop {#1.closing}
+  \pagebreak
   }
+
+\input{ufrgscca-forms.tex}
   
 \ExplSyntaxOff
 

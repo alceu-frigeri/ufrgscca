@@ -91,6 +91,24 @@
 	\end{center}%%
 }%
 
+\ExplSyntaxOn
+
+\NewDocumentCommand\tc@Nformtopbox{O{}+m+m}{%%
+	\begin{center}%%
+		\noindent%%
+		\parbox[t]{\textwidth}{%%
+      \centering%%
+      \vbox to \tc@formwinvoffset{%%
+        \tccover@covertopinfo%%
+				{\sc #2}%
+      }%%
+    }\par%
+
+		{\bf #3}\str_if_empty:nTF{#1}{}{\footnote[1]{#1}}%%
+	\end{center}%%
+}%
+\ExplSyntaxOff
+
 
 %
 \NewDocumentCommand{\tccover@covertopinfo}{}{%%
