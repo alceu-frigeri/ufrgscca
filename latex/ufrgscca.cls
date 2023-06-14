@@ -36,7 +36,7 @@
 
 \RequirePackage{etex}
 \RequirePackage{etoolbox}
-
+\RequirePackage{starray}
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 
