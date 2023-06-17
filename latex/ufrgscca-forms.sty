@@ -917,7 +917,7 @@
 \NewDocumentCommand{\SetTermKeys}{m}{
   \prop_set_from_keyval:Nn \l__ufrgscca_cterms_prop {#1}
 }
-\NewDocumentCommand{\GetTerm}{m}{
+\NewDocumentCommand{\UseTerm}{m}{
   \prop_item:Nn \l__ufrgscca_cterms_prop {#1}
 }
 
@@ -934,7 +934,7 @@
 \NewDocumentCommand{\SetHeadings}{m}{
   \prop_set_from_keyval:Nn \l__ufrgscca_headings_prop {#1}
 }
-\NewDocumentCommand{\GetHeading}{m}{
+\NewDocumentCommand{\UseHeading}{m}{
   \prop_item:Nn \l__ufrgscca_headings_prop {#1}
 }
 
@@ -949,7 +949,7 @@
 \NewDocumentCommand{\SetLabels}{m}{
   \prop_set_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
 }
-\NewDocumentCommand{\GetLabel}{m}{
+\NewDocumentCommand{\UseLabel}{m}{
   \prop_item:Nn \l__ufrgscca_labels_prop {#1}
 }
 

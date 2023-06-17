@@ -46,17 +46,20 @@
   footnote.reviewersform    = Entregar a cada membro da banca juntamente com a cópia do trabalho. , %%% TCC I / II
   footnote.receipts         = Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC. , %%% TCC II
   footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} %%% TCC II
+  
 }
 
 \SetLabels{%
   advisor                   = Orientador\tccore@@ref{advisor}{narticle} ,
   advisor.gen               = Orientador(a) ,
+  advisor.email             = Email d\tccore@@ref{advisor}{article} Orientador\tccore@@ref{advisor}{narticle} ,
   coadvisor                 = Co-orientador\tccore@@ref{coadvisor}{narticle} ,
   coadvisor.gen             = Co-orientador(a) ,
   reviewer                  = Avaliador\tccore@@ref{examiner}{narticle} ,
   altreviewer               = Suplente ,  
   student                   = Alun\tccore@@ref{student}{article} ,
   student.gen               = Aluno(a) ,
+  student.email             = Email d\tccore@@ref{student}{article} Alun\tccore@@ref{student}{article} ,
   signature.student         = Assinatura\ \ d\tccore@@ref{student}{article}\ \ Alun\tccore@@ref{student}{article} ,
   signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
   signature.advisor         = Assinatura\ \ d\tccore@@ref{advisor}{article}\ \ Orientador\tccore@@ref{advisor}{narticle} ,
@@ -64,6 +67,9 @@
   signature.reviewer        = Assinatura\ \ d\tccore@@ref{examiner}{article}\ \ Avaliador\tccore@@ref{examiner}{narticle} ,
   signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
   signature.gen             = Assinatura ,
+  worktitle                 = Título do Trabalho ,
+  worktitle.temp            = Título Provisório ,
+  phone                     = ramal ,
 }
 
 
@@ -97,10 +103,10 @@
 %%%%%%%%%%%%%%%
 %%  req form - I
 %%%%%%%%%%%%%%%
-\SetForm{request-I}{heading}{\GetTerm{title.tccI}}
+\SetForm{request-I}{heading}{\UseTerm{title.tccI}}
 
 %%%
-\SetForm{request-I}{title}{\GetTerm{title.requestform}}
+\SetForm{request-I}{title}{\UseTerm{title.requestform}}
 
 %%%
 \SetForm{request-I}{opening}{\tcdef@forms@reqformopening}
@@ -110,16 +116,16 @@
   \tcdef@forms@reqformdescTR%
   \vfill%
 
-  \tcdef@forms@formstemptitlelabel : \@title %
+  \UseLabel{worktitle.temp}: \@title %
 
-  \tcdef@forms@formsstudentemaillabel : {\bf \tc@studentAemail} %
+  \UseLabel{student.email} : {\bf \tc@studentAemail} %
 
-  \tcdef@forms@formsadvisorlabel : \tc@studentA@advisor%
+  \UseLabel{advisor} : \tc@studentA@advisor%
 
-  \tcdef@forms@formsadvisoremaillabel : {\bf \tc@studentA@advisoremail}%
-  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@advisorphone}%
+  \UseLabel{advisor.email} : {\bf \tc@studentA@advisoremail}%
+  \hfill \UseLabel{phone} : {\bf \tc@studentA@advisorphone}%
 
-  {\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
+  {\bf Resumo}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
 
   \vfill%
   \tcdef@core@tccbrief%
@@ -137,10 +143,10 @@
 %%%%%%%%%%%%%%%
 %%  coadvisor - I
 %%%%%%%%%%%%%%%
-\SetForm{coadvisor-I}{heading}{\GetTerm{title.tccI}}
+\SetForm{coadvisor-I}{heading}{\UseTerm{title.tccI}}
 
 %%%
-\SetForm{coadvisor-I}{title}{\GetTerm{title.coadvisorform}}
+\SetForm{coadvisor-I}{title}{\UseTerm{title.coadvisorform}}
 
 %%%
 \SetForm{coadvisor-I}{opening}{%
@@ -186,10 +192,10 @@
 %%%%%%%%%%%%%%%
 %%  board approval - I
 %%%%%%%%%%%%%%%
-\SetForm{boardapproval-I}{heading}{\GetTerm{title.tccI}}
+\SetForm{boardapproval-I}{heading}{\UseTerm{title.tccI}}
 
 %%%
-\SetForm{boardapproval-I}{title}{\GetTerm{title.boardapproval}}
+\SetForm{boardapproval-I}{title}{\UseTerm{title.boardapproval}}
 
 %%%
 \SetForm{boardapproval-I}{opening}{\tcforms@tccdesc}
@@ -217,10 +223,10 @@
 %%%%%%%%%%%%%%%
 %%  advisor's approval - I
 %%%%%%%%%%%%%%%
-\SetForm{advisorsapproval-I}{heading}{\GetTerm{title.tccI}}
+\SetForm{advisorsapproval-I}{heading}{\UseTerm{title.tccI}}
 
 %%%
-\SetForm{advisorsapproval-I}{title}{\GetTerm{title.advisorsapproval-I}}
+\SetForm{advisorsapproval-I}{title}{\UseTerm{title.advisorsapproval-I}}
 
 %%%
 \SetForm{advisorsapproval-I}{opening}{\tcforms@tccdesc}
@@ -252,13 +258,13 @@
 %%%%%%%%%%%%%%%
 %%  examiner's form - I
 %%%%%%%%%%%%%%%
-\SetForm{examinersform-I}{heading}{\GetTerm{title.tccI}}
+\SetForm{examinersform-I}{heading}{\UseTerm{title.tccI}}
 
 %%%
-\SetForm{examinersform-I}{title}{\GetTerm{title.reviewersform}}
+\SetForm{examinersform-I}{title}{\UseTerm{title.reviewersform}}
 
 %%%
-\SetForm{examinersform-I}{footnote}{\GetTerm{footnote.reviewersform}}
+\SetForm{examinersform-I}{footnote}{\UseTerm{footnote.reviewersform}}
 
 %%%
 \SetForm{examinersform-I}{opening}{%
@@ -317,10 +323,10 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  rectify approval - I
 %%%%%%%%%%%%%%%
-\SetForm{rectifyapproval-I}{heading}{\GetTerm{title.tccI}}
+\SetForm{rectifyapproval-I}{heading}{\UseTerm{title.tccI}}
 
 %%%
-\SetForm{rectifyapproval-I}{title}{\GetTerm{title.rectifyapproval}}
+\SetForm{rectifyapproval-I}{title}{\UseTerm{title.rectifyapproval}}
 
 %%%
 \SetForm{rectifyapproval-I}{opening}{\tcforms@tccdesc}
@@ -377,10 +383,10 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  req form - II
 %%%%%%%%%%%%%%%
-\SetForm{request-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{request-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{request-II}{title}{\GetTerm{title.requestform}}
+\SetForm{request-II}{title}{\UseTerm{title.requestform}}
 
 %%%
 \SetForm{request-II}{opening}{\tcdef@forms@reqformopening}
@@ -434,10 +440,10 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  coadvisor - II
 %%%%%%%%%%%%%%%
-\SetForm{coadvisor-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{coadvisor-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{coadvisor-II}{title}{\GetTerm{title.coadvisorform}}
+\SetForm{coadvisor-II}{title}{\UseTerm{title.coadvisorform}}
 
 %%%
 \SetForm{coadvisor-II}{opening}{%
@@ -486,10 +492,10 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  board approval - II
 %%%%%%%%%%%%%%%
-\SetForm{boardapproval-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{boardapproval-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{boardapproval-II}{title}{\GetTerm{title.boardapproval}}
+\SetForm{boardapproval-II}{title}{\UseTerm{title.boardapproval}}
 
 %%%
 \SetForm{boardapproval-II}{opening}{\tcforms@tccdesc}
@@ -522,10 +528,10 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  advisor's approval - II
 %%%%%%%%%%%%%%%
-\SetForm{advisorsapproval-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{advisorsapproval-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{advisorsapproval-II}{title}{\GetTerm{title.advisorsapproval-II}}
+\SetForm{advisorsapproval-II}{title}{\UseTerm{title.advisorsapproval-II}}
 
 %%%
 \SetForm{advisorsapproval-II}{opening}{  \tcforms@tccdesc}
@@ -554,13 +560,13 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  receipts - II
 %%%%%%%%%%%%%%%
-\SetForm{receipts-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{receipts-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{receipts-II}{title}{\GetTerm{title.receipts}}
+\SetForm{receipts-II}{title}{\UseTerm{title.receipts}}
 
 %%%
-\SetForm{receipts-II}{footnote}{\GetTerm{footnote.receipts}}
+\SetForm{receipts-II}{footnote}{\UseTerm{footnote.receipts}}
 
 %%%
 \SetForm{receipts-II}{opening}{  \tcforms@tccdesc\\%
@@ -585,13 +591,13 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  examiner's form - II
 %%%%%%%%%%%%%%%
-\SetForm{examinersform-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{examinersform-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{examinersform-II}{title}{\GetTerm{title.reviewersform}}
+\SetForm{examinersform-II}{title}{\UseTerm{title.reviewersform}}
 
 %%%
-\SetForm{examinersform-II}{footnote}{\GetTerm{footnote.reviewersform}}
+\SetForm{examinersform-II}{footnote}{\UseTerm{footnote.reviewersform}}
 
 %%%
 \SetForm{examinersform-II}{opening}{  \tcforms@studentIDheader
@@ -627,13 +633,13 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  examiner's form - II
 %%%%%%%%%%%%%%%
-\SetForm{correctionsform-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{correctionsform-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{correctionsform-II}{title}{\GetTerm{title.correctionsform}}
+\SetForm{correctionsform-II}{title}{\UseTerm{title.correctionsform}}
 
 %%%
-\SetForm{correctionsform-II}{footnote}{\GetTerm{footnote.correctionsform}}
+\SetForm{correctionsform-II}{footnote}{\UseTerm{footnote.correctionsform}}
 
 %%%
 \SetForm{correctionsform-II}{opening}{  \tcforms@studentIDheader
@@ -659,10 +665,10 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 %%  rectify approval - II
 %%%%%%%%%%%%%%%
-\SetForm{rectifyapproval-II}{heading}{\GetTerm{title.tccII}}
+\SetForm{rectifyapproval-II}{heading}{\UseTerm{title.tccII}}
 
 %%%
-\SetForm{rectifyapproval-II}{title}{\GetTerm{title.rectifyapproval}}
+\SetForm{rectifyapproval-II}{title}{\UseTerm{title.rectifyapproval}}
 
 %%%
 \SetForm{rectifyapproval-II}{opening}{  \tcforms@tccdesc}
