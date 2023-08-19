@@ -28,10 +28,17 @@
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 
+\SetHeadings{%
+    university              = Universidade Federal do Rio Grande do Sul ,
+    acronym                 = UFRGS ,
+    unit                    = Escola de Engenharia ,
+    secretary               = SACAD/EE ,
+}
 
 \SetTermKeys{%
   title.tccI                = Trabalho de Conclusão de Curso I ,
   title.tccII               = Trabalho de Conclusão de Curso II ,  
+  title.internship          = Estágio Supervisionado Obrigatório ,
   %
   title.requestform         = Formulário de Requerimento de Matrícula ,
   title.coadvisorform       = Requerimento de Autorização de Co-Orientação ,
@@ -42,51 +49,237 @@
   title.reviewersform       = Formulário de Avaliação ,
   title.correctionsform     = Formulário de Correções ,
   title.rectifyapproval     = Formulário de Aprovação das Correções ,
+  title.internsupervisorform = Formulário de Avaliação do Supervisor (Pela Empresa) ,
+  title.interntutorform      = Formulário de Avaliação do Tutor e Coordenador ,
+  
   %
   footnote.reviewersform    = Entregar a cada membro da banca juntamente com a cópia do trabalho. , %%% TCC I / II
   footnote.receipts         = Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC. , %%% TCC II
-  footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} %%% TCC II
-  
+  footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} ,%%% TCC II
+   %
+  footnote.supervisorsform = {Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}} ,
+   %
+  opening.requestform       = { Ilm\tccore@@ref{coursecoord}{article}. Sr\tccore@@ref{coursecoord}{narticle}.\par
+ Coordenador\tccore@@ref{coursecoord}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}   } ,
+  localdate                 = {\tc@city,\hspace{4mm} de \hspace{1.2cm} de 20\hspace{4mm}.} ,
 }
 
 \SetLabels{%
-  advisor                   = Orientador\tccore@@ref{advisor}{narticle} ,
+  advisor                   = Orientador\DataFields{student.advisor}{narticle} ,
   advisor.gen               = Orientador(a) ,
-  advisor.email             = Email d\tccore@@ref{advisor}{article} Orientador\tccore@@ref{advisor}{narticle} ,
-  coadvisor                 = Co-orientador\tccore@@ref{coadvisor}{narticle} ,
+  advisor.email             = Email d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle} ,
+  coadvisor                 = Co-orientador\DataFields{student.coadvisor}{narticle} ,
   coadvisor.gen             = Co-orientador(a) ,
-  reviewer                  = Avaliador\tccore@@ref{examiner}{narticle} ,
+  coadvisor.email           = Email d\DataFields{student.coadvisor}{article} Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  reviewer.base             = Avaliador ,
+  reviewer                  = Avaliador\DataFields{student.reviewer}{narticle} ,
   altreviewer               = Suplente ,  
-  student                   = Alun\tccore@@ref{student}{article} ,
+  tutor                     = Tutor\DataFields{student.tutor}{narticle} ,
+  tutor.gen                 = Tutor(a) ,
+  tutor.email               = Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} ,  
+  supervisor                = Supervisor\DataFields{student.supervisor}{narticle} ,
+  supervisor.gen            = Supervisor(a) ,  
+  student                   = Alun\DataFields{student}{article} ,
   student.gen               = Aluno(a) ,
-  student.email             = Email d\tccore@@ref{student}{article} Alun\tccore@@ref{student}{article} ,
-  signature.student         = Assinatura\ \ d\tccore@@ref{student}{article}\ \ Alun\tccore@@ref{student}{article} ,
+  student.email             = Email d\DataFields{student}{article} Alun\DataFields{student}{article} ,
+  student.ID                = Cartão ,
+  signature.student         = Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article} ,
   signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
-  signature.advisor         = Assinatura\ \ d\tccore@@ref{advisor}{article}\ \ Orientador\tccore@@ref{advisor}{narticle} ,
-  signature.coadvisor       = Assinatura\ \ d\tccore@@ref{coadvisor}{article}\ \ Co-orientador\tccore@@ref{coadvisor}{narticle} ,
-  signature.reviewer        = Assinatura\ \ d\tccore@@ref{examiner}{article}\ \ Avaliador\tccore@@ref{examiner}{narticle} ,
+  signature.advisor         = Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle} ,
+  signature.coadvisor       = Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  signature.reviewer        = Assinatura\ \ d\DataFields{student.reviewer}{article}\ \ Avaliador\DataFields{student.reviewer}{narticle} ,
   signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
   signature.gen             = Assinatura ,
+  signature.supervisor      = Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle} ,
+  signature.tutor           = Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle} ,
+  signature.internshipcoord = Assinatura\ \ d\tccore@@ref{internshipcoord}{article}\ \ Coordenador\tccore@@ref{internshipcoord}{narticle} ,
   worktitle                 = Título do Trabalho ,
   worktitle.temp            = Título Provisório ,
+  email                     = Email ,
   phone                     = ramal ,
+  board                     = Banca Examinadora ,
+  agree                     = De Acordo ,
 }
 
 
-%  internreqform.code = {\tcforms@internreqform},
-%  internsupervisorform.code = {\tcforms@internsupervisorform},
-%  interntutorform.code = {\tcforms@interntutorform},
-\SetForm{internshiprequest}{heading}{}
-\SetForm{internshipsupervisorform}{heading}{}
-\SetForm{internshiptutorform}{heading}{}
+\SetTermKeys{%
+ footnote.requestform       = { O resumo deve ser curto, i.e., não deve exceder este espaço. O texto deve ser escrito em parágrafo único, 
+                                e por se tratar de proposta, poderá utilizar  tempo futuro e não necessita ter motivação ou justificativa.\break  Deve conter:
+                                \begin{enumerate*}[alpha)] 
+                                	\item O QUE será feito - descrição e objetivos.
+                                   \item COMO será feito - metodologia.
+                                	\item Resultados esperados.
+                                \end{enumerate*}%
+                                } ,   %%% TCC I
+  desc.requestform          = { \DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity{course}{name}}, desta universidade, 
+                              portador\DataFields{student}{narticle} do cartão de identificação n$^o$ \DataFields{student}{ID}, 
+                              vem por meio deste solicitar matrícula na atividade de ensino} ,
+  desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
+                              vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
+  desc.studentwork          = {
+                              \noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
+                              \noindent\UseLabel{worktitle}: \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
+  desc.studentwork.full     = {\UseTerm{desc.studentwork}\\[2.5mm]\UseTerm{desc.advisor}} ,  
+  desc.advisor              = {\noindent\UseLabel{advisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
+  desc.coadvisor            = {\noindent\UseLabel{coadvisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
+  desc.reviewer             = {\noindent\UseLabel{reviewer}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
+  desc.student              = {\noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill 
+                              \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}} ,
+%  desc.student              = {\noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill 
+%                              \UseLabel{student.ID}: {\bf \tc@studentAID}} ,
+  desc.internshipperiod     = {\noindent Período do Estágio: {\bf \DataFields{student.internship}{start}} até: {\bf \DataFields{student.internship}{end}}} ,
+  desc.supervisor           = {\UseLabel{supervisor}: \textbf{\DataFields{student.supervisor}{name}} \hfill CREA: \textbf{\DataFields{student.supervisor}{register}}} ,
+}
 
 
-%  coadvisor-I.code = {\tcforms@coadvisorTRform},
-%  examinersforms-I.code = {\tcforms@examinersTRforms},
-%  advisorsapproval-I.code = {\tcforms@advisorTRapprovalform},
-%  boardapproval-I.code = {\tcforms@advisorTRboardform},
-%  rectifyapproval-I.code = {\tcforms@rectifyTRapprovalform},
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% Internship
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+%%%%%%%%%%%%%%%
+%%  req form - Internship
+%%%%%%%%%%%%%%%
+\SetForm{internshiprequest}{heading}{\UseTerm{title.internship}}
+\SetForm{internshiprequest}{title}{\UseTerm{title.requestform}}
+
+%%%
+\SetForm{internshiprequest}{opening}{
+
+  \UseTerm{opening.requestform}}
+
+%%%
+\SetForm{internshiprequest}{body}{
+  \UseTerm{desc.requestform} \Activity{internship}{name}.
+    \vfill%
+   \UseLabel{student.email}: {\bf \DataFields{student}{email}} %
+\vspace{2mm}
+
+\UseLabel{tutor}: \textbf{\DataFields{student.tutor}{name}}%
+
+\UseLabel{tutor.email}: {\bf \DataFields{student.tutor}{email}}%
+\hfill \UseLabel{phone}: {\bf \DataFields{student.tutor}{phone}}%
+\vspace{2mm}
+
+
+Empresa: {\bf \DataFields{student.internship}{company}}%
+
+Área de Atividade: {\bf \DataFields{student.internship}{field}}%
+\vspace{2mm}
+
+\UseTerm{desc.supervisor}
+
+Cargo: {\bf \DataFields{student.supervisor}{office}}\hfill Email: {\bf \DataFields{student.supervisor}{email}} \hfill Fone: {\bf \DataFields{student.supervisor}{phone}}   %
+\vspace{2mm}
+
+Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de Término: {\bf \DataFields{student.internship}{end}}\hfill Duração: {\bf \DataFields{student.internship}{length}}
+
+}
+
+%%%
+\SetForm{internshiprequest}{closing}{
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.supervisor}}}\hfill%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.tutor}}}%
+
+    \hfill%
+    \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.student}}}
+}
+
+
+%%%%%%%%%%%%%%%
+%%  supervisor`s form - Internship
+%%%%%%%%%%%%%%%
+\SetForm{internshipsupervisorform}{heading}{\UseTerm{title.internship}}
+\SetForm{internshipsupervisorform}{title}{\UseTerm{title.internsupervisorform}}
+\SetForm{internshipsupervisorform}{footnote}{\UseTerm{footnote.supervisorsform}}
+
+%%%
+\SetForm{internshipsupervisorform}{opening}{
+    \UseTerm{desc.student}\\%
+    \noindent\UseTerm{desc.supervisor}\\%
+    \UseTerm{desc.internshipperiod}
+}
+
+%%%
+\SetForm{internshipsupervisorform}{body}{
+\begin{itemize}[tcc,nosep]
+ \item Grupo I - Aspectos Profissionais
+   \begin{enumerate}[tcc,nosep]
+     \item \textbf{Qualidade do Trabalho}:\emptybox\\ {\footnotesize considerar a qualidade do trabalho tendo em vista o que seria desejável}
+     \item \textbf{Engenhosidade}:\emptybox\\ {\footnotesize capacidade de sugerir, projetar ou executar modificações ou inovações.}
+     \item \textbf{Conhecimentos}:\emptybox\\ {\footnotesize conhecimento demonstrado no desenvolvimento das atividades programadas.}
+     \item \textbf{Cumprimentos das Tarefas}:\emptybox\\ {\footnotesize     considerar o volume de atividades cumpridas dentro de um padrão razoável.}
+     \item \textbf{Iniciativa}:\emptybox\\ {\footnotesize iniciativa para desenvolver suas atividades sem dependências de outros.}
+   \end{enumerate}
+ \item Grupo II - Aspectos Humanos
+    \begin{enumerate}[tcc,nosep]
+     \item \textbf{Assiduidade}:\emptybox\\ {\footnotesize cumprimento do horário do estágio e ausência de falhas}
+\item \textbf{Disciplina}:\emptybox\\ {\footnotesize observância das normas e regulamentos internos da empresa.}
+\item \textbf{Sociabilidade}:\emptybox\\ {\footnotesize facilidade de se integrar com colegas e ambiente de trabalho.}
+\item \textbf{Cooperação}:\emptybox\\ {\footnotesize     disposição para cooperar com colegas e para atender a atividades..}
+\item \textbf{Senso de Responsabilidade}:\emptybox\\ {\footnotesize zelo pelo material, equipamentos e bens da empresa.}
+    \end{enumerate}
+\end{itemize}
+
+    \vfill%
+
+    Considerações Complementares: \tcdef@core@formsblanklinesB
+}
+
+%%%
+\SetForm{internshipsupervisorform}{closing}{
+\hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.supervisor}}}
+}
+
+%%%%%%%%%%%%%%%
+%%  tutor`s form - Internship
+%%%%%%%%%%%%%%%
+\SetForm{internshiptutorform}{heading}{\UseTerm{title.internship}}
+\SetForm{internshiptutorform}{title}{\UseTerm{title.interntutorform}}
+
+%%%
+\SetForm{internshiptutorform}{opening}{
+    \UseTerm{desc.student}\\%
+    \UseLabel{tutor}: \textbf{\DataFields{student.tutor}{name}}\\%
+    \UseTerm{desc.internshipperiod}
+}
+
+%%%
+\SetForm{internshiptutorform}{body}{
+    Avaliação d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle}:\emptybox%\tcdef@forms@interntutorgrade%
+
+    \vfill%
+
+    Considerações d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle} sobre o Estágio: 
+    
+    \tcdef@core@formsblanklinesB
+
+    \vfill%
+
+    \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.tutor}}}
+
+ %   \hline
+    \vfill%
+
+    Avaliação d\tccore@@ref{internshipcoord}{article} Prof\tccore@@ref{internshipcoord}{narticle}. Coordenador\tccore@@ref{internshipcoord}{narticle}:\emptybox%\tcdef@forms@interncoordgrade%
+    \vfill
+
+    Considerações d\tccore@@ref{internshipcoord}{article} Prof\tccore@@ref{internshipcoord}{narticle}. Coordenador\tccore@@ref{internshipcoord}{narticle} sobre o Estágio:
+    
+     \tcdef@core@formsblanklinesB
+    \vfill%
+
+    \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.internshipcoord}}}
+}
+
+%%%
+\SetForm{internshiptutorform}{closing}{}
 
 
 
@@ -104,28 +297,26 @@
 %%  req form - I
 %%%%%%%%%%%%%%%
 \SetForm{request-I}{heading}{\UseTerm{title.tccI}}
-
-%%%
 \SetForm{request-I}{title}{\UseTerm{title.requestform}}
+\SetForm{request-I}{opening}{
 
-%%%
-\SetForm{request-I}{opening}{\tcdef@forms@reqformopening}
+\UseTerm{opening.requestform}}
 
 %%%
 \SetForm{request-I}{body}{%
-  \tcdef@forms@reqformdescTR%
+  \UseTerm{desc.requestform} \Activity{tccI}{name}.
   \vfill%
 
   \UseLabel{worktitle.temp}: \@title %
 
-  \UseLabel{student.email} : {\bf \tc@studentAemail} %
+  \UseLabel{student.email}: {\bf \DataFields{student}{email}} %
 
-  \UseLabel{advisor} : \tc@studentA@advisor%
+  \UseLabel{advisor}: \DataFields{student.advisor}{name}%
 
-  \UseLabel{advisor.email} : {\bf \tc@studentA@advisoremail}%
-  \hfill \UseLabel{phone} : {\bf \tc@studentA@advisorphone}%
+  \UseLabel{advisor.email}: {\bf \DataFields{student.advisor}{email}}%
+  \hfill \UseLabel{phone}: {\bf \DataFields{student.advisor}{phone}}%
 
-  {\bf Resumo}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
+  {\bf Resumo}:\footnote[1]{\UseTerm{footnote.requestform}}%\tcdef@forms@renewreqformnotes}%
 
   \vfill%
   \tcdef@core@tccbrief%
@@ -133,8 +324,8 @@
 
 %%%
 \SetForm{request-I}{closing}{%
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}\hfill%
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.student}}}\hfill%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}%
 }%
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -144,34 +335,32 @@
 %%  coadvisor - I
 %%%%%%%%%%%%%%%
 \SetForm{coadvisor-I}{heading}{\UseTerm{title.tccI}}
-
-%%%
 \SetForm{coadvisor-I}{title}{\UseTerm{title.coadvisorform}}
-
-%%%
 \SetForm{coadvisor-I}{opening}{%
+
+  \UseTerm{opening.requestform}
   \@ifundefined{tc@studentA@coadvisor}{%
     \coadvisor{\rule{\tc@namerule}{.1pt}}{}%
     \coadvisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
     }{}%
-  \tcdef@forms@reqformopening%
 }
 
 %%%
 \SetForm{coadvisor-I}{body}{%
-  \tcdef@forms@coadvisorformdesc%
+  \UseTerm{desc.coadvisorform}
+  %\tcdef@forms@coadvisorformdesc%
   \vfill%
 
-  \tcdef@forms@formstemptitlelabel : \@title %
+  \UseLabel{worktitle.temp}: \@title %
 
-  \tcdef@forms@formsadvisorlabel: \tc@studentA@advisor
+  \UseLabel{advisor}: \DataFields{student.advisor}{name}
 
-  \tcdef@forms@formscoadvisorlabel: \tc@studentA@coadvisor%
+  \UseLabel{coadvisor}: \DataFields{student.coadvisor}{name}%
 
-  \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
-  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}\\%
+  \UseLabel{coadvisor.email}: {\bf \DataFields{student.coadvisor}{email}}%
+  \hfill \UseLabel{phone}: {\bf \DataFields{student.coadvisor}{phone}}\\%
 
-  {\bf \tcdef@forms@formsreasonlabel}:%
+  {\bf Justificativa}:%
   \vfill
 
   \tcdef@core@tcccoadvisorbrief%    !!!! What a Hell ?!?!?!
@@ -180,10 +369,10 @@
 %%%
 \SetForm{coadvisor-I}{closing}{%
 
-  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
+  \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.student}}}
 
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}\hfill%
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@coadvisorsignature}}%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}\hfill%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.coadvisor}}}%
 }%
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -193,21 +382,19 @@
 %%  board approval - I
 %%%%%%%%%%%%%%%
 \SetForm{boardapproval-I}{heading}{\UseTerm{title.tccI}}
-
-%%%
 \SetForm{boardapproval-I}{title}{\UseTerm{title.boardapproval}}
-
-%%%
-\SetForm{boardapproval-I}{opening}{\tcforms@tccdesc}
+\SetForm{boardapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
 \SetForm{boardapproval-I}{body}{  \begin{center}
-    \tcdef@forms@formsboardtitle
+    \UseLabel{board}
   \end{center}%
 
-  \tcforms@examinerdesc{studentA}{examinerB}%
+%%% TODO: That's do be done... convert it to starray!!!
+ 
+  \BoardDescSignature{Avaliador\DataFields{student.reviewer[2]}{narticle}}{student.reviewer[2]}
 
-  \tcforms@examinerdesc{studentA}{examinerC}%
+  \BoardDescSignature{Avaliador\DataFields{student.reviewer[3]}{narticle}}{student.reviewer[3]}
 
   \vfill%
 
@@ -215,7 +402,7 @@
 }
 
 %%%
-\SetForm{boardapproval-I}{closing}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}
+\SetForm{boardapproval-I}{closing}{\hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}}
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 
@@ -224,12 +411,8 @@
 %%  advisor's approval - I
 %%%%%%%%%%%%%%%
 \SetForm{advisorsapproval-I}{heading}{\UseTerm{title.tccI}}
-
-%%%
 \SetForm{advisorsapproval-I}{title}{\UseTerm{title.advisorsapproval-I}}
-
-%%%
-\SetForm{advisorsapproval-I}{opening}{\tcforms@tccdesc}
+\SetForm{advisorsapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
 \SetForm{advisorsapproval-I}{body}{%
@@ -240,8 +423,8 @@
   \tcdef@core@tccadvisorsreview%
 
   \vfill%
-  Aprovo a versão final do trabalho submetido pel\tccore@@ref{student}{article} alun\tccore@@ref{student}{article} e 
-  considero \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} para avaliação pela Banca Examinadora.%
+  Aprovo a versão final do trabalho submetido pel\DataFields{student}{article} alun\DataFields{student}{article} e 
+  considero \DataFields{student}{article} mesm\DataFields{student}{article} apt\DataFields{student}{article} para avaliação pela Banca Examinadora.%
 }
 
 %%%
@@ -259,18 +442,10 @@
 %%  examiner's form - I
 %%%%%%%%%%%%%%%
 \SetForm{examinersform-I}{heading}{\UseTerm{title.tccI}}
-
-%%%
 \SetForm{examinersform-I}{title}{\UseTerm{title.reviewersform}}
-
-%%%
 \SetForm{examinersform-I}{footnote}{\UseTerm{footnote.reviewersform}}
-
-%%%
 \SetForm{examinersform-I}{opening}{%
-  \tcdef@forms@formsstudentlabel : {\bf \expandafter\csname tc@student\Alph{tc@studentcount}\endcsname}\\[-4mm]%
-  
-  \noindent\tcdef@forms@formsworktitlelabel : {\bf \@title}\\%
+  \UseTerm{desc.studentwork}\\[2mm]
   
   \tcdef@forms@formsexaminerlabel : \expandafter\csname tc@student\Alph{tc@studentcount}@#1\endcsname\\[-4mm]%
   
@@ -324,12 +499,8 @@ Outras considerações, parecer (se necessário): \\
 %%  rectify approval - I
 %%%%%%%%%%%%%%%
 \SetForm{rectifyapproval-I}{heading}{\UseTerm{title.tccI}}
-
-%%%
 \SetForm{rectifyapproval-I}{title}{\UseTerm{title.rectifyapproval}}
-
-%%%
-\SetForm{rectifyapproval-I}{opening}{\tcforms@tccdesc}
+\SetForm{rectifyapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
 \SetForm{rectifyapproval-I}{body}{  \tcdef@forms@rectifyapprovalTRformdesc%
@@ -384,11 +555,7 @@ Outras considerações, parecer (se necessário): \\
 %%  req form - II
 %%%%%%%%%%%%%%%
 \SetForm{request-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{request-II}{title}{\UseTerm{title.requestform}}
-
-%%%
 \SetForm{request-II}{opening}{\tcdef@forms@reqformopening}
 
 %%%
@@ -398,12 +565,12 @@ Outras considerações, parecer (se necessário): \\
 
   \tcdef@forms@formstemptitlelabel : \@title %
 
-  \tcdef@forms@formsstudentemaillabel : {\bf \tc@studentAemail} %
+  \tcdef@forms@formsstudentemaillabel : {\bf \DataFields{student}{email}} %
 
-  \tcdef@forms@formsadvisorlabel : \tc@studentA@advisor%
+  \tcdef@forms@formsadvisorlabel : \DataFields{student.advisor}{name}%
 
-  \tcdef@forms@formsadvisoremaillabel : {\bf \tc@studentA@advisoremail}%
-  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@advisorphone}%
+  \tcdef@forms@formsadvisoremaillabel : {\bf \DataFields{student.advisor}{email}}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \DataFields{student.advisor}{phone}}%
 
 
   \@ifundefined{tc@studentA@coadvisor}{%
@@ -413,10 +580,10 @@ Outras considerações, parecer (se necessário): \\
     \hfill \tcdef@forms@formsphonelabel : {\bf \rule{\tc@phonerule}{.1pt}}%
 	}
   {
-    \tcdef@forms@formscoadvisorlabel : \tc@studentA@coadvisor%
+    \tcdef@forms@formscoadvisorlabel : \DataFields{student.coadvisor}{name}%
   
-    \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
-    \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}%
+    \tcdef@forms@formscoadvisoremaillabel : {\bf \DataFields{student.coadvisor}{email}}%
+    \hfill \tcdef@forms@formsphonelabel : {\bf \DataFields{student.coadvisor}{phone}}%
   }%
 
   %{\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
@@ -441,11 +608,7 @@ Outras considerações, parecer (se necessário): \\
 %%  coadvisor - II
 %%%%%%%%%%%%%%%
 \SetForm{coadvisor-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{coadvisor-II}{title}{\UseTerm{title.coadvisorform}}
-
-%%%
 \SetForm{coadvisor-II}{opening}{%
   \@ifundefined{tc@studentA@coadvisor}{%
     \coadvisor{\rule{\tc@namerule}{.1pt}}{}%
@@ -462,12 +625,12 @@ Outras considerações, parecer (se necessário): \\
 
   \tcdef@forms@formstemptitlelabel : \@title %
 
-  \tcdef@forms@formsadvisorlabel: \tc@studentA@advisor%
+  \tcdef@forms@formsadvisorlabel: \DataFields{student.advisor}{name}%
 
-  \tcdef@forms@formscoadvisorlabel: \tc@studentA@coadvisor%
+  \tcdef@forms@formscoadvisorlabel: \DataFields{student.coadvisor}{name}%
 
-  \tcdef@forms@formscoadvisoremaillabel : {\bf \tc@studentA@coadvisoremail}%
-  \hfill \tcdef@forms@formsphonelabel : {\bf \tc@studentA@coadvisorphone}%
+  \tcdef@forms@formscoadvisoremaillabel : {\bf \DataFields{student.coadvisor}{email}}%
+  \hfill \tcdef@forms@formsphonelabel : {\bf \DataFields{student.coadvisor}{phone}}%
 
 
   \vfill%
@@ -493,12 +656,8 @@ Outras considerações, parecer (se necessário): \\
 %%  board approval - II
 %%%%%%%%%%%%%%%
 \SetForm{boardapproval-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{boardapproval-II}{title}{\UseTerm{title.boardapproval}}
-
-%%%
-\SetForm{boardapproval-II}{opening}{\tcforms@tccdesc}
+\SetForm{boardapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
 \SetForm{boardapproval-II}{body}{%
@@ -506,13 +665,13 @@ Outras considerações, parecer (se necessário): \\
     \tcdef@forms@formsboardtitle
   \end{center}%
 
-  \tcforms@examinerdesc{studentA}{examinerA}%
+  \BoardDescSignature{Avaliador\DataFields{student.reviewer[1]}{narticle}}{student.reviewer[1]}
+  
+  \BoardDescSignature{Avaliador\DataFields{student.reviewer[2]}{narticle}}{student.reviewer[2]}
+  
+  \BoardDescSignature{Avaliador\DataFields{student.reviewer[3]}{narticle}}{student.reviewer[3]}
 
-  \tcforms@examinerdesc{studentA}{examinerB}%
-
-  \tcforms@examinerdesc{studentA}{examinerC}%
-
-  \tcforms@examinerdesc[\tcdef@forms@formsaltexaminerlabel]{studentA}{altexaminerA}%
+  \BoardDescSignature{Suplente}{student.altreviewer[1]}
 
   \vfill%
 
@@ -529,12 +688,8 @@ Outras considerações, parecer (se necessário): \\
 %%  advisor's approval - II
 %%%%%%%%%%%%%%%
 \SetForm{advisorsapproval-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{advisorsapproval-II}{title}{\UseTerm{title.advisorsapproval-II}}
-
-%%%
-\SetForm{advisorsapproval-II}{opening}{  \tcforms@tccdesc}
+\SetForm{advisorsapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
 \SetForm{advisorsapproval-II}{body}{  \tcdef@forms@advisorapprovalformdesc%
@@ -561,21 +716,17 @@ Outras considerações, parecer (se necessário): \\
 %%  receipts - II
 %%%%%%%%%%%%%%%
 \SetForm{receipts-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{receipts-II}{title}{\UseTerm{title.receipts}}
-
-%%%
 \SetForm{receipts-II}{footnote}{\UseTerm{footnote.receipts}}
 
 %%%
-\SetForm{receipts-II}{opening}{  \tcforms@tccdesc\\%
+\SetForm{receipts-II}{opening}{\UseTerm{desc.studentwork.full}\\%
 
   \noindent\tcdef@forms@formsboardlabel : {\bf \csname tc@student\Alph{tc@studentcount}@#1\endcsname }%
 }
 
 %%%
-\SetForm{receipts-II}{body}{ \tcdef@forms@receiptformdesc {\bf \tc@studentA},\ \ \ \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}.%
+\SetForm{receipts-II}{body}{ \tcdef@forms@receiptformdesc {\bf \tc@studentA},\ \ \ \tcdef@forms@formsstudentIDlabel : {\bf \DataFields{student}{ID}}.%
 
   \vfill%
 
@@ -592,15 +743,11 @@ Outras considerações, parecer (se necessário): \\
 %%  examiner's form - II
 %%%%%%%%%%%%%%%
 \SetForm{examinersform-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{examinersform-II}{title}{\UseTerm{title.reviewersform}}
-
-%%%
 \SetForm{examinersform-II}{footnote}{\UseTerm{footnote.reviewersform}}
 
 %%%
-\SetForm{examinersform-II}{opening}{  \tcforms@studentIDheader
+\SetForm{examinersform-II}{opening}{\UseTerm{desc.studentwork}
   
   \tcforms@examinerIDheader{#1}
 }
@@ -634,15 +781,11 @@ Outras considerações, parecer (se necessário): \\
 %%  examiner's form - II
 %%%%%%%%%%%%%%%
 \SetForm{correctionsform-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{correctionsform-II}{title}{\UseTerm{title.correctionsform}}
-
-%%%
 \SetForm{correctionsform-II}{footnote}{\UseTerm{footnote.correctionsform}}
 
 %%%
-\SetForm{correctionsform-II}{opening}{  \tcforms@studentIDheader
+\SetForm{correctionsform-II}{opening}{\UseTerm{desc.studentwork}
   
   \tcforms@examinerIDheader{#1}
 }
@@ -666,12 +809,8 @@ Outras considerações, parecer (se necessário): \\
 %%  rectify approval - II
 %%%%%%%%%%%%%%%
 \SetForm{rectifyapproval-II}{heading}{\UseTerm{title.tccII}}
-
-%%%
 \SetForm{rectifyapproval-II}{title}{\UseTerm{title.rectifyapproval}}
-
-%%%
-\SetForm{rectifyapproval-II}{opening}{  \tcforms@tccdesc}
+\SetForm{rectifyapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
 \SetForm{rectifyapproval-II}{body}{  \tcdef@forms@rectifyapprovalformdesc%

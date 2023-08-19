@@ -32,6 +32,315 @@
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
+\ExplSyntaxOn
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% starray based student commands%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\tc@IDrule{30mm}%
+\def\tc@emailrule{40mm}%
+\def\tc@namerule{50mm}%
+\def\tc@titlerule{40mm}%
+\def\tc@phonerule{20mm}%
+\def\tc@agreerule{25mm}%
+\def\tc@daterule{15mm}%
+
+\dim_new:N \l__ufrgscca_ID_rule_dim
+\dim_new:N \l__ufrgscca_email_rule_dim
+\dim_new:N \l__ufrgscca_name_rule_dim
+\dim_new:N \l__ufrgscca_title_rule_dim
+\dim_new:N \l__ufrgscca_worktitle_rule_dim
+\dim_new:N \l__ufrgscca_phone_rule_dim
+\dim_new:N \l__ufrgscca_agree_rule_dim
+\dim_new:N \l__ufrgscca_date_rule_dim
+\dim_new:N \l__ufrgscca_register_rule_dim
+\dim_new:N \l__ufrgscca_office_rule_dim
+\dim_new:N \l__ufrgscca_field_rule_dim
+
+\dim_set:Nn \l__ufrgscca_ID_rule_dim {30mm}
+\dim_set:Nn \l__ufrgscca_email_rule_dim {40mm}
+\dim_set:Nn \l__ufrgscca_name_rule_dim {50mm}
+\dim_set:Nn \l__ufrgscca_title_rule_dim {30mm}
+\dim_set:Nn \l__ufrgscca_worktitle_rule_dim {60mm}
+\dim_set:Nn \l__ufrgscca_phone_rule_dim {20mm}
+\dim_set:Nn \l__ufrgscca_agree_rule_dim {25mm}
+\dim_set:Nn \l__ufrgscca_date_rule_dim {15mm}
+\dim_set:Nn \l__ufrgscca_register_rule_dim {20mm}
+\dim_set:Nn \l__ufrgscca_office_rule_dim {25mm}
+\dim_set:Nn \l__ufrgscca_field_rule_dim {30mm}
+
+
+
+
+\starray_new:n {student}
+\starray_def_from_keyval:nn {student}
+ {
+  first = ,
+  last = ,
+  name = \rule{\l__ufrgscca_name_rule_dim}{.1pt} ,
+  Nproc = \rule{\l__ufrgscca_ID_rule_dim}{.1pt} ,
+  ID    = \rule{\l__ufrgscca_ID_rule_dim}{.1pt} , 
+  email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+  worktitle = \rule{\l__ufrgscca_worktitle_rule_dim}{.1pt} ,
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) ,
+  advisor . struct = {
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  coadvisor . struct = {
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  reviewer . struct = {
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  altreviewer . struct = {
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  internship . struct = {
+    company = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    field = \rule{\l__ufrgscca_field_rule_dim}{.1pt},
+    start = \rule{\l__ufrgscca_date_rule_dim}{.1pt},
+    end = \rule{\l__ufrgscca_date_rule_dim}{.1pt},
+    length = \rule{\l__ufrgscca_date_rule_dim}{.1pt},  
+  } ,
+  tutor . struct = {
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+  supervisor . struct = {
+    first = ,
+    last =  ,
+    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    register = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
+    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
+    office = \rule{\l__ufrgscca_office_rule_dim}{.1pt} ,
+    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
+    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+  } ,
+ }
+
+%\starray_show_def:n {student}
+
+\prop_new:N \l__ufrgscca_forms_prop
+\starray_new:n {activity}
+\starray_def_from_keyval:nn {activity}
+  {
+    name = Nome~ da~ Atividade ,
+    acronym = ACRO ,
+    coord . struct = 
+      {
+        name = Nome~ do(a)~ Coordenador(a) ,
+        title = Coordenador(a)~ de ,
+        article = o(a) ,
+        Article = O(A) ,
+        narticle = (a) ,
+        Narticle = (A) ,
+        carticle = ao(à) ,
+        Carticle = Ao(À) 
+      }
+  }
+%  \starray_show_def:n {activity}
+\starray_new_term:nn {activity}{course} % yeah, CCA as an activity...
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{tccI}
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{tccII}
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{internship}
+\starray_new_term:nn {activity.coord}{}
+\starray_new_term:nn {activity}{internship-opt}
+\starray_new_term:nn {activity.coord}{}
+%\starray_show_terms:n {activity}
+%
+%
+\NewDocumentCommand{\SetActivityX}{mm} {
+  \starray_set_from_keyval:nn {activity[#1]}{#2}
+}
+
+\NewDocumentCommand{\SetActivity}{mmm} {
+  \starray_set_prop:nnn {activity[#1]}{name}{#3}
+  \starray_set_prop:nnn {activity[#1]}{acronym}{#2}
+}
+ 
+\NewDocumentCommand{\SetActivityCoordTitle}{mm} {
+  \starray_set_prop:nnn {activity[#1].coord}{title}{#2}
+}
+
+\NewDocumentCommand{\SetActivityCoord}{mmO{}}{
+  \starray_gset_prop:nnn {activity[#1].coord}{name}{#2}
+  \__ufrgscca_setgender:nn {activity[#1].coord}{#3}
+%  \str_if_eq:nnT {#3}{m}
+%    {
+%      \starray_gset_from_keyval:nn {activity[#1]}
+%        {
+%          coord = {
+%          article = o ,
+%          Article = O ,
+%          narticle =  ,
+%          Narticle =  ,
+%          carticle = ao ,
+%          Carticle = Ao 
+%          }
+%        }      
+%    }
+%  \str_if_eq:nnT {#3}{f}
+%    {
+%      \starray_gset_from_keyval:nn {activity[#1]}
+%        {
+%          coord = {
+%          article = a ,
+%          Article = A ,
+%          narticle = a ,
+%          Narticle = A ,
+%          carticle = à ,
+%          Carticle = À 
+%          }
+%        }
+%    }
+}
+
+\NewDocumentCommand{\Activity}{mm}{
+  \starray_get_prop:nn {activity[#1]}{#2}
+}
+\NewDocumentCommand{\ActivityCoord}{mm}{
+  \starray_get_prop:nn {activity[#1].coord}{#2}
+}
+
+\prop_new:N \l__ufrgscca_headings_prop
+\prop_set_from_keyval:Nn \l__ufrgscca_headings_prop 
+  {
+    university = Universidade~ Federal~ do~ Rio~ Grande~ do~ Sul ,
+    acronym = UFRGS ,
+    unit = Escola~ de~ Engenharia ,
+    secretary = SACAD/EE     
+  }
+  
+\NewDocumentCommand{\SetHeadings}{m}{
+  \prop_put_from_keyval:Nn \l__ufrgscca_headings_prop {#1}
+}
+\NewDocumentCommand{\UseHeading}{m}{
+  \prop_item:Nn \l__ufrgscca_headings_prop {#1}
+}
+
+\prop_new:N \l__ufrgscca_cterms_prop
+
+\NewDocumentCommand{\SetTermKeys}{+m}{
+  \prop_put_from_keyval:Nn \l__ufrgscca_cterms_prop {#1}
+}
+\NewDocumentCommand{\UseTerm}{m}{
+  \prop_item:Nn \l__ufrgscca_cterms_prop {#1}
+}
+
+\prop_new:N \l__ufrgscca_labels_prop
+
+\NewDocumentCommand{\SetLabels}{m}{
+  \prop_set_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
+}
+\NewDocumentCommand{\UseLabel}{m}{
+  \prop_item:Nn \l__ufrgscca_labels_prop {#1}
+}
+
+%
+\cs_new_protected:Npn \__ufrgscca_setgender:nn #1#2 
+  {
+    \str_if_eq:nnT {#2}{m}
+      {
+        \starray_gset_from_keyval:nn {#1}
+          {
+            article = o ,
+            Article = O ,
+            narticle =  ,
+            Narticle =  ,
+            carticle = ao ,
+            Carticle = Ao 
+          }
+      } 
+    \str_if_eq:nnT {#2}{f}
+      {
+        \starray_gset_from_keyval:nn {#1}
+          {
+            article = a ,
+            Article = A ,
+            narticle = a ,
+            Narticle = A ,
+            carticle = à ,
+            Carticle = À 
+          }
+      } 
+  }
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % student commands%
@@ -112,101 +421,242 @@
 %
 \newcounter{tc@studentcount}%
 \RenewDocumentCommand{\author}{mmO{}}{%
+    % TO BE REMOVED !
         \stepcounter{tc@studentcount}%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}last\endcsname{#1}%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}first\endcsname{#2}%
-        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}\endcsname{#2 #1}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}\endcsname{#2~ #1}%
 		\tccore@articledef{tc@student\Alph{tc@studentcount}}{#3}%%
+  % USING STARRAY
+  \starray_new_term:nn {student}{}
+  \starray_gset_from_keyval:nn {student}
+    {
+      first = #2 ,
+      last = #1 ,
+      name = #2~ #1 ,
+    }
+  \__ufrgscca_setgender:nn {student}{#3}
 }%
+  %
+\NewDocumentCommand{\DataFields}{mm}{
+  \starray_get_prop:nn{#1}{#2}
+}  
+  %
 %
 \NewDocumentCommand{\authorinfo}{O{}mm}{%
+  %%%
+  %%% TO BE REMOVED !
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Nproc\endcsname{#1}%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}ID\endcsname{#2}%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}email\endcsname{#3}%
+  %%%
+  %%% USING STARRAY
+  \starray_gset_from_keyval:nn {student}
+    {
+      Nproc = #1 ,
+      ID    = #2 ,
+      email = #3 ,
+    }
 }%
 \NewDocumentCommand{\student}{mmO{}}{\author{#1}{#2}[#3]}%
 \NewDocumentCommand{\studentinfo}{O{}mm}{\authorinfo[#1]{#2}{#3}}%
 %----------
 %----------
 %
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\tccore@ProfFields}{mmmmm}{%%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1last\endcsname{#3}%%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1first\endcsname{#4}%%
-        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1\endcsname{#2~#4 #3}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1\endcsname{#2~#4~ #3}%%
 		\tccore@articledef{tc@student\Alph{tc@studentcount}@#1}{#5}%
-
 }%
+  %%%
+  %%% USING STARRAY
+\cs_new_protected:Npn \__ufrgscca_set_prof:nnnnn #1#2#3#4#5 
+  {
+    \starray_gset_from_keyval:nn {student.#1}
+      {
+        last = #3 ,
+        first = #4 ,
+        name = #2~#4~ #3 ,
+      }
+   \__ufrgscca_setgender:nn {student.#1}{#5}
+  }
+
+
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\tccore@ProfInfo}{mmmmm}{%%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1institution\endcsname{#2}%%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1titleinfo\endcsname{#3}%%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1email\endcsname{#4}%%
         \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1phone\endcsname{#5}%%
 }%
+  %%%
+  %%% USING STARRAY
+\cs_new_protected:Npn \__ufrgscca_set_prof_info:nnnnn #1#2#3#4#5
+  {
+    \starray_gset_from_keyval:nn {student.#1}
+      {
+        institution = #2 ,
+        title = #3 ,
+        email = #4 ,
+        phone = #5 ,
+      }
+  }
 %
 %
 %
 \newcounter{tc@examinercount}[tc@studentcount]%
 %
 \NewDocumentCommand{\advisor}{O{}mmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
 	\tccore@ProfFields{advisor}{#1}{#2}{#3}{#4}%%
-%%% the advisor is also the first examiner if not @nBoard%
+  %%% the advisor is also the first examiner if not @nBoard%
 	\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%%
+  %%%
+  %%% USING STARRAY
+  \starray_new_term:nn {student.advisor}{}
+  \__ufrgscca_set_prof:nnnnn {advisor}{#1}{#2}{#3}{#4}
+	%\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%%
 }%
 \NewDocumentCommand{\advisorinfo}{mmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
 	\tccore@ProfInfo{advisor}{#1}{#2}{#3}{#4}%%
-%%% the advisor is also the first examiner if not @nBoard%
+  %%% the advisor is also the first examiner if not @nBoard%
 	\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
+  %%%
+  %%% USING STARRAY
+  \__ufrgscca_set_prof_info:nnnnn {advisor}{#1}{#2}{#3}{#4}
+	%\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
 }%
 %
 \NewDocumentCommand{\coadvisor}{O{}mmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
 				\tccore@ProfFields{coadvisor}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \starray_new_term:nn {student.coadvisor}{}
+  \__ufrgscca_set_prof:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\coadvisorinfo}{mmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
 				\tccore@ProfInfo{coadvisor}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \__ufrgscca_set_prof_info:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
 }%
 %
 %
 \NewDocumentCommand{\tutor}{O{}mmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
     \tccore@ProfFields{tutor}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \starray_new_term:nn {student.tutor}{}
+  \__ufrgscca_set_prof:nnnnn {tutor}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\tutorinfo}{mmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
     \tccore@ProfInfo{tutor}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \__ufrgscca_set_prof_info:nnnnn {tutor}{#1}{#2}{#3}{#4}
 }%
 %
 %
 \NewDocumentCommand{\supervisor}{O{}mmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
     \tccore@ProfFields{supervisor}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \starray_new_term:nn {student.supervisor}{}
+  \__ufrgscca_set_prof:nnnnn {supervisor}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\supervisorinfo}{mmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisorregister\endcsname{#1}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisoroffice\endcsname{#2}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisoremail\endcsname{#3}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisorphone\endcsname{#4}%%
+  %%%
+  %%% USING STARRAY
+    \starray_gset_from_keyval:nn {student.supervisor}
+      {
+        register = #1 ,
+        office = #2 ,
+        email = #3 ,
+        phone = #4 ,
+      }
 }%
 \NewDocumentCommand{\internship}{mmmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipcompany\endcsname{#1}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipfield\endcsname{#2}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipstart\endcsname{#3}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipend\endcsname{#4}%%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshiplength\endcsname{#5}%%
+  %%%
+  %%% USING STARRAY
+    \starray_new_term:nn {student.internship}{}
+    \starray_gset_from_keyval:nn {student.internship}
+      {
+        company = #1 ,
+        field = #2 ,
+        start = #3 ,
+        end = #4 ,
+        length = #5 ,
+      }
 }%
 %
 %
 \NewDocumentCommand{\examiner}{O{}mmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
         \stepcounter{tc@examinercount}%%
 				\tccore@ProfFields{examiner\Alph{tc@examinercount}}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \starray_new_term:nn {student.reviewer}{}
+  \__ufrgscca_set_prof:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\examinerinfo}{mmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
 				\tccore@ProfInfo{examiner\Alph{tc@examinercount}}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \__ufrgscca_set_prof_info:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
 %
 \newcounter{tc@altexaminercount}[tc@studentcount]%
 \NewDocumentCommand{\altexaminer}{O{}mmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
         \stepcounter{tc@altexaminercount}%%
 				\tccore@ProfFields{altexaminer\Alph{tc@altexaminercount}}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \starray_new_term:nn {student.altreviewer}{}
+  \__ufrgscca_set_prof:nnnnn {altreviewer}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\altexaminerinfo}{mmmm}{%%
+  %%%
+  %%% TO BE REMOVED !
 				\tccore@ProfInfo{altexaminer\Alph{tc@altexaminercount}}{#1}{#2}{#3}{#4}%%
+  %%%
+  %%% USING STARRAY
+  \__ufrgscca_set_prof_info:nnnnn {altreviewer}{#1}{#2}{#3}{#4}
 }%
 %
 %%%%%%%%%%%%%%%
@@ -299,12 +749,23 @@
     \csundef{tc@studentA@supervisor}
     \csundef{tc@studentA@tutor}
     \csundef{tc@studentA@internshipcompany}
-%    \csundef{tc@studentA@internshipfield}
-%    \csundef{tc@studentA@internshipstart}
-%    \csundef{tc@studentA@internshipend}
-%    \csundef{tc@studentA@internshiplength}
 	\csundef{tcdef@core@tccbrief}
 	\csundef{tcdef@core@tccArgument}
 	\csundef{tcdef@core@tcccoadvisorbrief}
 	\csundef{tcdef@core@tccadvisorsreview}
 }
+
+\cs_new_protected:Npn \__ufrgscca_emptyfields:
+  {
+    \starray_new_term:nn {student}{empty}
+    \starray_new_term:nn {student.advisor}{}
+    \starray_new_term:nn {student.reviewer}{}
+    \starray_new_term:nn {student.reviewer}{}
+    \starray_new_term:nn {student.reviewer}{}
+    \starray_new_term:nn {student.altreviewer}{}
+    \starray_new_term:nn {student.supervisor}{}
+    \starray_new_term:nn {student.tutor}{}
+    \starray_new_term:nn {student.internship}{}
+  }
+  
+\ExplSyntaxOff
