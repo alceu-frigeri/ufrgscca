@@ -94,6 +94,20 @@
   \gdef\tc@TCCpointClabel{#3}%
 }%
 %
+\NewDocumentCommand{\TCCIpointsweight}{mmmmO{1}}{%
+  \gdef\tc@TCCIpointAweight{#1}%
+  \gdef\tc@TCCIpointBweight{#2}%
+  \gdef\tc@TCCIpointCweight{#3}%
+  \gdef\tc@TCCIpointDweight{#4}%
+  \gdef\tc@TCCIpointscale{#5}%
+}%
+
+\NewDocumentCommand{\TCCIpointslabel}{mmmm}{%
+  \gdef\tc@TCCIpointAlabel{#1}%
+  \gdef\tc@TCCIpointBlabel{#2}%
+  \gdef\tc@TCCIpointClabel{#3}%
+  \gdef\tc@TCCIpointDlabel{#4}%
+}%
 
 
 

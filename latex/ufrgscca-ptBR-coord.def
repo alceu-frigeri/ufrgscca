@@ -116,6 +116,25 @@
 \referralfailFF{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ n\~{a}o concluiu o trabalho de conclus\~{a}o de Curso tendo sido \tcdef@coord@referralfailed\  com conceito final \textbf{FF}.}
 
 
+%%% for TCC-I
+\referralexamapprovedtextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}\  no dia  \tccore@@ref{student}{date}, n\~{a}o tendo sido considerad\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} pela banca listada abaixo. Posto em exame, \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} foi \tcdef@coord@referralapproved\ com conceito final \tc@TCCgradeC .}
+
+\referralexamfailtextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}\  no dia  \tccore@@ref{student}{date}, n\~{a}o tendo sido considerad\tccore@@ref{student}{article} apt\tccore@@ref{student}{article}  pela banca listada abaixo. Posto em exame, \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} foi \tcdef@coord@referralfailed\ com conceito final \tc@TCCgradeD .}
+
+\referralfatetextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}\  no dia \tccore@@ref{student}{date}, tendo sido \tccoord@referralfate{\tccore@@ref{student}{Temp}} com conceito final \textbf{\tccoord@@fate{\Alph{tc@studentcount}}}, conforme quadro de notas abaixo. }
+
+%%\referralfailFF{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ n\~{a}o concluiu o trabalho de conclus\~{a}o de Curso tendo sido \tcdef@coord@referralfailed\  com conceito final \textbf{FF}.}
+
+
+
+
+
+
+
+
+
+
+
 \internshipreferralfatetext{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \tccore@@ref{student}{}, cartão No. \tccore@@ref{student}{ID}, Matriculado na Atividade de Estágio Supervisionado Obrigatório, estagiou na Empresa \tccore@@ref{internship}{company}, no período de \tccore@@ref{internship}{start} até \tccore@@ref{internship}{end}, tendo entregue o Relatório de Estágio Supervisionado Obrigatório em
 \tccore@@ref{student}{date}, tendo sido considerado \tccoord@referralfate{\tccore@@ref{student}{Temp}} com conceito final \textbf{\tccoord@@fate{\Alph{tc@studentcount}}}, conforme notas abaixo.}
 
@@ -146,6 +165,7 @@ inicialmente submetido apresentava diversos problemas formais, tendo re-submetid
 \cocertificatetext{atuou como co-orientador\tccore@@ref{coadvisor}{narticle} d\tccore@@ref{student}{article} alun\tccore@@ref{student}{article}\ \emph{\tccore@@ref{student}{}}\ no trabalho de conclus\~{a}o de curso intitulado \emph{\tccore@@ref{student}{title}}\ no semestre \tcdef@coord@TCCperiod.}
 
 \TCCcoordtitle{Coordenador\tccore@@ref{TCCcoord}{narticle} da atividade de ensino de\\ \tcdef@forms@formstitle\ }
+\TCCIcoordtitle{Coordenador\tccore@@ref{TCCcoord}{narticle} da atividade de ensino de\\ \tcdef@forms@formstitleTR\ }
 
 
 \advisornamegen{Orientador(a)}

@@ -42,6 +42,10 @@
     checklist.if = tcif@coord@checklist,
     report.usage = general,
     report.if = tcif@coord@report,
+    report-II.usage = general,
+    report-II.if = tcif@coord@report,
+    report-I.usage = general,
+    report-I.if = tcif@coord@reportI,
     reportxinfo.usage = general,
     reportxinfo.if = tcif@coord@reportxinfo,
     boards.usage = general,
@@ -52,8 +56,12 @@
     studentlist.if = tcif@coord@studentlist,
     revforms.usage = general,
     revforms.if = tcif@coord@forms@revforms,
+    referral-I.usage = general,
+    referral-I.if = tcif@coord@forms@referralI,
+    referral-II.usage = general,
+    referral-II.if = tcif@coord@forms@referralII,
     referral.usage = general,
-    referral.if = tcif@coord@forms@referral,
+    referral.if = tcif@coord@forms@referralII,
     cocertificate.usage = general,
     cocertificate.if = tcif@coord@forms@cocertificate,
 }
@@ -80,8 +88,11 @@
 
 \cmdfactory<coord>{calendartitle,tcccalendardesc}%
 \cmdfactory<coord>{tccreporttitle,tccreportopening,tccreportdesc,tccreportabsents,tccreportdismiss}%
-\cmdfactory<coord>{tccreferralopening,referralfailed,referralapproved,referralfailFF}
+\cmdfactory<coord>{tccreferralopening}
+\cmdfactory<coord>{referralfailed,referralapproved}
+\cmdfactory<coord>{referralfailFF}
 \cmdfactory<coord>{referralexamapprovedtext,referralexamfailtext,referralfatetext}%
+\cmdfactory<coord>{referralexamapprovedtextTR,referralexamfailtextTR,referralfatetextTR}%
 \cmdfactory<coord>{boardlabel,cocertificatetitle,cocertificateopenning,cocertificatetext}%
 \cmdfactory<coord>{TCCperiod,boardstitleB,boardsOBS}%
 \cmdfactory<coord>{studentlistformtitle,studentlistactivity,studentlistdate}%
@@ -241,8 +252,11 @@
     \iftcif@coord@forms@revforms%
       \tcforms@examinersForms%
     \fi%
-    \iftcif@coord@forms@referral%
+    \iftcif@coord@forms@referralII%
       \tccoord@TCCreferralletter%
+    \fi%
+    \iftcif@coord@forms@referralI%
+      \tccoord@TCCIreferralletter%
     \fi%
     \iftcif@coord@forms@cocertificate%
       \tccoord@TCCcocertificateletter%
@@ -258,7 +272,7 @@
     \expandafter\NewDocumentCommand\csname #1\endcsname{O{}}{%%
         #2%
         \csname #1.hook\endcsname%
-        \iftcif@coord@forms@referral%
+        \iftcif@coord@forms@referralII%
         \tccoord@internshipreferalletter%
         \fi%
     }%%
@@ -294,17 +308,33 @@
 }
 
 %
-\NewDocumentCommand{\examinergrades}{mmm}{%%
-        \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{#1}%%
-        \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{#2}%%
-        \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{#3}%%
-        \ifthenelse{\equal{#1}{}}{%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
-        }{%%
-          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{\fpeval{round((\tc@TCCpointAweight * #1 + \tc@TCCpointBweight * #2 + \tc@TCCpointCweight * #3),2,1)} }%
-        }%
+\NewDocumentCommand{\examinergrades}{mmmO{0}}{%%
+        \ifthenelse{\equal{#4}{0}}{
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{#1}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{#2}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{#3}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{#4}%%
+          \ifthenelse{\equal{#1}{}}{%%
+            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
+            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
+          }{%%
+            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{\fpeval{round((\tc@TCCpointAweight * #1 + \tc@TCCpointBweight * #2 + \tc@TCCpointCweight * #3) / (\tc@TCCpointAweight + \tc@TCCpointBweight + \tc@TCCpointCweight),2,1)} }%
+            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
+          }%
+        }{
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{\fpeval{#1 * \tc@TCCIpointscale}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{\fpeval{#2 * \tc@TCCIpointscale}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{\fpeval{#3 * \tc@TCCIpointscale}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{\fpeval{#4 * \tc@TCCIpointscale}}%%
+          \ifthenelse{\equal{#1}{}}{%%
+            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
+            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
+          }{%%
+            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
+            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4)  * \tc@TCCIpointscale / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
+          }%
+        }
   }%
-
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -516,6 +546,18 @@
   }%
 }%
 %
+%%
+% TCC-I
+% \tc@student grade => average of the 2 examiners grade%
+%%
+\NewDocumentCommand{\tccoord@studentgradeI}{m}{%%
+  \@ifundefined{tc@student#1}{}{%
+    \expandafter\edef\csname tc@student#1Temp\endcsname{%%
+\fpeval{round((\csname tc@student#1@examinerBgradeI\endcsname + \csname tc@student#1@examinerCgradeI\endcsname )/2,2,1)}%
+    }%
+  }%
+}%
+%
 
 \NewDocumentCommand{\tccoord@internshipstudentgrade}{m}{%
   \@ifundefined{tc@student#1}{}{%
@@ -532,6 +574,14 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NewDocumentCommand{\tccoord@examinersline}{mm}{%%
 & \hspace{-0.4em}\csname tc@student#1@examiner#2\endcsname & \csname tc@student#1@examiner#2pointA\endcsname & \csname tc@student#1@examiner#2pointB\endcsname & \csname tc@student#1@examiner#2pointC\endcsname & \csname tc@student#1@examiner#2grade\endcsname &%
+}%
+%
+%%
+% TCC-I
+% examiners info (grades) for report/referral letters%
+%%
+\NewDocumentCommand{\tccoord@examinerslineI}{mm}{%%
+& \hspace{-0.4em}\csname tc@student#1@examiner#2\endcsname & \csname tc@student#1@examiner#2pointA\endcsname & \csname tc@student#1@examiner#2pointB\endcsname & \csname tc@student#1@examiner#2pointC\endcsname & \csname tc@student#1@examiner#2pointD\endcsname & \csname tc@student#1@examiner#2gradeI\endcsname &%
 }%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -563,9 +613,42 @@
         & \multicolumn{4}{c}{\ifcsdef{tc@student#2@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#2@advisor\endcsname \ifcsdef{tc@student#2@coadvisor}{ /\csname tc@student#2@coadvisor\endcsname}}{} & \textbf{\csname tc@student#2Temp\endcsname} & %%
           \textbf{\tccoord@@fate{#2}}%%
           \ifblank{#1}{\\}{\\*%%
-            \multicolumn{6}{l}{\tcdef@coord@boardsworklabel: \csname tc@student#2title\endcsname}\\*%%
+            \multicolumn{7}{l}{\tcdef@coord@boardsworklabel: \csname tc@student#2title\endcsname}\\*%%
             \iftcif@coord@reportxinfo%
-              \multicolumn{6}{l}{\tccoord@studentextrainfo{#2}}\\*%
+              \multicolumn{7}{l}{\tccoord@studentextrainfo{#2}}\\*%
+              \ifcsdef{tc@student#2remark}{\multicolumn{6}{c}{{\bf \csname tc@student#2remark\endcsname}}\\}{}%
+            \fi%
+          }%%
+          \hline%%
+      }{%%
+      }%%
+    }{%%
+    }%%
+  }%%
+}%
+%
+%
+%%
+% TCC-I
+% student info (all examiners, advisor, etc.) for report and referral letters.%
+%%
+\NewDocumentCommand{\tccoord@@studentrowI}{m}{%
+  \setcounter{tc@studentcount}{#1}%
+  \tccoord@studentrowI[tc@studentextrainfo]{\Alph{tc@studentcount}}%
+}%
+\NewDocumentCommand{\tccoord@studentrowI}{O{}m}{%%
+  \@ifundefined{tc@student#2}{}{%%
+    \@ifundefined{tc@student#2FF}{%%
+      \@ifundefined{tc@student#2Dismiss}{%%
+        \multirow{3}{\tc@ReportTabA}{\csname tc@student#2\endcsname} %%
+        \tccoord@examinerslineI{#2}{B}\\*%%
+        \tccoord@examinerslineI{#2}{C}\\*%%
+        & \multicolumn{5}{c}{\ifcsdef{tc@student#2@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#2@advisor\endcsname \ifcsdef{tc@student#2@coadvisor}{ /\csname tc@student#2@coadvisor\endcsname}}{} & \textbf{\csname tc@student#2Temp\endcsname} & %%
+          \textbf{\tccoord@@fate{#2}}%%
+          \ifblank{#1}{\\}{\\*%%
+            \multicolumn{8}{l}{\tcdef@coord@boardsworklabel: \csname tc@student#2title\endcsname}\\*%%
+            \iftcif@coord@reportxinfo%
+              \multicolumn{8}{l}{\tccoord@studentextrainfo{#2}}\\*%
               \ifcsdef{tc@student#2remark}{\multicolumn{6}{c}{{\bf \csname tc@student#2remark\endcsname}}\\}{}%
             \fi%
           }%%
@@ -580,7 +663,7 @@
 %
 %
 \NewDocumentCommand{\tccoord@studentxinforow}{m}{%
-    \multicolumn{6}{l}{\tccoord@studentextrainfo{#1}}\\*%
+    \multicolumn{7}{l}{\tccoord@studentextrainfo{#1}}\\*%
     \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
 }%
 %
@@ -648,6 +731,7 @@
 \def\tc@ReportTabC{15mm}%
 \def\tc@ReportTabD{15mm}%
 \def\tc@ReportTabE{15mm}%
+\def\tc@ReportTabEx{15mm}%
 \def\tc@ReportTabF{8mm}%
 \def\tc@ReportTabG{12mm}%
 %%%%
@@ -667,6 +751,41 @@
             \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
           \endhead%
           \forcsvlist{\tccoord@@studentrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
+          \@ifundefined{tc@TCCff@flag}{}{%
+            & & & & & & \\%
+            & & & & & & \\%
+            \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportabsents}}\\\hline%
+            \forcsvlist{\tccoord@@studentFFrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}%
+          }%
+          \@ifundefined{tc@TCCdismiss@flag}{}{%
+            & & & & & & \\%
+            & & & & & & \\%
+            \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportdismiss}}\\\hline%
+            \forcsvlist{\tccoord@@studentDismissrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
+          }%%
+        \end{longtable}%%
+    \end{center}%%
+  } %end of footnotesize%
+
+  \vfill%
+  \pagebreak%
+}%
+%
+%%%%
+\NewDocumentCommand{\tccoord@TCCIreport}{}{%
+  \stepcounter{tc@studentcount}%
+  \tc@formtopbox{\tcdef@forms@formstitleTR}{\tcdef@coord@tccreporttitle\ - \tcdef@coord@TCCperiod}%
+  {%%
+%    \footnotesize%
+    \tiny%
+    \forcsvlist{\tccoord@studentgradeI}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,X,Y}%
+    \begin{center}%
+        \begin{longtable}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }p{\tc@ReportTabC}@{\ }p{\tc@ReportTabD}@{\ }p{\tc@ReportTabE}@{\ }p{\tc@ReportTabEx}@{\ }p{\tc@ReportTabF}@{\ }p{\tc@ReportTabG}}%
+          \multicolumn{7}{c}{\tcdef@forms@formstitleTR\ \tcdef@coord@TCCperiod}\\\hline%
+          & \tcdef@coord@boardlabel & \tc@TCCIpointAlabel & \tc@TCCIpointBlabel & \tc@TCCIpointClabel & \tc@TCCIpointDlabel &%
+            \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
+          \endhead%
+          \forcsvlist{\tccoord@@studentrowI}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
           \@ifundefined{tc@TCCff@flag}{}{%
             & & & & & & \\%
             & & & & & & \\%
@@ -870,6 +989,78 @@
 }%
 %
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+% TCC-I referral letters :: approved/failed/FF%
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\NewDocumentCommand{\tccoord@TCCIreferralletter}{}{%
+  \@ifundefined{tc@student\Alph{tc@studentcount}Dismiss}{%
+    \tc@formtopbox{\tcdef@forms@formstitleTR}{\tcdef@coord@TCCperiod}%
+
+    \noindent\tcdef@coord@tccreferralopening%
+    \vfill%
+
+    \@ifundefined{tc@student\Alph{tc@studentcount}FF}{%
+      \@ifundefined{tc@student\Alph{tc@studentcount}Exam}{%
+        \tccoord@studentgradeI{\Alph{tc@studentcount}}%
+         \tcdef@coord@referralfatetextTR%
+
+        \vfill%
+
+        {\footnotesize%
+          \begin{center}%
+            \resizebox{\textwidth}{!}{%
+              \begin{tabular}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}%\hline%
+                & \tcdef@coord@boardlabel & \tc@TCCIpointAlabel & \tc@TCCIpointBlabel & \tc@TCCIpointClabel & \tc@TCCIpointDlabel  &%
+                \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
+                \tccoord@studentrowI{\Alph{tc@studentcount}}%
+              \end{tabular}%
+            }%
+          \end{center}%
+        }%
+      }{%
+        \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{D}}{%
+          \tcdef@coord@referralexamfailtextTR%
+          \vfill%
+        }{%
+          \tcdef@coord@referralexamapprovedtextTR%
+          \vfill%
+        }%
+        {%%
+          \footnotesize%
+          \begin{center}%
+            \begin{tabular}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }c}%\hline%
+              & \tcdef@coord@boardlabel \\\hline%
+              \multirow{3}{\tc@ReportTabA}{\csname tc@student\Alph{tc@studentcount}\endcsname} %
+              &\csname tc@student\Alph{tc@studentcount}@examinerB\endcsname\\%
+              &\csname tc@student\Alph{tc@studentcount}@examinerC\endcsname\\%
+              \multicolumn{2}{l}{\tcdef@forms@formsadvisorlabel : \csname tc@student\Alph{tc@studentcount}@advisor\endcsname} \\\hline%
+            \end{tabular}%
+          \end{center}%
+        }%
+      }%
+    }{%
+      \tcdef@coord@referralfailFF%
+    }%
+
+    \vfill%
+    \begin{flushright}%
+      \tc@city, \tc@publday\ de \tc@publmonth\ de \tc@publyear .%
+      \vfill %
+
+      \tcdef@core@TCCIcoordtitle%
+      \vfill%
+
+      $\overline{\text{\tcdef@core@TCCcoord}}$%
+    \end{flushright}%
+    \vfill%
+    \pagebreak%
+  }{}%
+}%
+%
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -980,6 +1171,9 @@
   }
   \iftcif@coord@checklist%
     \tccoord@TCCchecklist%
+  \fi%
+  \iftcif@coord@reportI%
+    \tccoord@TCCIreport%
   \fi%
   \iftcif@coord@report%
     \tccoord@TCCreport%
