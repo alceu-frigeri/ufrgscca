@@ -240,7 +240,8 @@ Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
 
 \advisorapprovalformdesc{{\bf Parecer d\tccore@@ref{advisor}{article} Orientador\tccore@@ref{advisor}{narticle}}\footnote{Preenchimento Obrigatório}}
 
-\advisorapprovalformdescB{Aprovo a versão final do trabalho submetido pel\tccore@@ref{student}{article} alun\tccore@@ref{student}{article} e considero \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} para apresentação.}
+%\advisorapprovalformdescB{Aprovo a versão final do trabalho submetido pel\tccore@@ref{student}{article} alun\tccore@@ref{student}{article} e considero \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} para apresentação.}
+\advisorapprovalformdescB{}
 
 \rectifyapprovalformtitle{Formulário de Aprovação das Correções}
 

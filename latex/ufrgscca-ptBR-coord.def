@@ -117,18 +117,13 @@
 
 
 %%% for TCC-I
-\referralexamapprovedtextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}\  no dia  \tccore@@ref{student}{date}, n\~{a}o tendo sido considerad\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} pela banca listada abaixo. Posto em exame, \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} foi \tcdef@coord@referralapproved\ com conceito final \tc@TCCgradeC .}
+\referralexamapprovedtextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}, n\~{a}o tendo sido considerad\tccore@@ref{student}{article} apt\tccore@@ref{student}{article} pela banca listada abaixo. Posto em exame, \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} foi \tcdef@coord@referralapproved\ com conceito final \tc@TCCgradeC .}
 
-\referralexamfailtextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}\  no dia  \tccore@@ref{student}{date}, n\~{a}o tendo sido considerad\tccore@@ref{student}{article} apt\tccore@@ref{student}{article}  pela banca listada abaixo. Posto em exame, \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} foi \tcdef@coord@referralfailed\ com conceito final \tc@TCCgradeD .}
+\referralexamfailtextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}, n\~{a}o tendo sido considerad\tccore@@ref{student}{article} apt\tccore@@ref{student}{article}  pela banca listada abaixo. Posto em exame, \tccore@@ref{student}{article} mesm\tccore@@ref{student}{article} foi \tcdef@coord@referralfailed\ com conceito final \tc@TCCgradeD .}
 
-\referralfatetextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}\  no dia \tccore@@ref{student}{date}, tendo sido \tccoord@referralfate{\tccore@@ref{student}{Temp}} com conceito final \textbf{\tccoord@@fate{\Alph{tc@studentcount}}}, conforme quadro de notas abaixo. }
+\referralfatetextTR{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ submeteu o trabalho intitulado \emph{\tccore@@ref{student}{title}}, tendo sido \tccoord@referralfate{\tccore@@ref{student}{Temp}} com conceito final \textbf{\tccoord@@fate{\Alph{tc@studentcount}}}, conforme quadro de notas abaixo. }
 
 %%\referralfailFF{\tccore@@ref{student}{Article} alun\tccore@@ref{student}{article} \emph{\tccore@@ref{student}{}}\ n\~{a}o concluiu o trabalho de conclus\~{a}o de Curso tendo sido \tcdef@coord@referralfailed\  com conceito final \textbf{FF}.}
-
-
-
-
-
 
 
 

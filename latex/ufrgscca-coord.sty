@@ -309,32 +309,27 @@
 
 %
 \NewDocumentCommand{\examinergrades}{mmmO{0}}{%%
-        \ifthenelse{\equal{#4}{0}}{
+  \ifthenelse{\equal{#1}{}}{%%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
+    \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
+  }{%
+    \ifthenelse{\equal{#4}{0}}{%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{#1}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{#2}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{#3}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{#4}%%
-          \ifthenelse{\equal{#1}{}}{%%
-            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
-            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
-          }{%%
-            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{\fpeval{round((\tc@TCCpointAweight * #1 + \tc@TCCpointBweight * #2 + \tc@TCCpointCweight * #3) / (\tc@TCCpointAweight + \tc@TCCpointBweight + \tc@TCCpointCweight),2,1)} }%
-            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
-          }%
-        }{
+          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{\fpeval{round((\tc@TCCpointAweight * #1 + \tc@TCCpointBweight * #2 + \tc@TCCpointCweight * #3) / (\tc@TCCpointAweight + \tc@TCCpointBweight + \tc@TCCpointCweight),2,1)} }%
+          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
+    }{%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{\fpeval{#1 * \tc@TCCIpointscale}}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{\fpeval{#2 * \tc@TCCIpointscale}}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{\fpeval{#3 * \tc@TCCIpointscale}}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{\fpeval{#4 * \tc@TCCIpointscale}}%%
-          \ifthenelse{\equal{#1}{}}{%%
-            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
-            \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
-          }{%%
-            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
-            \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4)  * \tc@TCCIpointscale / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
-          }%
-        }
+          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
+          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4)  * \tc@TCCIpointscale / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
+    }%
   }%
+}%
 
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
