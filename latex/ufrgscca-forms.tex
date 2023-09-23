@@ -51,10 +51,10 @@
   title.rectifyapproval     = Formulário de Aprovação das Correções ,
   title.internsupervisorform = Formulário de Avaliação do Supervisor (Pela Empresa) ,
   title.interntutorform      = Formulário de Avaliação do Tutor e Coordenador ,
-  
   %
-  footnote.reviewersform    = Entregar a cada membro da banca juntamente com a cópia do trabalho. , %%% TCC I / II
-  footnote.receipts         = Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC. , %%% TCC II
+  %footnote.reviewersform
+  footnote.reviewersform    = {Entregar a cada membro da banca juntamente com a cópia do trabalho.} , %%% TCC I / II
+  footnote.receipts         = {Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC.} , %%% TCC II
   footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} ,%%% TCC II
    %
   footnote.supervisorsform = {Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}} ,
@@ -62,6 +62,38 @@
   opening.requestform       = { Ilm\tccore@@ref{coursecoord}{article}. Sr\tccore@@ref{coursecoord}{narticle}.\par
  Coordenador\tccore@@ref{coursecoord}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}   } ,
   localdate                 = {\tc@city,\hspace{4mm} de \hspace{1.2cm} de 20\hspace{4mm}.} ,
+  %
+  %
+  %
+  %
+ footnote.requestform       = { O resumo deve ser curto, i.e., não deve exceder este espaço. O texto deve ser escrito em parágrafo único, 
+                                e por se tratar de proposta, poderá utilizar  tempo futuro e não necessita ter motivação ou justificativa.\break  Deve conter:
+                                \begin{enumerate*}[alpha)] 
+                                	\item O QUE será feito - descrição e objetivos.
+                                   \item COMO será feito - metodologia.
+                                	\item Resultados esperados.
+                                \end{enumerate*}%
+                                } ,   %%% TCC I
+  desc.requestform          = { \DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity{course}{name}}, desta universidade, 
+                              portador\DataFields{student}{narticle} do cartão de identificação n$^o$ \DataFields{student}{ID}, 
+                              vem por meio deste solicitar matrícula na atividade de ensino} ,
+  desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
+                              vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
+  desc.studentwork          = {
+                              \noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
+                              \noindent\UseLabel{worktitle}: \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
+  desc.studentwork.full     = {\UseTerm{desc.studentwork}\\[2.5mm]\UseTerm{desc.advisor}} ,  
+  desc.advisor              = {\noindent\UseLabel{advisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
+  desc.coadvisor            = {\noindent\UseLabel{coadvisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
+  desc.reviewer             = {\noindent\UseLabel{reviewer}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
+  desc.student              = {\noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill 
+                              \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}} ,
+%  desc.student              = {\noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill 
+%                              \UseLabel{student.ID}: {\bf \tc@studentAID}} ,
+  desc.internshipperiod     = {\noindent Período do Estágio: {\bf \DataFields{student.internship}{start}} até: {\bf \DataFields{student.internship}{end}}} ,
+  desc.supervisor           = {\UseLabel{supervisor}: \textbf{\DataFields{student.supervisor}{name}} \hfill CREA: \textbf{\DataFields{student.supervisor}{register}}} ,
 }
 
 \SetLabels{%
@@ -103,34 +135,6 @@
 
 
 \SetTermKeys{%
- footnote.requestform       = { O resumo deve ser curto, i.e., não deve exceder este espaço. O texto deve ser escrito em parágrafo único, 
-                                e por se tratar de proposta, poderá utilizar  tempo futuro e não necessita ter motivação ou justificativa.\break  Deve conter:
-                                \begin{enumerate*}[alpha)] 
-                                	\item O QUE será feito - descrição e objetivos.
-                                   \item COMO será feito - metodologia.
-                                	\item Resultados esperados.
-                                \end{enumerate*}%
-                                } ,   %%% TCC I
-  desc.requestform          = { \DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
-                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity{course}{name}}, desta universidade, 
-                              portador\DataFields{student}{narticle} do cartão de identificação n$^o$ \DataFields{student}{ID}, 
-                              vem por meio deste solicitar matrícula na atividade de ensino} ,
-  desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
-                              REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
-                              vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
-  desc.studentwork          = {
-                              \noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
-                              \noindent\UseLabel{worktitle}: \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
-  desc.studentwork.full     = {\UseTerm{desc.studentwork}\\[2.5mm]\UseTerm{desc.advisor}} ,  
-  desc.advisor              = {\noindent\UseLabel{advisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
-  desc.coadvisor            = {\noindent\UseLabel{coadvisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
-  desc.reviewer             = {\noindent\UseLabel{reviewer}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
-  desc.student              = {\noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill 
-                              \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}} ,
-%  desc.student              = {\noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill 
-%                              \UseLabel{student.ID}: {\bf \tc@studentAID}} ,
-  desc.internshipperiod     = {\noindent Período do Estágio: {\bf \DataFields{student.internship}{start}} até: {\bf \DataFields{student.internship}{end}}} ,
-  desc.supervisor           = {\UseLabel{supervisor}: \textbf{\DataFields{student.supervisor}{name}} \hfill CREA: \textbf{\DataFields{student.supervisor}{register}}} ,
 }
 
 
@@ -421,10 +425,10 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
   \vfill%
 
   \tcdef@core@tccadvisorsreview%
-
-  \vfill%
-  Aprovo a versão final do trabalho submetido pel\DataFields{student}{article} alun\DataFields{student}{article} e 
-  considero \DataFields{student}{article} mesm\DataFields{student}{article} apt\DataFields{student}{article} para avaliação pela Banca Examinadora.%
+%
+%  \vfill%
+%  Aprovo a versão final do trabalho submetido pel\DataFields{student}{article} alun\DataFields{student}{article} e 
+%  considero \DataFields{student}{article} mesm\DataFields{student}{article} apt\DataFields{student}{article} para avaliação pela Banca Examinadora.%
 }
 
 %%%
@@ -483,7 +487,7 @@ Outras considerações, parecer (se necessário): \\
   ~\\\hline
 	~\\\hline
 	\end{tabular}\\[-1mm]
-  \footnotetext[2]{Use a escala: \begin{enumerate*}\item Péssimo  \item Deficitário \item Bom \item Muito Bom \item Excelente \end{enumerate*}}%
+  \footnotetext[2]{Use uma escala de 0 à 10: \begin{enumerate*}\item[0.] Péssimo  \item[3.] Deficitário \item[6.] Bom \item[8.] Muito Bom \item[10.] Excelente \end{enumerate*}}%
   \footnotetext[3]{\tcdef@forms@reviewformfootnoteB}%
 }
 
