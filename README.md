@@ -122,7 +122,12 @@ The Current Maintainer of this work is Alceu Frigeri
 -------------
 
 ## Changelog
-* Version 1.11 (this)
+* Version 1.12 (this)
+    - forms adjustments
+    - documentation typo
+    - expl3 initial preparation
+
+* Version 1.11
     - added many forms (TCC-I/II related, see documentation)
     - documentation describing the new options.
 
