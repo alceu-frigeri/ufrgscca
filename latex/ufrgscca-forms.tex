@@ -233,7 +233,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
     \vfill%
 
-    Considerações Complementares: \tcdef@core@formsblanklinesB
+    Considerações Complementares: \BlankLines{5}%\tcdef@core@formsblanklinesB
 }
 
 %%%
@@ -262,7 +262,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
     Considerações d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle} sobre o Estágio: 
     
-    \tcdef@core@formsblanklinesB
+    \BlankLines{5}%\tcdef@core@formsblanklinesB
 
     \vfill%
 
@@ -276,7 +276,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
     Considerações d\tccore@@ref{internshipcoord}{article} Prof\tccore@@ref{internshipcoord}{narticle}. Coordenador\tccore@@ref{internshipcoord}{narticle} sobre o Estágio:
     
-     \tcdef@core@formsblanklinesB
+     \BlankLines{5}%\tcdef@core@formsblanklinesB
     \vfill%
 
     \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.internshipcoord}}}
@@ -352,7 +352,6 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 %%%
 \SetForm{coadvisor-I}{body}{%
   \UseTerm{desc.coadvisorform}
-  %\tcdef@forms@coadvisorformdesc%
   \vfill%
 
   \UseLabel{worktitle.temp}: \@title %
@@ -420,7 +419,8 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
 %%%
 \SetForm{advisorsapproval-I}{body}{%
-  \tcdef@forms@advisorapprovalformdesc%
+  %\tcdef@forms@advisorapprovalformdesc%
+  {\bf Parecer d\tccore@@ref{advisor}{article} Orientador\tccore@@ref{advisor}{narticle}}\footnote{Preenchimento Obrigatório}
 
   \vfill%
 

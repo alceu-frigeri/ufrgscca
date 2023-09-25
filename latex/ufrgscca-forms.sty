@@ -205,50 +205,50 @@
   
   \tcforms@advisorIDheader
 }%
-
-
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 %%
-% TCC (new) generic form %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%% TCC (new) generic form %
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% parameters:
+%% #3 : footnote for 'form title'
+%% #1 : form 'heading title' (TCC I, for instance)
+%% #2 : 'form title'
+%% #4 : form oppening
+%% #5 : form body
+%% #6 : form closing
+%%
+%\NewDocumentCommand{\tcforms@genform}{mmmmmm}{%
+%  \tc@Nformtopbox[#3]{#1}{#2}%
+%%
+%  \vfill%
+%   #4
+%  \vfill%
+%  #5
+%  \vfill%
+%  #6
+%  \pagebreak
+%}
 %
-% parameters:
-% #3 : footnote for 'form title'
-% #1 : form 'heading title' (TCC I, for instance)
-% #2 : 'form title'
-% #4 : form oppening
-% #5 : form body
-% #6 : form closing
 %
-\NewDocumentCommand{\tcforms@genform}{mmmmmm}{%
-  \tc@Nformtopbox[#3]{#1}{#2}%
-%
-  \vfill%
-   #4
-  \vfill%
-  #5
-  \vfill%
-  #6
-  \pagebreak
-}
-
-
 \NewDocumentCommand{\tcforms@studentIDheader}{}{
   \noindent\tcdef@forms@formsstudentlabel : {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \tcdef@forms@formsstudentIDlabel : {\bf \tc@studentAID}\\%
   \noindent\tcdef@forms@formsworktitlelabel : \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}\\
 }
-
+%
 \NewDocumentCommand{\tcforms@examinerIDheader}{m}{
   %\tccore@examiners{#1}
   \noindent\tcdef@forms@formsexaminerlabel :  \textbf{\csname tc@student\Alph{tc@studentcount}@#1\endcsname}%
 }
-
+%
 \NewDocumentCommand{\tcforms@advisorIDheader}{}{
   \noindent\tcdef@forms@formsadvisorlabel :  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}%
 }
-
+%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -289,7 +289,7 @@
   \pagebreak%
 }%
 %
-%
+%%
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -372,7 +372,7 @@
   \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}%
   \pagebreak%
 }%
-%
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % TCC co-advisor requirement form (TCC register)%
@@ -548,9 +548,9 @@
   \vfill%
   \pagebreak%
 }%
-%
-%
-%
+%%
+%%
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % examiners approval/not signature (for rectify approval form)%
@@ -561,12 +561,12 @@
   \hfill\tcdef@forms@formsdatelabel:\rule{\tc@daterule}{.1pt}\\[3mm]%
   #1: #2 \hfill  \tcdef@forms@formssignaturelabel:\rule{\tc@namerule}{.1pt}%
 }%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
-% TCC Board rectify approval form%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%% TCC Board rectify approval form%
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \NewDocumentCommand{\tcforms@rectifyexaminersig}{O{\tcdef@forms@formsexaminerlabel}m}{\@ifundefined{#2}{}{\tcforms@approvalsigdate{#1}{\csname #2\endcsname}}\\[3mm]}%
 %
 \NewDocumentCommand{\tcforms@rectifyapprovalform}{}{%
@@ -597,9 +597,9 @@
   \vfill%
   \pagebreak%
 }%
-%
-%
-%
+%%
+%%
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % TCC Advisor approval form%
@@ -634,8 +634,8 @@
 %%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%
 %
-
 %
+%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
 % set of blank lines%
@@ -667,7 +667,7 @@
 
     \hrulefill\\%
 }%
-%
+
 
 
 \DeclareKeys[forms]{
@@ -739,6 +739,18 @@
 \ExplSyntaxOn
 
 
+\int_new:N \l__ufrgscca_a_int
+\int_new:N \l__ufrgscca_b_int
+\NewDocumentCommand{\BlankLines}{m}{
+  \int_zero:N \l__ufrgscca_a_int
+  \int_set:Nn \l__ufrgscca_b_int {#1}
+  \int_do_until:nNnn {\l__ufrgscca_a_int} {=} {\l__ufrgscca_b_int}
+    {
+      \int_incr:N \l__ufrgscca_a_int
+      \hrulefill\\\par%
+
+    }
+}
 
 \NewDocumentCommand{\SetForm}{mm+m}{
   \prop_put:Nnn \l__ufrgscca_forms_prop {#1.#2}{#3}
