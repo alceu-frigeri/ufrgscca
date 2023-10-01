@@ -33,6 +33,7 @@
     acronym                 = UFRGS ,
     unit                    = Escola de Engenharia ,
     secretary               = SACAD/EE ,
+    course                  = Engenharia de Controle e Automação ,
 }
 
 \SetTermKeys{%
@@ -59,8 +60,8 @@
    %
   footnote.supervisorsform = {Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}} ,
    %
-  opening.requestform       = { Ilm\tccore@@ref{coursecoord}{article}. Sr\tccore@@ref{coursecoord}{narticle}.\par
- Coordenador\tccore@@ref{coursecoord}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}   } ,
+  opening.requestform       = { Ilm\ActivityCoord{course}{article}. Sr\ActivityCoord{course}{narticle}.\par
+ Coordenador\ActivityCoord{course}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}.   } ,
   localdate                 = {\tc@city,\hspace{4mm} de \hspace{1.2cm} de 20\hspace{4mm}.} ,
   %
   %
@@ -81,6 +82,12 @@
   desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
                               REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
                               vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
+  desc.rectifyapproval      = { \begin{description}
+                              \item[Observação 1:] Caso a versão final corrigida do trabalho, mais este formulário, não sejam entregues até a data estipulada, o conceito final passará a ser {\bf D}.
+                              \item[Observação 2:] Caso as correções sejam satisfatórias, a nota final será a já atribuída pela Banca Examinadora. 
+                              \item[Observação 3:] A assinatura d\DataFields{student.advisor}{article} orientador\DataFields{student.advisor}{narticle} é obrigatória, entretanto a assinatura dos membros da banca só é necessária caso tenham marcado a opção ''$\Box$ Revisarei o trabalho depois de corrigido'' no \emph{\UseTerm{temp.formrefname}}.
+                            \end{description}
+                              } ,
   desc.studentwork          = {
                               \noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
                               \noindent\UseLabel{worktitle}: \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
@@ -90,10 +97,22 @@
   desc.reviewer             = {\noindent\UseLabel{reviewer}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
   desc.student              = {\noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill 
                               \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}} ,
-%  desc.student              = {\noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill 
-%                              \UseLabel{student.ID}: {\bf \tc@studentAID}} ,
   desc.internshipperiod     = {\noindent Período do Estágio: {\bf \DataFields{student.internship}{start}} até: {\bf \DataFields{student.internship}{end}}} ,
   desc.supervisor           = {\UseLabel{supervisor}: \textbf{\DataFields{student.supervisor}{name}} \hfill CREA: \textbf{\DataFields{student.supervisor}{register}}} ,
+  corrections.ok            = {Correções satisfatórias: \hspace*{1cm}$\Box$\ sim\hspace*{2cm}$\Box$\ não} , 
+}
+
+\SetTermKeys{%
+  notes.calendar            = {%
+    \begin{description}
+      \item[Obs. 1]: Caso o aluno(a) já tenha um processo aberto de TCC, reusar o mesmo apenas anexando o novo requerimento de matrícula, caso necessário.
+      \item[Obs. 2]: O formulário deve conter as assinaturas de concordância em participar da banca da parte dos professores convidados.
+      \item[Obs. 3]: As bancas serão marcadas após a entrega do relatório parcial, de acordo com a disponibilidade dos professores convidados.
+      \item[Obs. 4]: O \emph{Formulário de Aprovação das Correções} deve estar assinado pelo(a) orientador(a). Para relatórios em que o campo “Revisarei o trabalho depois de corrigido” tiver sido assinalado por algum membro da banca, a assinatura do(a) mesmo(a) também deverá constar no \emph{Formulário de Aprovação das Correções}.
+      \item[Obs. 5]: Trabalho em \textbf{RECUPERAÇÃO} é aquele cuja nota final quando da defesa é insuficiente para aprovação OU aquele em que o campo “Necessita ser revisto/re-escrito” do formulário de correções foi marcado por algum membro da banca. Neste caso, o \emph{Formulário de Aprovação das Correções} deve estar assinado tanto pelo(a) orientador(a) como pelo(s) membro(s) da banca designado(s) para reavaliar o trabalho, incluindo obrigatoriamente aqueles que tiverem marcado o campo “Revisarei o trabalho depois de corrigido”.\\\hrule
+      \item[IMPORTANTE]: O(A) aluno(a) estará \textbf{REPROVADO(A)} \emph{se falhar na entrega de qualquer um dos documentos aqui citados dentro dos prazos estipulados}.
+    \end{description}
+  } ,
 }
 
 \SetLabels{%
@@ -106,6 +125,7 @@
   reviewer.base             = Avaliador ,
   reviewer                  = Avaliador\DataFields{student.reviewer}{narticle} ,
   altreviewer               = Suplente ,  
+  altreviewer.sig           = Avaliador\DataFields{student.altreviewer}{narticle} ,
   tutor                     = Tutor\DataFields{student.tutor}{narticle} ,
   tutor.gen                 = Tutor(a) ,
   tutor.email               = Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} ,  
@@ -115,6 +135,7 @@
   student.gen               = Aluno(a) ,
   student.email             = Email d\DataFields{student}{article} Alun\DataFields{student}{article} ,
   student.ID                = Cartão ,
+  signature.gen             = Assinatura , 
   signature.student         = Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article} ,
   signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
   signature.advisor         = Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle} ,
@@ -124,18 +145,38 @@
   signature.gen             = Assinatura ,
   signature.supervisor      = Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle} ,
   signature.tutor           = Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle} ,
-  signature.internshipcoord = Assinatura\ \ d\tccore@@ref{internshipcoord}{article}\ \ Coordenador\tccore@@ref{internshipcoord}{narticle} ,
+  signature.internshipcoord = Assinatura\ \ d\ActivityCoord{internship}{article}\ \ Coordenador\ActivityCoord{internship}{narticle} ,
   worktitle                 = Título do Trabalho ,
   worktitle.temp            = Título Provisório ,
   email                     = Email ,
   phone                     = ramal ,
   board                     = Banca Examinadora ,
+  board.member              = Membro da Banca ,
   agree                     = De Acordo ,
+}
+
+\SetLabels{%
+  TCC-I.pointA              = {Tema} ,
+  TCC-I.pointB              = {Biblio.} ,
+  TCC-I.pointC              = {Plano Trab.} ,
+  TCC-I.pointD              = {Texto} ,
+  TCC-I.weightA              = {2} ,
+  TCC-I.weightB              = {2} ,
+  TCC-I.weightC              = {2} ,
+  TCC-I.weightD              = {1} ,
+  TCC-II.pointA              = {Conteúdo} , 
+  TCC-II.pointB              = {Trab. Escrito} ,
+  TCC-II.pointC              = {Apresentação} ,
+  TCC-II.weightA              = {0.35} , 
+  TCC-II.weightB              = {0.35} ,
+  TCC-II.weightC              = {0.3} 
 }
 
 
 \SetTermKeys{%
 }
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -233,7 +274,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
     \vfill%
 
-    Considerações Complementares: \BlankLines{5}%\tcdef@core@formsblanklinesB
+    Considerações Complementares: \BlankLines{5}
 }
 
 %%%
@@ -256,13 +297,13 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
 %%%
 \SetForm{internshiptutorform}{body}{
-    Avaliação d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle}:\emptybox%\tcdef@forms@interntutorgrade%
+    Avaliação d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle}:\emptybox
 
     \vfill%
 
     Considerações d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle} sobre o Estágio: 
     
-    \BlankLines{5}%\tcdef@core@formsblanklinesB
+    \BlankLines{5}%
 
     \vfill%
 
@@ -271,12 +312,12 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
  %   \hline
     \vfill%
 
-    Avaliação d\tccore@@ref{internshipcoord}{article} Prof\tccore@@ref{internshipcoord}{narticle}. Coordenador\tccore@@ref{internshipcoord}{narticle}:\emptybox%\tcdef@forms@interncoordgrade%
+    Avaliação d\ActivityCoord{internship}{article} Prof\ActivityCoord{internship}{narticle}. Coordenador\ActivityCoord{internship}{narticle}:\emptybox%
     \vfill
 
-    Considerações d\tccore@@ref{internshipcoord}{article} Prof\tccore@@ref{internshipcoord}{narticle}. Coordenador\tccore@@ref{internshipcoord}{narticle} sobre o Estágio:
+    Considerações d\ActivityCoord{internship}{article} Prof\ActivityCoord{internship}{narticle}. Coordenador\ActivityCoord{internship}{narticle} sobre o Estágio:
     
-     \BlankLines{5}%\tcdef@core@formsblanklinesB
+     \BlankLines{5}%
     \vfill%
 
     \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.internshipcoord}}}
@@ -284,6 +325,94 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
 %%%
 \SetForm{internshiptutorform}{closing}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% TCCs - Calendar - EVENTS
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\SetActivityNewEvent{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% TCCs - Calendar
+%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\SetForm{calendar-I}{heading}{\UseTerm{title.tccI}}
+\SetForm{calendar-I}{title}{\UseTerm{title.calendar}}
+\SetForm{calendar-I}{opening}{}
+
+%%%
+  \ExplSyntaxOn
+  \bool_new:N \l__ufrgscca_tmp_bool
+\SetForm{calendar-I}{body}{%
+  \starray_set_iter_from_hash:nn {activity}{tccI}
+  \starray_reset_iter:n {activity.calendar}
+  \bool_set_true:N \l__ufrgscca_tmp_bool
+  { \footnotesize%
+    \begin{center}
+%
+      \resizebox{\textwidth}{!}{%%
+        \begin{tabular}{ccp{11.5cm}}%
+        Data/Período & Semana~ Letiva & Evento\\\hline
+        \bool_do_while:Nn \l__ufrgscca_tmp_bool
+          {
+            \textbf{\starray_get_prop:nn {activity.calendar}{date}} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}\\\hline
+            \starray_next_iter:nF {activity.calendar}{\bool_set_false:N \l__ufrgscca_tmp_bool}
+          }
+        \end{tabular}}%
+%
+    \end{center}%
+    {\tiny \UseTerm{notes.calendar}}
+  }%
+}
+  \ExplSyntaxOff
+
+%%%
+\SetForm{calendar-I}{closing}{\vfill}%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\SetForm{calendar-II}{heading}{\UseTerm{title.tccII}}
+\SetForm{calendar-II}{title}{\UseTerm{title.calendar}}
+\SetForm{calendar-II}{opening}{}
+
+%%%
+  \ExplSyntaxOn
+%  \bool_new:N \l__ufrgscca_tmp_bool
+\SetForm{calendar-II}{body}{%
+  \starray_set_iter_from_hash:nn {activity}{tccII}
+  \starray_reset_iter:n {activity.calendar}
+  \bool_set_true:N \l__ufrgscca_tmp_bool
+  { \footnotesize%
+    \begin{center}
+%
+      \resizebox{\textwidth}{!}{%%
+        \begin{tabular}{ccp{11.5cm}}%
+        Data/Período & Semana~ Letiva & Evento\\\hline
+        \bool_do_while:Nn \l__ufrgscca_tmp_bool
+          {
+            \textbf{\starray_get_prop:nn {activity.calendar}{date}} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}\\\hline
+            \starray_next_iter:nTF {activity.calendar}{}{\bool_set_false:N \l__ufrgscca_tmp_bool}
+          }
+        \end{tabular}}%
+%
+    \end{center}%
+    {\tiny \UseTerm{notes.calendar}}
+  }%
+}
+  \ExplSyntaxOff
+
+%%%
+\SetForm{calendar-II}{closing}{\vfill}%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
 
 
 
@@ -302,9 +431,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 %%%%%%%%%%%%%%%
 \SetForm{request-I}{heading}{\UseTerm{title.tccI}}
 \SetForm{request-I}{title}{\UseTerm{title.requestform}}
-\SetForm{request-I}{opening}{
-
-\UseTerm{opening.requestform}}
+\SetForm{request-I}{opening}{\UseTerm{opening.requestform}}
 
 %%%
 \SetForm{request-I}{body}{%
@@ -320,10 +447,11 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
   \UseLabel{advisor.email}: {\bf \DataFields{student.advisor}{email}}%
   \hfill \UseLabel{phone}: {\bf \DataFields{student.advisor}{phone}}%
 
-  {\bf Resumo}:\footnote[1]{\UseTerm{footnote.requestform}}%\tcdef@forms@renewreqformnotes}%
+  {\bf Resumo}:\footnote[1]{\UseTerm{footnote.requestform}}%
 
   \vfill%
-  \tcdef@core@tccbrief%
+
+  \DataFields{student}{brief}
 }
 
 %%%
@@ -343,10 +471,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 \SetForm{coadvisor-I}{opening}{%
 
   \UseTerm{opening.requestform}
-  \@ifundefined{tc@studentA@coadvisor}{%
-    \coadvisor{\rule{\tc@namerule}{.1pt}}{}%
-    \coadvisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-    }{}%
+  \coadvisoremptyifnone
 }
 
 %%%
@@ -366,13 +491,14 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
   {\bf Justificativa}:%
   \vfill
 
-  \tcdef@core@tcccoadvisorbrief%    !!!! What a Hell ?!?!?!
+ \DataFields{student.coadvisor}{justification}
+ 
 }
 
 %%%
 \SetForm{coadvisor-I}{closing}{%
 
-  \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.student}}}
+  \SignatureDate{\UseLabel{signature.student}}
 
   \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}\hfill%
   \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.coadvisor}}}%
@@ -401,7 +527,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
   \vfill%
 
-  Aprovo a Banca Examinadora acima relacionada.%
+  Aprovo a nominata da Banca Examinadora acima relacionada.%
 }
 
 %%%
@@ -419,24 +545,19 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
 %%%
 \SetForm{advisorsapproval-I}{body}{%
-  %\tcdef@forms@advisorapprovalformdesc%
-  {\bf Parecer d\tccore@@ref{advisor}{article} Orientador\tccore@@ref{advisor}{narticle}}\footnote{Preenchimento Obrigatório}
+  {\bf Parecer d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}}\footnote{Preenchimento Obrigatório}
 
   \vfill%
 
-  \tcdef@core@tccadvisorsreview%
-%
-%  \vfill%
-%  Aprovo a versão final do trabalho submetido pel\DataFields{student}{article} alun\DataFields{student}{article} e 
-%  considero \DataFields{student}{article} mesm\DataFields{student}{article} apt\DataFields{student}{article} para avaliação pela Banca Examinadora.%
+
+  \DataFields{student.advisor}{assessment}
 }
 
 %%%
 \SetForm{advisorsapproval-I}{closing}{
-  \tcforms@formsigdate{\tcdef@forms@advisorsignature}%
-  \vfill%
+  \SignatureDate{\UseLabel{signature.advisor}}\vfill%
+  \SignatureDate{\UseLabel{signature.student}}%
 
-  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
 }%
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -451,7 +572,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 \SetForm{examinersform-I}{opening}{%
   \UseTerm{desc.studentwork}\\[2mm]
   
-  \tcdef@forms@formsexaminerlabel : \expandafter\csname tc@student\Alph{tc@studentcount}@#1\endcsname\\[-4mm]%
+  \UseLabel{reviewer}: \textbf{\DataFields{student.reviewer}{name}}\\[-4mm]%
   
   {\scriptsize {\textsl{(favor retornar este diretamente à coordenação de TCC.)}}}
   }
@@ -477,23 +598,15 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
      \end{itemize} 
    \end{enumerate}
    
-Outras considerações, parecer (se necessário): \\
+Outras considerações, parecer (se necessário): \BlankLines{6}
 
-	\begin{tabular}{p{0.9\textwidth}}
-	~\\\hline
-	~\\\hline
-	~\\\hline
-	~\\\hline
-  ~\\\hline
-	~\\\hline
-	\end{tabular}\\[-1mm]
-  \footnotetext[2]{Use uma escala de 0 à 10: \begin{enumerate*}\item[0.] Péssimo  \item[3.] Deficitário \item[6.] Bom \item[8.] Muito Bom \item[10.] Excelente \end{enumerate*}}%
-  \footnotetext[3]{\tcdef@forms@reviewformfootnoteB}%
+  \footnotetext[2]{Use a escala: \begin{enumerate*}\item[0.]Péssimo  \item[3.]Deficitário \item[6.]Bom \item[8.]Muito Bom \item[10.]Excelente \end{enumerate*}}%
+  \footnotetext[3]{Neste caso \DataFields{student}{article} alun\DataFields{student}{article} estará em EXAME e receberá conceito final C ou D, conforme revisão final do texto.}%
 }
 
 %%%
-\SetForm{examinersform-I}{closing}{%
-  \tcforms@formsigdate{\tcdef@forms@examinersignature}%
+\SetForm{examinersform-I}{closing}{%signature.reviewer
+  \SignatureDate{\UseLabel{signature.reviewer}}%
 }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -507,43 +620,29 @@ Outras considerações, parecer (se necessário): \\
 \SetForm{rectifyapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
-\SetForm{rectifyapproval-I}{body}{  \tcdef@forms@rectifyapprovalTRformdesc%
+\SetForm{rectifyapproval-I}{body}{  %
+  \SetTermKeys{temp.formrefname = {Formulário de Avaliação}}
+  \UseTerm{desc.rectifyapproval}
 
   \vfill%
 
-  \tcforms@rectifyexaminersig[\tcdef@forms@formsadvisorlabel]{tc@studentA@advisor}%
+  \ApprovalSignature[\UseLabel{advisor}]{\DataFields{student.advisor}{name}}
+
 }
 
 %%%
-\SetForm{rectifyapproval-I}{closing}{ \@ifundefined{tc@nBoard}{}{%
-    \tcforms@rectifyexaminersig{tc@studentA@examinerA}%
-  }%
+\SetForm{rectifyapproval-I}{closing}{ 
 
-  \tcforms@rectifyexaminersig{tc@studentA@examinerB}%
+  \SetReviewer{2}
+  \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
-  \tcforms@rectifyexaminersig{tc@studentA@examinerC}%
+  \SetReviewer{3}
+  \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
+
  }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 
-
-
-
-%  reqform.code = {\tcforms@reqform},
-%  reqform-II.code = {\tcforms@reqform},
-%  coadvisor.code = {\tcforms@coadvisorform},
-%  coadvisor-II.code = {\tcforms@coadvisorform},
-%  boardapproval.code = {\tcforms@examboardform},
-%  boardapproval-II.code = {\tcforms@examboardform},
-%  boardapproval-IIb.code = {\tcforms@examboardformTMP},
-%  advisorsapproval.code = {\tcforms@advisorapprovalform},
-%  advisorsapproval-II.code = {\tcforms@advisorapprovalform},
-%  receipts.code = {\tcforms@receiptforms},
-%  receipts-II.code = {\tcforms@receiptforms},
-%  examinersforms.code = {\tcforms@examinersForms},
-%  examinersforms-II.code = {\tcforms@examinersForms},
-%  rectifyapproval.code = {\tcforms@rectifyapprovalform},
-%  rectifyapproval-II.code = {\tcforms@rectifyapprovalform},
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -560,50 +659,47 @@ Outras considerações, parecer (se necessário): \\
 %%%%%%%%%%%%%%%
 \SetForm{request-II}{heading}{\UseTerm{title.tccII}}
 \SetForm{request-II}{title}{\UseTerm{title.requestform}}
-\SetForm{request-II}{opening}{\tcdef@forms@reqformopening}
+
+\SetForm{request-II}{opening}{
+
+\UseTerm{opening.requestform}}
 
 %%%
 \SetForm{request-II}{body}{
-\tcdef@forms@reqformdesc%
+  \UseTerm{desc.requestform} \Activity{tccII}{name}.
   \vfill%
 
-  \tcdef@forms@formstemptitlelabel : \@title %
+  \UseLabel{worktitle.temp}: \@title %
 
-  \tcdef@forms@formsstudentemaillabel : {\bf \DataFields{student}{email}} %
+  \UseLabel{student.email}: {\bf \DataFields{student}{email}} %
 
-  \tcdef@forms@formsadvisorlabel : \DataFields{student.advisor}{name}%
+  \UseLabel{advisor}: \DataFields{student.advisor}{name}%
 
-  \tcdef@forms@formsadvisoremaillabel : {\bf \DataFields{student.advisor}{email}}%
-  \hfill \tcdef@forms@formsphonelabel : {\bf \DataFields{student.advisor}{phone}}%
+  \UseLabel{advisor.email}: {\bf \DataFields{student.advisor}{email}}%
+  \hfill \UseLabel{phone}: {\bf \DataFields{student.advisor}{phone}}%
 
+  \UseLabel{coadvisor}: \DataFields{student.coadvisor}{name}%
 
-  \@ifundefined{tc@studentA@coadvisor}{%
-    \tcdef@forms@formscoadvisorlabel : \rule{\tc@namerule}{.1pt}%
-  
-    \tcdef@forms@formscoadvisoremaillabel : {\bf \rule{\tc@emailrule}{.1pt}}%
-    \hfill \tcdef@forms@formsphonelabel : {\bf \rule{\tc@phonerule}{.1pt}}%
-	}
-  {
-    \tcdef@forms@formscoadvisorlabel : \DataFields{student.coadvisor}{name}%
-  
-    \tcdef@forms@formscoadvisoremaillabel : {\bf \DataFields{student.coadvisor}{email}}%
-    \hfill \tcdef@forms@formsphonelabel : {\bf \DataFields{student.coadvisor}{phone}}%
-  }%
+  \UseLabel{coadvisor.email}: {\bf \DataFields{student.coadvisor}{email}}%
+  \hfill \UseLabel{phone}: {\bf \DataFields{student.coadvisor}{phone}}%
 
-  %{\bf \tcdef@forms@formsbrieflabel}:\footnote[1]{\tcdef@forms@renewreqformnotes}%
 
   \vfill%
-  \tcdef@forms@reqArgument
+  O Tema do Trabalho e Orientador (Co-orientador) seguem sendo os mesmos de TCC I ?
+\begin{itemize}[tcc,noitemsep]
+ \item[$\Box$] SIM
+ \item[$\Box$] NÃO, neste caso \textbf{justifique} a mudança no espaço a seguir:
+ \end{itemize}
   
 
-  \tcdef@core@tccArgument%
+  \DataFields{student}{justification}
 
 }
 
 %%%
 \SetForm{request-II}{closing}{
- \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@studentsignature}}\hfill%
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.student}}}\hfill%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}%
 }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -614,41 +710,38 @@ Outras considerações, parecer (se necessário): \\
 \SetForm{coadvisor-II}{heading}{\UseTerm{title.tccII}}
 \SetForm{coadvisor-II}{title}{\UseTerm{title.coadvisorform}}
 \SetForm{coadvisor-II}{opening}{%
-  \@ifundefined{tc@studentA@coadvisor}{%
-    \coadvisor{\rule{\tc@namerule}{.1pt}}{}%
-    \coadvisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-    }{}%
 
-  \tcdef@forms@reqformopening%
+  \UseTerm{opening.requestform}
+  \coadvisoremptyifnone
 }
 
 %%%
 \SetForm{coadvisor-II}{body}{%
-  \tcdef@forms@coadvisorformdesc%
+  \UseTerm{desc.coadvisorform}
   \vfill%
 
-  \tcdef@forms@formstemptitlelabel : \@title %
+  \UseLabel{worktitle.temp}: \@title %
 
-  \tcdef@forms@formsadvisorlabel: \DataFields{student.advisor}{name}%
+  \UseLabel{advisor}: \DataFields{student.advisor}{name}
 
-  \tcdef@forms@formscoadvisorlabel: \DataFields{student.coadvisor}{name}%
+  \UseLabel{coadvisor}: \DataFields{student.coadvisor}{name}%
 
-  \tcdef@forms@formscoadvisoremaillabel : {\bf \DataFields{student.coadvisor}{email}}%
-  \hfill \tcdef@forms@formsphonelabel : {\bf \DataFields{student.coadvisor}{phone}}%
+  \UseLabel{coadvisor.email}: {\bf \DataFields{student.coadvisor}{email}}%
+  \hfill \UseLabel{phone}: {\bf \DataFields{student.coadvisor}{phone}}\\%
 
+  {\bf Justificativa}:%
+  \vfill
 
-  \vfill%
-  {\bf \tcdef@forms@formsreasonlabel}:%
-
-  \tcdef@core@tcccoadvisorbrief%    !!!! What a Hell ?!?!?!
+  \DataFields{student.coadvisor}{justification}
 }
 
 %%%
 \SetForm{coadvisor-II}{closing}{%
-  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
 
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@advisorsignature}}\hfill%
-  \parbox[t]{.45\textwidth}{\tcforms@formsigdate{\tcdef@forms@coadvisorsignature}}%
+  \SignatureDate{\UseLabel{signature.student}}
+
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}\hfill%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.coadvisor}}}%
 }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -666,7 +759,7 @@ Outras considerações, parecer (se necessário): \\
 %%%
 \SetForm{boardapproval-II}{body}{%
   \begin{center}
-    \tcdef@forms@formsboardtitle
+    \UseLabel{board}%
   \end{center}%
 
   \BoardDescSignature{Avaliador\DataFields{student.reviewer[1]}{narticle}}{student.reviewer[1]}
@@ -679,11 +772,11 @@ Outras considerações, parecer (se necessário): \\
 
   \vfill%
 
-  \tcdef@forms@examboardformdesc%
+    Aprovo a nominata da Banca Examinadora acima relacionada.%
 }
 
 %%%
-\SetForm{boardapproval-II}{closing}{  \tcforms@formsigdate{\tcdef@forms@advisorsignature}}
+\SetForm{boardapproval-II}{closing}{  \SignatureDate{\UseLabel{signature.advisor}}}
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 
@@ -696,21 +789,20 @@ Outras considerações, parecer (se necessário): \\
 \SetForm{advisorsapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
-\SetForm{advisorsapproval-II}{body}{  \tcdef@forms@advisorapprovalformdesc%
+\SetForm{advisorsapproval-II}{body}{%
+  {\bf Parecer d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}}\footnote{Preenchimento Obrigatório}
 
   \vfill%
 
-  \tcdef@core@tccadvisorsreview%
-
-  \vfill%
-  \tcdef@forms@advisorapprovalformdescB%
+   \DataFields{student.advisor}{assessment}
 }
 
 %%%
-\SetForm{advisorsapproval-II}{closing}{ \tcforms@formsigdate{\tcdef@forms@advisorsignature}%
+\SetForm{advisorsapproval-II}{closing}{%
+  \SignatureDate{\UseLabel{signature.advisor}}%
   \vfill%
 
-  \tcforms@formsigdate{\tcdef@forms@studentsignature}%
+  \SignatureDate{\UseLabel{signature.student}}%
  }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -724,17 +816,21 @@ Outras considerações, parecer (se necessário): \\
 \SetForm{receipts-II}{footnote}{\UseTerm{footnote.receipts}}
 
 %%%
-\SetForm{receipts-II}{opening}{\UseTerm{desc.studentwork.full}\\%
+\SetForm{receipts-II}{opening}{%
+  \UseTerm{desc.studentwork.full}\\%
 
-  \noindent\tcdef@forms@formsboardlabel : {\bf \csname tc@student\Alph{tc@studentcount}@#1\endcsname }%
+  \noindent Membro da Banca : {\bf \DataFields{student.reviewer}{name} }%
 }
 
 %%%
-\SetForm{receipts-II}{body}{ \tcdef@forms@receiptformdesc {\bf \tc@studentA},\ \ \ \tcdef@forms@formsstudentIDlabel : {\bf \DataFields{student}{ID}}.%
+\SetForm{receipts-II}{body}{ %
+  Declaro que encontra-se em minha posse cópia da versão final do \Activity{tccII}{name} em \Activity{course}{name}  d\DataFields{student}{article} alun\DataFields{student}{article} 
+  \textbf{\DataFields{student}{name}}.
 
   \vfill%
 
-  \tcforms@formsigdate{\tcdef@forms@boardsignature}%
+ \SignatureDate{\UseLabel{signature.board}}%
+ 
 }
 
 %%%
@@ -753,28 +849,31 @@ Outras considerações, parecer (se necessário): \\
 %%%
 \SetForm{examinersform-II}{opening}{\UseTerm{desc.studentwork}
   
-  \tcforms@examinerIDheader{#1}
+  \noindent\UseLabel{reviewer}: \textbf{\DataFields{student.reviewer}{name}}
 }
 
 %%%
-\SetForm{examinersform-II}{body}{ \tcdef@forms@examformdesc%
+\SetForm{examinersform-II}{body}{ 
+A nota (variando de zero a dez) atribuída por cada membro da banca examinadora será dada considerando o desempenho d\DataFields{student}{article} alun\DataFields{student}{article} nos 3 pontos apresentados na tabela abaixo.
 
   \vfill%
 
   \begin{center}
     \begin{tabular}{|c|c|c|}%
       \hline%
-      \tc@TCCpointAlabel & \tc@TCCpointBlabel & \tc@TCCpointClabel \\\hline%
+      \UseLabel{TCC-II.pointA} & \UseLabel{TCC-II.pointB} & \UseLabel{TCC-II.pointC} \\\hline%
       & & \\\hline
     \end{tabular}%
   \end{center}%
 }
 
 %%%
-\SetForm{examinersform-II}{closing}{ \tcforms@formsigdate{\tcdef@forms@examinersignature}%
+\SetForm{examinersform-II}{closing}{ 
+  
+ \SignatureDate{\UseLabel{signature.reviewer}}%
   \vfill%
   \begin{description}
-    \item[\tcdef@forms@examformnoteslabel:] \tcdef@forms@examformnotes
+    \item[Observações:] \ \\A nota final, de cada membro da banca examinadora, será calculada conforme:\\[2mm] {\bf Nota Final = \UseLabel{TCC-II.weightA}\ x \UseLabel{TCC-II.pointA}\  + \UseLabel{TCC-II.weightB}\ x \UseLabel{TCC-II.pointB}\  + \UseLabel{TCC-II.weightC}\ x \UseLabel{TCC-II.pointC}\ } \\[2mm] A média final da atividade será dada pela média das notas finais atribuidas por cada um dos membros da banca examinadora.
   \end{description}%
 }
 %%%%%%%%%%%%%%%
@@ -791,18 +890,51 @@ Outras considerações, parecer (se necessário): \\
 %%%
 \SetForm{correctionsform-II}{opening}{\UseTerm{desc.studentwork}
   
-  \tcforms@examinerIDheader{#1}
+    \noindent\UseLabel{reviewer}: \textbf{\DataFields{student.reviewer}{name}}
+
 }
 
 %%%
 \SetForm{correctionsform-II}{body}{  \resizebox{0.9\textwidth}{!}{%%
-    \tcdef@forms@reviewformdesc%
-  }%
-  \footnotetext[2]{\tcdef@forms@reviewformfootnoteB}%
+O texto submetido:
+ \parbox[t]{.75\textwidth}{
+    \begin{itemize}[tcc,nosep]
+     \item[$\Box$] Está adequado, dispensando correções do texto.
+     \item[$\Box$] Está adequado, sendo necessário correções, conforme a
+      seguir (e anotações anexas).
+      	\begin{description}[tcc,noitemsep]
+        	\item[$\Box$] Ortográfica
+        	\item[$\Box$] Regras de Escrita
+        	\item[$\Box$] Equações
+        	\item[$\Box$] Resumo
+        	\item[$\Box$] Abstract
+        	\item[$\Box$] Índice
+        	\item[$\Box$] Introdução
+        	\item[$\Box$] Conclusões
+        	\item[$\Box$] Corpo do Trabalho
+        	\item[$\Box$] Resultados
+        	\item[$\Box$] Adicionar mais exemplos
+        	\item[$\Box$] Figuras
+        	\item[$\Box$] Tabelas
+        \end{description}
+     \item[$\Box$] Necessita ser revisto/re-escrito,\footnotemark[2] e: 
+       \begin{itemize}
+         \item[$\Box$] basta a revisão final do texto pelo orientador,
+         \item[$\Box$] revisarei o trabalho depois de corrigido.
+       \end{itemize}
+	\item[$\Box$] Outras considerações (se necessário): \\
+	\begin{tabular}{p{0.7\textwidth}}
+	~\\\hline
+	~\\\hline
+	~\\\hline
+	~\\\hline
+	\end{tabular}\\[-1mm]
+	\end{itemize}}  }%
+  \footnotetext[2]{Neste caso \DataFields{student}{article} alun\DataFields{student}{article} estará em EXAME e receberá conceito final C ou D, conforme revisão final do texto.}%
 }
 
 %%%
-\SetForm{correctionsform-II}{closing}{ \tcforms@formsigdate{\tcdef@forms@examinersignature}%
+\SetForm{correctionsform-II}{closing}{  \SignatureDate{\UseLabel{signature.reviewer}}%
  }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -817,29 +949,43 @@ Outras considerações, parecer (se necessário): \\
 \SetForm{rectifyapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
-\SetForm{rectifyapproval-II}{body}{  \tcdef@forms@rectifyapprovalformdesc%
+\SetForm{rectifyapproval-II}{body}{  %
+  \SetTermKeys{temp.formrefname = {Formulário de Correções}}
+  \UseTerm{desc.rectifyapproval}
 
   \vfill%
 
-  \tcforms@rectifyexaminersig[\tcdef@forms@formsadvisorlabel]{tc@studentA@advisor}%
+  \ApprovalSignature[\UseLabel{advisor}]{\DataFields{student.advisor}{name}}
 }
 
 %%%
 \SetForm{rectifyapproval-II}{closing}{%
  \@ifundefined{tc@nBoard}{}{%
-    \tcforms@rectifyexaminersig{tc@studentA@examinerA}%
+  \SetReviewer{1}
+  \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
   }%
 
-  \tcforms@rectifyexaminersig{tc@studentA@examinerB}%
+  \SetReviewer{2}
+  \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
-  \tcforms@rectifyexaminersig{tc@studentA@examinerC}%
+  \SetReviewer{3}
+  \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
-  \tcforms@rectifyexaminersig{tc@studentA@altexaminerA}%
+
+  \ApprovalSignature[\UseLabel{altreviewer.sig}]{\DataFields{student.altreviewer}{name}}
 }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
-
-
+%%
+%%%%%%%%%%%%%%%
+% examiners approval (or not) signature (for rectify approval form)%
+%%%%%%%%%%%%%%%
+\ExplSyntaxOn
+\NewDocumentCommand{\ApprovalSignature}{O{\UseLabel{reviewer}}m}{%%
+  \UseTerm{corrections.ok}  \hfill Data:\rule{\l__ufrgscca_date_rule_dim}{.1pt}\\[3mm]%
+  #1: #2 \hfill  \UseLabel{signature.gen}:\rule{\l__ufrgscca_name_rule_dim}{.1pt}%
+}%
+\ExplSyntaxOff
 
 
 

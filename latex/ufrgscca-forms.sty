@@ -672,54 +672,90 @@
 
 \DeclareKeys[forms]{
   internreqform.usage = general,
-  internreqform.code = {\tcforms@internreqform},
+  internreqform.code = {%
+        \MakeForm{internshiprequest}
+        },%{\tcforms@internreqform},
   internsupervisorform.usage = general,
-  internsupervisorform.code = {\tcforms@internsupervisorform},
+  internsupervisorform.code = {%
+        \MakeForm{internshipsupervisorform}
+        },%{\tcforms@internsupervisorform},
   interntutorform.usage = general,
-  interntutorform.code = {\tcforms@interntutorform},
-  reqform.usage = general,
-  reqform.code = {\tcforms@reqform},
-  reqform-II.usage = general,
-  reqform-II.code = {\tcforms@reqform},
-  coadvisor.usage = general,
-  coadvisor.code = {\tcforms@coadvisorform},
-  coadvisor-II.usage = general,
-  coadvisor-II.code = {\tcforms@coadvisorform},
-  boardapproval.usage = general,
-  boardapproval.code = {\tcforms@examboardform},
-  boardapproval-II.usage = general,
-  boardapproval-II.code = {\tcforms@examboardform},
-  boardapproval-IIb.usage = general,
-  boardapproval-IIb.code = {\tcforms@examboardformTMP},
-  advisorsapproval.usage = general,
-  advisorsapproval.code = {\tcforms@advisorapprovalform},
-  advisorsapproval-II.usage = general,
-  advisorsapproval-II.code = {\tcforms@advisorapprovalform},
-  receipts.usage = general,
-  receipts.code = {\tcforms@receiptforms},
-  receipts-II.usage = general,
-  receipts-II.code = {\tcforms@receiptforms},
-  examinersforms.usage = general,
-  examinersforms.code = {\tcforms@examinersForms},
-  examinersforms-II.usage = general,
-  examinersforms-II.code = {\tcforms@examinersForms},
-  rectifyapproval.usage = general,
-  rectifyapproval.code = {\tcforms@rectifyapprovalform},
-  rectifyapproval-II.usage = general,
-  rectifyapproval-II.code = {\tcforms@rectifyapprovalform},
+  interntutorform.code = {%
+        \MakeForm{internshitutorform}
+        },%{\tcforms@interntutorform},
   reqform-I.usage = general,
-  reqform-I.code = {\tcforms@reqTRform},
+  reqform-I.code = {%
+        \MakeForm{request-I}
+        },%{\tcforms@reqform},
+  reqform-II.usage = general,
+  reqform-II.code = {%
+        \MakeForm{request-II}
+        },%{\tcforms@reqform},
   coadvisor-I.usage = general,
-  coadvisor-I.code = {\tcforms@coadvisorTRform},
-  examinersforms-I.usage = general,
-  examinersforms-I.code = {\tcforms@examinersTRforms},
-  advisorsapproval-I.usage = general,
-  advisorsapproval-I.code = {\tcforms@advisorTRapprovalform},
+  coadvisor-I.code = {%
+        \MakeForm{coadvisor-I}
+        },%{\tcforms@coadvisorform},
+  coadvisor-II.usage = general,
+  coadvisor-II.code = {%
+        \MakeForm{coadvisor-II}
+        },%{\tcforms@coadvisorform},
   boardapproval-I.usage = general,
-  boardapproval-I.code = {\tcforms@advisorTRboardform},
+  boardapproval-I.code = {%
+        \MakeForm{boardapproval-I}
+        },%{\tcforms@examboardform},
+  boardapproval-II.usage = general,
+  boardapproval-II.code = {%
+        \MakeForm{boardapproval-II}
+        },%{\tcforms@examboardform},
+  %boardapproval-IIb.usage = general,
+  %boardapproval-IIb.code = {\tcforms@examboardformTMP},
+  advisorsapproval-I.usage = general,
+  advisorsapproval-I.code = {%
+        \MakeForm{advisorapproval-I}
+        },%{\tcforms@advisorapprovalform},
+  advisorsapproval-II.usage = general,
+  advisorsapproval-II.code = {%
+        \MakeForm{advisorapproval-II}
+        },%{\tcforms@advisorapprovalform},
+  receipts-I.usage = general,
+  receipts-I.code = {%
+        \MakeForm{receipts-II}
+        },%{\tcforms@receiptforms},
+  receipts-II.usage = general,
+  receipts-II.code = {%
+        \MakeForm{receipts-II}
+        },%{\tcforms@receiptforms},
+  examinersforms-I.usage = general,
+  examinersforms-I.code = {%
+        \SetReviewer{2}
+        \MakeForm{examinersform-I}
+        \SetReviewer{3}
+        \MakeForm{examinersform-I}
+        },%{\tcforms@examinersForms},
+  examinersforms-II.usage = general,
+  examinersforms-II.code = {%
+        \SetReviewer{1}
+        \MakeForm{receipts-II}
+        \MakeForm{examinersform-II}
+        \MakeForm{correctionsform-II}
+        \SetReviewer{2}
+        \MakeForm{receipts-II}
+        \MakeForm{examinersform-II}
+        \MakeForm{correctionsform-II}
+        \SetReviewer{3}
+        \MakeForm{receipts-II}
+        \MakeForm{examinersform-II}
+        \MakeForm{correctionsform-II}
+        },%\tcforms@examinersForms},
   rectifyapproval-I.usage = general,
-  rectifyapproval-I.code = {\tcforms@rectifyTRapprovalform},
-  }
+  rectifyapproval-I.code = {%
+        \MakeForm{rectifyapproval-I}
+        },%{\tcforms@rectifyapprovalform},
+  rectifyapproval-II.usage = general,
+  rectifyapproval-II.code = {%
+        \MakeForm{rectifyapproval-II}
+        },%{\tcforms@rectifyapprovalform},
+}
 
 
 \NewDocumentCommand{\tcforms}{m}{%

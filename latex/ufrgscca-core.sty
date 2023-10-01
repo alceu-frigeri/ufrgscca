@@ -90,6 +90,12 @@
         Narticle = (A) ,
         carticle = ao(à) ,
         Carticle = Ao(À) ,
+  remark = ,
+  brief = \BlankLines{6} ,
+  justification = \BlankLines{6} ,
+  board-local = {local ~da~ apresentação} ,
+  board-day   = {dia~ da~ apresentação} ,
+  board-time  = {hora~da~apresentação} ,
   advisor . struct = {
     first = ,
     last =  ,
@@ -103,7 +109,8 @@
         narticle = (a) ,
         Narticle = (A) ,
         carticle = ao(à) ,
-        Carticle = Ao(À) 
+        Carticle = Ao(À) ,
+    assessment = \BlankLines{6}
   } ,
   coadvisor . struct = {
     first = ,
@@ -118,7 +125,8 @@
         narticle = (a) ,
         Narticle = (A) ,
         carticle = ao(à) ,
-        Carticle = Ao(À) 
+        Carticle = Ao(À) ,
+    justification = \BlankLines{6}
   } ,
   reviewer . struct = {
     first = ,
@@ -133,7 +141,13 @@
         narticle = (a) ,
         Narticle = (A) ,
         carticle = ao(à) ,
-        Carticle = Ao(À) 
+        Carticle = Ao(À) ,
+    pointA = ,
+    pointB = ,
+    pointC = ,
+    pointD = ,
+    gradeI = 0 ,
+    gradeII = 0 ,    
   } ,
   altreviewer . struct = {
     first = ,
@@ -207,66 +221,63 @@
         Narticle = (A) ,
         carticle = ao(à) ,
         Carticle = Ao(À) 
+      } ,
+    calendar . struct =
+      {
+        date = {-Dia-} ,
+        week = {-semana-} ,
+        event = {-Descrição-} ,
       }
   }
 %  \starray_show_def:n {activity}
-\starray_new_term:nn {activity}{course} % yeah, CCA as an activity...
-\starray_new_term:nn {activity.coord}{}
-\starray_new_term:nn {activity}{tccI}
-\starray_new_term:nn {activity.coord}{}
-\starray_new_term:nn {activity}{tccII}
-\starray_new_term:nn {activity.coord}{}
-\starray_new_term:nn {activity}{internship}
-\starray_new_term:nn {activity.coord}{}
-\starray_new_term:nn {activity}{internship-opt}
-\starray_new_term:nn {activity.coord}{}
-%\starray_show_terms:n {activity}
-%
-%
-\NewDocumentCommand{\SetActivityX}{mm} {
-  \starray_set_from_keyval:nn {activity[#1]}{#2}
+
+\NewDocumentCommand{\NewActivity}{m} {
+    \starray_new_term:nn {activity}{#1}
+    \starray_new_term:nn {activity.coord}{}
 }
 
-\NewDocumentCommand{\SetActivity}{mmm} {
-  \starray_set_prop:nnn {activity[#1]}{name}{#3}
-  \starray_set_prop:nnn {activity[#1]}{acronym}{#2}
+\NewActivity{course} % yeah, CCA as an activity...
+\NewActivity{tccI}
+\NewActivity{tccII}
+\NewActivity{internship}
+\NewActivity{internship-opt}
+
+
+\NewDocumentCommand{\SetActivity}{O{}mm} {
+  \tl_if_blank:nF {#1}
+    {\starray_set_iter_from_hash:nn {activity}{#1}}
+  \starray_set_prop:nnn {activity}{name}{#3}
+  \starray_set_prop:nnn {activity}{acronym}{#2}
 }
  
-\NewDocumentCommand{\SetActivityCoordTitle}{mm} {
-  \starray_set_prop:nnn {activity[#1].coord}{title}{#2}
+\NewDocumentCommand{\SetActivityCoordTitle}{O{}m} {
+  \tl_if_blank:nF {#1}
+    {\starray_set_iter_from_hash:nn {activity}{#1}}
+  \starray_set_prop:nnn {activity.coord}{title}{#2}
 }
 
-\NewDocumentCommand{\SetActivityCoord}{mmO{}}{
-  \starray_gset_prop:nnn {activity[#1].coord}{name}{#2}
-  \__ufrgscca_setgender:nn {activity[#1].coord}{#3}
-%  \str_if_eq:nnT {#3}{m}
-%    {
-%      \starray_gset_from_keyval:nn {activity[#1]}
-%        {
-%          coord = {
-%          article = o ,
-%          Article = O ,
-%          narticle =  ,
-%          Narticle =  ,
-%          carticle = ao ,
-%          Carticle = Ao 
-%          }
-%        }      
-%    }
-%  \str_if_eq:nnT {#3}{f}
-%    {
-%      \starray_gset_from_keyval:nn {activity[#1]}
-%        {
-%          coord = {
-%          article = a ,
-%          Article = A ,
-%          narticle = a ,
-%          Narticle = A ,
-%          carticle = à ,
-%          Carticle = À 
-%          }
-%        }
-%    }
+\NewDocumentCommand{\SetActivityCoord}{O{}mO{}}{
+  \tl_if_blank:nF {#1}
+    {\starray_set_iter_from_hash:nn {activity}{#1}}
+  \starray_gset_prop:nnn {activity.coord}{name}{#2}
+  \__ufrgscca_setgender:nn {activity.coord}{#3}
+}
+
+\NewDocumentCommand{\SetActivityNewEvent}{O{}mm}{
+  \tl_if_blank:nF {#1}
+    {\starray_set_iter_from_hash:nn {activity}{#1}}
+  \starray_new_term:nn {activity.calendar}{#2}
+  \starray_gset_prop:nnn {activity.calendar}{event}{#3}
+}
+
+\NewDocumentCommand{\SetActivityEventDay}{O{}mmm}{
+  \tl_if_blank:nF {#1}
+    {\starray_set_iter_from_hash:nn {activity}{#1}}
+  \starray_gset_from_keyval:nn {activity.calendar[#2]}
+    {
+        date = {#3} ,
+        week = {#4} ,
+    }
 }
 
 \NewDocumentCommand{\Activity}{mm}{
@@ -275,6 +286,14 @@
 \NewDocumentCommand{\ActivityCoord}{mm}{
   \starray_get_prop:nn {activity[#1].coord}{#2}
 }
+
+\NewDocumentCommand{\ActivityCalLine}{O{}m}{
+  \tl_if_blank:nF {#1}
+    {\starray_set_iter_from_hash:nn {activity}{#1}}
+  \starray_set_iter_from_hash:nn {activity.calendar}{#2}
+  \starray_get_prop:nn {activity.calendar}{date} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}
+}
+
 
 \prop_new:N \l__ufrgscca_headings_prop
 \prop_set_from_keyval:Nn \l__ufrgscca_headings_prop 
@@ -304,7 +323,7 @@
 \prop_new:N \l__ufrgscca_labels_prop
 
 \NewDocumentCommand{\SetLabels}{m}{
-  \prop_set_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
+  \prop_put_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
 }
 \NewDocumentCommand{\UseLabel}{m}{
   \prop_item:Nn \l__ufrgscca_labels_prop {#1}
@@ -441,6 +460,9 @@
 \NewDocumentCommand{\DataFields}{mm}{
   \starray_get_prop:nn{#1}{#2}
 }  
+\NewDocumentCommand{\SetReviewer}{m}{
+  \starray_set_iter:nn {student.reviewer}{#1}
+}
   %
 %
 \NewDocumentCommand{\authorinfo}{O{}mm}{%
@@ -552,6 +574,14 @@
   \__ufrgscca_set_prof_info:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
 }%
 %
+\NewDocumentCommand{\coadvisoremptyifnone}{}{%%
+  %%%
+  %%% USING STARRAY
+  \starray_get_cnt:nN {student.coadvisor} \l_tmpa_int
+  \int_if_zero:nTF \l_tmpa_int
+    { \starray_new_term:nn {student.coadvisor}{} }
+    {}
+}%
 %
 \NewDocumentCommand{\tutor}{O{}mmO{}}{%%
   %%%
@@ -759,6 +789,7 @@
   {
     \starray_new_term:nn {student}{empty}
     \starray_new_term:nn {student.advisor}{}
+    \starray_new_term:nn {student.coadvisor}{}
     \starray_new_term:nn {student.reviewer}{}
     \starray_new_term:nn {student.reviewer}{}
     \starray_new_term:nn {student.reviewer}{}
