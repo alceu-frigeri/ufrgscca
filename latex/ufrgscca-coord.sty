@@ -32,6 +32,8 @@
 \@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
 \@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
+\ExplSyntaxOn
+
 \newif\iftcif@coord@emptyforms\tcif@coord@emptyformsfalse
 \DeclareKeys[ufrgscca-coord]{
     calendar-I.usage = general,
@@ -110,6 +112,8 @@
 
 %%% this should go to ufrgscca-coord !!!!
 
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\grades}{mmmmm}{%
   \gdef\tc@TCCgradeA{#1}%
   \gdef\tc@TCCgradeB{#2}%
@@ -125,6 +129,8 @@
 \let\TCCgrades\grades%
 %%% this should go to ufrgscca-coord !!!!
 
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\gradesN}{mmm}{%
   \gdef\tc@TCCgradeAN{#1}%
   \gdef\tc@TCCgradeBN{#2}%
@@ -139,20 +145,30 @@
 %%%%%%%%%
 %%%%%%%%% ufrgscca-coord !!!
 %%%%%%%%%
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\tccoord@studentExam}{m}{%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Exam\endcsname{#1}%
 }%
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\tccoord@studentFF}{}{%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}FF\endcsname{1}%
   \gdef\tc@TCCff@flag{1}%
   \gdef\tc@ff@flag{1}%
 }%
+  %%%
+  %%% TO BE REMOVED !
 \NewDocumentCommand{\tccoord@studentDismiss}{}{%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Dismiss\endcsname{1}%
   \gdef\tc@TCCdismiss@flag{1}%
   \gdef\tc@dismiss@flag{1}%
 }%
+%
+%
 \NewDocumentCommand{\studentFate}{O{}}{%%
+  %%%
+  %%% TO BE REMOVED !
   \ifthenelse{\equal{#1}{C}}{%%
     \tccoord@studentExam{C}%%
   }{%%
@@ -169,18 +185,134 @@
       }%%
     }%%
   }%%
+  %%%
+  %%% USING STARRAY
+  \str_case:nnF  {#1}
+    {
+      {C}
+        {
+          \starray_gset_from_keyval:nn {student} 
+            {
+              grade = C ,
+              flag-exam = \c_true_bool ,
+              flag-graded = \c_true_bool ,
+            }
+        }
+      {D}
+        {
+          \starray_gset_from_keyval:nn {student} 
+            {
+              grade = D ,
+              flag-exam = \c_true_bool ,
+              flag-graded = \c_true_bool ,
+            }
+        }
+      {FF}
+        {
+          \starray_gset_from_keyval:nn {student} 
+            {
+              grade = FF ,
+              flag-ff = \c_true_bool ,
+              flag-graded = \c_true_bool ,
+            }
+        }
+      {dismiss}
+        {
+          \starray_gset_from_keyval:nn {student} 
+            {
+              flag-dismiss = \c_true_bool ,
+              flag-graded = \c_true_bool ,
+            }
+        }
+      {none}
+        {
+          \starray_gset_from_keyval:nn {student} 
+            {
+              flag-dismiss = \c_true_bool ,
+              flag-graded = \c_true_bool ,
+            }
+        }
+    }
+    { %% in case of none of above...
+      \__ufrgscca_studentgrade:
+    }
 }%%
 %
+\tl_new:N \l__ufrgscca_tmpa_tl
+\tl_new:N \l__ufrgscca_tmpb_tl
+\tl_new:N \l__ufrgscca_tmpc_tl
+\tl_new:N \l__ufrgscca_tmpd_tl
+\cs_new_protected:Npn \__ufrgscca_studentgrade: 
+    {
+      \starray_term_syntax:n {student.reviewer[1]}
+      \tl_set:Ne \l__ufrgscca_tmpa_tl {\starray_parsed_get_prop:n {grade}}
+      \starray_term_syntax:n {student.reviewer[2]}
+      \tl_set:Ne \l__ufrgscca_tmpb_tl {\starray_parsed_get_prop:n {grade}}
+      \starray_term_syntax:n {student.reviewer[3]}
+      \tl_set:Ne \l__ufrgscca_tmpc_tl {\starray_parsed_get_prop:n {grade}}
+      \int_case:nn {\starray_parsed_get_prop:n {gradetype}}
+        {
+          {1}
+            {
+              \tl_set:Ne \l__ufrgscca_tmpd_tl
+                {\fpeval{round(((\l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/2),2,1)}}
+            }
+          {2}
+            {
+              \tl_set:Ne \l__ufrgscca_tmpd_tl
+                {\fpeval{round(((\l__ufrgscca_tmpa_tl + \l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/3),2,1)}}
+            }
+        }
+      \starray_gset_prop:nne {student}{gradeavrg}{\l__ufrgscca_tmpd_tl}
+      \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeC}}
+        { % D
+          \starray_gset_prop:nnn {student}{grade}{D}
+        }
+        {
+          \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeB}}
+            { % C
+              \starray_gset_prop:nnn {student}{grade}{C}
+            }
+            {
+              \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeA}}
+                { % B
+                  \starray_gset_prop:nnn {student}{grade}{B}
+                }
+                { % A
+                  \starray_gset_prop:nnn {student}{grade}{A}
+                }
+            }
+        }
+
+        \starray_gset_prop:nnn {student}{flag-graded}{\c_true_bool}
+    }
 %
 \NewDocumentCommand{\studenttimeslot}{O{}mm}{%%
+  %%%
+  %%% TO BE REMOVED !
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}date\endcsname{#2}%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}time\endcsname{#3}%
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}local\endcsname{#1}%
+  %%%
+  %%% USING STARRAY
+  \starray_gset_from_keyval:nn {student}
+    {
+      board-local = #1 ,
+      board-day = #2 ,
+      board-time = #3 ,
+    }
 }%
 \let\timeslot\studenttimeslot%
 %
 \NewDocumentCommand{\tccdate}{mm}{%%
+  %%%
+  %%% TO BE REMOVED !
   \expandafter\gdef\csname date:#1\endcsname{#2}%
+  %%%
+  %%% USING STARRAY
+  \SetConst{%
+    date:#1 = #2 ,
+  }
 }%
 %
 
@@ -210,7 +342,12 @@
 %%%%%%%%% ufrgscca-coord !?!!
 %%%%%%%%%
 \NewDocumentCommand{\studentTCCtitle}{m}{%%
+  %%%
+  %%% TO BE REMOVED !
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}title\endcsname{#1}%
+  %%%
+  %%% USING STARRAY
+  \starray_gset_prop:nnn {student}{worktitle}{#1}
 }%
 \let\TCCtitle\studentTCCtitle%
 %
@@ -218,12 +355,31 @@
 %%%%%%%%% ufrgscca-coord !!!
 %%%%%%%%%
 \NewDocumentCommand{\studentremark}{m}{%%
+  %%%
+  %%% TO BE REMOVED !
   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}remark\endcsname{#1}%
+  %%%
+  %%% USING STARRAY
+  \starray_gset_prop:nnn {student}{remark}{#1}
 }%
 %
+\NewDocumentCommand{\studentsetdistinctboard}{}{%%
+  %%%
+  %%% USING STARRAY
+  \starray_gset_prop:nnn {student}{flag-distinctboard}{\c_true_bool}
+}%
+\NewDocumentCommand{\studentsetnewpage}{O{}}{%%
+  %%%
+  %%% USING STARRAY
+  \tl_if_blank:nTF {#1}
+    {\starray_set_iter_from_hash:nn {student}{#1}}
+  \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool}
+}%
 
 
-
+  %%%
+  %%% TO BE ADAPTED for starray !
+  %%% TO BE DONE !
 %
 \NewDocumentCommand{\tccoord@checklist}{m}{\expandafter\gdef\csname tc@student\Alph{tc@studentcount}:#1\endcsname{}}%
 \NewDocumentCommand{\checklist}{m}{\forcsvlist{\tccoord@checklist}{#1}}%
@@ -308,12 +464,16 @@
 }
 
 %
-\NewDocumentCommand{\examinergrades}{mmmO{0}}{%%
+\cs_generate_variant:Nn \starray_gset_prop:nnn {nne}
+%
+\NewDocumentCommand{\examinergrades}{mmmO{}}{%%
+  %%%
+  %%% TO BE REMOVED !
   \ifthenelse{\equal{#1}{}}{%%
     \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
     \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
   }{%
-    \ifthenelse{\equal{#4}{0}}{%
+    \ifthenelse{\equal{#4}{}}{%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{#1}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{#2}%%
           \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{#3}%%
@@ -321,15 +481,53 @@
           \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{\fpeval{round((\tc@TCCpointAweight * #1 + \tc@TCCpointBweight * #2 + \tc@TCCpointCweight * #3) / (\tc@TCCpointAweight + \tc@TCCpointBweight + \tc@TCCpointCweight),2,1)} }%
           \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
     }{%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{\fpeval{#1}}%% * \tc@TCCIpointscale}}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{\fpeval{#2}}%% * \tc@TCCIpointscale}}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{\fpeval{#3}}%% * \tc@TCCIpointscale}}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{\fpeval{#4}}%% * \tc@TCCIpointscale}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{\fpeval{#1}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{\fpeval{#2}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{\fpeval{#3}}%%
+          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{\fpeval{#4}}%%
           \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
           \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4) / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
 %          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4)  * \tc@TCCIpointscale / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
     }%
   }%
+  %%%
+  %%% USING STARRAY
+  \tl_if_blank:nTF {#1}
+    { \starray_gset_prop:nnn {student.reviewer}{grade}{0} }
+    {
+      \tl_if_blank:nTF {#4}
+        { %% 3 grades, TCC II
+            \starray_gset_from_keyval:nn {student.reviewer}
+              {
+                pointA = #1 ,
+                pointB = #2 ,
+                pointC = #3 ,
+                gradetype = 2 ,
+                %gradeII = \fpeval{round((#1 * \UseConst{TCC-II.weightA} + #2 * \UseConst{TCC-II.weightB} + #3 * \UseConst{TCC-II.weightC}) / ( \UseConst{TCC-II.weightA} + \UseConst{TCC-II.weightB} + \UseConst{TCC-II.weightC}) , 2 , 1) } ,
+              }
+            \starray_gset_prop:nne {student.reviewer}{grade}
+                {%
+                    \fpeval{round((#1 * \UseConst{TCC-II.weightA} + #2 * \UseConst{TCC-II.weightB} + #3 * \UseConst{TCC-II.weightC}) / ( \UseConst{TCC-II.weightA} + \UseConst{TCC-II.weightB} + \UseConst{TCC-II.weightC}) , 2 , 1) }
+                }
+        }
+        { %% 4 grades, TCC I
+            \starray_gset_from_keyval:nn {student.reviewer}
+              {
+                pointA = #1 ,
+                pointB = #2 ,
+                pointC = #3 ,
+                pointD = #4 ,
+                %gradeI = \fpeval{round((#1 * \UseConst{TCC-I.weightA} + #2 * \UseConst{TCC-I.weightB} + #3 * \UseConst{TCC-I.weightC} + #4 * \UseConst{TCC-I.weightD}) / ( \UseConst{TCC-I.weightA} + \UseConst{TCC-I.weightB} + \UseConst{TCC-I.weightC} + \UseConst{TCC-I.weightD}) , 2 , 1) } ,
+                gradetype = 1 ,
+              }
+            \starray_gset_prop:nne {student.reviewer}{grade}
+                {%
+                    \fpeval{round((#1 * \UseConst{TCC-I.weightA} + #2 * \UseConst{TCC-I.weightB} + #3 * \UseConst{TCC-I.weightC} + #4 * \UseConst{TCC-I.weightD}) / ( \UseConst{TCC-I.weightA} + \UseConst{TCC-I.weightB} + \UseConst{TCC-I.weightC} + \UseConst{TCC-I.weightD}) , 2 , 1) }
+                }
+    
+        }
+    }
+  
 }%
 
 %
@@ -1151,7 +1349,27 @@
 }
 
 
-\NewDocumentCommand{\setstudentlist}{mm}{\tcgen@cdef<coord>{list#1}{#2}}
+\NewDocumentCommand{\setstudentlist}{mm}{%
+  %%%
+  %%% TO BE REMOVED !
+    \tcgen@cdef<coord>{list#1}{#2}
+  %%%
+  %%% USING STARRAY
+    \seq_set_from_clist:cn {l__ufrgscca_#1_seq}{#2}
+}
+
+\cs_new_protected:Npn \__ufrgscca_grade:n #1 
+    {
+      \starray_set_iter_from_hash:nn {student}{#1}
+      \starray_term_syntax:n {student[#1]}
+      \bool_if:nF {\starray_parsed_get_prop:n {flag-graded}}
+        { \__ufrgscca_studentgrade: }
+        
+    }
+
+\NewDocumentCommand{\tcgrades}{m}{%
+    \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_grade:n}
+}
 
 \NewDocumentCommand{\tcreports}{O{}m}{%%
   \setreports{#1}
@@ -1206,3 +1424,4 @@
 \input{ufrgscca-ptBR-coord.def}%
 \fi%
 
+\ExplSyntaxOff

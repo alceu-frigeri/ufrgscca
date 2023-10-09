@@ -96,6 +96,14 @@
   board-local = {local ~da~ apresentação} ,
   board-day   = {dia~ da~ apresentação} ,
   board-time  = {hora~da~apresentação} ,
+  gradeavrg = 0,
+  grade = ,
+  flag-graded = \c_false_bool , %%% IF gradeavrg AND finalgrade already calculated (or defined)
+  flag-exam = \c_false_bool ,
+  flag-ff = \c_false_bool ,
+  flag-dismiss = \c_false_bool , %%% IF it was the 1st semester.
+  flag-newpage = \c_false_bool , %% if it should go in a new page (board)
+  flag-distinctboard = \c_false_bool , %% if advisor isn't in the board
   advisor . struct = {
     first = ,
     last =  ,
@@ -146,8 +154,8 @@
     pointB = ,
     pointC = ,
     pointD = ,
-    gradeI = 0 ,
-    gradeII = 0 ,    
+    grade = 0 ,
+    gradetype = ,    
   } ,
   altreviewer . struct = {
     first = ,
@@ -243,34 +251,34 @@
 \NewActivity{internship-opt}
 
 
-\NewDocumentCommand{\SetActivity}{O{}mm} {
+\NewDocumentCommand{\ActivitySet}{O{}mm} {
   \tl_if_blank:nF {#1}
     {\starray_set_iter_from_hash:nn {activity}{#1}}
   \starray_set_prop:nnn {activity}{name}{#3}
   \starray_set_prop:nnn {activity}{acronym}{#2}
 }
  
-\NewDocumentCommand{\SetActivityCoordTitle}{O{}m} {
+\NewDocumentCommand{\ActivitySetCoordTitle}{O{}m} {
   \tl_if_blank:nF {#1}
     {\starray_set_iter_from_hash:nn {activity}{#1}}
   \starray_set_prop:nnn {activity.coord}{title}{#2}
 }
 
-\NewDocumentCommand{\SetActivityCoord}{O{}mO{}}{
+\NewDocumentCommand{\ActivitySetCoord}{O{}mO{}}{
   \tl_if_blank:nF {#1}
     {\starray_set_iter_from_hash:nn {activity}{#1}}
   \starray_gset_prop:nnn {activity.coord}{name}{#2}
   \__ufrgscca_setgender:nn {activity.coord}{#3}
 }
 
-\NewDocumentCommand{\SetActivityNewEvent}{O{}mm}{
+\NewDocumentCommand{\ActivitySetNewEvent}{O{}mm}{
   \tl_if_blank:nF {#1}
     {\starray_set_iter_from_hash:nn {activity}{#1}}
   \starray_new_term:nn {activity.calendar}{#2}
   \starray_gset_prop:nnn {activity.calendar}{event}{#3}
 }
 
-\NewDocumentCommand{\SetActivityEventDay}{O{}mmm}{
+\NewDocumentCommand{\ActivitySetEventDay}{O{}mmm}{
   \tl_if_blank:nF {#1}
     {\starray_set_iter_from_hash:nn {activity}{#1}}
   \starray_gset_from_keyval:nn {activity.calendar[#2]}
@@ -279,6 +287,10 @@
         week = {#4} ,
     }
 }
+
+\NewDocumentCommand{\ActivitySelect}{m}{ \starray_set_iter_from_hash:nn {activity}{#1} }
+%\NewDocumentCommand{\ActivitySet}{m}{ \starray_set_iter_from_hash:nn {activity}{#1} }
+
 
 \NewDocumentCommand{\Activity}{mm}{
   \starray_get_prop:nn {activity[#1]}{#2}
@@ -327,6 +339,14 @@
 }
 \NewDocumentCommand{\UseLabel}{m}{
   \prop_item:Nn \l__ufrgscca_labels_prop {#1}
+}
+
+\prop_new:N \l__ufrgscca_const_prop
+
+\NewDocumentCommand{\SetConst}{m}{
+  \prop_put_from_keyval:Nn \l__ufrgscca_const_prop {#1}
+}
+\NewDocumentCommand{\UseConst}{m}{ \prop_item:Nn \l__ufrgscca_const_prop {#1} 
 }
 
 %
@@ -439,22 +459,24 @@
 \let\tc@org@author\author
 %
 \newcounter{tc@studentcount}%
-\RenewDocumentCommand{\author}{mmO{}}{%
+\RenewDocumentCommand{\author}{O{}mmO{}}{%
     % TO BE REMOVED !
         \stepcounter{tc@studentcount}%
-        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}last\endcsname{#1}%
-        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}first\endcsname{#2}%
-        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}\endcsname{#2~ #1}%
-		\tccore@articledef{tc@student\Alph{tc@studentcount}}{#3}%%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}last\endcsname{#2}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}first\endcsname{#3}%
+        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}\endcsname{#3~ #2}%
+		\tccore@articledef{tc@student\Alph{tc@studentcount}}{#4}%%
   % USING STARRAY
-  \starray_new_term:nn {student}{}
+  \tl_if_blank:nTF {#1}
+    {\starray_new_term:nn {student}{}}
+    {\starray_new_term:nn {student}{#1}}
   \starray_gset_from_keyval:nn {student}
     {
-      first = #2 ,
-      last = #1 ,
-      name = #2~ #1 ,
+      first = #3 ,
+      last = #2 ,
+      name = #3~ #2 ,
     }
-  \__ufrgscca_setgender:nn {student}{#3}
+  \__ufrgscca_setgender:nn {student}{#4}
 }%
   %
 \NewDocumentCommand{\DataFields}{mm}{
@@ -480,8 +502,9 @@
       email = #3 ,
     }
 }%
-\NewDocumentCommand{\student}{mmO{}}{\author{#1}{#2}[#3]}%
+\NewDocumentCommand{\student}{O{}mmO{}}{\author[#1]{#2}{#3}[#4]}%
 \NewDocumentCommand{\studentinfo}{O{}mm}{\authorinfo[#1]{#2}{#3}}%
+\NewDocumentCommand{\studentSelect}{m}{ \starray_set_iter_from_hash:nn {student}{#1} }
 %----------
 %----------
 %
@@ -537,23 +560,27 @@
   %%% TO BE REMOVED !
 	\tccore@ProfFields{advisor}{#1}{#2}{#3}{#4}%%
   %%% the advisor is also the first examiner if not @nBoard%
-	\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%%
+%%	\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%% see below, with starray (to avoid dups).
   %%%
   %%% USING STARRAY
   \starray_new_term:nn {student.advisor}{}
   \__ufrgscca_set_prof:nnnnn {advisor}{#1}{#2}{#3}{#4}
-	%\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%%
+  \starray_term_syntax:n{student}
+  \bool_if:nF {\starray_parsed_get_prop:n{flag-distinctboard}}
+    { \examiner[#1]{#2}{#3}[#4] }
 }%
 \NewDocumentCommand{\advisorinfo}{mmmm}{%%
   %%%
   %%% TO BE REMOVED !
 	\tccore@ProfInfo{advisor}{#1}{#2}{#3}{#4}%%
   %%% the advisor is also the first examiner if not @nBoard%
-	\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
+%%	\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
   %%%
   %%% USING STARRAY
   \__ufrgscca_set_prof_info:nnnnn {advisor}{#1}{#2}{#3}{#4}
-	%\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
+  \starray_term_syntax:n{student}
+  \bool_if:nF {\starray_parsed_get_prop:n{flag-distinctboard}}
+    { \examinerinfo{#1}{#2}{#3}{#4} }
 }%
 %
 \NewDocumentCommand{\coadvisor}{O{}mmO{}}{%%

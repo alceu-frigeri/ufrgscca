@@ -43,7 +43,7 @@
   %
   title.requestform         = Formulário de Requerimento de Matrícula ,
   title.coadvisorform       = Requerimento de Autorização de Co-Orientação ,
-  title.boardapproval       = Formulário de Aprovação da Banca Examinadora ,
+  title.boardapproval       = Formulário de Indicação da Banca Examinadora ,
   title.advisorsapproval-I  = Formulário de Aprovação para Avaliação ,
   title.advisorsapproval-II = Formulário de Aprovação para Apresentação ,
   title.receipts            = Recibo de entrega de cópia da versão final do Trabalho de Conclusão ,
@@ -88,9 +88,9 @@
                               \item[Observação 3:] A assinatura d\DataFields{student.advisor}{article} orientador\DataFields{student.advisor}{narticle} é obrigatória, entretanto a assinatura dos membros da banca só é necessária caso tenham marcado a opção ''$\Box$ Revisarei o trabalho depois de corrigido'' no \emph{\UseTerm{temp.formrefname}}.
                             \end{description}
                               } ,
-  desc.studentwork          = {
-                              \noindent\UseLabel{student}: {\bf \csname tc@student\Alph{tc@studentcount}\endcsname}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
-                              \noindent\UseLabel{worktitle}: \@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
+  desc.studentwork          = { %%% WRONG -- OLD STYLE !!! replace it with starray !!
+                              \noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
+                              \noindent\UseLabel{worktitle}: \DataFields{student}{worktitle} } , %\@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
   desc.studentwork.full     = {\UseTerm{desc.studentwork}\\[2.5mm]\UseTerm{desc.advisor}} ,  
   desc.advisor              = {\noindent\UseLabel{advisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
   desc.coadvisor            = {\noindent\UseLabel{coadvisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
@@ -102,18 +102,7 @@
   corrections.ok            = {Correções satisfatórias: \hspace*{1cm}$\Box$\ sim\hspace*{2cm}$\Box$\ não} , 
 }
 
-\SetTermKeys{%
-  notes.calendar            = {%
-    \begin{description}
-      \item[Obs. 1]: Caso o aluno(a) já tenha um processo aberto de TCC, reusar o mesmo apenas anexando o novo requerimento de matrícula, caso necessário.
-      \item[Obs. 2]: O formulário deve conter as assinaturas de concordância em participar da banca da parte dos professores convidados.
-      \item[Obs. 3]: As bancas serão marcadas após a entrega do relatório parcial, de acordo com a disponibilidade dos professores convidados.
-      \item[Obs. 4]: O \emph{Formulário de Aprovação das Correções} deve estar assinado pelo(a) orientador(a). Para relatórios em que o campo “Revisarei o trabalho depois de corrigido” tiver sido assinalado por algum membro da banca, a assinatura do(a) mesmo(a) também deverá constar no \emph{Formulário de Aprovação das Correções}.
-      \item[Obs. 5]: Trabalho em \textbf{RECUPERAÇÃO} é aquele cuja nota final quando da defesa é insuficiente para aprovação OU aquele em que o campo “Necessita ser revisto/re-escrito” do formulário de correções foi marcado por algum membro da banca. Neste caso, o \emph{Formulário de Aprovação das Correções} deve estar assinado tanto pelo(a) orientador(a) como pelo(s) membro(s) da banca designado(s) para reavaliar o trabalho, incluindo obrigatoriamente aqueles que tiverem marcado o campo “Revisarei o trabalho depois de corrigido”.\\\hrule
-      \item[IMPORTANTE]: O(A) aluno(a) estará \textbf{REPROVADO(A)} \emph{se falhar na entrega de qualquer um dos documentos aqui citados dentro dos prazos estipulados}.
-    \end{description}
-  } ,
-}
+
 
 \SetLabels{%
   advisor                   = Orientador\DataFields{student.advisor}{narticle} ,
@@ -160,16 +149,22 @@
   TCC-I.pointB              = {Biblio.} ,
   TCC-I.pointC              = {Plano Trab.} ,
   TCC-I.pointD              = {Texto} ,
+  TCC-II.pointA              = {Conteúdo} , 
+  TCC-II.pointB              = {Trab. Escrito} ,
+  TCC-II.pointC              = {Apresentação} ,
+}
+
+\SetConst{%
   TCC-I.weightA              = {2} ,
   TCC-I.weightB              = {2} ,
   TCC-I.weightC              = {2} ,
   TCC-I.weightD              = {1} ,
-  TCC-II.pointA              = {Conteúdo} , 
-  TCC-II.pointB              = {Trab. Escrito} ,
-  TCC-II.pointC              = {Apresentação} ,
   TCC-II.weightA              = {0.35} , 
   TCC-II.weightB              = {0.35} ,
-  TCC-II.weightC              = {0.3} 
+  TCC-II.weightC              = {0.3} ,
+  NgradeA                      = {9.0} ,
+  NgradeB                      = {7.5} ,
+  NgradeC                      = {6.0} ,  
 }
 
 
@@ -369,7 +364,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
         \end{tabular}}%
 %
     \end{center}%
-    {\tiny \UseTerm{notes.calendar}}
+    \scriptsize \UseTerm{notes.calendarI}
   }%
 }
   \ExplSyntaxOff
@@ -404,7 +399,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
         \end{tabular}}%
 %
     \end{center}%
-    {\tiny \UseTerm{notes.calendar}}
+    \scriptsize \UseTerm{notes.calendarII}
   }%
 }
   \ExplSyntaxOff
@@ -438,7 +433,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
   \UseTerm{desc.requestform} \Activity{tccI}{name}.
   \vfill%
 
-  \UseLabel{worktitle.temp}: \@title %
+  \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
 
   \UseLabel{student.email}: {\bf \DataFields{student}{email}} %
 
@@ -479,7 +474,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
   \UseTerm{desc.coadvisorform}
   \vfill%
 
-  \UseLabel{worktitle.temp}: \@title %
+  \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
 
   \UseLabel{advisor}: \DataFields{student.advisor}{name}
 
@@ -527,7 +522,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
   \vfill%
 
-  Aprovo a nominata da Banca Examinadora acima relacionada.%
+  Indicamos a nominata da Banca Examinadora acima relacionada.%
 }
 
 %%%
@@ -669,7 +664,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
   \UseTerm{desc.requestform} \Activity{tccII}{name}.
   \vfill%
 
-  \UseLabel{worktitle.temp}: \@title %
+  \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
 
   \UseLabel{student.email}: {\bf \DataFields{student}{email}} %
 
@@ -720,7 +715,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
   \UseTerm{desc.coadvisorform}
   \vfill%
 
-  \UseLabel{worktitle.temp}: \@title %
+  \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
 
   \UseLabel{advisor}: \DataFields{student.advisor}{name}
 
@@ -772,7 +767,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
   \vfill%
 
-    Aprovo a nominata da Banca Examinadora acima relacionada.%
+    Indicamos a nominata da Banca Examinadora acima relacionada.%
 }
 
 %%%
