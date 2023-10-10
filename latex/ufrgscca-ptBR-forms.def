@@ -226,13 +226,13 @@ Coordenador da Atividade:  \textbf{\tccore@@ref{internshipcoord}{}}%
 
 \examformnotes{\ \\Posteriormente, \tccore@@ref{TCCcoord}{article} professor\tccore@@ref{TCCcoord}{narticle} coordenador\tccore@@ref{TCCcoord}{narticle} calculará a nota final atribuída por cada membro da banca examinadora, de acordo com a seguinte ponderação:\\[2mm] {\bf Nota Final Banca = \tc@TCCpointAweight\ x \tc@TCCpointAlabel\  + \tc@TCCpointBweight\ x \tc@TCCpointBlabel\  + \tc@TCCpointCweight\ x \tc@TCCpointClabel\ } \\[2mm] A média final da atividade será dada pela média das notas finais (calculadas com a expressão acima) atribuidas por cada um dos membros da banca examinadora.}
 
-\examboardformtitle{Formulário de Aprovação da Banca Examinadora}
+\examboardformtitle{Formulário de Indicação da Banca Examinadora}
 
 \examboardformtitleTMP{Formulário de Aprovação do Relatório Parcial e Banca Examinadora}
 
 \examboardformdescTMP{Aprovo o Relatório Parcial e nominata da Banca Examinadora acima relacionada.}
 
-\examboardformdesc{Aprovo a nominata da Banca Examinadora acima relacionada.}
+\examboardformdesc{Indicamos a nominata da Banca Examinadora acima relacionada.}
 
 \formsboardtitle{Banca Examinadora}
 
