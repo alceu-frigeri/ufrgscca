@@ -23,400 +23,178 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\def\tc@tmp@packname{ufrgscca-cover}
-\def\tc@tmp@altpackname{ufrgsccacover}
-\def\tc@tmp@packdesc{UFRGS/CCA cover commands}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
-
-\DeclareKeys[ufrgscca-cover]{
-    report.usage = load,
-    report.if = tcif@report,
-    internship.usage = load,
-	internship.if = tcif@internship,
-    nonrequired.usage = load,
-    nonrequired.if = tcif@nonrequired,
-}
-\ProcessKeyOptions[ufrgscca-cover]\relax
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student commands%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\cmdfactory<cover>{course}
-\cmdfactory<cover>{courseacronym}%
-\cmdfactory<cover>{graduationtitle}
-\cmdfactory<cover>{university,universityacronym,universitydivision}
-\cmdfactory<cover>{divisiongradcouncil}%
-\cmdfactory<cover>{department,classcode,classname,subject}%
-\cmdfactory<cover>{secretaryacronym,secdivisionacronym}%
-\cmdfactory<cover>{advisorname,coadvisorname}
-\cmdfactory<cover>{examinername}%
-\cmdfactory<cover>{reportspecificinfo,approvalspecificinfo}%
-\cmdfactory<cover>{advisorwidth}
-\cmdfactory<cover>{profname,coprofname}%
-\cmdfactory<cover>{tutorname,supervisorname}%
-\cmdfactory<cover>{internshiptitle}%
-\cmdfactory<cover>{internshipinfo}%
-%
-\advisorwidth{0.55\textwidth}%
-%
-\NewDocumentCommand{\class}{mm}{\classcode{#1}\classname{#2}}%
-%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%
-%%%%
-%%% cover pages and related macros%
-%%%%
-%%%%%%%%%%%%%%%%%%%%%%%
-\newlength{\tc@formwinvoffset}%
-\setlength{\tc@formwinvoffset}{24mm}%
-\NewDocumentCommand\tc@formtopbox{O{}+m+m}{%%
-	\begin{center}%%
-		\noindent%%
-		\parbox[t]{\textwidth}{%%
-      \centering%%
-      \vbox to \tc@formwinvoffset{%%
-        \tccover@covertopinfo%%
-				{\sc #2}%
-      }%%
-    }%
-
-		{\bf #3}\@ifundefined{#1}{}{\footnote[1]{\csname #1\endcsname}}%%
-	\end{center}%%
-}%
-
-\ExplSyntaxOn
-
-\NewDocumentCommand\tc@Nformtopbox{O{}+m+m}{%%
-	\begin{center}%%
-		\noindent%%
-		\parbox[t]{\textwidth}{%%
-      \centering%%
-      \vbox to \tc@formwinvoffset{%%
-        \tccover@covertopinfo%%
-				{\sc #2}%
-      }%%
-    }\par%
-
-		{\bf #3}\str_if_empty:nTF{#1}{}{\footnote[1]{#1}}%%
-	\end{center}%%
-}%
-\ExplSyntaxOff
+\ProvidesExplPackage
+    {ufrgscca-cover}
+    {2023/11/10}
+    {1.99}
+    {UFRGS/CCA cover commands}
 
 
-%
-\NewDocumentCommand{\tccover@covertopinfo}{}{%%
-        \@ifundefined{tcdef@cover@university}{}{\MakeUppercase{\tcdef@cover@university}\\}%
-        \@ifundefined{tcdef@cover@universitydivision}{}{\MakeUppercase{\tcdef@cover@universitydivision}\\}%
-        \@ifundefined{tcdef@cover@course}{}{\MakeUppercase{\tcdef@cover@course}\\}%
-        \@ifundefined{tcdef@cover@department}{}{\MakeUppercase{\tcdef@cover@department}\\}%%
-        \@ifundefined{tcdef@cover@classname}{}{\MakeUppercase{\tcdef@cover@classcode\ --\ \tcdef@cover@classname}\\}%
-        \@ifundefined{tcdef@cover@subject}{}{\MakeUppercase{\tcdef@cover@subject}}%
-}%
 
-
-\NewDocumentCommand{\tccover@coveradvisorinfo}{}{%%
-        \@ifundefined{tc@studentA@advisor}{}{\vfill{\scshape\tcdef@cover@advisorname}:\\\null\hfill\tc@studentA@advisor}%
-        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\tcdef@cover@coadvisorname}:\\\null\hfill\tc@studentA@coadvisor}%
-}%
-%
-\NewDocumentCommand{\tccover@reportadvisorinfo}{}{%%
-        \@ifundefined{tc@studentA@advisor}{}{\vfill{\scshape\iftcif@internship\tcdef@cover@advisorname\else\tcdef@cover@profname\fi}:\\\null\hfill\tc@studentA@advisor}%
-        \@ifundefined{tc@studentA@coadvisor}{}{\\[6ex]{\scshape\iftcif@internship\tcdef@cover@coadvisorname\else\tcdef@cover@coprofname\fi}:\\\null\hfill\tc@studentA@coadvisor}%
+\NewDocumentCommand{\class}{mm}{%
+  \SetConsts{%
+    class.code = {#1} ,
+    class.name = {#2} ,
+  }
 }%
 %
 
-%%%%%%%%%%%%%%%%%%%
-\let\tc@org@maketitle\maketitle
-\RenewDocumentCommand{\maketitle}{}{\coverpages}%
 
 
-\NewDocumentCommand{\coverpages}{}{%%
-    \thecoverpage%that´s the first page%
-    \thetitlepage%that´s the second page (for tcc)%
-    \tccapprovalpage%that´s the third page (for tcc)%
-}%
+\cs_generate_variant:Nn \text_uppercase:n {e}
 
-\iftcif@report
-  \RenewDocumentCommand{\coverpages}{}{%%
-    \thecoverpage%that´s the first page%
-  }%
-\fi
 
-\iftcif@internship
-  \AtBeginDocument{\title{\tcdef@cover@internshiptitle}}
-  \RenewDocumentCommand{\coverpages}{}{%%
-    \thecoverpage%that´s the first page%
-    \internapprovalpage%that´s the second page (for internship)%
-  }%
-\fi
 
-%
-
-%%%%%%%%%
-%%%
-%% 1st cover page%
-%%%
-%%%%%%%%%
-%%
-\newlength{\tc@coverwinwidth}\setlength{\tc@coverwinwidth}{95mm}%%
-\newlength{\tc@coverwinheight}\setlength{\tc@coverwinheight}{64mm}%%
-\newlength{\tc@coverwinvoffset}\setlength{\tc@coverwinvoffset}{112mm}%%
 \NewDocumentCommand{\location}{mm}{%%
-        \gdef\tc@city{#1}%%
-        \gdef\tc@state{#2}%%
+  \SetConsts{%
+    publ.city = {#1} ,
+    publ.state = {#2} ,
+  }
 }%%
 
 
-\NewDocumentCommand{\thecoverpage}{}{%%
-  \begin{titlepage}%
-    \noindent\tc@covertopbox%
-    \vfill%
-	  \iftcif@report{%%
-		\@ifundefined{tc@studentA@advisor}{}{%%
-          \hspace*{\fill}\parbox[b]{\tcdef@cover@advisorwidth}{\tccover@reportadvisorinfo}%
-		  \vfill%
-        }%%
-	  }%%
-     \else\fi
-    \centerline{\tc@city}%
-	  \centerline{\tc@date}%
-  \end{titlepage}%%
-	\tc@pagebreak
-}%
-%
-%
-%%%%%%%%%
-%%%
-%% 2nd cover page (title page)%
-%%%
-%%%%%%%%%
-\NewDocumentCommand{\thetitlepage}{}{%%
-	\begin{titlepage}%
-    \noindent\tc@covertopbox%
-    \vfill%
-    \@ifundefined{tcdef@cover@reportspecificinfo}{}{%
-      \hspace*{\fill}\makebox[.55\textwidth][l]{%%
-        \parbox[b]{8.5cm}{\tcdef@cover@reportspecificinfo}%%
-      }%
-      \vfill%
-    }%
-    \@ifundefined{tc@studentA@advisor}{}{%
-      \hspace*{\fill}\parbox[b]{\tcdef@cover@advisorwidth}{%%
-        \tccover@coveradvisorinfo%
-      }%
-      \vfill%
-    }%
-    \centerline{\tc@city}%
-	  \centerline{\tc@date}%
-	\end{titlepage}%
-	\tc@pagebreak
-}%
-%
-%
-%
-\NewDocumentCommand{\tccover@studentdesc}{m}{\@ifundefined{#1}{}{\MakeUppercase{\textbf{\csname #1\endcsname\ - \csname #1ID\endcsname}}\\}}
-%
+\prop_new:N \l__ufrgscca_coverpages_prop
 
 
-\NewDocumentCommand\tc@covertopbox{}{%%
-  \parbox[t]{\textwidth}{%%
-    \centering%%
-    \vbox to \tc@coverwinvoffset{%%
-      \tccover@covertopinfo\vfill\tc@winbox%
-    }%
-  }%
-}%
+\NewDocumentCommand{\SetCoverFields}{mm+m}{
+  \prop_put:Nnn \l__ufrgscca_coverpages_prop {#1.#2}{#3}
+}
+
+\NewDocumentCommand{\MakeCoverPages}{m} 
+  {
+    \seq_set_from_clist:Ne \l__ufrgscca_tmp_seq {\prop_item:Nn \l__ufrgscca_coverpages_prop {#1.clist} }
+
+    \seq_map_inline:Nn \l__ufrgscca_tmp_seq 
+      {
+        \keys_set:nn { ufrgscca / layout }{##1 = #1}
+      }
+
+  }
 
 
- \NewDocumentCommand\tc@winbox{}{%%
-       %\fbox{%
-     \parbox[b]{\tc@coverwinwidth}{%%
-       \centering\vbox to \tc@coverwinheight{%%
-         \vspace*{\fill}%
-         \iftcif@report%
-  		   \tccover@studentdesc{tc@studentA}%
-           \tccover@studentdesc{tc@studentB}%
-           \tccover@studentdesc{tc@studentC}%
-           \tccover@studentdesc{tc@studentD}%%
-         \else%
-           \tccover@studentdesc{tc@studentA}%%
-         \fi%
-         \vspace{\stretch{4}}%
-         {\large\MakeUppercase{\textbf{\@title}}\par}%
-         \vfill%
-       }%%
-	   %}%%
-       }%%
- }%
+\keys_define:nn { ufrgscca / layout }
+  {
+    cover        .usage:n    = general,
+	cover        .code:n     = {\CoverPage{#1}},
+    desc        .usage:n    = general,
+	desc        .code:n     = {\DescPage{#1}},
+    approval    .usage:n    = general,
+    approval    .code:n     = {\ApprovalPage{#1}},
+  }
+  
+\cs_generate_variant:Nn \seq_map_inline:Nn {Ne}
+\cs_generate_variant:Nn \seq_set_from_clist:Nn {Ne}
+
+\coffin_new:N \l__ufrgscca_top_coffin 
+\coffin_new:N \l__ufrgscca_student_coffin
+\coffin_new:N \l__ufrgscca_title_coffin
+\coffin_new:N \l__ufrgscca_desc_coffin
+\coffin_new:N \l__ufrgscca_adv_coffin
+\coffin_new:N \l__ufrgscca_board_coffin
+\coffin_new:N \l__ufrgscca_coord_coffin
+
+\dim_new:N \l__ufrgscca_top_ht_dim
+
+\dim_new:N \l__ufrgscca_student_voffset_dim
+\dim_new:N \l__ufrgscca_student_ht_dim
+
+\dim_new:N \l__ufrgscca_title_voffset_dim
+\dim_new:N \l__ufrgscca_title_wd_dim
+\dim_new:N \l__ufrgscca_title_ht_dim
+
+\dim_new:N \l__ufrgscca_desc_wd_dim
+\dim_new:N \l__ufrgscca_desc_ht_dim
+\dim_new:N \l__ufrgscca_desc_voffset_dim
+
+\dim_new:N \l__ufrgscca_adv_wd_dim
+\dim_new:N \l__ufrgscca_adv_ht_dim
+
+
+\NewDocumentCommand{\CoverPageBase}{m}{
+  \dim_gset:Nn \l__ufrgscca_title_wd_dim {0.6\textwidth}% {95mm}
+  \dim_gset:Nn \l__ufrgscca_desc_wd_dim {0.6\textwidth}% {95mm}
+  \dim_gset:Nn \l__ufrgscca_adv_wd_dim {0.68\textwidth}% {95mm}
+
+  \vcoffin_gset:Nnn \l__ufrgscca_top_coffin {\textwidth}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.top} }
+
+  \vcoffin_gset:Nnn \l__ufrgscca_student_coffin {\l__ufrgscca_title_wd_dim}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.students} }
+    
+  \vcoffin_gset:Nnn \l__ufrgscca_title_coffin {\l__ufrgscca_title_wd_dim}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.title} }
+
+  \dim_gset:Nn \l__ufrgscca_student_ht_dim {\coffin_ht:N \l__ufrgscca_student_coffin}
+  \dim_gset:Nn \l__ufrgscca_top_ht_dim {\coffin_ht:N \l__ufrgscca_top_coffin}
+  \dim_gset:Nn \l__ufrgscca_title_voffset_dim {0.3\textheight} %%{0.3\textheight} 
+  \dim_gset:Nn \l__ufrgscca_desc_voffset_dim {0.43\textheight} %%{0.45\textheight}   
+  \dim_gset:Nn \l__ufrgscca_student_voffset_dim {(\l__ufrgscca_title_voffset_dim + \l__ufrgscca_top_ht_dim - \l__ufrgscca_student_ht_dim)/2}
+
+  \coffin_gjoin:NnnNnnnn \l__ufrgscca_top_coffin {hc}{t} \l__ufrgscca_student_coffin {hc}{t} {0pt} {-\l__ufrgscca_student_voffset_dim} 
+  \coffin_gjoin:NnnNnnnn \l__ufrgscca_top_coffin {hc}{t} \l__ufrgscca_title_coffin {hc}{t} {0pt} {-\l__ufrgscca_title_voffset_dim} 
+}
 
 
 
-%
-%%%%%%%%%
-%%%
-%% 3rd cover page (approval page)%
-%%%
-%%%%%%%%%
-\NewDocumentCommand{\tccapprovalpage}{}{%%
-	\begin{center}%
-    \noindent\tc@covertopbox%
-    \vfill%
-    \@ifundefined{tcdef@cover@approvalspecificinfo}{}{%
-      \hspace*{\fill}\makebox[.55\textwidth][l]{%%
-        \parbox[b]{8.5cm}{\tcdef@cover@approvalspecificinfo}%%
-      }%
-      \vfill%
-    }%
-    \@ifundefined{tc@studentA@advisor}{}{%
-      \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
-        \tccover@approvalpageadvisorinfo%
-      }%
-      \vfill%
-    }%
-	\@ifundefined{tc@studentA@examinerA}{}{%
-		\hspace*{\fill}\parbox[b]{1.0\textwidth}{\tcdef@cover@examinername:}%
-		\vfill%
-    \hspace*{\fill}\parbox[b]{.90\textwidth}{%%
-      \tccover@approvalpageexaminerinfo%
-    }%
-    \vfill%
-  }%
-  \@ifundefined{tcdef@core@coursecoord}{}{%
-    \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
-      \tccover@approvalpagecoordinfo%
-    }%
-    \vfill%
-  }%
-  \vfill%
-  \hfill\tc@city, \tc@monthyeardate
-	\end{center}%
-	\tc@pagebreak
-}%
-%
-%
-%
-%
-%
-%%%%%%%%%
-%%%
-%% 2nd cover page (internship, approval page)%
-%%%
-%%%%%%%%%
-\NewDocumentCommand{\internapprovalpage}{}{%%
-    \begin{center}%
-        \noindent\tc@covertopbox%
-        \vfill%
-        \@ifundefined{tcdef@cover@internshipinfo}{}{%
-            \hspace*{\fill}\makebox[.55\textwidth][l]{%%
-                \parbox[b]{8.5cm}{\tcdef@cover@internshipinfo}%%
-            }%
-            \vfill%
-        }%
-        \@ifundefined{tc@studentA@tutor}{}{%
-            \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
-                \tccover@approvalpagetutorinfo%
-            }%
-            \vfill%
-        }%
-        \@ifundefined{tc@studentA@supervisor}{}{%
-            \vfill%
-            \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
-                \tccover@approvalpagesupervisorinfo%
-            }%
-            \vfill%
-        }%
-        \iftcif@nonrequired
-        \else
-        \@ifundefined{tcdef@core@coursecoord}{}{%
-            \hspace*{\fill}\parbox[b]{.70\textwidth}{%%
-                \tccover@approvalpageinternshipcoordinfo%
-            }%
-            \vfill%
-        }%
-        \fi
-        \vfill%
-        \hfill\tc@city, \tc@monthyeardate
-    \end{center}%
-    \tc@pagebreak
-}%
-%
-%
-%
-%
-%
-\NewDocumentCommand{\tccover@approvalpageadvisorinfo}{}{%%
-  \@ifundefined{tc@studentA@advisor}{}{%%
-		\vfill%
-		\tcdef@cover@advisorname: \hrulefill\\%
-		\tc@studentA@advisor, \tc@studentA@advisorinstitution\\%
-		\tc@studentA@advisortitleinfo %
-	}%
-}%
-\NewDocumentCommand{\tccover@approvalpagetutorinfo}{}{%%
-    \@ifundefined{tc@studentA@tutor}{}{%%
-        \vfill%
-        \tcdef@cover@tutorname: \hrulefill\\%
-        \tc@studentA@tutor, \tc@studentA@tutorinstitution\\%
-        \tc@studentA@tutortitleinfo %
-    }%
-}%
 
-\NewDocumentCommand{\tccover@@aprovalexaminerinfo}{m}{
-  \@ifundefined{#1}{}{%%
-  	\csname #1\endcsname, \csname #1institution\endcsname\\%
-		\csname #1titleinfo\endcsname\\%
-	}%
-}%
-\NewDocumentCommand{\tccover@approvalpageexaminerinfo}{}{%%
-		\vfill%
-		\tccover@@aprovalexaminerinfo{tc@studentA@examinerA}%
+\NewDocumentCommand{\CoverPage}{m}{
+  \CoverPageBase{#1}
+    
+  \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
 
-		\tccover@@aprovalexaminerinfo{tc@studentA@examinerB}%
+  \vfill
+  { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom} }
+  \newpage
+}
 
-		\tccover@@aprovalexaminerinfo{tc@studentA@examinerC}%
+\NewDocumentCommand{\DescPage}{m}{
+  \CoverPageBase{#1}      
 
-		\tccover@@aprovalexaminerinfo{tc@studentA@examinerD}%
+  \vcoffin_gset:Nnn \l__ufrgscca_desc_coffin {\l__ufrgscca_desc_wd_dim}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.text-descpage} }
 
-		\tccover@@aprovalexaminerinfo{tc@studentA@examinerE}%
-}%
-%
-\NewDocumentCommand{\tccover@approvalpagesupervisorinfo}{}{%%
-  \vfill%
-  \@ifundefined{tc@studentA@supervisor}{}{%%
-      \tcdef@cover@supervisorname: \hrulefill\\%
-    \tc@studentA@supervisor, \tc@studentA@supervisorregister\\%
-    \tc@studentA@supervisoroffice\\%
-  }%
-}%
-%
+  \vcoffin_gset:Nnn \l__ufrgscca_adv_coffin {\l__ufrgscca_adv_wd_dim}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.advisor-descpage} }
+  
+  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_desc_coffin {r}{t} {0pt} {-\l__ufrgscca_desc_voffset_dim} 
+   
+  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-3\parsep} 
+    
+  \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
+
+  \vfill
+  { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom-descpage} }
+  \newpage
+}
 
 
-\NewDocumentCommand{\tccover@approvalpagecoordinfo}{}{%%
-  \@ifundefined{tcdef@core@coursecoord}{}{%%
-		\vfill%
-		\hrulefill\\%
-		\tcdef@core@coursecoord\\%
-		\tcdef@core@coursecoordtitle\\%
-		\tcdef@cover@course%
-	}%
-}%
-%
-\NewDocumentCommand{\tccover@approvalpageinternshipcoordinfo}{}{%%
-    \@ifundefined{tcdef@core@internshipcoord}{}{%%
-        \vfill%
-        \hrulefill\\%
-        \tcdef@core@internshipcoord\\%
-        \tcdef@core@internshipcoordtitle\\%
-        \tcdef@cover@course%
-    }%
-}%
+\NewDocumentCommand{\ApprovalPage}{m}{
+  \CoverPageBase{#1}        
+  \vcoffin_gset:Nnn \l__ufrgscca_desc_coffin {\l__ufrgscca_desc_wd_dim}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.text-approvalpage} }
 
+  \vcoffin_gset:Nnn \l__ufrgscca_adv_coffin {\l__ufrgscca_adv_wd_dim}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.advisor-approvalpage} }
 
+  \vcoffin_gset:Nnn \l__ufrgscca_board_coffin {\textwidth}
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.board} }
+
+  \vcoffin_gset:Nnn \l__ufrgscca_coord_coffin {\l__ufrgscca_adv_wd_dim} 
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.coord} }
+
+  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_desc_coffin {r}{t} {0pt} {-\l__ufrgscca_desc_voffset_dim} 
+   
+  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-3\parsep} 
+    
+  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {l}{b} \l__ufrgscca_board_coffin {l}{t} {0pt} {-3\parsep} 
+  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_coord_coffin {r}{t} {0pt} {-3\parsep} 
+    
+  \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
+
+  \vfill
+  { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom-approvalpage} }
+  \newpage
+}
 

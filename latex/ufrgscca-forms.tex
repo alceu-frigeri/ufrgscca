@@ -22,154 +22,8 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\makeatletter
-\ExplSyntaxOff
-
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-
-\SetHeadings{%
-    university              = Universidade Federal do Rio Grande do Sul ,
-    acronym                 = UFRGS ,
-    unit                    = Escola de Engenharia ,
-    secretary               = SACAD/EE ,
-    course                  = Engenharia de Controle e Automação ,
-}
-
-\SetTermKeys{%
-  title.tccI                = Trabalho de Conclusão de Curso I ,
-  title.tccII               = Trabalho de Conclusão de Curso II ,  
-  title.internship          = Estágio Supervisionado Obrigatório ,
-  %
-  title.requestform         = Formulário de Requerimento de Matrícula ,
-  title.coadvisorform       = Requerimento de Autorização de Co-Orientação ,
-  title.boardapproval       = Formulário de Indicação da Banca Examinadora ,
-  title.advisorsapproval-I  = Formulário de Aprovação para Avaliação ,
-  title.advisorsapproval-II = Formulário de Aprovação para Apresentação ,
-  title.receipts            = Recibo de entrega de cópia da versão final do Trabalho de Conclusão ,
-  title.reviewersform       = Formulário de Avaliação ,
-  title.correctionsform     = Formulário de Correções ,
-  title.rectifyapproval     = Formulário de Aprovação das Correções ,
-  title.internsupervisorform = Formulário de Avaliação do Supervisor (Pela Empresa) ,
-  title.interntutorform      = Formulário de Avaliação do Tutor e Coordenador ,
-  %
-  %footnote.reviewersform
-  footnote.reviewersform    = {Entregar a cada membro da banca juntamente com a cópia do trabalho.} , %%% TCC I / II
-  footnote.receipts         = {Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC.} , %%% TCC II
-  footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} ,%%% TCC II
-   %
-  footnote.supervisorsform = {Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}} ,
-   %
-  opening.requestform       = { Ilm\ActivityCoord{course}{article}. Sr\ActivityCoord{course}{narticle}.\par
- Coordenador\ActivityCoord{course}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}.   } ,
-  localdate                 = {\tc@city,\hspace{4mm} de \hspace{1.2cm} de 20\hspace{4mm}.} ,
-  %
-  %
-  %
-  %
- footnote.requestform       = { O resumo deve ser curto, i.e., não deve exceder este espaço. O texto deve ser escrito em parágrafo único, 
-                                e por se tratar de proposta, poderá utilizar  tempo futuro e não necessita ter motivação ou justificativa.\break  Deve conter:
-                                \begin{enumerate*}[alpha)] 
-                                	\item O QUE será feito - descrição e objetivos.
-                                   \item COMO será feito - metodologia.
-                                	\item Resultados esperados.
-                                \end{enumerate*}%
-                                } ,   %%% TCC I
-  desc.requestform          = { \DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
-                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity{course}{name}}, desta universidade, 
-                              portador\DataFields{student}{narticle} do cartão de identificação n$^o$ \DataFields{student}{ID}, 
-                              vem por meio deste solicitar matrícula na atividade de ensino} ,
-  desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
-                              REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
-                              vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
-  desc.rectifyapproval      = { \begin{description}
-                              \item[Observação 1:] Caso a versão final corrigida do trabalho, mais este formulário, não sejam entregues até a data estipulada, o conceito final passará a ser {\bf D}.
-                              \item[Observação 2:] Caso as correções sejam satisfatórias, a nota final será a já atribuída pela Banca Examinadora. 
-                              \item[Observação 3:] A assinatura d\DataFields{student.advisor}{article} orientador\DataFields{student.advisor}{narticle} é obrigatória, entretanto a assinatura dos membros da banca só é necessária caso tenham marcado a opção ''$\Box$ Revisarei o trabalho depois de corrigido'' no \emph{\UseTerm{temp.formrefname}}.
-                            \end{description}
-                              } ,
-  desc.studentwork          = { %%% WRONG -- OLD STYLE !!! replace it with starray !!
-                              \noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
-                              \noindent\UseLabel{worktitle}: \DataFields{student}{worktitle} } , %\@ifundefined{tc@student\Alph{tc@studentcount}title}{\textsl{\@title}}{\textsl{\csname tc@student\Alph{tc@studentcount}title\endcsname}}} ,
-  desc.studentwork.full     = {\UseTerm{desc.studentwork}\\[2.5mm]\UseTerm{desc.advisor}} ,  
-  desc.advisor              = {\noindent\UseLabel{advisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
-  desc.coadvisor            = {\noindent\UseLabel{coadvisor}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
-  desc.reviewer             = {\noindent\UseLabel{reviewer}:  \textbf{\csname tc@student\Alph{tc@studentcount}@advisor\endcsname}} ,
-  desc.student              = {\noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill 
-                              \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}} ,
-  desc.internshipperiod     = {\noindent Período do Estágio: {\bf \DataFields{student.internship}{start}} até: {\bf \DataFields{student.internship}{end}}} ,
-  desc.supervisor           = {\UseLabel{supervisor}: \textbf{\DataFields{student.supervisor}{name}} \hfill CREA: \textbf{\DataFields{student.supervisor}{register}}} ,
-  corrections.ok            = {Correções satisfatórias: \hspace*{1cm}$\Box$\ sim\hspace*{2cm}$\Box$\ não} , 
-}
-
-
-
-\SetLabels{%
-  advisor                   = Orientador\DataFields{student.advisor}{narticle} ,
-  advisor.gen               = Orientador(a) ,
-  advisor.email             = Email d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle} ,
-  coadvisor                 = Co-orientador\DataFields{student.coadvisor}{narticle} ,
-  coadvisor.gen             = Co-orientador(a) ,
-  coadvisor.email           = Email d\DataFields{student.coadvisor}{article} Co-orientador\DataFields{student.coadvisor}{narticle} ,
-  reviewer.base             = Avaliador ,
-  reviewer                  = Avaliador\DataFields{student.reviewer}{narticle} ,
-  altreviewer               = Suplente ,  
-  altreviewer.sig           = Avaliador\DataFields{student.altreviewer}{narticle} ,
-  tutor                     = Tutor\DataFields{student.tutor}{narticle} ,
-  tutor.gen                 = Tutor(a) ,
-  tutor.email               = Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} ,  
-  supervisor                = Supervisor\DataFields{student.supervisor}{narticle} ,
-  supervisor.gen            = Supervisor(a) ,  
-  student                   = Alun\DataFields{student}{article} ,
-  student.gen               = Aluno(a) ,
-  student.email             = Email d\DataFields{student}{article} Alun\DataFields{student}{article} ,
-  student.ID                = Cartão ,
-  signature.gen             = Assinatura , 
-  signature.student         = Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article} ,
-  signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
-  signature.advisor         = Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle} ,
-  signature.coadvisor       = Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Co-orientador\DataFields{student.coadvisor}{narticle} ,
-  signature.reviewer        = Assinatura\ \ d\DataFields{student.reviewer}{article}\ \ Avaliador\DataFields{student.reviewer}{narticle} ,
-  signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
-  signature.gen             = Assinatura ,
-  signature.supervisor      = Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle} ,
-  signature.tutor           = Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle} ,
-  signature.internshipcoord = Assinatura\ \ d\ActivityCoord{internship}{article}\ \ Coordenador\ActivityCoord{internship}{narticle} ,
-  worktitle                 = Título do Trabalho ,
-  worktitle.temp            = Título Provisório ,
-  email                     = Email ,
-  phone                     = ramal ,
-  board                     = Banca Examinadora ,
-  board.member              = Membro da Banca ,
-  agree                     = De Acordo ,
-}
-
-\SetLabels{%
-  TCC-I.pointA              = {Tema} ,
-  TCC-I.pointB              = {Biblio.} ,
-  TCC-I.pointC              = {Plano Trab.} ,
-  TCC-I.pointD              = {Texto} ,
-  TCC-II.pointA              = {Conteúdo} , 
-  TCC-II.pointB              = {Trab. Escrito} ,
-  TCC-II.pointC              = {Apresentação} ,
-}
-
-\SetConst{%
-  TCC-I.weightA              = {2} ,
-  TCC-I.weightB              = {2} ,
-  TCC-I.weightC              = {2} ,
-  TCC-I.weightD              = {1} ,
-  TCC-II.weightA              = {0.35} , 
-  TCC-II.weightB              = {0.35} ,
-  TCC-II.weightC              = {0.3} ,
-  NgradeA                      = {9.0} ,
-  NgradeB                      = {7.5} ,
-  NgradeC                      = {6.0} ,  
-}
-
-
-\SetTermKeys{%
-}
+%\makeatletter
+%\ExplSyntaxOff
 
 
 
@@ -486,7 +340,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
   {\bf Justificativa}:%
   \vfill
 
- \DataFields{student.coadvisor}{justification}
+ \DataFields{student.coadvisor}{reason}
  
 }
 
@@ -616,7 +470,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
 %%%
 \SetForm{rectifyapproval-I}{body}{  %
-  \SetTermKeys{temp.formrefname = {Formulário de Avaliação}}
+  \SetTerms{temp.formrefname = {Formulário de Avaliação}}
   \UseTerm{desc.rectifyapproval}
 
   \vfill%
@@ -687,7 +541,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
  \end{itemize}
   
 
-  \DataFields{student}{justification}
+  \DataFields{student}{reason}
 
 }
 
@@ -727,7 +581,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
   {\bf Justificativa}:%
   \vfill
 
-  \DataFields{student.coadvisor}{justification}
+  \DataFields{student.coadvisor}{reason}
 }
 
 %%%
@@ -868,7 +722,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
  \SignatureDate{\UseLabel{signature.reviewer}}%
   \vfill%
   \begin{description}
-    \item[Observações:] \ \\A nota final, de cada membro da banca examinadora, será calculada conforme:\\[2mm] {\bf Nota Final = \UseLabel{TCC-II.weightA}\ x \UseLabel{TCC-II.pointA}\  + \UseLabel{TCC-II.weightB}\ x \UseLabel{TCC-II.pointB}\  + \UseLabel{TCC-II.weightC}\ x \UseLabel{TCC-II.pointC}\ } \\[2mm] A média final da atividade será dada pela média das notas finais atribuidas por cada um dos membros da banca examinadora.
+    \item[Observações:] \ \\A nota final, de cada membro da banca examinadora, será calculada conforme:\\[2mm] {\bf Nota Final = \UseConst{TCC-II.weightA}\ x \UseLabel{TCC-II.pointA}\  + \UseConst{TCC-II.weightB}\ x \UseLabel{TCC-II.pointB}\  + \UseConst{TCC-II.weightC}\ x \UseLabel{TCC-II.pointC}\ }\\[2mm] A média final da atividade será dada pela média das notas finais atribuidas por cada um dos membros da banca examinadora.
   \end{description}%
 }
 %%%%%%%%%%%%%%%
@@ -945,7 +799,7 @@ O texto submetido:
 
 %%%
 \SetForm{rectifyapproval-II}{body}{  %
-  \SetTermKeys{temp.formrefname = {Formulário de Correções}}
+  \SetTerms{temp.formrefname = {Formulário de Correções}}
   \UseTerm{desc.rectifyapproval}
 
   \vfill%
@@ -955,10 +809,12 @@ O texto submetido:
 
 %%%
 \SetForm{rectifyapproval-II}{closing}{%
- \@ifundefined{tc@nBoard}{}{%
-  \SetReviewer{1}
-  \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
-  }%
+  \studentDistinctBoardCase
+    {
+      \SetReviewer{1}
+      \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
+    }
+    {}
 
   \SetReviewer{2}
   \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
@@ -969,6 +825,370 @@ O texto submetido:
 
   \ApprovalSignature[\UseLabel{altreviewer.sig}]{\DataFields{student.altreviewer}{name}}
 }
+
+%%%%%%%%%%%%%%%
+%%  referall letter- I
+%%%%%%%%%%%%%%%
+\SetForm{referral-I}{heading}{\UseTerm{title.tccI}}
+\SetForm{referral-I}{title}{\UseConst{semester}}
+\SetForm{referral-I}{opening}{\UseTerm{desc.sacad}}
+
+%%%
+\SetForm{referral-I}{body}{  %
+
+\studentCase%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido APROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \studentBoardGradedI
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido REAPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \studentBoardGradedI
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi APROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \studentBoardI
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi REPROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \studentBoardI
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido REPROVAD\DataFields{student}{Article}  com conceito final \textbf{FF}.
+  }
+}
+
+%%%
+\SetForm{referral-I}{closing}{%
+    \begin{flushright}
+    Porto Alegre, \UseConst{publ.day} de \UseConst{publ.month} de \UseConst{publ.year}.\\[2em]
+
+    \ActivitySelect{tccI}
+    \DataFields{activity.coord}{name}
+    
+    \DataFields{activity.coord}{title}
+    \end{flushright}
+  \vfill
+}
+
+
+\NewDocumentCommand{\studentCoadvLabelCase}{}{%%
+  \studentCoadvCase{\UseLabel{advisors} : \DataFields{student.advisor}{name} / \DataFields{student.coadvisor}{name}}{\UseLabel{advisor} : \DataFields{student.advisor}{name}}%%
+}
+
+\NewDocumentCommand{\studentBoardI}{}{
+  {%%
+    \footnotesize%
+    \begin{center}%
+      \begin{tabular}{p{\UseConst{report.tabA*}}@{\ }p{\UseConst{report.tabB*}}@{\ }c}%\hline%
+        & \UseLabel{board} \\\hline%
+        \multirow{2}={\DataFields{student}{name}} %
+        &\DataFields{student.reviewer[2]}{name}\\%
+        &\DataFields{student.reviewer[3]}{name}\\%
+        \multicolumn{2}{l}{\ \ \studentCoadvLabelCase} \\\hline%
+      \end{tabular}%
+    \end{center}%
+  }%
+}
+
+\NewDocumentCommand{\studentBoardGradedI}{}{
+  {\footnotesize%
+    \begin{center}%
+      \resizebox{\textwidth}{!}{%
+        \begin{tabular}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}%\hline%
+          \HeaderLineI
+          \studentLineI\\*\hline
+        \end{tabular}%
+      }%
+    \end{center}%
+  }%
+}
+
+
+\NewDocumentCommand{\HeaderLineI}{}{%
+    & \UseLabel{board} & \UseLabel{TCC-I.pointA} & \UseLabel{TCC-I.pointB} & \UseLabel{TCC-I.pointC} & \UseLabel{TCC-I.pointD}  &%
+    \UseLabel{Ngrade} & \UseLabel{grade}\\\hline%
+}
+\NewDocumentCommand{\studentLineI}{}{%
+   \multirow{2}={\textbf{\DataFields{student}{name}}} %
+    \ReviewerLineI{2}\\*%
+    \ReviewerLineI{3}\\*%
+    \multicolumn{6}{l}{\ \ \ \studentCoadvLabelCase} & \textbf{\DataFields{student}{gradeavrg}} & \textbf{\DataFields{student}{grade}}%\\* \hline%   
+}
+
+\NewDocumentCommand{\ReviewerLineI}{m}{%
+   & \hspace{-0.4em}\DataFields{student.reviewer[#1]}{name} & \DataFields{student.reviewer[#1]}{pointA} & \DataFields{student.reviewer[#1]}{pointB} & \DataFields{student.reviewer[#1]}{pointC} & \DataFields{student.reviewer[#1]}{pointD} & \DataFields{student.reviewer[#1]}{grade} &%
+ }
+
+
+\NewDocumentCommand{\studentExtLine}{m}{%
+   \\[-1em]%
+   \multicolumn{#1}{l}{\ \ \ \UseLabel{worktitle}: \DataFields{student}{worktitle}}\\*       
+   \multicolumn{#1}{l}{\ \ \ (\UseLabel{Nproc}: \DataFields{student}{Nproc}) \UseLabel{student.ID}: \DataFields{student}{ID} / \DataFields{student}{email}}\\*       
+   \multicolumn{#1}{l}{\ \ \ \UseLabel{remarks}: \DataFields{student}{remarks}}%\\ \hline
+}
+
+
+
+
+
+%%%%%%%%%%%%%%%
+%%  referall letter- II
+%%%%%%%%%%%%%%%
+\SetForm{referral-II}{heading}{\UseTerm{title.tccII}}
+\SetForm{referral-II}{title}{\UseConst{semester}}
+\SetForm{referral-II}{opening}{\UseTerm{desc.sacad}}
+
+%%%
+\SetForm{referral-II}{body}{  %
+
+\studentCase%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-day}, tendo sido APROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \studentBoardGradedII
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-day}, tendo sido REAPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \studentBoardGradedII
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia  \DataFields{student}{board-day}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi APROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \studentBoardII
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia  \DataFields{student}{board-day}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi REPROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \studentBoardII
+  }%
+  {
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido REPROVAD\DataFields{student}{Article}  com conceito final \textbf{FF}.
+  }
+}
+
+%%%
+\SetForm{referral-II}{closing}{%
+    \begin{flushright}
+    Porto Alegre, \UseConst{publ.day} de \UseConst{publ.month} de \UseConst{publ.year}.\\[2em]
+
+    \ActivitySelect{tccII}
+    \DataFields{activity.coord}{name}
+    
+    \DataFields{activity.coord}{title}
+    \end{flushright}
+  \vfill
+}
+
+
+
+
+
+\NewDocumentCommand{\studentBoardII}{}{
+  {%%
+    \footnotesize%
+    \begin{center}%
+      \begin{tabular}{p{\UseConst{report.tabA*}}@{\ }p{\UseConst{report.tabB*}}@{\ }c}%\hline%
+        & \UseLabel{board} \\\hline%
+        \multirow{3}={\DataFields{student}{name}} %
+        &\DataFields{student.reviewer[1]}{name}\\%
+        &\DataFields{student.reviewer[2]}{name}\\%
+        &\DataFields{student.reviewer[3]}{name}\\%
+        \multicolumn{2}{l}{\ \ \studentCoadvLabelCase} \\\hline%
+      \end{tabular}%
+    \end{center}%
+  }%
+}
+\NewDocumentCommand{\studentBoardGradedII}{}{
+  {%
+    \footnotesize%
+    \begin{center}%
+      \resizebox{\textwidth}{!}{%
+        \begin{tabular}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}%\hline%
+          \HeaderLineII
+          \studentLineII\\*\hline    
+        \end{tabular}%
+      }%
+    \end{center}%
+  }%
+}
+
+\NewDocumentCommand{\HeaderLineII}{}{%
+  & \UseLabel{board} & \UseLabel{TCC-II.pointA} & \UseLabel{TCC-II.pointB} & \UseLabel{TCC-II.pointC} &%
+  \UseLabel{Ngrade} & \UseLabel{grade}\\\hline%
+}
+\NewDocumentCommand{\studentLineII}{}{%
+   \multirow{3}={\textbf{\DataFields{student}{name}}} %
+    \ReviewerLineII{1}\\*%
+    \ReviewerLineII{2}\\*%
+    \ReviewerLineII{3}\\*%
+    \multicolumn{5}{l}{\ \ \ \studentCoadvLabelCase} & \textbf{\DataFields{student}{gradeavrg}} & \textbf{\DataFields{student}{grade}}%\\ \hline%   
+}
+
+\NewDocumentCommand{\ReviewerLineII}{m}{%
+   & \hspace{-0.4em}\DataFields{student.reviewer[#1]}{name} & \DataFields{student.reviewer[#1]}{pointA} & \DataFields{student.reviewer[#1]}{pointB} & \DataFields{student.reviewer[#1]}{pointC}  & \DataFields{student.reviewer[#1]}{grade} &%
+ }
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%
+%%  report TCC - I
+%%%%%%%%%%%%%%%
+\SetForm{report-I}{heading}{\UseTerm{title.tccI}}
+\SetForm{report-I}{title}{Relatório Acompanhamento - \UseConst{semester}}
+\SetForm{report-I}{opening}{}
+
+\ExplSyntaxOn
+%%%
+\SetForm{report-I}{opening}{  %
+  { \tiny
+    \begin{longtable}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }p{\UseConst{report.tabC}}@{\ }p{\UseConst{report.tabD}}@{\ }p{\UseConst{report.tabE}}@{\ }p{\UseConst{report.tabEx}}@{\ }p{\UseConst{report.tabF}}@{\ }p{\UseConst{report.tabG}}}%
+    \HeaderLineI
+    \seq_map_inline:cn {l__ufrgscca_baselist_graded_seq} 
+      {
+        \starray_set_iter_from_hash:nn {student} {#1}
+        \studentLineI\\*\hline
+        \studentExtLine{8}\\\hline        
+      }
+    \reportMissCase{8}{\l__ufrgscca_baselist_ff_seq}{Desistentes~ com~ conceito~ (2o ~ semestre)}
+    \reportMissCase{8}{\l__ufrgscca_baselist_dismiss_seq}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
+    \end{longtable}  
+  }
+}
+
+%%%
+\SetForm{report-I}{closing}{}
+
+
+\NewDocumentCommand{\reportMissCase}{mmmO{red}}{
+    \seq_if_empty:NF #2
+      {
+        &\\
+        \multicolumn{#1}{l}{\textbf{\color{#4}#3}}\\\hline
+        \seq_map_inline:Nn #2 
+          {
+            \studentSelect{##1}
+            &\\*
+            \multicolumn{#1}{l}{\textbf{\color{#4}\DataFields{student}{name}}}\\*
+            \studentExtLine{#1}\\*
+            \multicolumn{#1}{l}{\studentCoadvLabelCase}\\ \hline
+          }     
+      }
+}
+
+\ExplSyntaxOff
+
+
+
+%%%%%%%%%%%%%%%
+%%  report TCC - II
+%%%%%%%%%%%%%%%
+\SetForm{report-II}{heading}{\UseTerm{title.tccII}}
+\SetForm{report-II}{title}{Relatório Acompanhamento - \UseConst{semester}}
+\SetForm{report-II}{opening}{}
+
+\ExplSyntaxOn
+%%%
+\SetForm{report-II}{opening}{  %
+  { \tiny
+    \begin{longtable}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }p{\UseConst{report.tabC}}@{\ }p{\UseConst{report.tabD}}@{\ }p{\UseConst{report.tabE}}@{\ }p{\UseConst{report.tabF}}@{\ }p{\UseConst{report.tabG}}}%
+    \HeaderLineII
+    \seq_map_inline:cn {l__ufrgscca_baselist_graded_seq} 
+      {
+        \starray_set_iter_from_hash:nn {student} {#1}
+        \studentLineII\\*\hline
+        \studentExtLine{7}\\\hline        
+      }
+    \reportMissCase{7}{\l__ufrgscca_baselist_ff_seq}{Desistentes~ com~ conceito~ (2o ~ semestre)}
+    \reportMissCase{7}{\l__ufrgscca_baselist_dismiss_seq}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
+    \end{longtable}
+  }
+}
+
+%%%
+\SetForm{report-II}{closing}{}
+
+\ExplSyntaxOff
+
+
+
+%%%%%%%%%%%%%%%
+%%  Boards TCC - II
+%%%%%%%%%%%%%%%
+\SetForm{boards}{heading}{\UseTerm{title.tccII}}
+\SetForm{boards}{title}{\UseConst{semester}}
+\SetForm{boards}{opening}{}
+
+\ExplSyntaxOn
+%%%
+\SetForm{boards}{opening}{  %
+  {\footnotesize
+    \begin{longtable}{p{\UseConst{board.tabA}}p{\UseConst{board.tabB}}p{\UseConst{board.tabC}}p{\UseConst{board.tabD}}}%
+    \multicolumn{4}{c}{Apresentações ~de ~ TCC ~ - ~ \UseConst{semester}}\\\hline
+    \tl_gclear:N \l__ufrgscca_daytmpa_tl
+    \tl_gclear:N \l__ufrgscca_daytmpb_tl
+    \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
+      {
+        \starray_set_iter_from_hash:nn {student} {#1}
+        \starray_term_syntax:n {student}
+        \tl_gset:Ne \l__ufrgscca_daytmpb_tl {\starray_parsed_get_prop:n{board-date}}
+        \tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{date:\l__ufrgscca_daytmpb_tl}}
+        %\tl_gset:Ne \l__ufrgscca_daytmpD_tl {date:\l__ufrgscca_daytmpb_tl}
+        %\tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{\l__ufrgscca_daytmpD_tl}}
+        \tl_if_eq:NNF \l__ufrgscca_daytmpa_tl \l__ufrgscca_daytmpb_tl
+          {
+            &\multicolumn{3}{r}{\textbf{\l__ufrgscca_daytmpc_tl\  ~- ~ \l__ufrgscca_daytmpb_tl}}\\*
+            \textsc{\UseLabel{student.gen}} & \textsc{\UseLabel{advisor.gen}} & \textsc{\UseLabel{board}} & \textsc{\UseLabel{boardtime.gen}}\\*\hline
+            \tl_gset:Ne \l__ufrgscca_daytmpa_tl \l__ufrgscca_daytmpb_tl
+          }
+        \multirow{4}={\textbf{\DataFields{student}{name}}} & \multirow{4}={\studentCoadvCase{\hspace{-0.6em}\DataFields{student.advisor}{name}\\[1mm]\hspace{-0.6em}\DataFields{student.coadvisor}{name}}{\hspace{-0.6em}\DataFields{student.advisor}{name}}} & \DataFields{student.reviewer[1]}{name} & \multirow{4}={\DataFields{student}{board-time}\\[1mm]\DataFields{student}{board-local}}\\*
+        && \DataFields{student.reviewer[2]}{name} \\*
+        && \DataFields{student.reviewer[3]}{name} \\*
+        && (\DataFields{student.altreviewer[1]}{name}) \\*
+        \multicolumn{4}{l}{\textsc{Título:}\ \emph{\DataFields{student}{worktitle}}}\\\hline      
+      }
+    \end{longtable} 
+  }
+}
+
+%%%
+\SetForm{boards}{closing}{}
+
+
+\ExplSyntaxOff
+
+
+%%%%%%%%%%%%%%%
+%%  cocertificate
+%%%%%%%%%%%%%%%
+\SetForm{cocertificate}{heading}{\UseTerm{title.tcc}}
+\SetForm{cocertificate}{title}{\UseConst{semester}}
+\SetForm{cocertificate}{opening}{À quem interessar possa,\\ certificamos que}
+\SetForm{cocertificate}{body}{%
+  \begin{center}
+    \textsc{\DataFields{student.coadvisor}{name}}
+  \end{center}
+  \vfill
+  atuou como co-orientador\DataFields{student.coadvisor}{narticle} d\DataFields{student}{article} alun\DataFields{student}{article}\ \emph{\DataFields{student}{name}}\ no Trabalho de Conclusão de Curso intitulado \emph{\DataFields{student}{worktitle}}\ no semestre \UseConst{semester}.
+}
+
+\SetForm{cocertificate}{closing}{%
+    \begin{flushright}
+    Porto Alegre, \UseConst{publ.day} de \UseConst{publ.month} de \UseConst{publ.year}.\\[2em]
+
+    \ActivitySelect{tccII}
+    \DataFields{activity.coord}{name}
+    
+    \DataFields{activity.coord}{title}
+    \end{flushright}
+  \vfill
+}
+
+
+
+
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 %%

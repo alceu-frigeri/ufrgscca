@@ -1,0 +1,238 @@
+%%%==============================================================================
+%% Copyright 2022-23 by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 2.00 (2023/11/??)
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/ufrgscca
+%%
+%%%==============================================================================
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%%==============================================================================
+%%%\makeatletter
+%\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+
+\SetTerms{%
+  advisor.descpage       = %
+  {%
+        \noindent%
+        \studentCoadvCase{%
+          \UseTerm{advisors}:\\
+          \DataFields{student.advisor}{name}\\
+          \DataFields{student.coadvisor}{name}
+        }{%
+          \UseTerm{advisor}:\\
+          \DataFields{student.advisor}{name}
+        }
+  } ,
+  advisor.approvalpage   = %
+  {%
+        \noindent%
+          \studentCoadvCase{%
+            \UseTerm{advisors}:\\
+            \DataFields{student.advisor}{name}, \DataFields{student.advisor}{institution}\\
+            \DataFields{student.advisor}{title}\\[0.5mm]
+            \DataFields{student.coadvisor}{name}, \DataFields{student.coadvisor}{institution}\\
+            \DataFields{student.coadvisor}{title}
+          }{
+            \UseTerm{advisor}:\\
+            \DataFields{student.advisor}{name}, \DataFields{student.advisor}{institution}\\
+            \DataFields{student.advisor}{title}
+          }
+  } ,
+  cover.students        = %
+  {%
+        \eDataSet{student}
+        \centering{\MakeUppercase{\eDataFields{name}} - \eDataFields{ID}}  
+  } ,
+  cover.topbase            = %
+  {%
+        \centering
+          \MakeUppercase{\UseHeading{university}}\\
+          \MakeUppercase{\UseHeading{unit}}\\
+          \MakeUppercase{\UseHeading{course}}
+  } ,
+  cover.title             = %
+  {%
+          \eDataSet{student}
+          \centering\textbf{\MakeUppercase{\eDataFields{worktitle}}}  
+  } ,
+  cover.bottom            = {%
+          \centering \UseConst{publ.city}\\ \UseConst{publ.year}\par
+  } ,
+  ppc.top            = %
+  {%
+        \centering
+          \MakeUppercase{\UseHeading{university}}\\
+          \MakeUppercase{\UseHeading{unit}}\\
+          \MakeUppercase{\UseHeading{ppc.comgrad}}\\
+          \MakeUppercase{\UseHeading{ppc.nde}}\\
+          \MakeUppercase{\UseHeading{ppc.course}}\\
+
+  } ,
+}
+
+\ExplSyntaxOn
+\SetTerms{
+  cover.studentsXX  = 
+    {
+      \starray_reset_iter:n {student}
+      \bool_set_true:N \l__ufrgscca_t_bool
+      \bool_do_while:Nn \l__ufrgscca_t_bool 
+        {
+          \eDataSet{student}
+          \centering{\MakeUppercase{\eDataFields{name}}~ -~ \eDataFields{ID}}\\  
+          \starray_next_iter:nF {student}
+            {\bool_set_false:N \l__ufrgscca_t_bool}
+        }
+    } ,
+  cover.students   =
+  {
+    \studentiterate
+     {
+       \eDataSet{student}
+       \centering{\MakeUppercase{\eDataFields{name}}~ -~ \eDataFields{ID}}\\     
+     }
+  }  
+}
+
+\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%%%
+%%%  TCC I
+%%%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\SetCoverFields{tccI}{clist}{cover,desc,approval}
+\SetCoverFields{tccI}{top}{  \UseTerm{cover.topbase} }
+\SetCoverFields{tccI}{students}{ \UseTerm{cover.students} }
+\SetCoverFields{tccI}{title}{ \UseTerm{cover.title} }
+\SetCoverFields{tccI}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+\SetCoverFields{tccI}{text-descpage}{
+    Proposta de Trabalho de Conclusão de Curso submetida à
+		COMGRAD/\Activity{course}{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
+		obtenção do título de \emph{\UseHeading{course.title}.}}
+
+\SetCoverFields{tccI}{advisor-descpage}{ \UseTerm{advisor.descpage} }
+
+\SetCoverFields{tccI}{bottom-descpage}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+\SetCoverFields{tccI}{text-approvalpage}{
+		Esta Proposta de Trabalho de Conclusão de Curso foi julgada adequada para a
+		obtenção dos créditos da Atividade de \emph{\Activity{tccI}{name}} e aprovada em sua forma final 
+		\studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.
+}
+\SetCoverFields{tccI}{advisor-approvalpage}{ \UseTerm{advisor.approvalpage} }
+
+\SetCoverFields{tccI}{bottom-approvalpage}{ \UseTerm{cover.bottom} }
+
+
+\SetCoverFields{tccI}{board}{
+\noindent \UseTerm{board}:\\
+\indent \DataFields{student.reviewer[2]}{name}, \DataFields{student.reviewer[2]}{institution}\\
+\indent \DataFields{student.reviewer[2]}{title}\\
+\\
+\indent \DataFields{student.reviewer[3]}{name}, \DataFields{student.reviewer[2]}{institution}\\
+\indent \DataFields{student.reviewer[3]}{title}\\
+}
+
+
+\SetCoverFields{tccI}{coord}{
+\noindent\hrulefill\\
+\ActivityCoord{course}{name}\\
+\ActivityCoord{course}{title}\\
+\Activity{course}{name}
+}
+
+
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%%%
+%%%  TCC II
+%%%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\SetCoverFields{tccII}{clist}{cover,desc,approval}
+\SetCoverFields{tccII}{top}{  \UseTerm{cover.topbase} }
+\SetCoverFields{tccII}{students}{  \UseTerm{cover.students} }
+\SetCoverFields{tccII}{title}{  \UseTerm{cover.title} }
+\SetCoverFields{tccII}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+\SetCoverFields{tccII}{text-descpage}{
+    Trabalho de Conclusão de Curso submetido à
+		COMGRAD/\Activity{course}{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
+		obtenção do título de \emph{\UseHeading{course.title}.}}
+
+\SetCoverFields{tccII}{advisor-descpage}{ \UseTerm{advisor.descpage} }
+
+\SetCoverFields{tccII}{bottom-descpage}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+\SetCoverFields{tccII}{text-approvalpage}{
+		Este Trabalho de Conclusão de Curso foi julgado adequado para a
+		obtenção dos créditos da Atividade de \emph{\Activity{tccII}{name}} e aprovado em sua forma final 
+    \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article}
+		Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.
+}
+\SetCoverFields{tccII}{advisor-approvalpage}{  \UseTerm{advisor.approvalpage} }
+
+\SetCoverFields{tccII}{bottom-approvalpage}{ \UseTerm{cover.bottom} }
+
+
+\SetCoverFields{tccII}{board}{
+\noindent \UseTerm{board}:\\
+\indent \DataFields{student.reviewer[1]}{name}, \DataFields{student.reviewer[1]}{institution}\\
+\indent \DataFields{student.reviewer[1]}{title}\\
+\\
+\indent \DataFields{student.reviewer[2]}{name}, \DataFields{student.reviewer[2]}{institution}\\
+\indent \DataFields{student.reviewer[2]}{title}\\
+\\
+\indent \DataFields{student.reviewer[3]}{name}, \DataFields{student.reviewer[2]}{institution}\\
+\indent \DataFields{student.reviewer[3]}{title}\\
+}
+
+
+\SetCoverFields{tccII}{coord}{
+\noindent\hrulefill\\
+\ActivityCoord{course}{name}\\
+\ActivityCoord{course}{title}\\
+\Activity{course}{name}
+}
+
+
+
+
+\SetCoverFields{ppc}{clist}{cover}
+\SetCoverFields{ppc}{top}{  \UseTerm{ppc.top} }
+\SetCoverFields{ppc}{students}{  }
+\SetCoverFields{ppc}{title}{ \centering PROJETO~ PEDAGÓGICO~ DO\\
+CURSO~ EM~ ENGENHARIA~ DE\\
+CONTROLE~ E~ AUTOMAÇÃO }
+\SetCoverFields{ppc}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+
+
+
+

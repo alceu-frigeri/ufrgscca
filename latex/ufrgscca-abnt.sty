@@ -23,57 +23,118 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\def\tc@tmp@packname{ufrgscca-abnt}
-\def\tc@tmp@altpackname{ufrgsccaabnt}
-\def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
-
-\def\tc@tocdepth{3}  % Table of Contents depth
-\def\tc@secdepth{4} % Sectioning numbers depth (3 -> subsubsection)
-
-\DeclareKeys[ufrgscca-abnt]{
-    strict-abnt.usage = load,
-		strict-abnt.if = tcif@strictabnt,
-
-        pretextontoc.usage = load,
-        pretextontoc.if = tcif@pretextontoc,
-
-        yearsonly.usage = load,
-        yearsonly.if = tcif@yearsonly,
+%%\def\tc@tmp@packname{ufrgscca-abnt}
+%%\def\tc@tmp@altpackname{ufrgsccaabnt}
+%%\def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
+%%\def\tc@tmp@packdate{2023/09/23}
+%%\def\tc@tmp@packversion{1.12}
+%%\let\@exp\expandafter
+%%\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+%%\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
 
-		chapternopagenum.usage = load,
-		chapternopagenum.if = tcif@chapternopagenum,
 
-		english.usage = load,
-		english.if = tcif@english,
-		relnum.usage = load,
-		relnum.if = tcif@relnum,
-		repeatfields.usage = load,
-		repeatfields.if = tcif@repeatfields,
+\ProvidesExplPackage
+    {ufrgscca-abnt}
+    {2023/11/10}
+    {1.99}
+    {UFRGS/CCA ABNT layout}
 
-		showframes.usage = load,
-		showframes.if = tcif@showframes,
-		showlabels.usage = load,
-		showlabels.if = tcif@showlabels,
 
-		tocdepth.usage = load,
-		tocdepth.store = \tc@tocdepth,
-		secdepth.usage = load,
-		secdepth.store = \tc@secdepth,
 
-		nomicrotype.usage = load,
-		nomicrotype.if = tcif@nomicrotype,
 
-		article.usage = load,
-		article.if = tcif@article,
-}
+\keys_define:nn { ufrgscca.abnt }
+  {
+        strict-abnt   .usage:n          = load ,
+		strict-abnt   .bool_set:N       = \l__ufrgscca_strictabnt_bool ,
 
-\ProcessKeyOptions[ufrgscca-abnt]\relax
+        pretextontoc  .usage:n          = load ,
+        pretextontoc  .bool_set:N       = \l__ufrgscca_pretextontoc_bool ,
+
+        yearsonly     .usage:n          = load ,
+        yearsonly     .bool_set:N       = \l__ufrgscca_yearsonly_bool ,
+
+		chapternopagenum  .usage:n      = load ,
+		chapternopagenum  .bool_set:N   = \l__ufrgscca_chapternopagenum_bool ,
+
+		english       .usage:n          = load ,
+		english       .bool_set:N       = \l__ufrgscca_english_bool ,
+
+		relnum        .usage:n          = load ,
+		relnum        .bool_set:N       = \l__ufrgscca_relnum_bool ,
+
+		repeatfields  .usage:n          = load ,
+		repeatfields  .bool_set:N       = \l__ufrgscca_repeatfields_bool ,
+
+		showframes    .usage:n          = load ,
+		showframes    .bool_set:N       = \l__ufrgscca_showframes_bool ,
+
+		showlabels    .usage:n          = load ,
+		showlabels    .bool_set:N       = \l__ufrgscca_showlabels_bool ,
+
+		tocdepth      .usage:n          = load ,
+		tocdepth      .tl_set:N         = \l__ufrgscca_tocdepth_tl ,
+
+		secdepth      .usage:n          = load ,
+		secdepth      .tl_set:N         = \l__ufrgscca_secdepth_tl ,
+
+		nomicrotype   .usage:n          = load ,
+		nomicrotype   .bool_set:N       = \l__ufrgscca_nomicrotype_bool ,
+
+		article       .usage:n          = load ,
+		article       .bool_set:N       = \l__ufrgscca_article_bool ,
+  }
+
+\tl_set:Nn \l__ufrgscca_tocdepth_tl {3}
+\tl_set:Nn \l__ufrgscca_secdepth_tl {4}
+
+\ProcessKeyOptions[ufrgscca.abnt]\relax
+
+\makeatletter
+
+
+%%\def\tc@tocdepth{3}  % Table of Contents depth
+%%\def\tc@secdepth{4} % Sectioning numbers depth (3 -> subsubsection)
+%%
+%%\DeclareKeys[ufrgscca-abnt]{
+%%    strict-abnt.usage = load,
+%%		strict-abnt.if = tcif@strictabnt,
+%%
+%%        pretextontoc.usage = load,
+%%        pretextontoc.if = tcif@pretextontoc,
+%%
+%%        yearsonly.usage = load,
+%%        yearsonly.if = tcif@yearsonly,
+%%
+%%
+%%		chapternopagenum.usage = load,
+%%		chapternopagenum.if = tcif@chapternopagenum,
+%%
+%%		english.usage = load,
+%%		english.if = tcif@english,
+%%		relnum.usage = load,
+%%		relnum.if = tcif@relnum,
+%%		repeatfields.usage = load,
+%%		repeatfields.if = tcif@repeatfields,
+%%
+%%		showframes.usage = load,
+%%		showframes.if = tcif@showframes,
+%%		showlabels.usage = load,
+%%		showlabels.if = tcif@showlabels,
+%%
+%%		tocdepth.usage = load,
+%%		tocdepth.store = \tc@tocdepth,
+%%		secdepth.usage = load,
+%%		secdepth.store = \tc@secdepth,
+%%
+%%		nomicrotype.usage = load,
+%%		nomicrotype.if = tcif@nomicrotype,
+%%
+%%		article.usage = load,
+%%		article.if = tcif@article,
+%%}
+%%
+%%\ProcessKeyOptions[ufrgscca-abnt]\relax
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading
@@ -81,15 +142,25 @@
 \RequirePackage[english,brazilian]{babel}% see ufrgscca.cls in case of newtx* being loaded!
 \RequirePackage{csquotes}%
 
-\iftcif@strictabnt
-  \RequirePackage[a4paper,inner=2cm,outer=3cm,top=3cm,bottom=2cm,twoside]{geometry}
-\else
-  \iftcif@nogeometry
-%    \RequirePackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.75cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
-  \else
-    \RequirePackage[a4paper,inner=2.5cm,outer=2.5cm,top=3cm,bottom=2cm,twoside]{geometry}
-  \fi
-\fi
+\bool_if:NTF \l__ufrgscca_strictabnt_bool
+  {
+    \RequirePackage[a4paper,inner=2cm,outer=3cm,top=3cm,bottom=2cm,twoside]{geometry}
+  }
+  {
+    \bool_if:NF \l__ufrgscca_nogeometry_bool
+      {
+        \RequirePackage[a4paper,inner=2.5cm,outer=2.5cm,top=3cm,bottom=2cm,twoside]{geometry}
+      }
+  }
+%%\iftcif@strictabnt
+%%  \RequirePackage[a4paper,inner=2cm,outer=3cm,top=3cm,bottom=2cm,twoside]{geometry}
+%%\else
+%%  \iftcif@nogeometry
+%%%    \RequirePackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.75cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
+%%  \else
+%%    \RequirePackage[a4paper,inner=2.5cm,outer=2.5cm,top=3cm,bottom=2cm,twoside]{geometry}
+%%  \fi
+%%\fi
 
 \RequirePackage[toc,page,title]{appendix}
 \RequirePackage[pagestyles,clearempty]{titlesec}
@@ -97,10 +168,18 @@
 \RequirePackage[inline]{enumitem}
 
 \RequirePackage{chngcntr}
-
+%%
+%% TO BE removed !
 \def\tc@captionwidth{0.75\textwidth}
 \def\tc@notewidth{0.635\textwidth}  %% 0.84666667\tc@captionwidth
-\RequirePackage[position=above,font=small,labelfont=bf,textfont=md,textfont+=sl,width=\tc@captionwidth]{caption}%
+%
+% using Expl3
+\SetConsts{%
+    caption.width   = 0.75\textwidth ,
+    note.width      =  0.635\textwidth ,
+}
+%\RequirePackage[position=above,font=small,labelfont=bf,textfont=md,textfont+=sl,width=\tc@captionwidth]{caption}%
+\RequirePackage[position=above,font=small,labelfont=bf,textfont=md,textfont+=sl,width=\UseConst{caption.width}]{caption}%
 %%%
 %%% commands for 'floats'
 %%%
@@ -108,7 +187,7 @@
 \NewDocumentCommand{\sourcecitation}{m}{{\small{\sourcename\ #1}}}%
 %
 \newlength{\noteindent}%%auxiliary length
-\NewDocumentCommand{\note}{O{}+m}{{\footnotesize\settowidth{\noteindent}{\notename#1:}\addtolength{\noteindent}{3pt}\begin{center}\begin{minipage}{\tc@notewidth}{\parindent=-\the\noteindent\notename#1:\hspace{2.9pt}#2}\end{minipage}\end{center}}}%%
+\NewDocumentCommand{\note}{O{}+m}{{\footnotesize\settowidth{\noteindent}{\notename#1:}\addtolength{\noteindent}{3pt}\begin{center}\begin{minipage}{\UseConst{note.width}}{\parindent=-\the\noteindent\notename#1:\hspace{2.9pt}#2}\end{minipage}\end{center}}}%%
 %
 %
 
@@ -133,32 +212,61 @@
 %%%%%%%%%%%%%%%%%%%%%
 \WarningFilter{biblatex}{File 'brazilian-abnt-abnt.lbx'}%
 \WarningFilter{biblatex}{Conflicting options}%
-\iftcif@repeatfields%
-	\RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear,repeatfields]{biblatex}%
-\else%
-	\RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear]{biblatex}%
-\fi%
+
+\bool_if:NTF \l__ufrgscca_repeatfields_bool
+  {
+    \RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear,repeatfields]{biblatex}%
+  }
+  {
+    \RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear]{biblatex}%
+  }
+
+%%\iftcif@repeatfields%
+%%	\RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear,repeatfields]{biblatex}%
+%%\else%
+%%	\RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear]{biblatex}%
+%%\fi%
+
 %%
 %%%
 %%% Language selection {package babel}
 %%%
-\iftcif@english%%
-  \selectlanguage{english}%
-  \AtBeginDocument{\selectlanguage{english}}%
-\else
-  \selectlanguage{brazilian}%
-  \AtBeginDocument{\selectlanguage{brazilian}}%
-\fi%
+\bool_if:NTF \l__ufrgscca_english_bool
+  {
+    \selectlanguage{english}%
+    \AtBeginDocument{\selectlanguage{english}}%
+  }
+  {
+    \selectlanguage{brazilian}%
+    \AtBeginDocument{\selectlanguage{brazilian}}%
+  }
+
+%%\iftcif@english%%
+%%  \selectlanguage{english}%
+%%  \AtBeginDocument{\selectlanguage{english}}%
+%%\else
+%%  \selectlanguage{brazilian}%
+%%  \AtBeginDocument{\selectlanguage{brazilian}}%
+%%\fi%
 
 
 %%%
 %%% typeset adjusting {package microtype}
 %%%
-\iftcif@timesroman\else%
-\iftcif@nomicrotype\else\RequirePackage[tracking,kerning,spacing,babel]{microtype}\fi%
-\fi
-%\iftcif@nomicrotype\else\RequirePackage[babel]{microtype}\fi%
-%
+\bool_if:NF \l__ufrgscca_timesroman_bool
+  {
+    \bool_if:NF \l__ufrgscca_nomicrotype_bool
+      {
+        \RequirePackage[tracking,kerning,spacing,babel]{microtype}
+      }
+  }
+
+%%\iftcif@timesroman\else%
+%%\iftcif@nomicrotype\else\RequirePackage[tracking,kerning,spacing,babel]{microtype}\fi%
+%%\fi
+%%%\iftcif@nomicrotype\else\RequirePackage[babel]{microtype}\fi%
+%%%
+
 % pdftex native protruding
 %
 \pdfprotrudechars=2
@@ -171,32 +279,56 @@
 \RequirePackage{soul}
 
 
-\iftcif@showframes%
-  \RequirePackage{showframe}%%
-\fi
+\bool_if:NT \l__ufrgscca_showframes_bool
+  {
+    \RequirePackage{showframe}
+  }
+\bool_if:NT \l__ufrgscca_showlabels_bool
+  {
+	\RequirePackage{showlabels}
+	\showlabels{cite}
+	\showlabels{textcite}
+	\RenewDocumentCommand{\showlabelfont}{}{\tiny\ttfamily\color{blue}}
+  }
+
+
+%%\iftcif@showframes%
+%%  \RequirePackage{showframe}%%
+%%\fi
 %%
-\iftcif@showlabels%
-	\RequirePackage{showlabels}%%
-	\showlabels{cite}%%
-	\showlabels{textcite}%%
-	\RenewDocumentCommand{\showlabelfont}{}{\tiny\ttfamily\color{blue}}%%
-\fi%%
+%%\iftcif@showlabels%
+%%	\RequirePackage{showlabels}%%
+%%	\showlabels{cite}%%
+%%	\showlabels{textcite}%%
+%%	\RenewDocumentCommand{\showlabelfont}{}{\tiny\ttfamily\color{blue}}%%
+%%\fi%%
 
 
 %%%
 %%% ToC and Headings format. {package titlesec/titletoc/titleps}
 %%%
 
-\setcounter{tocdepth}{\tc@tocdepth}  % Table of Contents depth
-\setcounter{secnumdepth}{\tc@secdepth} % Sectioning numbers depth (3 -> subsubsection)
+\setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}  % Table of Contents depth
+\setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl} % Sectioning numbers depth (3 -> subsubsection)
 
 \NewDocumentEnvironment{tocless}{}%
    {\setcounter{secnumdepth}{-1}\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}\ignorespaces}}%
-   {\setcounter{secnumdepth}{\tc@secdepth}\addtocontents{toc}{\protect\setcounter{tocdepth}{\tc@tocdepth}\ignorespaces}}%
+   {\setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl}\addtocontents{toc}{\protect\setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}\ignorespaces}}%
 \def\notoc#1#2{\begin{tocless}#1{#2}\end{tocless}}
 
-\NewDocumentEnvironment{numberless}{}{\setcounter{secnumdepth}{-1}}{\setcounter{secnumdepth}{\tc@secdepth}}
+\NewDocumentEnvironment{numberless}{}{\setcounter{secnumdepth}{-1}}{\setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl}}
 \def\nonum#1#2{\begin{numberless}#1{#2}\end{numberless}}
+
+%%\setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}  % Table of Contents depth
+%%\setcounter{secnumdepth}{\tc@secdepth} % Sectioning numbers depth (3 -> subsubsection)
+
+%%\NewDocumentEnvironment{tocless}{}%
+%%   {\setcounter{secnumdepth}{-1}\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}\ignorespaces}}%
+%%   {\setcounter{secnumdepth}{\tc@secdepth}\addtocontents{toc}{\protect\setcounter{tocdepth}{\tc@tocdepth}\ignorespaces}}%
+%%\def\notoc#1#2{\begin{tocless}#1{#2}\end{tocless}}
+%%
+%%\NewDocumentEnvironment{numberless}{}{\setcounter{secnumdepth}{-1}}{\setcounter{secnumdepth}{\tc@secdepth}}
+%%\def\nonum#1#2{\begin{numberless}#1{#2}\end{numberless}}
 
 %%%
 %%% Relative/Absolute numbering... argh !!!
@@ -204,18 +336,28 @@
   \def\tc@chapterspc{\vspace{2.5mm}}
   \def\tc@sectionspc{\vspace{0.75mm}}
   
-\iftcif@article
-\else
-\iftcif@relnum%
-%  \def\tc@chapterspc{\vspace{2.5mm}}
-%  \def\tc@sectionspc{\vspace{0.75mm}}
-\else%
-%  \def\tc@chapterspc{}
-%  \def\tc@sectionspc{}
-  \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoF ... to supress extra space (figures of diverse chapters)
-  \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoT
-\fi
-\fi
+  
+\bool_if:NF \l__ufrgscca_article_bool
+  {
+    \bool_if:NF \l__ufrgscca_relnum_bool
+      {
+        \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH ~FAILED}}% LoF ... to supress extra space (figures of diverse chapters)
+        \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH ~FAILED}}% LoT
+      }
+  }  
+
+%%\iftcif@article
+%%\else
+%%\iftcif@relnum%
+%%%  \def\tc@chapterspc{\vspace{2.5mm}}
+%%%  \def\tc@sectionspc{\vspace{0.75mm}}
+%%\else%
+%%%  \def\tc@chapterspc{}
+%%%  \def\tc@sectionspc{}
+%%  \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH ~FAILED}}% LoF ... to supress extra space (figures of diverse chapters)
+%%  \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH ~FAILED}}% LoT
+%%\fi
+%%\fi
 
 
 %%%
@@ -288,21 +430,38 @@
 %%%
 %%% Relative/Absolute counters... {package chngcntr}
 %%%
-\iftcif@article
-\else
-\iftcif@relnum%
-  \counterwithin{figure}{chapter}%
-  \counterwithin{table}{chapter}%
-  \counterwithin{equation}{chapter}%
-\else%
-  \counterwithout{figure}{chapter}%
-  \counterwithout{table}{chapter}%
-  \counterwithout{equation}{chapter}%
-  %\meaning\@chapter
-  %\patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoF
-  %\patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoT
-\fi
-\fi
+\bool_if:NF \l__ufrgscca_article_bool
+  {
+    \bool_if:NTF \l__ufrgscca_relnum_bool
+      {
+          \counterwithin{figure}{chapter}%
+          \counterwithin{table}{chapter}%
+          \counterwithin{equation}{chapter}%
+      }
+      {
+          \counterwithout{figure}{chapter}%
+          \counterwithout{table}{chapter}%
+          \counterwithout{equation}{chapter}%
+      }
+  }
+
+
+
+%%\iftcif@article
+%%\else
+%%\iftcif@relnum%
+%%  \counterwithin{figure}{chapter}%
+%%  \counterwithin{table}{chapter}%
+%%  \counterwithin{equation}{chapter}%
+%%\else%
+%%  \counterwithout{figure}{chapter}%
+%%  \counterwithout{table}{chapter}%
+%%  \counterwithout{equation}{chapter}%
+%%  %\meaning\@chapter
+%%  %\patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoF
+%%  %\patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoT
+%%\fi
+%%\fi
 %%%
 %%% Page Heading format {titlesec/titleps}
 %%%
@@ -311,19 +470,35 @@
 \newpagestyle{bibliography}{\sethead[\sffamily\thepage][][]{}{}{\sffamily\thepage}}
 \pagestyle{main}
 
-\iftcif@chapternopagenum\renewpagestyle{plain}{\sethead[][][]{}{}{}}\fi
+
+\bool_if:NF \l__ufrgscca_chapternopagenum_bool
+  {
+    \renewpagestyle{plain}{\sethead[][][]{}{}{}}
+  }
+
+%%\iftcif@chapternopagenum\renewpagestyle{plain}{\sethead[][][]{}{}{}}\fi
 
 \let\tc@temp@printbibliography\printbibliography
 
 \defbibheading{bibliography}[\refname]{\nonum\chapter{#1}\pagestyle{bibliography}}
 
-\iftcif@pretextontoc
+
+\bool_if:NT \l__ufrgscca_pretextontoc_bool
+  {
     \let\tc@temp@listoffigures\listoffigures
     \def\listoffigures{\tc@temp@listoffigures\addcontentsline{toc}{chapter}{\textsc\listfigurename}}
 %%
     \let\tc@temp@listoftables\listoftables
     \def\listoftables{\tc@temp@listoftables\addcontentsline{toc}{chapter}{\textsc\listtablename}}
-\fi
+  }
+
+%%\iftcif@pretextontoc
+%%    \let\tc@temp@listoffigures\listoffigures
+%%    \def\listoffigures{\tc@temp@listoffigures\addcontentsline{toc}{chapter}{\textsc\listfigurename}}
+%%%%
+%%    \let\tc@temp@listoftables\listoftables
+%%    \def\listoftables{\tc@temp@listoftables\addcontentsline{toc}{chapter}{\textsc\listtablename}}
+%%\fi
 
 %%
 
@@ -332,11 +507,18 @@
 \NewDocumentCommand{\NewChapListEnv}{mm}{
     \NewDocumentEnvironment{#1}{O{}m}{%
         \settowidth{\tc@lblwidth}{##2***}%
-        \iftcif@pretextontoc
-            \nonum\chapter{\textsc{#2}}%
-        \else
-            \notoc\chapter{\textsc{#2}}%
-        \fi
+        \bool_if:NTF \l__ufrgscca_pretextontoc_bool
+          {
+            \nonum\chapter{\textsc{#2}}
+          }
+          {
+            \notoc\chapter{\textsc{#2}}
+          }
+%%        \iftcif@pretextontoc
+%%            \nonum\chapter{\textsc{#2}}%
+%%        \else
+%%            \notoc\chapter{\textsc{#2}}%
+%%        \fi
         \begin{description}[tcc,noindent,leftmargin=\tc@lblwidth,labelwidth=!,##1]%
 		}{\end{description}}
 }
@@ -439,7 +621,7 @@
         \notoc\chapter{\abstractname}%
 }{%%
         \par\vspace{2ex} %\vfill%
-        \noindent\textbf{\keywordsname:} \tcabnt@abstractkw.%
+        \noindent\textbf{\keywordsname :} \tcabnt@abstractkw.%
 }%
 
 \NewDocumentEnvironment{otherabstract}{O{english}m}{%%
@@ -448,21 +630,42 @@
         \notoc\chapter{\abstractname}%
 }{%
         \par\vspace{2ex} %\vfill%
-        \noindent\textbf{\keywordsname:} \tc@otherkeywords.%
+        \noindent\textbf{\keywordsname :} \tc@otherkeywords.%
         \end{otherlanguage}%
 }%
 
 
-
+%\ExplSyntaxOn
 %==============================================================================%
 % date redefinition (separated month and year)
 %==============================================================================%
 \RenewDocumentCommand{\date}{O{\number\day}mm}{%
-	\gdef\tc@publmonth{#2}%
-	\gdef\tc@publyear{#3}%
-	\gdef\tc@publday{\ifnum #1<10 0\fi #1}%
+  %%%
+  %%% TO BE REMOVED !
+%%	\gdef\tc@publmonth{#2}%
+%%	\gdef\tc@publyear{#3}%
+%%	\gdef\tc@publday{\ifnum #1<10 0\fi #1}%
+  %%%
+  %%% USING STARRAY
+  \int_compare:nNnTF {#1} < {10}
+    {
+      \SetConsts{%
+        publ.month = {#2} ,
+        publ.year = {#3} ,
+        publ.day = {0#1} ,
+      }
+    }
+    {
+      \SetConsts{%
+        publ.month = {#2} ,
+        publ.year = {#3} ,
+        publ.day = {#1} ,
+      }
+    }
 }%
 \date{\monthname}{\number\year}%
+
+%\ExplSyntaxOff
 
 %for english%
 \@namedef{captionsenglish}{%%
@@ -477,11 +680,6 @@
 			October\or November\or December%%
 		\fi%%
 	}%%
-    \iftcif@yearsonly
-        \def\tc@date{\tc@publyear}%%
-    \else
-    	\def\tc@date{\tc@publmonth~\tc@publyear}%%
-    \fi
 }%
 %
 %para portugues%
@@ -497,15 +695,41 @@
 			Outubro\or Novembro\or Dezembro%%
 		\fi%%
 	}%%
-    \iftcif@yearsonly
-        \def\tc@date{\tc@publyear}%%
-    \else
-        \def\tc@date{\tc@publmonth~\tc@publyear}%%
-    \fi
 }%
 %
 \def\tc@monthyeardate{\tc@publmonth~\tc@publyear}
 %
 % Mainly for 'cover pages'
 \def\tc@pagebreak{\if@openright\cleardoublepage\else\clearpage\fi}
+%
+\bool_if:NTF \l__ufrgscca_yearsonly_bool
+  {
+    \SetConsts
+      {
+        publ.date = {\UseConst{publ.year}} ,
+        publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
+      }
+  }
+  {
+    \SetConsts
+      {
+        publ.date = {\UseConst{publ.month}~\UseConst{publ.year}} ,
+        publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
+      }
+  }
+
+
+%%    \iftcif@yearsonly
+%%        \SetConsts
+%%          {
+%%            publ.date = {\UseConst{publ.year}} ,
+%%            publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
+%%          }
+%%    \else
+%%        \SetConsts
+%%          {
+%%            publ.date = {\UseConst{publ.month}~\UseConst{publ.year}} ,
+%%            publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
+%%          }
+%%    \fi
 

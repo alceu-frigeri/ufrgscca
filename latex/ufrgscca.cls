@@ -24,15 +24,21 @@
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
 \RequirePackage{expl3}
-\def\tc@tmp@packname{ufrgscca}
-\def\tc@tmp@altpackname{ufrgscca}
-\def\tc@tmp@packdesc{UFRGS/CCA  class}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+%%\def\tc@tmp@packname{ufrgscca}
+%%\def\tc@tmp@altpackname{ufrgscca}
+%%\def\tc@tmp@packdesc{UFRGS/CCA  class}
+%%\def\tc@tmp@packdate{2023/09/23}
+%%\def\tc@tmp@packversion{1.12}
+%%\let\@exp\expandafter
+%%\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+%%\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
+
+\ProvidesExplClass
+    {ufrgscca}
+    {2023/11/10}
+    {1.99}
+    {UFRGS/CCA class}
 
 \RequirePackage{etex}
 \RequirePackage{etoolbox}
@@ -40,137 +46,332 @@
 \RequirePackage[T1]{fontenc}
 \RequirePackage[utf8]{inputenc}
 
+%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%% TODO: to be decided, where to leave that !! 
+%%%       general purpose _propeties !!
+%%% 
+%%%%%%%%%%%%%%%%%%%%%%
 
+%\ExplSyntaxOn
+\prop_new:N \l__ufrgscca_terms_prop
+  
+\NewDocumentCommand{\SetHeadings}{m}
+  {
+    \prop_put_from_keyval:Nn \l__ufrgscca_terms_prop {#1}
+  }
+
+  %%
+  %% No protection, so it can be used in a fully expandable context (like \MakeUppercase)
+\cs_new:Npn \UseHeading #1 
+  { \prop_item:Nn \l__ufrgscca_terms_prop {#1} }
+
+
+%\prop_new:N \l__ufrgscca_terms_prop
+
+\NewDocumentCommand{\SetTerms}{+m}
+  {
+    \prop_put_from_keyval:Nn \l__ufrgscca_terms_prop {#1} 
+  } 
+  
+  %%
+  %% No protection, so it can be used in a fully expandable context (like \MakeUppercase)
+\cs_new:Npn \UseTerm #1 
+  { \prop_item:Nn \l__ufrgscca_terms_prop {#1} }
+
+\cs_new_protected:Npn \TermCase #1#2#3
+  {
+    \prop_if_in:NnTF \l__ufrgscca_terms_prop {#1} {#2} {#3}
+  } 
+
+%\prop_new:N \l__ufrgscca_labels_prop
+
+
+
+\NewDocumentCommand{\SetLabels}{m}
+  {
+    \prop_put_from_keyval:Nn \l__ufrgscca_terms_prop {#1} 
+  }
+
+  %%
+  %% No protection, so it can be used in a fully expandable context (like \MakeUppercase)
+\cs_new:Npn \UseLabel #1 
+  { \prop_item:Nn \l__ufrgscca_terms_prop {#1} }
+
+
+\prop_new:N \l__ufrgscca_const_prop
+
+\NewDocumentCommand{\SetConsts}{m}
+  {
+    \prop_put_from_keyval:Nn \l__ufrgscca_const_prop {#1}
+  }
+
+\cs_generate_variant:Nn \prop_item:Nn {Ne}
+
+  %%
+  %% No protection, so it can be used in a fully expandable context (like \MakeUppercase)
+\cs_new:Npn \UseConst #1 
+  { \prop_item:Ne \l__ufrgscca_const_prop {#1} }
+
+
+%\ExplSyntaxOff
+
+
+\bool_new:N \l__ufrgscca_repeatfields_bool
+\bool_new:N \l__ufrgscca_timesroman_bool
+\bool_new:N \l__ufrgscca_nolocal_bool
 
 %==============================================================================
 % Declaração de opções
 %==============================================================================
-\DeclareKeys[tc]{
-    tocdepth.usage = load,
-	tocdepth.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-    secdepth.usage = load,
-	secdepth.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+\keys_define:nn { ufrgscca }
+  {
+    tocdepth        .usage:n    = load,
+	tocdepth        .code:n     = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    secdepth        .usage:n    = load,
+	secdepth        .code:n     = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
-    english.usage = load,
-    english.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
-    relnum.usage = load,
-    relnum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\PassOptionsToPackage{\CurrentOption}{ufrgscca-lists}\OptionNotUsed},
+    english        .usage:n     = load,
+    english        .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
+    relnum         .usage:n     = load,
+    relnum         .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\PassOptionsToPackage{\CurrentOption}{ufrgscca-lists}\OptionNotUsed},
 
-    pretextontoc.usage = load,
-    pretextontoc.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-	timesroman.usage = load,
-    timesroman.if = tcif@timesroman,
-    yearsonly.usage = load,
-    yearsonly.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    pretextontoc   .usage:n     = load,
+    pretextontoc   .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+	timesroman     .usage:n     = load,
+    timesroman     .bool_set:N  = \l__ufrgscca_timesroman_bool,
+    yearsonly      .usage:n     = load,
+    yearsonly      .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
-    oneside.usage = load,
-    oneside.code = {\AtEndOfClass{\@twosidefalse}\OptionNotUsed},
-    strict-abnt.usage = load,
-    strict-abnt.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-    repeatfields.usage = load,
-    repeatfields.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-	chapternopagenum.usage = load,
-	chapternopagenum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    oneside        .usage:n     = load,
+    oneside        .code:n      = {\AtEndOfClass{\@twosidefalse}\OptionNotUsed},
+    strict-abnt    .usage:n     = load,
+    strict-abnt    .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    repeatfields   .usage:n     = load,
+    repeatfields   .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+	chapternopagenum .usage:n   = load,
+	chapternopagenum .code:n    = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
-    nomicrotype.usage = load,
-    nomicrotype.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    nomicrotype    .usage:n     = load,
+    nomicrotype    .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
-    showframes.usage = load,
-    showframes.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-    showlabes.usage = load,
-    showlabes.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    showframes     .usage:n     = load,
+    showframes     .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+    showlabes      .usage:n     = load,
+    showlabes      .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
-	xlists.usage = load,
-    xlists.if = tc@xlists,
-	xpacks.usage = load,
-	xpacks.if = tc@xpacks,
+	xlists         .usage:n     = load,
+    xlists         .bool_set:N  = \l__ufrgscca_xlists_bool,
+	xpacks         .usage:n     = load,
+	xpacks         .bool_set:N  = \l__ufrgscca_xpacks_bool,
 
-	nolocal.usage = load,
-	nolocal.if = tcif@nolocal,
+	nolocal        .usage:n     = load,
+	nolocal        .bool_set:N  = \l__ufrgscca_nolocal_bool,
 
-    nofontwarning.usage = load,
-    nofontwarning.if = @nofontwarning,
+    nofontwarning  .usage:n     = load,
+    nofontwarning  .bool_set:N  = \l__ufrgscca_nofontwarning_bool,
 
-    report.usage = load,
-    report.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
-    internship.usage = load,
-	internship.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
-    nonrequired.usage = load,
-    nonrequired.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
+    report        .usage:n      = load,
+    report        .code:n       = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
+    internship    .usage:n      = load,
+	internship    .code:n       = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
+    nonrequired   .usage:n      = load,
+    nonrequired   .code:n       = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
 
-	texlive.usage = load,
-	texlive.if = tcif@texlive,
-	overleaf.usage = load,
-	overleaf.if = tcif@overleaf,
-	miktex.usage = load,
-	miktex.if = tcif@miktex,
+	texlive       .usage:n      = load,
+	texlive       .bool_set:N   = \l__ufrgscca_texlive_bool,
+	overleaf      .usage:n      = load,
+	overleaf      .bool_set:N   = \l__ufrgscca_overleaf_bool,
+	miktex        .usage:n      = load,
+	miktex        .bool_set:N   = \l__ufrgscca_miktex_bool,
 
-	article.usage = load,
-	article.if = tcif@article,
+	article       .usage:n      = load,
+	article       .bool_set:N   = \l__ufrgscca_article_bool,
 
-	nogeometry.usage = load,
-	nogeometry.if = tcif@nogeometry,
-}
+	nogeometry    .usage:n      = load,
+	nogeometry    .bool_set:N   = \l__ufrgscca_nogeometry_bool,
 
-\DeclareUnknownKeyHandler[tc]{\PassOptionsToClass{\CurrentOption}{report}}
-\ProcessKeyOptions[tc]\relax
+    unknown       .code:n       = {\PassOptionsToClass{\CurrentOption}{report}},
+  }
+\ProcessKeyOptions[ufrgscca]\relax
 
-\iftcif@timesroman
+
+
+
+%%\DeclareKeys[tc]{
+%%    tocdepth.usage = load,
+%%	tocdepth.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%    secdepth.usage = load,
+%%	secdepth.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%
+%%    english.usage = load,
+%%    english.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
+%%    relnum.usage = load,
+%%    relnum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\PassOptionsToPackage{\CurrentOption}{ufrgscca-lists}\OptionNotUsed},
+%%
+%%    pretextontoc.usage = load,
+%%    pretextontoc.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%	timesroman.usage = load,
+%%    timesroman.if = tcif@timesroman,
+%%    yearsonly.usage = load,
+%%    yearsonly.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%
+%%    oneside.usage = load,
+%%    oneside.code = {\AtEndOfClass{\@twosidefalse}\OptionNotUsed},
+%%    strict-abnt.usage = load,
+%%    strict-abnt.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%    repeatfields.usage = load,
+%%    repeatfields.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%	chapternopagenum.usage = load,
+%%	chapternopagenum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%
+%%    nomicrotype.usage = load,
+%%    nomicrotype.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%
+%%    showframes.usage = load,
+%%    showframes.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%    showlabes.usage = load,
+%%    showlabes.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
+%%
+%%	xlists.usage = load,
+%%    xlists.if = tc@xlists,
+%%	xpacks.usage = load,
+%%	xpacks.if = tc@xpacks,
+%%
+%%	nolocal.usage = load,
+%%	nolocal.if = tcif@nolocal,
+%%
+%%    nofontwarning.usage = load,
+%%    nofontwarning.if = @nofontwarning,
+%%
+%%    report.usage = load,
+%%    report.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
+%%    internship.usage = load,
+%%	internship.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
+%%    nonrequired.usage = load,
+%%    nonrequired.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
+%%
+%%	texlive.usage = load,
+%%	texlive.if = tcif@texlive,
+%%	overleaf.usage = load,
+%%	overleaf.if = tcif@overleaf,
+%%	miktex.usage = load,
+%%	miktex.if = tcif@miktex,
+%%
+%%	article.usage = load,
+%%	article.if = tcif@article,
+%%
+%%	nogeometry.usage = load,
+%%	nogeometry.if = tcif@nogeometry,
+%%}
+
+%%\DeclareUnknownKeyHandler[tc]{\PassOptionsToClass{\CurrentOption}{report}}
+%%\ProcessKeyOptions[tc]\relax
+
+
+\bool_if:NTF \l__ufrgscca_timesroman_bool
+  {
     \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
     \RequirePackage{mathptmx}
-%    \RequirePackage[scale=1.05,looser]{newtxtext}%
-%    \RequirePackage[scale=1.05]{newtxmath}%
-%    \PackageWarning{ufrgscca}{Fonts newtxtext and newtxmath loaded. Those are free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
-%    \PackageWarning{ufrgscca}{newtxtext and newtxmath are based on URW Nimbus Roman with some extra math support. Again, those are not real Times Roman nor Times New Roman}
     \PackageWarning{ufrgscca}{(obsolete) package mathptmx loaded. It loads a free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
     \PackageWarning{ufrgscca}{package microtype is suppressed, resulting in a subpar layout. Again, the “Roman” font used isn't a true Times Roman nor Times New Roman}
-
-\else
+  }
+  {
     \RequirePackage{lmodern}%
-\fi
-
-\iftcif@article
+  }
+\bool_if:NTF \l__ufrgscca_article_bool
+  {
     \LoadClass[12pt]{article}
-\else
+  }
+  {
     \LoadClass[12pt,twoside,openright]{report}
-%    \LoadClass[12pt]{report}
-\fi
+  }
 
-\iftcif@miktex
-% \def\BabelCaseHack{}
- \ifcsdef{miktexHack}{\miktexHack}{}
-\fi
+\bool_if:NT \l__ufrgscca_miktex_bool
+  {
+    \ifcsdef{miktexHack}{\miktexHack}{}
+  }
+\bool_if:NT \l__ufrgscca_overleaf_bool
+  {
+    \ifcsdef{overleafHack}{\overleafHack}{}
+  }
+\bool_if:NT \l__ufrgscca_texlive_bool
+  {
+    \ifcsdef{texliveHack}{\texliveHack}{}
+  }
 
-\iftcif@overleaf
- \ifcsdef{overleafHack}{\overleafHack}{}
-\fi
 
-\iftcif@texlive
- \ifcsdef{texliveHack}{\texliveHack}{}
-\fi
+%%\iftcif@timesroman
+%%    \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
+%%    \RequirePackage{mathptmx}
+%%%    \RequirePackage[scale=1.05,looser]{newtxtext}%
+%%%    \RequirePackage[scale=1.05]{newtxmath}%
+%%%    \PackageWarning{ufrgscca}{Fonts newtxtext and newtxmath loaded. Those are free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
+%%%    \PackageWarning{ufrgscca}{newtxtext and newtxmath are based on URW Nimbus Roman with some extra math support. Again, those are not real Times Roman nor Times New Roman}
+%%    \PackageWarning{ufrgscca}{(obsolete) package mathptmx loaded. It loads a free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
+%%    \PackageWarning{ufrgscca}{package microtype is suppressed, resulting in a subpar layout. Again, the “Roman” font used isn't a true Times Roman nor Times New Roman}
+%%
+%%\else
+%%    \RequirePackage{lmodern}%
+%%\fi
+
+%%\iftcif@article
+%%    \LoadClass[12pt]{article}
+%%\else
+%%    \LoadClass[12pt,twoside,openright]{report}
+%%%    \LoadClass[12pt]{report}
+%%\fi
+
+%%\iftcif@miktex
+%%% \def\BabelCaseHack{}
+%% \ifcsdef{miktexHack}{\miktexHack}{}
+%%\fi
+%%
+%%\iftcif@overleaf
+%% \ifcsdef{overleafHack}{\overleafHack}{}
+%%\fi
+%%
+%%\iftcif@texlive
+%% \ifcsdef{texliveHack}{\texliveHack}{}
+%%\fi
 
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading
 %%%%%%%%%%%%%%%%%%%%%
 \RequirePackage{silence}%
-\if@nofontwarning%
+
+\bool_if:NT \l__ufrgscca_nofontwarning_bool
+  {
   \WarningFilter{latexfont}{Font shape}%
   \WarningFilter{latexfont}{Size substitutions with differences}%
   \WarningFilter{latexfont}{Some font shapes were not available}%
-\fi%
+  }
+
+%%\if@nofontwarning%
+%%  \WarningFilter{latexfont}{Font shape}%
+%%  \WarningFilter{latexfont}{Size substitutions with differences}%
+%%  \WarningFilter{latexfont}{Some font shapes were not available}%
+%%\fi%
 
 
 \RequirePackage{ufrgscca-abnt}
 
-\iftc@xlists\RequirePackage{ufrgscca-lists}\fi
+\bool_if:NT \l__ufrgscca_xlists_bool
+  {
+    \RequirePackage{ufrgscca-lists}
+  }
 
-\RequirePackage{ufrgscca-gen}
+%%\iftc@xlists\RequirePackage{ufrgscca-lists}\fi
+
+%\RequirePackage{ufrgscca-gen}
 \RequirePackage{ufrgscca-cover}
 \RequirePackage{ufrgscca-core}
 
 
-\iftc@xpacks
+\bool_if:NT \l__ufrgscca_xpacks_bool
+  {
+  \ExplSyntaxOff
     \RequirePackage{relsize}
     \RequirePackage{keyval,graphicx}
     \RequirePackage{mathtools}
@@ -193,7 +394,40 @@
 	\usetikzlibrary{shadows}%
 	\usetikzlibrary{babel}
     \RequirePackage{steinmetz}%
-\fi
+    \ExplSyntaxOn
+  }
+
+
+
+
+%%\iftc@xpacks
+%%    \RequirePackage{relsize}
+%%    \RequirePackage{keyval,graphicx}
+%%    \RequirePackage{mathtools}
+%%    \RequirePackage{empheq}
+%%    \RequirePackage{mathrsfs, amsfonts,amssymb}%
+%%    \RequirePackage{amsthm}%
+%%    \RequirePackage{extarrows}%
+%%    \RequirePackage{mathfixs}%
+%%    \RequirePackage{bigdelim}%
+%%	\RequirePackage[american,siunitx,cuteinductors,smartlabels,arrowmos,EFvoltages,betterproportions]{circuitikz}%
+%%	\usetikzlibrary{fit}%
+%%	\usetikzlibrary{math}%
+%%	\usetikzlibrary{calc}%
+%%	\usetikzlibrary{shapes.geometric} %needed for the triangle%
+%%	\usetikzlibrary{shapes.misc} %needed for the triangle%
+%%	\usetikzlibrary{shapes.multipart}
+%%	\usetikzlibrary{graphs}%
+%%	\usetikzlibrary{3d}%
+%%	\usetikzlibrary{positioning}%
+%%	\usetikzlibrary{shadows}%
+%%	\usetikzlibrary{babel}
+%%    \RequirePackage{steinmetz}%
+%%\fi
+
+%\bool_show:N \l__ufrgscca_repeatfields_bool
+%\bool_show:N \l__ufrgscca_timesroman_bool
+%\bool_show:N \l__ufrgscca_nolocal_bool
 
 
 \WarningFilter{hyperref}{Option `pdftex' has already}
@@ -207,17 +441,57 @@
 \NewDocumentCommand{\autoannexref}{O{, }mO{\space}}{\annexref{#2}#1\nameref{#2}#3}
 
 
-\iftcif@english%
- \input{ufrgscca-en-core.def}%
-\else%
- \input{ufrgscca-ptBR-core.def}%
-\fi%
+%\bool_show:N \l__ufrgscca_repeatfields_bool
+%\bool_show:N \l__ufrgscca_timesroman_bool
+%\bool_show:N \l__ufrgscca_nolocal_bool
 
 
-\iftcif@nolocal%
-\else%
+
+%%move this to ufrgscca-terms-
+%%\bool_if:NTF \l__ufrgscca_english_bool
+%%  {
+%%    \input{ufrgscca-en-core.def}%
+%%  }
+%%  {
+%%    \input{ufrgscca-ptBR-core.def}%
+%%  }
+
+
+%\bool_show:N \l__ufrgscca_repeatfields_bool
+%\bool_show:N \l__ufrgscca_timesroman_bool
+%\bool_show:N \l__ufrgscca_nolocal_bool
+
+
+%%
+%%\iftcif@english%
+%% \input{ufrgscca-en-core.def}%
+%%\else%
+%% \input{ufrgscca-ptBR-core.def}%
+%%\fi%
+%%
+    \ExplSyntaxOff
+\input{ufrgscca-terms-ptBR.tex}
+\input{ufrgscca-cover-ptBR.tex}
+    \ExplSyntaxOn
+
+%\bool_show:N \l__ufrgscca_repeatfields_bool
+%\bool_show:N \l__ufrgscca_timesroman_bool
+%\bool_show:N \l__ufrgscca_nolocal_bool
+
+
+\bool_if:NF \l__ufrgscca_nolocal_bool
+  {
+    \ExplSyntaxOff
     \IfFileExists{local.tex}{\input{local.tex}}{}%
-    \tccore@emptyfields%
-\fi
+%    \tccore@emptyfields%
+    \ExplSyntaxOn
+  }
+
+
+%%\iftcif@nolocal%
+%%\else%
+%%    \IfFileExists{local.tex}{\input{local.tex}}{}%
+%%    \tccore@emptyfields%
+%%\fi
 
 

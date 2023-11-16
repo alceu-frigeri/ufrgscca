@@ -1,0 +1,243 @@
+%%%==============================================================================
+%% Copyright 2022-23 by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version 2.00 (2023/11/??)
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/ufrgscca
+%%
+%%%==============================================================================
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%%==============================================================================
+\makeatletter
+%\ExplSyntaxOff
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\location{Porto~Alegre}{RS}
+
+\SetHeadings{%
+    university              = Universidade Federal do Rio Grande do Sul ,
+    acronym                 = UFRGS ,
+    unit                    = Escola de Engenharia ,
+    secretary               = SACAD/EE ,
+    course                  = Engenharia de Controle e Automação ,
+    course.title            = Bacharel em Engenharia de Controle e Automação ,
+    ppc.comgrad             = {COMISSÃO DE GRADUAÇÃO - COMGRAD/CCA} ,
+    ppc.nde             = {NÚCLEO DOCENTE ESTRUTURANTE - NDE/CCA} ,
+    ppc.course          = {DO CURSO EM ENGENHARIA DE CONTROLE E AUTOMAÇÃO} ,
+}
+
+
+
+\ActivitySelect{course}
+\ActivitySet{CCA}{Eng. de Controle e Automação}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord{course}{narticle} de Curso}
+
+\ActivitySelect{tccI}
+\ActivitySet{TCC~-~I}{Trabalho de Conclusão de Curso CCA - I}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord{tccI}{narticle} da Atividade de Ensino de\break Trabalho de Conclusão de Curso}
+
+\ActivitySelect{tccII}
+\ActivitySet{TCC~-~II}{Trabalho de Conclusão de Curso CCA - II}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord{tccII}{narticle} da Atividade de Ensino de\break Trabalho de Conclusão de Curso}
+
+\ActivitySelect{internship}
+\ActivitySet{Est.Ob.}{Estágio Supervisionado Obrigatório}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord{internship}{narticle} da Atividade de Ensino de\break Estágio Supervisionado Obrigatório}
+
+
+
+\SetTerms{%
+  title.tcc                 = Trabalho de Conclusão de Curso ,
+  title.tccI                = Trabalho de Conclusão de Curso I ,
+  title.tccII               = Trabalho de Conclusão de Curso II ,  
+  title.internship          = Estágio Supervisionado Obrigatório ,
+  %
+  title.calendar            = {Calendário - \UseConst{semester}} , 
+  title.requestform         = Formulário de Requerimento de Matrícula ,
+  title.coadvisorform       = Requerimento de Autorização de Co-Orientação ,
+  title.boardapproval       = Formulário de Indicação da Banca Examinadora ,
+  title.advisorsapproval-I  = Formulário de Aprovação para Avaliação ,
+  title.advisorsapproval-II = Formulário de Aprovação para Apresentação ,
+  title.receipts            = Recibo de entrega de cópia da versão final do Trabalho de Conclusão ,
+  title.reviewersform       = Formulário de Avaliação ,
+  title.correctionsform     = Formulário de Correções ,
+  title.rectifyapproval     = Formulário de Aprovação das Correções ,
+  title.internsupervisorform = Formulário de Avaliação do Supervisor (Pela Empresa) ,
+  title.interntutorform      = Formulário de Avaliação do Tutor e Coordenador ,
+  %
+  %footnote.reviewersform
+  footnote.reviewersform    = {Entregar a cada membro da banca juntamente com a cópia do trabalho.} , %%% TCC I / II
+  footnote.receipts         = {Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC.} , %%% TCC II
+  footnote.correctionsform  = {Entregar a cada membro da banca juntamente com a cópia do trabalho. Após apresentação, retornar este à coordenação de TCC.} ,%%% TCC II
+   %
+  footnote.supervisorsform = {Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}} ,
+   %
+  opening.requestform       = { Ilm\ActivityCoord{course}{article}. Sr\ActivityCoord{course}{narticle}.\par
+ Coordenador\ActivityCoord{course}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}.   } ,
+  localdate                 = {\UseConst{publ.city},\hspace{4mm} de \hspace{1.2cm} de 20\hspace{4mm}.} ,
+  %
+  %
+  %
+  %
+ footnote.requestform       = { O resumo deve ser curto, i.e., não deve exceder este espaço. O texto deve ser escrito em parágrafo único, 
+                                e por se tratar de proposta, poderá utilizar  tempo futuro e não necessita ter motivação ou justificativa.\break  Deve conter:
+                                \begin{enumerate*}[alpha)] 
+                                	\item O QUE será feito - descrição e objetivos.
+                                   \item COMO será feito - metodologia.
+                                	\item Resultados esperados.
+                                \end{enumerate*}%
+                                } ,   %%% TCC I
+  desc.requestform          = { \DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity{course}{name}}, desta universidade, 
+                              portador\DataFields{student}{narticle} do cartão de identificação n$^o$ \DataFields{student}{ID}, 
+                              vem por meio deste solicitar matrícula na atividade de ensino} ,
+  desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
+                              vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
+  desc.rectifyapproval      = { \begin{description}
+                              \item[Observação 1:] Caso a versão final corrigida do trabalho, mais este formulário, não sejam entregues até a data estipulada, o conceito final passará a ser {\bf D}.
+                              \item[Observação 2:] Caso as correções sejam satisfatórias, a nota final será a já atribuída pela Banca Examinadora. 
+                              \item[Observação 3:] A assinatura d\DataFields{student.advisor}{article} orientador\DataFields{student.advisor}{narticle} é obrigatória, entretanto a assinatura dos membros da banca só é necessária caso tenham marcado a opção ''$\Box$ Revisarei o trabalho depois de corrigido'' no \emph{\UseTerm{temp.formrefname}}.
+                            \end{description}
+                              } ,
+  desc.studentwork          = { 
+                              \noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}\\%
+                              \noindent\UseLabel{worktitle}: \DataFields{student}{worktitle} } , 
+  desc.studentwork.full     = {\UseTerm{desc.studentwork}\\[2.5mm]\UseTerm{desc.advisor}} ,  
+  desc.advisor              = {\noindent\UseLabel{advisor}:  \textbf{\DataFields{student.advisor}{name}}} ,
+  desc.coadvisor            = {\noindent\UseLabel{coadvisor}:  \textbf{\DataFields{student.advisor}{name}}} ,
+  desc.reviewer             = {\noindent\UseLabel{reviewer}:  \textbf{\DataFields{student.advisor}{name}}} ,
+  desc.student              = {\noindent\UseLabel{student}: {\bf \DataFields{student}{name}}\hfill 
+                              \UseLabel{student.ID}: {\bf \DataFields{student}{ID}}} ,
+  desc.internshipperiod     = {\noindent Período do Estágio: {\bf \DataFields{student.internship}{start}} até: {\bf \DataFields{student.internship}{end}}} ,
+  desc.supervisor           = {\UseLabel{supervisor}: \textbf{\DataFields{student.supervisor}{name}} \hfill CREA: \textbf{\DataFields{student.supervisor}{register}}} ,
+  desc.sacad                = {\noindent Ao\par\noindent SACAD da Escola de Engenharia} ,
+  corrections.ok            = {Correções satisfatórias: \hspace*{1cm}$\Box$\ sim\hspace*{2cm}$\Box$\ não} , 
+}
+
+
+
+
+%\SetTerms{%
+%  
+%}
+
+
+\SetLabels{%
+  advisor                   = Orientador\DataFields{student.advisor}{narticle} ,
+  advisors                  = Orientadores ,
+  advisor.gen               = Orientador(a) ,
+  advisor.email             = Email d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle} ,
+  coadvisor                 = Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  coadvisor.gen             = Co-orientador(a) ,
+  coadvisor.email           = Email d\DataFields{student.coadvisor}{article} Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  reviewer.base             = Avaliador ,
+  reviewer                  = Avaliador\DataFields{student.reviewer}{narticle} ,
+  altreviewer               = Suplente ,  
+  altreviewer.sig           = Avaliador\DataFields{student.altreviewer}{narticle} ,
+  tutor                     = Tutor\DataFields{student.tutor}{narticle} ,
+  tutor.gen                 = Tutor(a) ,
+  tutor.email               = Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} ,  
+  supervisor                = Supervisor\DataFields{student.supervisor}{narticle} ,
+  supervisor.gen            = Supervisor(a) ,  
+  student                   = Alun\DataFields{student}{article} ,
+  student.gen               = Aluno(a) ,
+  student.email             = Email d\DataFields{student}{article} Alun\DataFields{student}{article} ,
+  student.ID                = Cartão ,
+  signature.gen             = Assinatura , 
+  signature.student         = Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article} ,
+  signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
+  signature.advisor         = Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle} ,
+  signature.coadvisor       = Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  signature.reviewer        = Assinatura\ \ d\DataFields{student.reviewer}{article}\ \ Avaliador\DataFields{student.reviewer}{narticle} ,
+  signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
+  signature.gen             = Assinatura ,
+  signature.supervisor      = Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle} ,
+  signature.tutor           = Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle} ,
+  signature.internshipcoord = Assinatura\ \ d\ActivityCoord{internship}{article}\ \ Coordenador\ActivityCoord{internship}{narticle} ,
+  worktitle                 = Título do Trabalho ,
+  worktitle.temp            = Título Provisório ,
+  email                     = Email ,
+  phone                     = ramal ,
+  board                     = Banca Examinadora ,
+  board.member              = Membro da Banca ,
+  agree                     = De Acordo ,
+  Nproc                     = SEI ,
+  remarks                   = remarks ,
+  boardtime.gen             = Horário , 
+}
+
+\SetLabels{%
+  TCC-I.pointA              = {Tema} ,
+  TCC-I.pointB              = {Biblio.} ,
+  TCC-I.pointC              = {Plano Trab.} ,
+  TCC-I.pointD              = {Texto} ,
+  TCC-II.pointA              = {Conteúdo} , 
+  TCC-II.pointB              = {Trab. Escrito} ,
+  TCC-II.pointC              = {Apresentação} ,
+  Ngrade                  = {Nota} ,
+  grade                      = {Conceito} ,
+}
+
+\SetConsts{%
+  TCC-I.weightA              = {2} ,
+  TCC-I.weightB              = {2} ,
+  TCC-I.weightC              = {2} ,
+  TCC-I.weightD              = {1} ,
+  TCC-II.weightA              = {0.35} , 
+  TCC-II.weightB              = {0.35} ,
+  TCC-II.weightC              = {0.3} ,
+  NgradeA                      = {9.0} ,
+  NgradeB                      = {7.5} ,
+  NgradeC                      = {6.0} ,  
+}
+
+
+
+\SetConsts{%
+  report.tabA = {32mm} ,
+  report.tabA* = {42mm} ,
+  report.tabB = {42mm} ,
+  report.tabB* = {62mm} ,
+  report.tabC = {15mm} ,
+  report.tabD = {15mm} ,
+  report.tabE = {15mm} ,
+  report.tabEx = {15mm} ,
+  report.tabF = {8mm} ,
+  report.tabG = {12mm} , 
+}
+
+\SetConsts{%
+  board.tabA = {38mm} ,
+  board.tabB = {38mm} ,
+  board.tabC = {60mm} ,
+  board.tabD = {13mm} ,
+}
+
+\SetConsts{%
+  cover.winwidth          = {95mm} ,
+  cover.winheight         = {64mm} ,
+  cover.winvoffset        = {112mm} ,
+  form.winvoffset         = {24mm} ,
+}
+

@@ -23,53 +23,43 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\def\tc@tmp@packname{ufrgscca-coord}
-\def\tc@tmp@altpackname{ufrgsccacoord}
-\def\tc@tmp@packdesc{UFRGS/CCA coord commands}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
-\ExplSyntaxOn
 
-\newif\iftcif@coord@emptyforms\tcif@coord@emptyformsfalse
-\DeclareKeys[ufrgscca-coord]{
-    calendar-I.usage = general,
-    calendar-I.if = tcif@coord@calendarI,
-    calendar-II.usage = general,
-    calendar-II.if = tcif@coord@calendarII,
-    checklist.usage = general,
-    checklist.if = tcif@coord@checklist,
-    report.usage = general,
-    report.if = tcif@coord@report,
-    report-II.usage = general,
-    report-II.if = tcif@coord@report,
-    report-I.usage = general,
-    report-I.if = tcif@coord@reportI,
-    reportxinfo.usage = general,
-    reportxinfo.if = tcif@coord@reportxinfo,
-    boards.usage = general,
-    boards.if = tcif@coord@boards,
-    boarddates.usage = general,
-    boarddates.if = tcif@coord@boarddates,
-    studentlist.usage = general,
-    studentlist.if = tcif@coord@studentlist,
-    revforms.usage = general,
-    revforms.if = tcif@coord@forms@revforms,
-    referral-I.usage = general,
-    referral-I.if = tcif@coord@forms@referralI,
-    referral-II.usage = general,
-    referral-II.if = tcif@coord@forms@referralII,
-    referral.usage = general,
-    referral.if = tcif@coord@forms@referralII,
-    cocertificate.usage = general,
-    cocertificate.if = tcif@coord@forms@cocertificate,
-}
-\ProcessKeyOptions[ufrgscca-coord]\relax
-\NewDocumentCommand{\setreports}{m}{\SetKeys[ufrgscca-coord]{#1}}
+\ProvidesExplPackage
+    {ufrgscca-coord}
+    {2023/11/10}
+    {1.99}
+    {UFRGS/CCA coord commands}
 
+\cs_generate_variant:Nn \tl_set:Nn {Ne}
+
+\keys_define:nn { ufrgscca.coord }
+  {
+    calendar-I. bool_set:N   = \l__ufrgscca_calendarI_bool ,
+    calendar-I. usage:n       = general , 
+    calendar-II. bool_set:N  = \l__ufrgscca_calendarII_bool ,
+    calendar-II. usage:n      = general , 
+    report-I. bool_set:N     = \l__ufrgscca_reportI_bool ,
+    report-I. usage:n         = general , 
+    report-II. bool_set:N    = \l__ufrgscca_reportII_bool ,
+    report-II. usage:n        = general , 
+    boards. bool_set:N       = \l__ufrgscca_boards_bool ,
+    boards. usage:n           = general , 
+    revforms-I. bool_set:N   = \l__ufrgscca_revformsI_bool ,
+    revforms-I. usage:n       = general , 
+    revforms-II. bool_set:N  = \l__ufrgscca_revformsII_bool ,
+    revforms-II. usage:n      = general , 
+    referral-I. bool_set:N   = \l__ufrgscca_referralI_bool ,
+    referral-I. usage:n       = general , 
+    referral-II. bool_set:N  = \l__ufrgscca_referralII_bool ,
+    referral-II. usage:n      = general , 
+    cocertificate. bool_set:N  = \l__ufrgscca_cocertificate_bool ,
+    cocertificate. usage:n      = general , 
+  }
+
+\ProcessKeyOptions[ufrgscca.coord]\relax
+%\NewDocumentCommand{\setreports}{m}{\SetKeys[ufrgscca-coord]{#1}}
+\NewDocumentCommand{\setreports}{m}{\keys_set:nn { ufrgscca.coord }{#1}}
 
 \def\c@one#1:#2:{\csname #1\endcsname}
 \def\c@two#1:#2:{\csname #1\endcsname[newpage]}
@@ -77,116 +67,15 @@
 \NewDocumentCommand{\tccoord@student@exec}{m}{\tccoord@split#1::\c@two\c@one\empty,}
 
 \RequirePackage{longtable}
-\RequirePackage{ufrgscca-gen}
+\RequirePackage{multirow}
+%\RequirePackage{ufrgscca-gen}
 \RequirePackage{ufrgscca-core}
 \RequirePackage{ufrgscca-forms}
 \RequirePackage{pgfcalendar}
 
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-\cmdfactory<coord>{boardstitle}
-\cmdfactory<coord>{boardsworklabel}
-\cmdfactory<coord>{TCCgradesNlabel,TCCgradesClabel}%
-
-\cmdfactory<coord>{calendartitle,tcccalendardesc}%
-\cmdfactory<coord>{tccreporttitle,tccreportopening,tccreportdesc,tccreportabsents,tccreportdismiss}%
-\cmdfactory<coord>{tccreferralopening}
-\cmdfactory<coord>{referralfailed,referralapproved}
-\cmdfactory<coord>{referralfailFF}
-\cmdfactory<coord>{referralexamapprovedtext,referralexamfailtext,referralfatetext}%
-\cmdfactory<coord>{referralexamapprovedtextTR,referralexamfailtextTR,referralfatetextTR}%
-\cmdfactory<coord>{boardlabel,cocertificatetitle,cocertificateopenning,cocertificatetext}%
-\cmdfactory<coord>{TCCperiod,boardstitleB,boardsOBS}%
-\cmdfactory<coord>{studentlistformtitle,studentlistactivity,studentlistdate}%
-
-\cmdfactory<coord>{advisornamegen,advisornameplural}
-\cmdfactory<coord>{tcceventAweek,tcceventBweek,tcceventCweek,tcceventDweek}
-\cmdfactory<coord>{tcceventEweek,tcceventFweek,tcceventGweek,tcceventHweek}
-\cmdfactory<coord>{tcceventIweek,tcceventJweek,tcceventKweek,tcceventLweek}
-
-
-\cmdfactory<coord>{internshipreferralopening,internshipreferralfatetext,internshipgrades,internshipreferralfailFF}
-\cmdfactory<coord>{internshipreferralexamapprovedtext,internshipreferralexamfailtext}
-\cmdfactory<coord>{internshipreferralexamhardapprovedtext,internshipreferralexamhardfailtext}
-
-
-%%% this should go to ufrgscca-coord !!!!
-
-  %%%
-  %%% TO BE REMOVED !
-\NewDocumentCommand{\grades}{mmmmm}{%
-  \gdef\tc@TCCgradeA{#1}%
-  \gdef\tc@TCCgradeB{#2}%
-  \gdef\tc@TCCgradeC{#3}%
-  \gdef\tc@TCCgradeD{#4}%
-  \gdef\tc@TCCgradeFF{#5}%
-  \gdef\tc@gradeA{#1}%
-  \gdef\tc@gradeB{#2}%
-  \gdef\tc@gradeC{#3}%
-  \gdef\tc@gradeD{#4}%
-  \gdef\tc@gradeFF{#5}%
-}%
-\let\TCCgrades\grades%
-%%% this should go to ufrgscca-coord !!!!
-
-  %%%
-  %%% TO BE REMOVED !
-\NewDocumentCommand{\gradesN}{mmm}{%
-  \gdef\tc@TCCgradeAN{#1}%
-  \gdef\tc@TCCgradeBN{#2}%
-  \gdef\tc@TCCgradeCN{#3}%
-  \gdef\tc@gradeAN{#1}%
-  \gdef\tc@gradeBN{#2}%
-  \gdef\tc@gradeCN{#3}%
-}%
-\let\TCCgradesN\gradesN
-
-
-%%%%%%%%%
-%%%%%%%%% ufrgscca-coord !!!
-%%%%%%%%%
-  %%%
-  %%% TO BE REMOVED !
-\NewDocumentCommand{\tccoord@studentExam}{m}{%
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Exam\endcsname{#1}%
-}%
-  %%%
-  %%% TO BE REMOVED !
-\NewDocumentCommand{\tccoord@studentFF}{}{%
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}FF\endcsname{1}%
-  \gdef\tc@TCCff@flag{1}%
-  \gdef\tc@ff@flag{1}%
-}%
-  %%%
-  %%% TO BE REMOVED !
-\NewDocumentCommand{\tccoord@studentDismiss}{}{%
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Dismiss\endcsname{1}%
-  \gdef\tc@TCCdismiss@flag{1}%
-  \gdef\tc@dismiss@flag{1}%
-}%
 %
 %
 \NewDocumentCommand{\studentFate}{O{}}{%%
-  %%%
-  %%% TO BE REMOVED !
-  \ifthenelse{\equal{#1}{C}}{%%
-    \tccoord@studentExam{C}%%
-  }{%%
-    \ifthenelse{\equal{#1}{D}}{%%
-      \tccoord@studentExam{D}%%
-    }{%%
-      \ifthenelse{\equal{#1}{FF}}{%%
-        \tccoord@studentFF%%
-      }{%%
-        \ifthenelse{\equal{#1}{Dismiss}}{%%
-          \tccoord@studentDismiss%%
-        }{%%
-        }%%
-      }%%
-    }%%
-  }%%
-  %%%
-  %%% USING STARRAY
   \str_case:nnF  {#1}
     {
       {C}
@@ -196,6 +85,7 @@
               grade = C ,
               flag-exam = \c_true_bool ,
               flag-graded = \c_true_bool ,
+              flag-approved = \c_true_bool ,
             }
         }
       {D}
@@ -244,6 +134,7 @@
 \tl_new:N \l__ufrgscca_tmpd_tl
 \cs_new_protected:Npn \__ufrgscca_studentgrade: 
     {
+      %(\DataFields{student}{name})\par
       \starray_term_syntax:n {student.reviewer[1]}
       \tl_set:Ne \l__ufrgscca_tmpa_tl {\starray_parsed_get_prop:n {grade}}
       \starray_term_syntax:n {student.reviewer[2]}
@@ -272,14 +163,17 @@
           \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeB}}
             { % C
               \starray_gset_prop:nnn {student}{grade}{C}
+              \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
             }
             {
               \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeA}}
                 { % B
                   \starray_gset_prop:nnn {student}{grade}{B}
+                  \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
                 }
                 { % A
                   \starray_gset_prop:nnn {student}{grade}{A}
+                  \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
                 }
             }
         }
@@ -288,36 +182,28 @@
     }
 %
 \NewDocumentCommand{\studenttimeslot}{O{}mm}{%%
-  %%%
-  %%% TO BE REMOVED !
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}date\endcsname{#2}%
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}time\endcsname{#3}%
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}local\endcsname{#1}%
-  %%%
-  %%% USING STARRAY
   \starray_gset_from_keyval:nn {student}
     {
       board-local = #1 ,
-      board-day = #2 ,
+      board-date = #2 ,
       board-time = #3 ,
     }
 }%
 \let\timeslot\studenttimeslot%
 %
 \NewDocumentCommand{\tccdate}{mm}{%%
-  %%%
-  %%% TO BE REMOVED !
-  \expandafter\gdef\csname date:#1\endcsname{#2}%
-  %%%
-  %%% USING STARRAY
-  \SetConst{%
+  \SetConsts{%
     date:#1 = #2 ,
   }
 }%
 %
+\NewDocumentCommand{\tccsemester}{m}{%%
+  \SetConsts{%
+    semester = #1 ,
+  }
+}%
+%
 
-%\def\c@one#1:#2:{\csname #1\endcsname}
-%\def\c@two#1:#2:{\csname #1\endcsname[newpage]}
 
 \NewDocumentCommand{\studentturnindate}{m}{\tccoord@studentdatesplit#1,}
 %23/12/2022
@@ -338,39 +224,34 @@
    \expandafter\xdef\csname tc@internshipcommit#4#4\endcsname{#1/#2/#3}%
 }
 
-%%%%%%%%%
-%%%%%%%%% ufrgscca-coord !?!!
-%%%%%%%%%
-\NewDocumentCommand{\studentTCCtitle}{m}{%%
-  %%%
-  %%% TO BE REMOVED !
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}title\endcsname{#1}%
-  %%%
-  %%% USING STARRAY
-  \starray_gset_prop:nnn {student}{worktitle}{#1}
-}%
-\let\TCCtitle\studentTCCtitle%
-%
+%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%% ufrgscca-coord !?!!
+%%%%%%%%%%%%%%%%
+%%%%\NewDocumentCommand{\studentworktitle}{m}{%%
+%%%%  \starray_gset_prop:nnn {student}{worktitle}{#1}
+%%%%}%
+%%%%\let\TCCtitle\studentworktitle%
+%%%%%
 %%%%%%%%%
 %%%%%%%%% ufrgscca-coord !!!
 %%%%%%%%%
 \NewDocumentCommand{\studentremark}{m}{%%
-  %%%
-  %%% TO BE REMOVED !
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}remark\endcsname{#1}%
-  %%%
-  %%% USING STARRAY
-  \starray_gset_prop:nnn {student}{remark}{#1}
+  \starray_gset_prop:nnn {student}{remarks}{#1}
 }%
 %
-\NewDocumentCommand{\studentsetdistinctboard}{}{%%
-  %%%
-  %%% USING STARRAY
+\NewDocumentCommand{\studentsetDistinctBoard}{}{%%
   \starray_gset_prop:nnn {student}{flag-distinctboard}{\c_true_bool}
 }%
+
+\NewDocumentCommand{\studentDistinctBoardCase}{mm}
+  {
+    \starray_term_syntax:n{student}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-distinctboard}}
+      {#1}
+      {#2}
+  }
+
 \NewDocumentCommand{\studentsetnewpage}{O{}}{%%
-  %%%
-  %%% USING STARRAY
   \tl_if_blank:nTF {#1}
     {\starray_set_iter_from_hash:nn {student}{#1}}
   \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool}
@@ -393,105 +274,11 @@
 \NewDocumentCommand{\checkdef}{mmm}{\expandafter\gdef\csname #1\endcsname{#2}\expandafter\gdef\csname @#2\endcsname{#3}}%
 %\chekmark%
 
-%%%%%
-%%%%% ufrgscca-coord !!!!
-%%%%%
-\NewDocumentCommand{\tccoord@studentboardsnewpage}{}{%  %%% see ufrgscca-core for counters...
-  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}BoardsNP\endcsname{1}%
-}%
-
-\NewDocumentCommand{\NewStudent}{m+m}{%%
-  \expandafter\NewDocumentCommand\csname #1\endcsname{O{}}{%%
-    #2%
-    \csname #1.hook\endcsname%
-    \@ifundefined{tccoord@studentboards##1}{}{\csname tccoord@studentboards##1\endcsname}%%
-    \iftcif@coord@forms@revforms%
-      \tcforms@examinersForms%
-    \fi%
-    \iftcif@coord@forms@referralII%
-      \tccoord@TCCreferralletter%
-    \fi%
-    \iftcif@coord@forms@referralI%
-      \tccoord@TCCIreferralletter%
-    \fi%
-    \iftcif@coord@forms@cocertificate%
-      \tccoord@TCCcocertificateletter%
-    \fi%
-%
-    \@defaultboard%
-  }%%
-  \expandafter\NewDocumentCommand\csname #1.hook\endcsname{}{}%
-}%
-
-
-\NewDocumentCommand{\NewInternshipStudent}{m+m}{%%
-    \expandafter\NewDocumentCommand\csname #1\endcsname{O{}}{%%
-        #2%
-        \csname #1.hook\endcsname%
-        \iftcif@coord@forms@referralII%
-        \tccoord@internshipreferalletter%
-        \fi%
-    }%%
-    \expandafter\NewDocumentCommand\csname #1.hook\endcsname{}{}%
-}%
-
-
-
-\NewDocumentCommand{\@distinctboard}{}{\def\tc@nBoard{}}%
-\NewDocumentCommand{\@defaultboard}{}{\let\tc@nBoard\undefined}%
-%
-%
-\newcounter{tc@calendareventcount}%
-\NewDocumentCommand{\tcccalendarevent}{mm}{%%
-        \stepcounter{tc@calendareventcount}%%
-        \expandafter\gdef\csname tc@tcccalendarevent\Alph{tc@calendareventcount}week\endcsname{#1}%%
-        \expandafter\gdef\csname tc@tcccalendarevent\Alph{tc@calendareventcount}desc\endcsname{#2}%%
-}%
-\NewDocumentCommand{\tcccalendarhead}{mmm}{\gdef\tc@tcccalendarhead{#1 & #2 & #3\\}}%
-%
-\newcounter{tc@calendareventdatecount}%
-\NewDocumentCommand{\tcccalendareventdate}{m}{%%
-        \stepcounter{tc@calendareventdatecount}%%
-        \expandafter\gdef\csname tc@tcccalendarevent\Alph{tc@calendareventdatecount}date\endcsname{#1}%%
-}%
-%
-\NewDocumentCommand{\tccoord@calendarlinereset}{m}{\@ifundefined{tc@tcccalendarevent#1week}{}{\csundef{tc@tcccalendarevent#1week}}}%
-%
-\NewDocumentCommand{\tcccalendarreset}{}{
-  \forcsvlist{\tccoord@calendarlinereset}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O}%
-  \setcounter{tc@calendareventcount}{0}%%
-  \setcounter{tc@calendareventdatecount}{0}%
-}
 
 %
 \cs_generate_variant:Nn \starray_gset_prop:nnn {nne}
 %
 \NewDocumentCommand{\examinergrades}{mmmO{}}{%%
-  %%%
-  %%% TO BE REMOVED !
-  \ifthenelse{\equal{#1}{}}{%%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
-    \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
-  }{%
-    \ifthenelse{\equal{#4}{}}{%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{#1}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{#2}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{#3}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{#4}%%
-          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{\fpeval{round((\tc@TCCpointAweight * #1 + \tc@TCCpointBweight * #2 + \tc@TCCpointCweight * #3) / (\tc@TCCpointAweight + \tc@TCCpointBweight + \tc@TCCpointCweight),2,1)} }%
-          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{0}%
-    }{%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointA\endcsname{\fpeval{#1}}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointB\endcsname{\fpeval{#2}}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointC\endcsname{\fpeval{#3}}%%
-          \expandafter\def\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}pointD\endcsname{\fpeval{#4}}%%
-          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}grade\endcsname{0}%
-          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4) / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
-%          \expandafter\edef\csname tc@student\Alph{tc@studentcount}@examiner\Alph{tc@examinercount}gradeI\endcsname{\fpeval{round((\tc@TCCIpointAweight * #1 + \tc@TCCIpointBweight * #2 + \tc@TCCIpointCweight * #3 + \tc@TCCIpointDweight * #4)  * \tc@TCCIpointscale / (\tc@TCCIpointAweight + \tc@TCCIpointBweight + \tc@TCCIpointCweight + \tc@TCCIpointDweight),2,1)} }%
-    }%
-  }%
-  %%%
-  %%% USING STARRAY
   \tl_if_blank:nTF {#1}
     { \starray_gset_prop:nnn {student.reviewer}{grade}{0} }
     {
@@ -503,7 +290,6 @@
                 pointB = #2 ,
                 pointC = #3 ,
                 gradetype = 2 ,
-                %gradeII = \fpeval{round((#1 * \UseConst{TCC-II.weightA} + #2 * \UseConst{TCC-II.weightB} + #3 * \UseConst{TCC-II.weightC}) / ( \UseConst{TCC-II.weightA} + \UseConst{TCC-II.weightB} + \UseConst{TCC-II.weightC}) , 2 , 1) } ,
               }
             \starray_gset_prop:nne {student.reviewer}{grade}
                 {%
@@ -517,7 +303,6 @@
                 pointB = #2 ,
                 pointC = #3 ,
                 pointD = #4 ,
-                %gradeI = \fpeval{round((#1 * \UseConst{TCC-I.weightA} + #2 * \UseConst{TCC-I.weightB} + #3 * \UseConst{TCC-I.weightC} + #4 * \UseConst{TCC-I.weightD}) / ( \UseConst{TCC-I.weightA} + \UseConst{TCC-I.weightB} + \UseConst{TCC-I.weightC} + \UseConst{TCC-I.weightD}) , 2 , 1) } ,
                 gradetype = 1 ,
               }
             \starray_gset_prop:nne {student.reviewer}{grade}
@@ -530,832 +315,16 @@
   
 }%
 
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC calendar%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\tc@calendartab{11.5cm}%
-\NewDocumentCommand{\tccoord@TCCcalendarline}{m}{\@ifundefined{tc@tcccalendarevent#1week}{}{\textbf{\csname tc@tcccalendarevent#1date\endcsname} & \csname tc@tcccalendarevent#1week\endcsname & \csname tc@tcccalendarevent#1desc\endcsname\\\hline}}%
-%%%
-%%
-%%%
-\NewDocumentCommand{\tccoord@TCCcalendarI}{}{%
-  \tc@formtopbox{\tcdef@forms@formstitleTR}{\tcdef@coord@calendartitle}%
-%
-  { \footnotesize%
-    \begin{center}
-%
-      \resizebox{\textwidth}{!}{%%
-        \begin{tabular}{ccp{\tc@calendartab}}%
-          \tc@tcccalendarhead\hline%
-          \forcsvlist{\tccoord@TCCcalendarline}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O}%
-        \end{tabular}}%
-%
-    \end{center}%
-    %\if@lmodern
-      \tiny
-    %\fi
-    \tcdef@coord@tcccalendardesc%
-  }%
-  \vfill%
-%
-  \pagebreak%
-}%
-%
-\NewDocumentCommand{\tccoord@TCCcalendarII}{}{%
-  \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@calendartitle}%
-%
-  { \footnotesize%
-    \begin{center}
-%
-      \resizebox{\textwidth}{!}{%%
-        \begin{tabular}{ccp{\tc@calendartab}}%
-          \tc@tcccalendarhead\hline%
-          \forcsvlist{\tccoord@TCCcalendarline}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O}%
-        \end{tabular}}%
-%
-    \end{center}%
-    %\if@lmodern
-      \tiny
-    %\fi
-    \tcdef@coord@tcccalendardesc%
-  }%
-  \vfill%
-%
-  \pagebreak%
-}%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% Student list form%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\tc@stlistrule{65mm}%
-\def\tc@stlisttab{70mm}%
-%%%
-%%
-%%%
-\NewDocumentCommand{\tccoord@studentlistrow}{m}{%%
-  \@ifundefined{tc@student#1}{\rule{\tc@stlistrule}{.1pt}}{\csname tc@student#1\endcsname}\hrulefill & \rule{\tc@stlistrule}{.1pt}\\%
-}%
-%
-\NewDocumentCommand{\tccoord@studentlistform}{}{%
-  \stepcounter{tc@studentcount}%
-  \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@studentlistformtitle}%
-  \vspace{20mm}%
-%
-  {\small%
-  \begin{tabular}{p{\tc@stlisttab}@{ }p{\tc@stlisttab}}%
-  \tcdef@forms@formsstudentlabelgen & \tcdef@forms@studentsignaturegen\\\hline\\[2mm]%
-
-%
-  \forcsvlist{\tccoord@studentlistrow}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y}
-  \end{tabular}}%
-  \vfill%
-%
-  \pagebreak%
-}%
-%
-%%%
-%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student info row (for reports and referral letters)%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\tc@BoardTabA{38mm}%
-\def\tc@BoardTabB{38mm}%
-\def\tc@BoardTabC{60mm}%
-\def\tc@BoardTabD{13mm}%
-%%%
-%%
-%%%
-\NewDocumentCommand{\tccoord@studentboardrow}{m}{%%
-  \@ifundefined{tc@student#1}{}{%
-    \@ifundefined{tc@student#1Dismiss}{%%
-      \@ifundefined{tc@student#1FF}{%%
-        \@ifundefined{tc@student#1time}{}{%%
-          \multirow{4}{\tc@BoardTabA}{\textbf{\csname tc@student#1\endcsname}}  & \multirow{4}{\tc@BoardTabB}{{\hspace{-0.4em}\csname tc@student#1@advisor\endcsname}\ifcsdef{tc@student#1@coadvisor}{\break\csname tc@student#1@coadvisor\endcsname}{}} & \break\csname tc@student#1@examinerA\endcsname  & \multirow{5}{\tc@BoardTabD}{\iftcif@coord@boarddates\else\csname tc@student#1date\endcsname\\\fi
-             \csname tc@student#1time\endcsname\\[1mm]\csname tc@student#1local\endcsname
-            }\\*%
-          & & \csname tc@student#1@examinerB\endcsname & \\*%
-          & & \csname tc@student#1@examinerC\endcsname & \\*%
-          & & (\csname tc@student#1@altexaminerA\endcsname\ ) & \\*%
-          \multicolumn{3}{l}{\textsc{\tcdef@coord@boardsworklabel:} \begin{minipage}{0.90\textwidth}\textit{\csname tc@student#1title\endcsname}\end{minipage}} & \\[2mm]\hline%
-        }%
-      }{}%
-    }{}%
-  }%
-}%
-%
-\NewDocumentCommand{\tccoord@testdaterow}{mm}{%%
-%  \@ifundefined{tcif@coord@boarddates}{}{%%
-  \iftcif@coord@boarddates%
-    \@ifundefined{tc@student#2}{}{%%
-      \@ifundefined{tc@student#2Dismiss}{%%
-        \@ifundefined{tc@student#2FF}{%%
-          \@ifundefined{tc@student#2BoardsNP}{%%
-            \tccoord@@testdaterow{\csname tc@student#1date\endcsname}{\csname tc@student#2date\endcsname}%%
-          }{\kill\pagebreak\tccoord@daterow{#2}}%%
-        }{}%%
-      }{}%%
-    }%%
-  \fi
-  %}%%@boarddates
-}%%
-%
-\NewDocumentCommand{\tccoord@@testdaterow}{mm}{\ifthenelse{\equal{#1}{#2}}{\\[-4.35mm]\hline\\[-4mm]}{\tccoord@@daterow{#2}}}%
-\NewDocumentCommand{\tccoord@daterow}{m}{\gdef\tc@date{\csname tc@student#1date\endcsname}\tccoord@@daterow{\tc@date}}%
-\NewDocumentCommand{\tccoord@@daterow}{m}{& & \multicolumn{2}{r}{\textsc{\textbf{\csname date:#1\endcsname\ --- #1}}} \\*%
-          \textsc{\tcdef@forms@formsstudentlabelgen} & \textsc{\tcdef@forms@formsadvisorlabelgen} & \textsc{\tcdef@forms@formsboardtitle} & \textsc{\tcdef@forms@formstimelabel}\\*\hline}%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC Boards announce table%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\newcounter{tccoord@@auxA}%
-\newcounter{tccoord@@auxB}%
-\NewDocumentCommand{\tccoord@@studenttestrow}{m}{%
-    \setcounter{tccoord@@auxA}{#1}\setcounter{tccoord@@auxB}{#1}\stepcounter{tccoord@@auxB} \tccoord@studentboardrow{\Alph{tccoord@@auxA}}\tccoord@testdaterow{\Alph{tccoord@@auxA}}{\Alph{tccoord@@auxB}}%
-}%
-\NewDocumentCommand{\tccoord@TCCboards}{}{%
-  \stepcounter{tc@studentcount}%
-  \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@TCCperiod}%
-%
-  {%%
-    \footnotesize\gdef\tc@date{\csname tc@studentAdate\endcsname}%
-    \setlength\LTleft{-8mm} \begin{center}%
-      {%%
-        \begin{longtable}{p{\tc@BoardTabA}p{\tc@BoardTabB}p{\tc@BoardTabC}p{\tc@BoardTabD}}%
-          \multicolumn{4}{c}{\textbf{\textsc{\tcdef@coord@boardstitle}}}\\\hline%
-          \iftcif@coord@boarddates\else\textsc{\tcdef@forms@formsstudentlabelgen} & \textsc{\tcdef@forms@formsadvisorlabelgen} & \textsc{\tcdef@forms@formsboardtitle} & \textsc{\tcdef@forms@formstimelabel}\\\hline\fi%
-          \endhead%
-           \tccoord@testdaterow{T}{A}%
-           \forcsvlist{\tccoord@@studenttestrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19}
-          \tccoord@studentboardrow{T}% letter 'T' is 20 !
-%
-        \end{longtable}%
-      }%
-    \end{center}%
-    {\bf \tcdef@coord@boardsOBS}%
-  }%
-  \vfill%
-  \pagebreak%
-}%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% \tccoord@fate => A,B,C,D as a function of student grade%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@fate}{m}{%
-    \ifthenelse{1 = \fpeval{#1 < \tc@TCCgradeCN}}%
-        {\tc@TCCgradeD}%
-        {
-          \ifthenelse{1 = \fpeval{#1 < \tc@TCCgradeBN}}%
-              {\tc@TCCgradeC}%
-              {
-                \ifthenelse{1 = \fpeval{#1 < \tc@TCCgradeAN}}%
-                {\tc@TCCgradeB}%
-                {\tc@TCCgradeA}%
-              }%
-        }%
-}
-\NewDocumentCommand{\tccoord@@fate}{m}{\tccoord@fate{\csname tc@student#1Temp\endcsname}}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% \tc@student grade => average of the 3 examiners grade%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@studentgrade}{m}{%%
-  \@ifundefined{tc@student#1}{}{%
-    \expandafter\edef\csname tc@student#1Temp\endcsname{%%
-\fpeval{round((\csname tc@student#1@examinerAgrade\endcsname + \csname tc@student#1@examinerBgrade\endcsname + \csname tc@student#1@examinerCgrade\endcsname )/3,2,1)}%
-    }%
-  }%
-}%
-%
-%%
-% TCC-I
-% \tc@student grade => average of the 2 examiners grade%
-%%
-\NewDocumentCommand{\tccoord@studentgradeI}{m}{%%
-  \@ifundefined{tc@student#1}{}{%
-    \expandafter\edef\csname tc@student#1Temp\endcsname{%%
-\fpeval{round((\csname tc@student#1@examinerBgradeI\endcsname + \csname tc@student#1@examinerCgradeI\endcsname )/2,2,1)}%
-    }%
-  }%
-}%
-%
-
-\NewDocumentCommand{\tccoord@internshipstudentgrade}{m}{%
-  \@ifundefined{tc@student#1}{}{%
-    \expandafter\edef\csname tc@student#1Temp\endcsname{%%
-        \fpeval{round((2 * (\csname tc@student#1@supervisorgradeA\endcsname + \csname tc@student#1@supervisorgradeB\endcsname) + \csname tc@student#1@tutorgrade\endcsname + \csname tc@student#1@internshipcoordgrade\endcsname )/28,2,1)}%
-    }%
-  }%
-}
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% examiners info (grades) for report/referral letters%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@examinersline}{mm}{%%
-& \hspace{-0.4em}\csname tc@student#1@examiner#2\endcsname & \csname tc@student#1@examiner#2pointA\endcsname & \csname tc@student#1@examiner#2pointB\endcsname & \csname tc@student#1@examiner#2pointC\endcsname & \csname tc@student#1@examiner#2grade\endcsname &%
-}%
-%
-%%
-% TCC-I
-% examiners info (grades) for report/referral letters%
-%%
-\NewDocumentCommand{\tccoord@examinerslineI}{mm}{%%
-& \hspace{-0.4em}\csname tc@student#1@examiner#2\endcsname & \csname tc@student#1@examiner#2pointA\endcsname & \csname tc@student#1@examiner#2pointB\endcsname & \csname tc@student#1@examiner#2pointC\endcsname & \csname tc@student#1@examiner#2pointD\endcsname & \csname tc@student#1@examiner#2gradeI\endcsname &%
-}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student extra info (process number, ID, email) for report%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@studentextrainfo}{m}{%%
-   (\csname tc@student#1Nproc\endcsname )\  \ \csname tc@student#1ID\endcsname\ / \csname tc@student#1email\endcsname%%
-}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student info (all examiners, advisor, etc.) for report and referral letters.%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@@studentrow}{m}{%
-  \setcounter{tc@studentcount}{#1}%
-  \tccoord@studentrow[tc@studentextrainfo]{\Alph{tc@studentcount}}%
-}%
-\NewDocumentCommand{\tccoord@studentrow}{O{}m}{%%
-  \@ifundefined{tc@student#2}{}{%%
-    \@ifundefined{tc@student#2FF}{%%
-      \@ifundefined{tc@student#2Dismiss}{%%
-        \multirow{4}{\tc@ReportTabA}{\csname tc@student#2\endcsname} %%
-        \tccoord@examinersline{#2}{A}\\*%%
-        \tccoord@examinersline{#2}{B}\\*%%
-        \tccoord@examinersline{#2}{C}\\*%%
-        & \multicolumn{4}{c}{\ifcsdef{tc@student#2@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#2@advisor\endcsname \ifcsdef{tc@student#2@coadvisor}{ /\csname tc@student#2@coadvisor\endcsname}}{} & \textbf{\csname tc@student#2Temp\endcsname} & %%
-          \textbf{\tccoord@@fate{#2}}%%
-          \ifblank{#1}{\\}{\\*%%
-            \multicolumn{7}{l}{\tcdef@coord@boardsworklabel: \csname tc@student#2title\endcsname}\\*%%
-            \iftcif@coord@reportxinfo%
-              \multicolumn{7}{l}{\tccoord@studentextrainfo{#2}}\\*%
-              \ifcsdef{tc@student#2remark}{\multicolumn{6}{c}{{\bf \csname tc@student#2remark\endcsname}}\\}{}%
-            \fi%
-          }%%
-          \hline%%
-      }{%%
-      }%%
-    }{%%
-    }%%
-  }%%
-}%
-%
-%
-%%
-% TCC-I
-% student info (all examiners, advisor, etc.) for report and referral letters.%
-%%
-\NewDocumentCommand{\tccoord@@studentrowI}{m}{%
-  \setcounter{tc@studentcount}{#1}%
-  \tccoord@studentrowI[tc@studentextrainfo]{\Alph{tc@studentcount}}%
-}%
-\NewDocumentCommand{\tccoord@studentrowI}{O{}m}{%%
-  \@ifundefined{tc@student#2}{}{%%
-    \@ifundefined{tc@student#2FF}{%%
-      \@ifundefined{tc@student#2Dismiss}{%%
-        \multirow{3}{\tc@ReportTabA}{\csname tc@student#2\endcsname} %%
-        \tccoord@examinerslineI{#2}{B}\\*%%
-        \tccoord@examinerslineI{#2}{C}\\*%%
-        & \multicolumn{5}{c}{\ifcsdef{tc@student#2@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#2@advisor\endcsname \ifcsdef{tc@student#2@coadvisor}{ /\csname tc@student#2@coadvisor\endcsname}}{} & \textbf{\csname tc@student#2Temp\endcsname} & %%
-          \textbf{\tccoord@@fate{#2}}%%
-          \ifblank{#1}{\\}{\\*%%
-            \multicolumn{8}{l}{\tcdef@coord@boardsworklabel: \csname tc@student#2title\endcsname}\\*%%
-            \iftcif@coord@reportxinfo%
-              \multicolumn{8}{l}{\tccoord@studentextrainfo{#2}}\\*%
-              \ifcsdef{tc@student#2remark}{\multicolumn{6}{c}{{\bf \csname tc@student#2remark\endcsname}}\\}{}%
-            \fi%
-          }%%
-          \hline%%
-      }{%%
-      }%%
-    }{%%
-    }%%
-  }%%
-}%
-%
-%
-%
-\NewDocumentCommand{\tccoord@studentxinforow}{m}{%
-    \multicolumn{7}{l}{\tccoord@studentextrainfo{#1}}\\*%
-    \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
-}%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student FF info (report)%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@@studentFFrow}{m}{%%
-  \setcounter{tc@studentcount}{#1}%
-  \tccoord@studentFFrow{\Alph{tc@studentcount}}%
-}%
-\NewDocumentCommand{\tccoord@studentFFrow}{m}{%%
-  \@ifundefined{tc@student#1}{}{%%
-    \@ifundefined{tc@student#1Dismiss}{%%
-      \@ifundefined{tc@student#1FF}{%%
-      }{\\*%%
-        \multicolumn{6}{l}{\csname tc@student#1\endcsname }  & \tc@TCCgradeFF\\*%%
-        \iftcif@coord@reportxinfo%
-          \multicolumn{6}{l}{\tccoord@studentextrainfo{#1}}\\*%
-          \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
-        \fi%
-        \multicolumn{6}{l}{\ifcsdef{tc@student#1@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#1@advisor\endcsname\ifcsdef{tc@student#1@coadvisor}{ /\csname tc@student#1@coadvisor\endcsname}{}} & \\\hline%%
-      }%%
-    }{}%%
-  }%%
-}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student info (report), dimiss case%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@@studentDismissrow}{m}{%%
-    \setcounter{tc@studentcount}{#1}%
-    \tccoord@studentDismissrow{\Alph{tc@studentcount}}%
-}%
-\NewDocumentCommand{\tccoord@studentDismissrow}{mO{}}{%%
-  \@ifundefined{tc@student#1}{}{%%
-    \@ifundefined{tc@student#1FF}{%%
-      \@ifundefined{tc@student#1Dismiss}{%%
-      }{\ifblank{#2}{}{\setcounter{tc@studentcount}{#2}}\\*%%
-        \multicolumn{6}{l}{\csname tc@student#1\endcsname} & \\*%%
-           \iftcif@coord@reportxinfo%
-             \multicolumn{6}{l}{\tccoord@studentextrainfo{#1}}\\*%
-             \ifcsdef{tc@student#1remark}{\multicolumn{6}{c}{{\bf \csname tc@student#1remark\endcsname}}\\}{}%
-           \fi%
-        \multicolumn{6}{l}{\ifcsdef{tc@student#1@coadvisor}{\tcdef@coord@advisornameplural}{\tcdef@cover@advisorname} : \csname tc@student#1@advisor\endcsname\ifcsdef{tc@student#1@coadvisor}{ /\csname tc@student#1@coadvisor\endcsname}{}} & \\\hline%%
-      }%%
-    }{}%%
-  }%%
-}%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC report (student grades, FF, dismiss)%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\def\tc@ReportTabA{32mm}%
-\def\tc@ReportTabB{42mm}%
-\def\tc@ReportTabC{15mm}%
-\def\tc@ReportTabD{15mm}%
-\def\tc@ReportTabE{15mm}%
-\def\tc@ReportTabEx{15mm}%
-\def\tc@ReportTabF{8mm}%
-\def\tc@ReportTabG{12mm}%
-%%%%
-%%
-%%%%
-\NewDocumentCommand{\tccoord@TCCreport}{}{%
-  \stepcounter{tc@studentcount}%
-  \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@tccreporttitle\ - \tcdef@coord@TCCperiod}%
-  {%%
-%    \footnotesize%
-    \tiny%
-    \forcsvlist{\tccoord@studentgrade}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,X,Y}%
-    \begin{center}%
-        \begin{longtable}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }p{\tc@ReportTabC}@{\ }p{\tc@ReportTabD}@{\ }p{\tc@ReportTabE}@{\ }p{\tc@ReportTabF}@{\ }p{\tc@ReportTabG}}%
-          \multicolumn{7}{c}{\tcdef@forms@formstitle\ \tcdef@coord@TCCperiod}\\\hline%
-          & \tcdef@coord@boardlabel & \tc@TCCpointAlabel & \tc@TCCpointBlabel & \tc@TCCpointClabel &%
-            \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
-          \endhead%
-          \forcsvlist{\tccoord@@studentrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
-          \@ifundefined{tc@TCCff@flag}{}{%
-            & & & & & & \\%
-            & & & & & & \\%
-            \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportabsents}}\\\hline%
-            \forcsvlist{\tccoord@@studentFFrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}%
-          }%
-          \@ifundefined{tc@TCCdismiss@flag}{}{%
-            & & & & & & \\%
-            & & & & & & \\%
-            \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportdismiss}}\\\hline%
-            \forcsvlist{\tccoord@@studentDismissrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
-          }%%
-        \end{longtable}%%
-    \end{center}%%
-  } %end of footnotesize%
-
-  \vfill%
-  \pagebreak%
-}%
-%
-%%%%
-\NewDocumentCommand{\tccoord@TCCIreport}{}{%
-  \stepcounter{tc@studentcount}%
-  \tc@formtopbox{\tcdef@forms@formstitleTR}{\tcdef@coord@tccreporttitle\ - \tcdef@coord@TCCperiod}%
-  {%%
-%    \footnotesize%
-    \tiny%
-    \forcsvlist{\tccoord@studentgradeI}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,X,Y}%
-    \begin{center}%
-        \begin{longtable}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }p{\tc@ReportTabC}@{\ }p{\tc@ReportTabD}@{\ }p{\tc@ReportTabE}@{\ }p{\tc@ReportTabEx}@{\ }p{\tc@ReportTabF}@{\ }p{\tc@ReportTabG}}%
-          \multicolumn{7}{c}{\tcdef@forms@formstitleTR\ \tcdef@coord@TCCperiod}\\\hline%
-          & \tcdef@coord@boardlabel & \tc@TCCIpointAlabel & \tc@TCCIpointBlabel & \tc@TCCIpointClabel & \tc@TCCIpointDlabel &%
-            \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
-          \endhead%
-          \forcsvlist{\tccoord@@studentrowI}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
-          \@ifundefined{tc@TCCff@flag}{}{%
-            & & & & & & \\%
-            & & & & & & \\%
-            \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportabsents}}\\\hline%
-            \forcsvlist{\tccoord@@studentFFrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}%
-          }%
-          \@ifundefined{tc@TCCdismiss@flag}{}{%
-            & & & & & & \\%
-            & & & & & & \\%
-            \multicolumn{6}{l}{{\bf \tcdef@coord@tccreportdismiss}}\\\hline%
-            \forcsvlist{\tccoord@@studentDismissrow}{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25}
-          }%%
-        \end{longtable}%%
-    \end{center}%%
-  } %end of footnotesize%
-
-  \vfill%
-  \pagebreak%
-}%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student check list row%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@@LCcheck}{mmm}{%
-    & \tccoord@check{#1}{check#2#3}%
-}%
-\NewDocumentCommand{\tccoord@@Lcheck}{mm}{%
-    \forcsvlist{\tccoord@@LCcheck{#1}{#2}}{A,B,C,D,E}\\*%
-}%
-\NewDocumentCommand{\tccoord@studentcheckrow}{m}{%%
-  \@ifundefined{tc@student#1}{}{%%
-    \@ifundefined{tc@student#1FF}{%%
-      \@ifundefined{tc@student#1Dismiss}{\\[-2ex]%%
-        \multirow{4}{\tc@ReportTabA}{\csname tc@student#1\endcsname} %
-              \forcsvlist{\tccoord@@Lcheck{#1}}{A,B,C,D}\hline%%
-      }{}%%
-    }{}%%
-  }%%
-}%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC check list%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@TCCchecklist}{}{%
-  \stepcounter{tc@studentcount}%
-  \tc@formtopbox{\tcdef@forms@formstitle}{Check List - \tcdef@coord@TCCperiod}%
-  {%%
-%    \footnotesize%
-    \scriptsize%
-    \setlength\LTleft{-10mm}%
-    \begin{center}%
-        \begin{longtable}{p{\tc@ReportTabA}lllll}%
-          \\\hline%
-          \endhead%
-          \forcsvlist{\tccoord@studentcheckrow}{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,X,Y}%
-        \end{longtable}%%
-    \end{center}%%
-  } %end of footnotesize%
-
-  \vfill%
-  \pagebreak%
-}%
-%
-%
-%
-%
-%
-%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%
-%
-%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC referral letters :: approved/failed/FF%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@TCCcocertificateletter}{}{% tc@student\Alph{tc@studentcount}@#1
-  \@ifundefined{tc@student\Alph{tc@studentcount}@coadvisor}{}{%
-    \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@cocertificatetitle}%
-
-    \noindent \tcdef@coord@cocertificateopenning%
-    \vfill%
-\begin{center}
-{\sc \csname tc@student\Alph{tc@studentcount}@coadvisor\endcsname}
-\end{center}
-
-\vfill
-
-\tcdef@coord@cocertificatetext
-
-
-
-    \vfill%
-    \begin{flushright}%
-      \tc@city, \tc@publday\ de \tc@publmonth\ de \tc@publyear .%
-      \vfill %
-
-%      \vfill%
-
-      $\overline{\text{\tcdef@core@TCCcoord}}$\\%
-      \tcdef@core@TCCcoordtitle%
-    \vfill
-        $\overline{\text{\tcdef@core@coursecoord}}$\\%
-    \tcdef@core@coursecoordtitle\\%
-    \tcdef@cover@course%
-
-    \end{flushright}%
-    \vfill%
-    \pagebreak%
-  }{}%
-}%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% referral fate :: failed or approved as per student grade%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@referralfate}{m}{\ifthenelse{1 = \fpeval{#1 <= \tc@TCCgradeCN}}{\tcdef@coord@referralfailed}{\tcdef@coord@referralapproved}}%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC referral letters :: approved/failed/FF%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@TCCreferralletter}{}{%
-  \@ifundefined{tc@student\Alph{tc@studentcount}Dismiss}{%
-    \tc@formtopbox{\tcdef@forms@formstitle}{\tcdef@coord@TCCperiod}%
-
-    \noindent\tcdef@coord@tccreferralopening%
-    \vfill%
-
-    \@ifundefined{tc@student\Alph{tc@studentcount}FF}{%
-      \@ifundefined{tc@student\Alph{tc@studentcount}Exam}{%
-        \tccoord@studentgrade{\Alph{tc@studentcount}}%
-         \tcdef@coord@referralfatetext%
-
-        \vfill%
-
-        {\footnotesize%
-          \begin{center}%
-            \resizebox{\textwidth}{!}{%
-              \begin{tabular}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}%\hline%
-                & \tcdef@coord@boardlabel & \tc@TCCpointAlabel & \tc@TCCpointBlabel & \tc@TCCpointClabel &%
-                \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
-                \tccoord@studentrow{\Alph{tc@studentcount}}%
-              \end{tabular}%
-            }%
-          \end{center}%
-        }%
-      }{%
-        \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{D}}{%
-          \tcdef@coord@referralexamfailtext%
-          \vfill%
-        }{%
-          \tcdef@coord@referralexamapprovedtext%
-          \vfill%
-        }%
-        {%%
-          \footnotesize%
-          \begin{center}%
-            \begin{tabular}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }c}%\hline%
-              & \tcdef@coord@boardlabel \\\hline%
-              \multirow{3}{\tc@ReportTabA}{\csname tc@student\Alph{tc@studentcount}\endcsname} %
-              &\csname tc@student\Alph{tc@studentcount}@examinerA\endcsname\\%
-              &\csname tc@student\Alph{tc@studentcount}@examinerB\endcsname\\%
-              &\csname tc@student\Alph{tc@studentcount}@examinerC\endcsname\\%
-              \multicolumn{2}{l}{\tcdef@forms@formsadvisorlabel : \csname tc@student\Alph{tc@studentcount}@advisor\endcsname} \\\hline%
-            \end{tabular}%
-          \end{center}%
-        }%
-      }%
-    }{%
-      \tcdef@coord@referralfailFF%
-    }%
-
-    \vfill%
-    \begin{flushright}%
-      \tc@city, \tc@publday\ de \tc@publmonth\ de \tc@publyear .%
-      \vfill %
-
-      \tcdef@core@TCCcoordtitle%
-      \vfill%
-
-      $\overline{\text{\tcdef@core@TCCcoord}}$%
-    \end{flushright}%
-    \vfill%
-    \pagebreak%
-  }{}%
-}%
-%
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% TCC-I referral letters :: approved/failed/FF%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@TCCIreferralletter}{}{%
-  \@ifundefined{tc@student\Alph{tc@studentcount}Dismiss}{%
-    \tc@formtopbox{\tcdef@forms@formstitleTR}{\tcdef@coord@TCCperiod}%
-
-    \noindent\tcdef@coord@tccreferralopening%
-    \vfill%
-
-    \@ifundefined{tc@student\Alph{tc@studentcount}FF}{%
-      \@ifundefined{tc@student\Alph{tc@studentcount}Exam}{%
-        \tccoord@studentgradeI{\Alph{tc@studentcount}}%
-         \tcdef@coord@referralfatetextTR%
-
-        \vfill%
-
-        {\footnotesize%
-          \begin{center}%
-            \resizebox{\textwidth}{!}{%
-              \begin{tabular}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}%\hline%
-                & \tcdef@coord@boardlabel & \tc@TCCIpointAlabel & \tc@TCCIpointBlabel & \tc@TCCIpointClabel & \tc@TCCIpointDlabel  &%
-                \tcdef@coord@TCCgradesNlabel & \tcdef@coord@TCCgradesClabel\\\hline%
-                \tccoord@studentrowI{\Alph{tc@studentcount}}%
-              \end{tabular}%
-            }%
-          \end{center}%
-        }%
-      }{%
-        \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{D}}{%
-          \tcdef@coord@referralexamfailtextTR%
-          \vfill%
-        }{%
-          \tcdef@coord@referralexamapprovedtextTR%
-          \vfill%
-        }%
-        {%%
-          \footnotesize%
-          \begin{center}%
-            \begin{tabular}{p{\tc@ReportTabA}@{\ }p{\tc@ReportTabB}@{\ }c}%\hline%
-              & \tcdef@coord@boardlabel \\\hline%
-              \multirow{3}{\tc@ReportTabA}{\csname tc@student\Alph{tc@studentcount}\endcsname} %
-              &\csname tc@student\Alph{tc@studentcount}@examinerB\endcsname\\%
-              &\csname tc@student\Alph{tc@studentcount}@examinerC\endcsname\\%
-              \multicolumn{2}{l}{\tcdef@forms@formsadvisorlabel : \csname tc@student\Alph{tc@studentcount}@advisor\endcsname} \\\hline%
-            \end{tabular}%
-          \end{center}%
-        }%
-      }%
-    }{%
-      \tcdef@coord@referralfailFF%
-    }%
-
-    \vfill%
-    \begin{flushright}%
-      \tc@city, \tc@publday\ de \tc@publmonth\ de \tc@publyear .%
-      \vfill %
-
-      \tcdef@core@TCCIcoordtitle%
-      \vfill%
-
-      $\overline{\text{\tcdef@core@TCCcoord}}$%
-    \end{flushright}%
-    \vfill%
-    \pagebreak%
-  }{}%
-}%
-%
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% Internship referal letter%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\NewDocumentCommand{\tccoord@internshipreferalletter}{}{%
- \@ifundefined{tc@student\Alph{tc@studentcount}Dismiss}{%
-  \tc@formtopbox{\tcdef@forms@formsinternshiptitle}{}%
-
-  \noindent\tcdef@coord@internshipreferralopening%
-  \vfill%
-  \tccoord@internshipstudentgrade{\Alph{tc@studentcount}}
-
-  \@ifundefined{tc@student\Alph{tc@studentcount}FF}{%
-    \@ifundefined{tc@student\Alph{tc@studentcount}Exam}{%
-        \tcdef@coord@internshipreferralfatetext
-
-        \vfill%
-        \tcdef@coord@internshipgrades%
-    }{
-    %%% in Exam...
-      \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{X}}{%..report past due date
-        \ifthenelse{1 = \fpeval{\tccore@@ref{student}{Temp} < \tc@TCCgradeCN}}{%
-            \tccoord@studentExam{D}%
-            \tcdef@coord@internshipreferralexamfailtext
-            \vfill%
-            \tcdef@coord@internshipgrades%
-            \vfill%
-        }{%
-            \tccoord@studentExam{C}%
-            \tcdef@coord@internshipreferralexamapprovedtext
-            \vfill%
-            \tcdef@coord@internshipgrades%
-            \vfill%
-        }
-      }{%%... in Exam due 'report form'
-            \ifthenelse{\equal{\csname tc@student\Alph{tc@studentcount}Exam\endcsname}{D}}{%
-                \tcdef@coord@internshipreferralexamhardfailtext
-                \vfill%
-                \tcdef@coord@internshipgrades%
-                \vfill%
-            }{%
-                \tcdef@coord@internshipreferralexamhardapprovedtext
-                \vfill%
-                \tcdef@coord@internshipgrades%
-                \vfill%
-            }%
-      }
-    }
-  }{
-   %%% FF... failed/report not delivered.
-   \tcdef@coord@internshipreferralfailFF
-  }
-
-    \vfill%
-
-
-    \vfill%
-\begin{flushright}%
-    \tc@city, \tc@publday\ de \tc@publmonth\ de \tc@publyear .%
-    \vfill %
-
-    \tcdef@core@internshipcoordtitle%
-    \vfill%
-
-    $\overline{\text{\tcdef@core@internshipcoord}}$%
-\end{flushright}%
-\vfill%
-
-
-\pagebreak%
-}{}
-}
-%
-%
-%
-
-
-
-
-\NewDocumentCommand{\tccoord@calendarfill}{}{%
-%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-  \@ifundefined{tc@tcccalendareventdateh}{\tcccalendareventdate{---}}{}%
-}
-
 
 \NewDocumentCommand{\setstudentlist}{mm}{%
-  %%%
-  %%% TO BE REMOVED !
-    \tcgen@cdef<coord>{list#1}{#2}
-  %%%
-  %%% USING STARRAY
-    \seq_set_from_clist:cn {l__ufrgscca_#1_seq}{#2}
+  \seq_new:c {l__ufrgscca_#1_seq}
+  \seq_new:c {l__ufrgscca_#1_ff_seq}
+  \seq_new:c {l__ufrgscca_#1_dismiss_seq}
+  \seq_new:c {l__ufrgscca_#1_graded_seq}
+  
+    \seq_gset_from_clist:cn {l__ufrgscca_#1_seq}{#2}
+    \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_grade:n}
+    \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_listclassify:nn {#1}}
 }
 
 \cs_new_protected:Npn \__ufrgscca_grade:n #1 
@@ -1363,65 +332,104 @@
       \starray_set_iter_from_hash:nn {student}{#1}
       \starray_term_syntax:n {student[#1]}
       \bool_if:nF {\starray_parsed_get_prop:n {flag-graded}}
-        { \__ufrgscca_studentgrade: }
-        
+        { \__ufrgscca_studentgrade: }        
+    }
+
+
+\cs_new_protected:Npn \__ufrgscca_listclassify:nn #1#2
+    {
+      \starray_set_iter_from_hash:nn {student}{#2}
+      \starray_term_syntax:n {student}
+      \bool_case:nF
+        {
+          {\starray_parsed_get_prop:n {flag-ff}}{\seq_gput_right:cn {l__ufrgscca_#1_ff_seq}{#2}}
+          {\starray_parsed_get_prop:n {flag-dismiss}}{\seq_gput_right:cn {l__ufrgscca_#1_dismiss_seq}{#2}}
+        }
+        {\seq_gput_right:cn {l__ufrgscca_#1_graded_seq}{#2}}
+      
     }
 
 \NewDocumentCommand{\tcgrades}{m}{%
     \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_grade:n}
 }
 
-\NewDocumentCommand{\tcreports}{O{}m}{%%
-  \setreports{#1}
-  \tccoord@calendarfill%
-  \iftcif@coord@calendarI%
-    \tccoord@TCCcalendarI%
-  \fi%
-  \iftcif@coord@calendarII%
-    \tccoord@TCCcalendarII%
-  \fi%
-  \@ifundefined{tcdef@coord@list#2}{}{%
-  \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tccoord@student@exec\expandafter\expandafter\expandafter{\csname tcdef@coord@list#2\endcsname}
+
+
+\NewDocumentCommand{\tcreports}{O{}m}{
+  {
+      \setreports{#1}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_seq {l__ufrgscca_#2_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_ff_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_dismiss_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq {l__ufrgscca_#2_graded_seq}
+    
+      \bool_if:NT \l__ufrgscca_calendarI_bool
+        { \MakeForm{calendar-I} }
+      \bool_if:NT \l__ufrgscca_calendarII_bool
+        { \MakeForm{calendar-II} }
+      \bool_if:NT \l__ufrgscca_reportI_bool
+        { \MakeForm{report-I} }
+      \bool_if:NT \l__ufrgscca_reportII_bool
+        { \MakeForm{report-II} }
+      \bool_if:NT \l__ufrgscca_boards_bool
+        { \MakeForm{boards} }      
+      \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
+        {
+          \studentSelect{##1}
+          \bool_if:NT \l__ufrgscca_cocertificate_bool
+            {
+              \studentCoadvCase
+                {\MakeForm{cocertificate}}
+                {}
+            }
+          \bool_if:NT \l__ufrgscca_referralI_bool
+            {
+              \studentDismissCase
+                {}
+                { \MakeForm{referral-I} }
+            }
+          \bool_if:NT \l__ufrgscca_revformsI_bool
+            {
+              \SetReviewer{2}
+              \MakeForm{examinersform-I}
+              \SetReviewer{3}
+              \MakeForm{examinersform-I}
+              \MakeForm{rectifyapproval-I}
+            }
+          \bool_if:NT \l__ufrgscca_referralII_bool
+            {
+              \MakeForm{referral-II}
+            }
+          \bool_if:NT \l__ufrgscca_revformsII_bool
+            {
+              \SetReviewer{1}
+              \MakeForm{examinersform-II}
+              \MakeForm{correctionsform-II}
+              \SetReviewer{2}
+              \MakeForm{examinersform-II}
+              \MakeForm{correctionsform-II}
+              \SetReviewer{3}
+              \MakeForm{examinersform-II}
+              \MakeForm{correctionsform-II}
+              \MakeForm{rectifyapproval-II}
+            }
+        }
   }
-  \iftcif@coord@checklist%
-    \tccoord@TCCchecklist%
-  \fi%
-  \iftcif@coord@reportI%
-    \tccoord@TCCIreport%
-  \fi%
-  \iftcif@coord@report%
-    \tccoord@TCCreport%
-  \fi%
-  \iftcif@coord@boards%
-    \tccoord@TCCboards%
-  \fi%
-  \iftcif@coord@studentlist%
-    \tccoord@studentlistform%
-  \fi%
 }%%
 
 
-\NewDocumentCommand{\internshipreports}{O{}m}{%%
-    \setreports{#1}
-    \@ifundefined{tcdef@coord@list#2}{}{%
-        \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tccoord@student@exec\expandafter\expandafter\expandafter{\csname tcdef@coord@list#2\endcsname}
-    }
-    \iftcif@coord@checklist%
-    \tccoord@TCCchecklist%
-    \fi%
-    \iftcif@coord@report%
-    \tccoord@TCCreport%
-    \fi%
-}%%
+%%% TO BE ADAPTED TO starray
 
+%\NewDocumentCommand{\internshipreports}{O{}m}{%%
+%    \setreports{#1}
+%    \@ifundefined{tcdef@coord@list#2}{}{%
+%        \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tccoord@student@exec\expandafter\expandafter\expandafter{\csname tcdef@coord@list#2\endcsname}
+%    }
+%    \iftcif@coord@checklist%
+%    \tccoord@TCCchecklist%
+%    \fi%
+%    \iftcif@coord@report%
+%    \tccoord@TCCreport%
+%    \fi%
+%}%%
 
-%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%
-\iftcif@english%
-\input{ufrgscca-en-coord.def}%
-\else%
-\input{ufrgscca-ptBR-coord.def}%
-\fi%
-
-\ExplSyntaxOff

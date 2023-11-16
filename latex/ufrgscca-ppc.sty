@@ -23,34 +23,34 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\def\tc@tmp@packname{ufrgscca-ppc}
-\def\tc@tmp@altpackname{ufrgsccappc}
-\def\tc@tmp@packdesc{UFRGS/CCA PPC commands}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
+\RequirePackage{expl3}
 
 
-\DeclareKeys[ufrgscca-ppc]{
-    showind.usage = load,
-    showind.if = @showindicators,
+\ProvidesExplPackage
+    {ufrgscca-ppc}
+    {2023/11/10}
+    {1.99}
+    {UFRGS/CCA PPC commands}
 
-    indlong.usage = load,
-    indlong.if = @indlongtext,
-    nocomments.usage = load,
-    nocomments.if = @indnocomments,
-}
-\ProcessKeyOptions[ufrgscca-ppc]\relax
+\keys_define:nn { ufrgscca / ppc}
+  {
+  	showind        .usage:n     = load,
+    showind        .bool_set:N  = \l__ufrgscca_showind_bool,
+  	indlong        .usage:n     = load,
+    indlong        .bool_set:N  = \l__ufrgscca_indlong_bool,
+  	nocomments     .usage:n     = load,
+    nocomments     .bool_set:N  = \l__ufrgscca_nocomments_bool,
+  }
+\ProcessKeyOptions[ufrgscca / ppc]\relax
+
 
 \RequirePackage{longtable}
 \RequirePackage{pdfcomment}
-\WarningFilter{latex}{name}%
-\RequirePackage[tikz]{mdframed}%
+\WarningFilter{latex}{name}
+\RequirePackage[tikz]{mdframed}
 \RequirePackage{ufrgscca-abnt}
-%\RequirePackage{ufrgscca-curr}
-\RequirePackage{ufrgscca-curr-tab}
+\RequirePackage{ufrgscca-curr}
+\RequirePackage{codedescribe}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%
@@ -69,363 +69,579 @@
 %      * (undefined, copy text)
 %%
 %%%%%%%%%%%%%%%%%%%
-%\iftc@ppc
-  \RenewDocumentCommand{\maketitle}{}{\tcppc@PPCcoverpages}%
-%\fi
 
-%
-\NewDocumentCommand{\tcppc@PPCcoverpages}{}{
-  \begin{titlepage}%
-    \noindent\tc@covertopbox%
-    \vfill%
-    \centerline{\tc@city}%
-	  \centerline{\tc@publyear}%
-  \end{titlepage}%%
-	\if@openright\cleardoublepage\else\clearpage\fi%%
-}%
- \RenewDocumentCommand\tc@winbox{}{%%
-    \parbox[b]{\tc@coverwinwidth}{%%
-        \centering\vbox to \tc@coverwinheight{%%
-            \vspace*{\fill}%
-            {\large\MakeUppercase{\textbf{\@title}}\par}%
-            \vfill%
-        }%%
-    }%%
-}%
 
-%
-%
-\NewDocumentCommand{\set@statuscolor}{m}{%%
-  \@ifundefined{#1@txtcolor}{%
-    \gdef\ind@txtcolor{\csname default@txtcolor\endcsname}%%
-    \gdef\ind@bgcolor{\csname default@bgcolor\endcsname}%%
-	}{%
-    \gdef\ind@txtcolor{\csname #1@txtcolor\endcsname}%%
-    \gdef\ind@bgcolor{\csname #1@bgcolor\endcsname}%%
-  }%
-}%
-%
-%
-\newcounter{@indcounter}%
-%
-\NewDocumentCommand{\declareindicator}{st+O{noref}mmm}{%
-%#3: status #4:org #5:mark #6:short text #7:long text #8:extra text #9:'clarification text'(for inep/mec)
-  \stepcounter{@indcounter}%
-	\IfBooleanTF{#1}{\expandafter\gdef\csname @indicator#4#5star\endcsname{#1}\ifcsundef{@indicator#4lst}{\csgdef{@indicator#4lst}{#5}}{\csgappto{@indicator#4lst}{,#5}}}{}
-	\IfBooleanTF{#2}{\ifcsundef{@indicator#4lst}{\csgdef{@indicator#4lst}{#5}}{\csgappto{@indicator#4lst}{,#5}}}{}
-  \expandafter\gdef\csname @indicator#4#5status\endcsname{#3}%
-  \expandafter\gdef\csname @indicator#4#5short\endcsname{#6}%
-  \expandafter\gdef\csname @indicator#4#5long\endcsname{}%
-  \expandafter\gdef\csname @indicator#4#5extra\endcsname{}%
-  \expandafter\gdef\csname @indicator#4#5text\endcsname{}%
-  \expandafter\gdef\csname @indrefA\arabic{@indcounter}\endcsname{#4}%
-  \expandafter\gdef\csname @indrefB\arabic{@indcounter}\endcsname{#5}%
-	\newcounter{@indcount#4#5}%
-	\@ifundefined{iftcppc@indset#4view}{\expandafter\newif\csname iftcppc@indset#4view\endcsname\csname tcppc@indset#4viewtrue\endcsname}{}
-	\gdef\tcppc@indindex{#4#5}
-}%
-\NewDocumentCommand{\indicatorDesc}{+m+m}{%
-  \expandafter\gdef\csname @indicator\tcppc@indindex long\endcsname{#1}
-  \expandafter\gdef\csname @indicator\tcppc@indindex extra\endcsname{#2}
+
+\starray_new:n {indicator}
+\starray_def_from_keyval:nn {indicator}
+ {
+    self        = ,
+    view        = \c_true_bool ,
+    has_lst     = \c_false_bool , 
+    seqlst      = , %this is going to be a sequence of 'ind'
+    ind.struct  = 
+      {
+        self            = ,
+        short           = ,
+        long            = ,
+        extra           = , %some extra long text, monstly unused
+        desc            = , %expanded text for 'MEC' (inep questionaire)
+        status          = ,
+        is_section      = \c_false_bool ,
+        is_subsection   = \c_false_bool ,
+        cnt             = 0 , %auxiliar 'counter' (num of references)
+        seqlst          = , %auxiliar list (references' list)
+        labelref        = , %this will contain the 'hyperref label' (at doc's end) to be used.        
+        ref.struct      =
+          {
+            reflabel    = , %this will contain the 'hyperref label' (in doc) to be used.
+          } ,
+      } ,
+ }
+
+\starray_new:n {status}
+\starray_def_from_keyval:nn {status}
+ {
+    bgcolor     = ,
+    txtcolor    = ,
+    self        = ,
+    text        = ,
+    view        = \c_false_bool ,
+    refcnt      = 0 , % 'counter'
+ }
+
+\starray_new:n {acrolist}
+\starray_def_from_keyval:nn {acrolist}
+ {
+    acronym     = ,
+    long        = ,
+ }
+
+
+\NewDocumentCommand{\declareindicator}{st+O{noref}mmm}
+  {
+    %#3: status #4:org #5:mark #6:short text 
+      \starray_set_iter_from_hash:nnF {indicator}{#4}
+        {
+          \starray_new_term:nn {indicator}{#4}
+          \seq_clear:N \l_tmpa_seq
+          \starray_set_prop:nnV {indicator}{seqlst}{\l_tmpa_seq}
+          %\seq_new:c {l__ufrgscca_ind_ #4 _seq}
+          \starray_set_prop:nnn {indicator}{self}{#4}
+        }
+      \starray_new_term:nn {indicator.ind}{@#5}
+      \starray_set_from_keyval:nn {indicator.ind}
+        {
+          short  = {#6} ,
+          status = {#3} ,
+          self   = {#5} ,
+          labelref = {@ufrgscca@ #4 @ #5} , %% to be issued when "printing the indicators' list"
+          %seqlst   = {l__ufrgscca_ind_ #4 _ #5 _seq} ,
+          %cnt      = {l__ufrgscca_ind_ #4 _ #5 _cnt_int} ,
+        }
+      \seq_clear:N \l_tmpa_seq
+      \starray_set_prop:nnV {indicator.ind}{seqlst}{\l_tmpa_seq}
+      %\seq_new:c {l__ufrgscca_ind_ #4 _ #5 _seq}
+      %\int_new:c {l__ufrgscca_ind_ #4 _ #5 _cnt_int}
+      \IfBooleanTF{#1}
+        {
+          \starray_get_prop:nnN {indicator}{seqlst}\l_tmpa_seq
+          \seq_put_right:Nn \l_tmpa_seq {@#5}
+          \starray_set_prop:nnV {indicator}{seqlst}\l_tmpa_seq
+          %\seq_put_right:cn {l__ufrgscca_ind_ #4 _seq}{@#5}
+          \starray_set_prop:nnn {indicator.ind}{is_section}{\c_true_bool}
+          \starray_set_prop:nnn {indicator}{has_lst}{\c_true_bool}
+        }
+        {}
+      \IfBooleanTF{#2}
+        {
+          \starray_get_prop:nnN {indicator}{seqlst}\l_tmpa_seq
+          \seq_put_right:Nn \l_tmpa_seq {@#5}
+          \starray_set_prop:nnV {indicator}{seqlst}\l_tmpa_seq
+          %\seq_put_right:cn {l__ufrgscca_ind_ #4 _seq}{@#5}
+          \starray_set_prop:nnn {indicator.ind}{is_subsection}{\c_true_bool}
+          \starray_set_prop:nnn {indicator}{has_lst}{\c_true_bool}
+        }
+        {}
+
+
+  }
+  
+  
+\NewDocumentCommand{\indicatorDesc}{+m+m}
+  {
+    \starray_set_from_keyval:nn {indicator.ind}
+    {
+      long  = {#1} ,
+      extra = {#2} ,
+    }
+  }
+
+\NewDocumentCommand{\indicatorText}{+m}
+  {
+    \starray_set_prop:nnn {indicator.ind}{text}{#1}
+  }
+
+
+\NewDocumentCommand{\lstind}{O{\section}O{\subsection}m}
+  {
+    \starray_set_iter_from_hash:nnT {indicator}{#3}
+      {
+        \starray_get_prop:nnN {indicator}{seqlst}\l_tmpa_seq
+        \seq_map_inline:Nn \l_tmpa_seq
+          {
+            \starray_set_iter_from_hash:nn {indicator.ind}{##1}
+            \starray_term_syntax:n {indicator.ind}
+            \bool_if:nTF {\starray_parsed_get_prop:n{is_section}}
+              { #1 {\starray_parsed_get_prop:n{short}} }
+              { #2 {\starray_parsed_get_prop:n{short}} }
+            \starray_parsed_get_prop:n{text}  
+          }
+      }
+  }
+
+
+\NewDocumentCommand{\indsetstatus}{O{attention}mm}
+  {
+    \starray_set_iter_from_hash:nn {indicator}{#2}
+    \seq_set_from_clist:Nn \l_tmpa_seq {#3}
+    \seq_map_inline:Nn \l_tmpa_seq
+      {
+        \starray_set_iter_from_hash:nn {indicator.ind}{@##1}
+        \starray_gset_prop:nnn {indicator.ind}{status}{#1}
+      }
+  }
+
+\NewDocumentCommand{\indsetview}{m} 
+  {
+    \starray_set_iter_from_hash:nn {indicator}{#1}
+    \starray_gset_prop:nnn {indicator}{view}{\c_true_bool}
+    
+  }
+
+\NewDocumentCommand{\indsethide}{m}
+  {
+    \starray_set_iter_from_hash:nn {indicator}{#1}
+    \starray_gset_prop:nnn {indicator}{view}{\c_false_bool}
+  }
+
+
+
+\NewDocumentEnvironment{listofindicators}{m}
+  {
+    \begin{list}{\textbf{??}}
+      {
+        \settowidth{\labelwidth}{#1}
+        \setlength{\labelsep}{1em}
+        \setlength{\itemindent}{0mm}
+        \setlength{\leftmargin}{\labelwidth}
+        \addtolength{\leftmargin}{\labelsep}
+        \setlength{\rightmargin}{0mm}
+        \setlength{\itemsep}{.1\baselineskip}
+        \renewcommand{\makelabel}[1]{\makebox[\labelwidth][l]{##1}}
+      }
+  }
+  {
+    \end{list}
+  }
+
+
+\NewDocumentCommand{\helpindicators}{}
+  {
+    \bool_if:NT \l__ufrgscca_showind_bool 
+      {
+    	\begin{itemize}[nosep,label=,leftmargin=0mm]
+    	  \item \tsmacro{\indsethide}{set} ~-~ Hide~ an~ indicator's~ set
+    		\item \tsmacro{\comment}[status]{title,comment}  ~-~ Just~ a~ comment
+    		\item \tsmacro{\indref}[status]{set,ref,comment}  ~-~ Single~ indicator's~ reference
+    		\item \tsmacro{\indref*}[status]{set,ref,comment}  ~-~  (Short~ text~ only)
+    		\item \tsmacro{\indsetstatus}[status]{set,ref's-clist} ~-~ Set~ the~ status~ of~ a~(comma~separated)~ list~ of~ indicators.
+    	\end{itemize}
+    	where~ status:\newline
+        \starray_iterate_over:nn {status}
+        {
+          \starray_term_syntax:n {status}
+          \makebox[5mm]{} \makebox[17mm][r]{\textbf{\starray_parsed_get_prop:n{self}}}\ \ \starray_parsed_get_prop:n{text}\newline
+        }   
+     }
+  }
+
+
+\NewDocumentCommand{\ifshowind}{+m+m}
+  {
+    \bool_if:NTF \l__ufrgscca_showind_bool 
+      {#1}
+      {#2}
+  }
+
+
+
+\cs_new:Npn \__ufrgscca_status_refincr:n #1 
+    {
+     \int_incr:c {#1}
+    }
+\cs_generate_variant:Nn \__ufrgscca_status_refincr:n {e}
+
+\cs_generate_variant:Nn \starray_get_prop:nnN {enN}
+\bool_new:N \l__ufrgscca_statuslst_bool
+\seq_new:N \l__ufrgscca_statuslst_seq
+
+\cs_new_protected:Npn \__ufrgscca_hypertarget:nn #1#2
+  {
+    \hypertarget{#1}{#2}
+  }
+\cs_generate_variant:Nn \__ufrgscca_hypertarget:nn {ee , en}
+
+\cs_new_protected:Npn \__ufrgscca_hyperlink:nn #1#2
+  {
+    \hyperlink{#1}{#2}
+  }
+\cs_generate_variant:Nn \__ufrgscca_hyperlink:nn {ee , en}
+
+\NewDocumentCommand{\PrintIndicators}{O{}}
+{
+  \bool_if:NT \l__ufrgscca_showind_bool 
+  {
+    {
+      \footnotesize
+      \if@openright\cleardoublepage\else\clearpage\fi%%% TO BE CONVERTED Expl3
+      
+      \phantomsection
+      \chapter*{Indicadores #1}
+      \begin{listofindicators}{EMPTY LIST . . .}
+          \tl_if_empty:nTF {#1}
+            {
+              \bool_set_false:N \l__ufrgscca_statuslst_bool
+              \__ufrgscca_set_statuscolor:n{attention}
+            }
+            {
+              \bool_set_true:N \l__ufrgscca_statuslst_bool
+              \seq_set_from_clist:Nn \l__ufrgscca_statuslst_seq {#1}
+              \seq_map_inline:Nn \l__ufrgscca_statuslst_seq 
+                {
+                  \starray_set_prop:nnn {status[##1]}{view}{\c_true_bool}
+                }
+            }
+        \starray_iterate_over:nn {indicator}
+          {
+            \starray_term_syntax:n {indicator}
+            \bool_if:nT {\starray_parsed_get_prop:n {view}}
+              {
+                \starray_iterate_over:nn {indicator.ind}
+                  {
+                    \starray_term_syntax:n{indicator.ind}
+                    \starray_get_prop:enN {status[\starray_parsed_get_prop:n{status}]}{view} \l_tmpb_tl
+                    \bool_if:nT {!\l__ufrgscca_statuslst_bool || \l_tmpb_tl}
+                      {
+                        \starray_term_syntax:n{indicator.ind}
+                        \__ufrgscca_set_statuscolor:e{\starray_parsed_get_prop:n{status}}
+                       
+                        \starray_get_prop:nnN {status}{refcnt}\l_tmpa_int
+                        \int_set:Nn \l_tmpb_int {\l_tmpa_int + 1}
+                        \starray_set_prop:nnV {status}{refcnt}\l_tmpb_int
+                        
+                        \starray_term_syntax:n {indicator.ind}
+                        \item[
+                            \textbf{
+                              \color{\l__ufrgscca_txtcolor_tl}
+                              \__ufrgscca_hypertarget:en
+                                {\starray_parsed_get_prop:n{labelref}}
+                                {\starray_get_prop:nn {indicator}{self}:~\starray_get_prop:nn {indicator.ind}{self}}
+                            }] 
+                            {\color{\l__ufrgscca_txtcolor_tl}\starray_get_prop:nn {indicator.ind}{short} \dotfill \normalsize\starray_get_prop:nn {indicator.ind}{status}}
+                            
+                        \newline \starray_get_prop:nn {indicator.ind}{long} \starray_get_prop:nn {indicator.ind}{extra}
+                        \starray_get_prop:nnN {indicator.ind}{seqlst} \l_tmpa_seq
+                        \seq_if_empty:NF \l_tmpa_seq
+                          {
+                            \newline
+                            \tl_set:Nn \l_tmpa_tl {} .\dotfill
+                            \seq_map_inline:Nn \l_tmpa_seq
+                              {
+                                \l_tmpa_tl \ref{##1} ~(\pageref{##1})
+                                \tl_set:Nn \l_tmpa_tl {,~}
+                              }
+                          }
+                      }
+                  }
+                  
+              }
+          }
+          \starray_iterate_over:nn {status}
+            {
+              \starray_term_syntax:n {status}
+              \item[\textbf{\starray_parsed_get_prop:n{self}}]  \starray_parsed_get_prop:n {refcnt}
+            }
+      \end{listofindicators}
+    }
+  }
 }
-\NewDocumentCommand{\indicatorText}{+m}{%
-  \expandafter\gdef\csname @indicator\tcppc@indindex text\endcsname{#1}
-}
-
-\NewDocumentCommand{\lstind}{O{\section}O{\subsection}m}{%
- \def\doit##1{\ifcsundef{@indicator#3##1star}{#2{\csname @indicator#3##1short\endcsname}}{#1{\csname @indicator#3##1short\endcsname}} \csname @indicator#3##1text\endcsname\par}%
-\expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\doit\expandafter\expandafter\expandafter{\csname @indicator#3lst\endcsname}
-}
-
-%
-%\newcommand{\indsetstatus}[3][attention]{\expandafter\gdef\csname @indicator#2#3status\endcsname{#1}}
-\NewDocumentCommand{\indsetstatus}{O{attention}mm}{%
-  \gdef\tcppc@indsetstatus##1{\expandafter\gdef\csname @indicator#2##1status\endcsname{#1}}%
-  \expandafter\forcsvlist\expandafter\tcppc@indsetstatus\expandafter{#3}%
-}
-%
-\NewDocumentCommand{\indsetview}{m}{\csname tcppc@indset#1viewtrue\endcsname}%
-%
-\NewDocumentCommand{\indsethide}{m}{\csname tcppc@indset#1viewfalse\endcsname}%
-%
-\NewDocumentEnvironment{listofindicators}{m}{%
-        \begin{list}{\textbf{??}}{%
-                \settowidth{\labelwidth}{#1}%
-                \setlength{\labelsep}{1em}%
-                \setlength{\itemindent}{0mm}%
-                \setlength{\leftmargin}{\labelwidth}%
-                \addtolength{\leftmargin}{\labelsep}%
-                \setlength{\rightmargin}{0mm}%
-                \setlength{\itemsep}{.1\baselineskip}%
-                \renewcommand{\makelabel}[1]{\makebox[\labelwidth][l]{##1}}%
-        }%
-}{%
-        \end{list}%
-}%
-%
-\NewDocumentCommand{\tcppc@indrefitem}{O{, }m}{%
-  \@ifundefined{r@@indlabel\tcppc@indA\tcppc@indB:#2}{}{#1 \ref{@indlabel\tcppc@indA\tcppc@indB:#2} (\pageref{@indlabel\tcppc@indA\tcppc@indB:#2})}%
-}%
-%
-\newif\iftcppc@itemdisp%
-\NewDocumentCommand{\tcppc@indicatorsitem}{m}{%%
-  \@ifundefined{@indrefA#1}{}{%%
-	  \gdef\tcppc@indA{\csname @indrefA#1\endcsname}%%
-		\gdef\tcppc@indB{\csname @indrefB#1\endcsname}%%
-		 \csname iftcppc@indset\tcppc@indA view\endcsname%
-		  \gdef\tcppc@status{\csname @indicator\tcppc@indA\tcppc@indB status\endcsname}%%
-			\iftcppc@ind@filter\expandafter\tcppc@ind@filtercase\expandafter{\tcppc@status}\else\tcppc@itemdisptrue\fi%
-			\iftcppc@itemdisp%
-  		  \set@statuscolor{\tcppc@status}%%
-	  	  \@ifundefined{theind@\tcppc@status @count}{\stepcounter{ind@default@count}}{\stepcounter{ind@\tcppc@status @count}}%%
-	      \item[\textbf{\color{\ind@txtcolor}\hypertarget{@indlabel\tcppc@indA\tcppc@indB\tcppc@ind@filterstatus}{\tcppc@indA: \tcppc@indB}}]%
-				  {\color{\ind@txtcolor}\emph{\csname @indicator\tcppc@indA\tcppc@indB short\endcsname}} \dotfill %
-					{\normalsize\color{\ind@txtcolor}\textbf{\csname @indicator\tcppc@indA\tcppc@indB status\endcsname}} %
-					\ifthenelse{\equal{\csname @indicator\tcppc@indA\tcppc@indB long\endcsname}{}}{\break}{\newline\csname @indicator\tcppc@indA\tcppc@indB long\endcsname \csname @indicator\tcppc@indA\tcppc@indB extra\endcsname\hfill\break}%%
-  		  \tcppc@indrefitem[.\dotfill]{1}%%
-	  	  \forcsvlist\tcppc@indrefitem{2,3,4,5,6,7,8,9,10,11,12,13}%
-			\fi%
-		 \fi%
-	}%%
-}%
-%
-\NewDocumentCommand{\tcppc@indicatorsbatch}{m}{\forcsvlist\tcppc@indicatorsitem{#10,#11,#12,#13,#14,#15,#16,#17,#18,#19}}%
-%
-\NewDocumentCommand{\tcppc@indicatorsBatch}{m}{\forcsvlist\tcppc@indicatorsbatch{#10,#11,#12,#13,#14,#15,#16,#17,#18,#19}}%
-%
-%
-\NewDocumentCommand{\tcppc@helpstatus}{+m}{\makebox[5mm]{}\makebox[17mm][r]{\textbf{#1}}\ \ \csname #1@text\endcsname\newline}%
-%
-\NewDocumentCommand{\tcppc@helpbf}{+m}{\textbf{\color{black}\textbackslash #1}$\,\,$}%
-\NewDocumentCommand{\tcppc@helpO}{+m}{{\color{darkteal}\textbf{[}<status>#1\textbf{]}}$\,\,$}%
-\NewDocumentCommand{\tcppc@helpM}{+m}{{\color{darkblue}\textbf{\{}#1\textbf{\}}}$\,\,$}%
-%
-\NewDocumentCommand{\helpindicators}{}{{\footnotesize%
-  \if@showindicators%
-	\begin{itemize}[nosep,label=,leftmargin=0mm]%
-	  \item \tcppc@helpbf{indsethide}\tcppc@helpM{<set>} - Hide an indicator's set%
-		\item \tcppc@helpbf{comment}\tcppc@helpO{}\tcppc@helpM{<title>}\tcppc@helpM{<comment>} - Just a comment%
-		\item \tcppc@helpbf{indref}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{<ref>}\tcppc@helpM{<comment>} - Single indicator's reference%
-		\item \tcppc@helpbf{indref*}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{<ref>}\tcppc@helpM{<comment>} -  (Short text only)%
-		\item \tcppc@helpbf{indreflst}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{\tcppc@helpO{:}<ref> , \tcppc@helpO{:}<ref> , ...}\tcppc@helpM{<comment>} - Referece list %
-		\item \tcppc@helpbf{indreflst*}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{\tcppc@helpO{:}<ref> , \tcppc@helpO{:}<ref> , ...}\tcppc@helpM{<comment>} - (Single box)%
-		\item \tcppc@helpbf{indsetstatus}\tcppc@helpO{}\tcppc@helpM{<set>}\tcppc@helpM{<ref> , <ref> , ...} - Set the status of a list of indicators.%
-	\end{itemize}%
-	where status:\newline%
-		\expandafter\forcsvlist\expandafter\tcppc@helpstatus\expandafter{\ind@statuslst}%
-	\fi%
-}}%
-%
-\NewDocumentCommand{\tcppc@printcount}{+m}{\item[ ] {\color{\attention@txtcolor}\large\textbf{\makebox[15mm][r]{#1 :} \csname theind@#1@count\endcsname}}%
-}%
-%
-%
-%
-%\NewDocumentCommand{\ifshowindicators}{m}{\if@showindicators#1\fi}
-%\NewDocumentCommand{\ifthenelseshowindicators}{+m+m}{\if@showindicators#1\else#2\fi}
-\NewDocumentCommand{\ifshowind}{+m+m}{\if@showindicators#1\else#2\fi}
-%
-%
-\newif\iftcppc@ind@filter%
-\mkswitch[\tcppc@itemdispfalse]\tcppc@ind@filtercase%
-\NewDocumentCommand{\tcppc@ind@filteraux}{+m}{\addcase\tcppc@ind@filtercase{#1}{\tcppc@itemdisptrue}}%
-\NewDocumentCommand{\PrintIndicators}{O{}}{\footnotesize%
-  \if@showindicators%%
-		\def\tcppc@ind@filterstatus{#1}%
-		\ifthenelse{\equal{#1}{}}{\tcppc@ind@filterfalse}{\tcppc@ind@filtertrue\expandafter\forcsvlist\expandafter\tcppc@ind@filteraux\expandafter{#1}}%
-    \if@openright\cleardoublepage\else\clearpage\fi%%%
-  	\phantomsection%%
-		\chapter*{Indicadores #1}%\newpage%%
-    \begin{listofindicators}{EMPTY LIST . . .}%%
-		  \iftcppc@ind@filter\else\item[ ] {\color{\attention@txtcolor}\large\textbf{\the@indcounter}\ Indicadores.}\fi%%
-		  \tcppc@indicatorsbatch{}%
-		  \tcppc@indicatorsBatch{}%
-			\forcsvlist\tcppc@indicatorsBatch{1,2,3,4,5,6,7,8,9}%
-			\iftcppc@ind@filter\else\expandafter\forcsvlist\expandafter\tcppc@printcount\expandafter{\ind@statuslst}\fi%
-    \end{listofindicators}%
-  \fi%
-}%
-%
-%
-\NewDocumentCommand{\textmark}{O{attention}m}{\set@statuscolor{#1}{\color\ind@txtcolor {\textbf{!! #2 !!}}}}
 
 
-\NewDocumentCommand{\comment}{O{attention}m+m}{%
-  \if@showindicators%
-		\if@indnocomments\else%
-	    \set@statuscolor{#1}%
-      \ \hfill\parbox{0.9\textwidth}{\small%
-        \begin{mdframed}[style=indicatorsTikZ,frametitle=\tikztitle{#2}]%
-          {\footnotesize #3\par}%
-          \hfill\emph{status: }\textbf{\color{\ind@txtcolor}#1}%
- 	      \end{mdframed}%
-        }\\[-2.7mm]%
-		\fi%
-  \fi%
-}%
+\NewDocumentCommand{\textmark}{O{attention}m}
+  {
+    \bool_if:NT \l__ufrgscca_showind_bool 
+      {
+        {
+          \__ufrgscca_set_statuscolor:n {#1}
+          \color{\l__ufrgscca_txtcolor_tl}
+          \textbf{!!~ #2~ !!}
+        }
+      }
+  }
+
+
+\NewDocumentCommand{\comment}{O{attention}m+m}
+  {
+      \bool_if:NT \l__ufrgscca_showind_bool 
+        {
+          \bool_if:NF \l__ufrgscca_nocomments_bool
+          {
+    	    \__ufrgscca_set_statuscolor:n {#1}
+            \ \hfill\parbox{0.9\textwidth}{\small
+            \begin{mdframed}[style=NEWindicatorsTikZ,frametitle=\__ufrgscca_tikz_title:n{#2}]
+              {\footnotesize #3\par}
+              \hfill\emph{status:~}\textbf{\color{\l__ufrgscca_txtcolor_tl}#1}
+     	      \end{mdframed}
+            }\\[-2.7mm]  
+    	  }
+        }
+  }
+
+
+
 \let\remark\comment
-%
-\NewDocumentCommand{\indtext}{mm}{\csname @indicator#1#2short\endcsname}
-%
-\NewDocumentCommand{\tcppc@indhack}{smm+m}{%
-	  \csname iftcppc@indset#2view\endcsname%
-	    \set@statuscolor{\tcppc@status}%
-      \ \hfill\parbox{0.9\textwidth}{\small%%
-          \begin{mdframed}[style=indicatorsTikZ,frametitle=\tikztitle{\hyperlink{@indlabel#2#3}{#2 : #3}}]%%
-            \pdftooltip{\emph{\csname @indicator#2#3short\endcsname}}{\csname @indicator#2#3long\endcsname}\par%%
-              \if@indlongtext%%
-					      \IfBooleanF{#1}{%%
-						      \ifthenelse{\equal{\csname @indicator#2#3long\endcsname}{}}{}{\enquote{\footnotesize\csname @indicator#2#3long\endcsname}\par}%%
-						    }%
- 				      \fi%%
-					    \if@indnocomments\else\ifthenelse{\equal{#4}{}}{}{{\emph{\color{\comments@txtcolor}{#4}}}\par}\fi%%
-            \hfill\emph{status: }\textbf{\color{\ind@txtcolor}\tcppc@status}%%
- 	        \end{mdframed}%%
-      }\\[-2.7mm]%%
-		\fi%
+
+\NewDocumentCommand{\indtext}{mm}
+  {
+    \bool_if:NT \l__ufrgscca_showind_bool 
+      {
+        \starray_get_prop:nn {#1}{#2}{short}
+      }
+  }
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%%
+%%%
+%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+
+\tl_new:N \l__ufrgscca_tmpc_tl
+\NewDocumentCommand{\indref}{sO{}mm+m}
+  {
+    \bool_if:NT \l__ufrgscca_showind_bool
+    {
+    \starray_set_iter_from_hash:nn {indicator}{#3}
+    \starray_set_iter_from_hash:nn {indicator.ind}{@#4}
+    \tl_if_empty:nF {#2}
+    {
+      \starray_gset_prop:nnn {indicator.ind}{status}{#2}
+    }
+    \starray_get_prop:nnN {indicator.ind}{seqlst} \l_tmpa_seq
+    \starray_get_prop:nnN {indicator.ind}{cnt} \l_tmpb_tl
+    \int_set:Nn \l_tmpa_int {\l_tmpb_tl + 1}
+    \starray_set_prop:nnV {indicator.ind}{cnt} \l_tmpa_int
+    \tl_set:Ne \l__ufrgscca_tmpc_tl {@indlabel@ #3 @ #4 - \int_use:N \l_tmpa_int }
+    \seq_put_right:Ne \l_tmpa_seq{\l__ufrgscca_tmpc_tl}
+    \starray_set_prop:nnV {indicator.ind}{seqlst} \l_tmpa_seq
+    \label{\l__ufrgscca_tmpc_tl}
+    \starray_term_syntax:n {indicator}
+    \bool_if:nT {\starray_parsed_get_prop:n {view}}
+    {
+      \starray_term_syntax:n {indicator.ind}
+      \__ufrgscca_set_statuscolor:e {\starray_parsed_get_prop:n {status}}
+      \starray_term_syntax:n {indicator.ind}
+      \ \hfill
+      \parbox{0.9\textwidth}
+        {
+          \small
+          \begin{mdframed}[style=NEWindicatorsTikZ,frametitle=\__ufrgscca_tikz_title:n{\__ufrgscca_hyperlink:en{\starray_parsed_get_prop:n {labelref}}{#3 ~:~ #4}}]
+            \pdftooltip{\emph{\starray_parsed_get_prop:n {short}}}{\starray_parsed_get_prop:n {long}}\par
+            \bool_if:NT \l__ufrgscca_indlong_bool 
+              {
+    		      \IfBooleanF{#1}{
+    	            \ifthenelse{\equal{\starray_parsed_get_prop:n {long}}{}}{}{\enquote{\footnotesize\starray_parsed_get_prop:n {long}}\par}
+    			   }
+              }
+            \bool_if:NF \l__ufrgscca_nocomments_bool
+              {
+                \ifthenelse{\equal{#5}{}}{}{{\emph{\color{\l__ufrgscca_comment_color_tl}{#5}}}\par}
+              }
+            \hfill\emph{status: }\textbf{\color{\l__ufrgscca_txtcolor_tl}\starray_parsed_get_prop:n {status}}
+     	  \end{mdframed}
+        }\\[-2.7mm]
+    }
+    }  
+  }
+  
+\definecolor{grayblack}{rgb}{0.8,0.8,0.8}
+
+
+\tl_new:N \l__ufrgscca_txtcolor_tl
+\tl_new:N \l__ufrgscca_bgcolor_tl
+\tl_new:N \l__ufrgscca_comment_color_tl
+\tl_set:Nn \l__ufrgscca_comment_color_tl {darkblue}
+
+\cs_new_protected:Npn \__ufrgscca_set_statuscolor:n #1
+  {
+    \starray_set_iter_from_hash:nnF {status}{#1}
+      { \starray_set_iter_from_hash:nn {status}{default} }
+      \starray_get_prop:nnN {status}{txtcolor}\l__ufrgscca_txtcolor_tl
+      \starray_get_prop:nnN {status}{bgcolor}\l__ufrgscca_bgcolor_tl
+  }
+
+\cs_generate_variant:Nn \__ufrgscca_set_statuscolor:n {e}
+
+
+\cs_new_protected:Npn \__ufrgscca_set_txtcolor:n #1
+  {
+    \starray_set_iter_from_hash:nnF {status}{#1}
+      {
+        \starray_set_iter_from_hash:nn {status}{default}
+      }
+        \starray_term_syntax:n{status}
+        \color{\starray_parsed_get_prop:n{txtcolor}}
+  }
+
+\NewDocumentCommand{\SetStatusColor}{m}
+  {
+    \__ufrgscca_set_txtcolor:n {#1}
+  }
+
+\cs_new:Npn \__ufrgscca_def_colorpair:n #1
+  {
+    \colorlet{light#1}{white!85!#1}
+    \colorlet{dark#1}{#1!70!black!100}
+  }
+
+\cs_new:Npn \__ufrgscca_def_status:nnn #1#2#3
+  {
+    \starray_new_term:nn {status}{#1}
+    \starray_set_from_keyval:nn {status}
+      {
+        txtcolor    = {dark#2} ,
+        bgcolor    = {light#2} ,
+        text        = {#3~ (#2)} ,
+        self        = {#1} ,
+      }
+    \__ufrgscca_def_colorpair:n {#2}
+  }
+
+\__ufrgscca_def_status:nnn{tbd}{gray}{To~ Be~ Done}
+\__ufrgscca_def_status:nnn{done}{green}{Done}
+\__ufrgscca_def_status:nnn{review}{yellow}{to~ be~ reviewed}
+\__ufrgscca_def_status:nnn{attention}{red}{needs~ Attention}
+\__ufrgscca_def_status:nnn{NSA}{brown}{NSA}
+\__ufrgscca_def_status:nnn{noref}{magenta}{no~ references}
+\__ufrgscca_def_status:nnn{EAD}{violet}{EAD}
+\__ufrgscca_def_status:nnn{MDi}{teal}{(courseware)...}
+\__ufrgscca_def_status:nnn{DOCs}{blue}{other~ DOCs}
+\__ufrgscca_def_status:nnn{default}{cyan}{everything~ else}
+\__ufrgscca_def_status:nnn{comment}{blue}{a~ comment}
+
+
+
+\mdfdefinestyle{NEWindicatorsTikZ}{
+  linecolor=grayblack,
+  linewidth=0.4pt,
+%  skipabove=0.65\baselineskip,
+%  skipbelow=0.5\baselineskip,
+  skipabove=0pt,
+  skipbelow=0pt,
+  leftmargin =-3.5pt,
+  rightmargin=-3.5pt,
+  innerleftmargin=3pt,
+  innerrightmargin=3pt,
+  needspace=3\baselineskip,
+  backgroundcolor=\l__ufrgscca_bgcolor_tl,
+  usetwoside=false,
+%	innertopmargin = 3pt,
+%	innerbottommargin = 2pt,
+	innertopmargin = 2pt,
+	innerbottommargin = 2pt,
+	roundcorner = 4pt,
+	frametitle={\__ufrgscca_tikz_title:n{TITLE}},
+	frametitleaboveskip=-0.6\baselineskip,
+	frametitlebelowskip=0pt,
+  frametitlealignment = \raggedleft,
+	leftline = true,
+	rightline = true,
+	nobreak = true,
 }
 
-\NewDocumentCommand{\indref}{sO{}mm+m}{%%
-  \ifthenelse{\equal{#2}{}}{}{\expandafter\gdef\csname @indicator#3#4status\endcsname{#2}}%%
-	\expandafter\gdef\expandafter\tcppc@status{\csname @indicator#3#4status\endcsname}%
-	\stepcounter{@indcount#3#4}\label{@indlabel#3#4:\csname the@indcount#3#4\endcsname}%%
-  \if@showindicators%%
-		\IfBooleanTF{#1}{\tcppc@indhack*{#3}{#4}{#5}}{\tcppc@indhack{#3}{#4}{#5}}
-  \fi%	%
-}%
-%
-%
-%\newcommand{\tcppc@indreflstitem}[4][]{%
-\NewDocumentCommand{\tcppc@indreflstitem}{O{}mmm}{%
-  \ifthenelse{\equal{#1}{}}{}{\expandafter\gdef\csname @indicator#2#3status\endcsname{#1}}%
-	\expandafter\gdef\expandafter\tcppc@status{\csname @indicator#2#3status\endcsname}%
-	\stepcounter{@indcount#2#3}\label{@indlabel#2#3:\csname the@indcount#2#3\endcsname}%%
-  \set@statuscolor{\tcppc@status}%
-	\hyperlink{@indlabel#2#3}{\textbf{#3 :}}\pdftooltip{\emph{\csname @indicator#2#3short\endcsname}}{\csname @indicator#2#3long\endcsname}\par%%
-  \if@indlongtext%%
-    \ifthenelse{\equal{\csname @indicator#2#3long\endcsname}{}}{}{\enquote{\footnotesize\csname @indicator#2#3long\endcsname}\par}%%
-  \fi%%
-  \hfill\emph{status: }\textbf{\color{\ind@txtcolor}\tcppc@status\break}%%
-}%
+\tl_new:N \l__ufrgscca_TikZ_pos_tl
+\tl_set:Nn \l__ufrgscca_TikZ_pos_tl {0.44}
+\cs_new_protected:Npn \__ufrgscca_tikz_title:n #1
+  {
+    \tikz[baseline=(current~ bounding~ box.east),outer~ sep=0pt,xshift=1cm,thin,color=grayblack]  
+      \draw  (0,0) (\l__ufrgscca_TikZ_pos_tl,0) 
+        node[anchor=west,rectangle,rounded~ corners,fill=white,draw] at (\l__ufrgscca_TikZ_pos_tl,0) {#1} 
+        node[anchor=west,rectangle,rounded~ corners,color=black] at (\l__ufrgscca_TikZ_pos_tl,0) {#1};
+  }
 
-\NewDocumentCommand{\indreflst}{sO{}mmm}{%
-  \IfBooleanTF{#1}{%
-    \gdef\tcppc@indreflst##1{\StrCut{##1}{:}\tcppc@parA\tcppc@parB\IfStrEq{\tcppc@parB}{}{\tcppc@indreflstitem{#3}{\tcppc@parA}{#5}}{\expandafter\tcppc@indreflstitem\expandafter[\tcppc@parA]{#3}{\tcppc@parB}{#5}}}%
-    \if@showindicators%
-	    \csname iftcppc@indset#3view\endcsname%
-		    \ \hfill\parbox{0.9\textwidth}{\small%
-			    \begin{mdframed}[style=indicatorsTikZ,frametitle=\tikztitle{#3}]%%
-            \expandafter\forcsvlist\expandafter\tcppc@indreflst\expandafter{#4}%
-			      \if@indnocomments\else\ifthenelse{\equal{#5}{}}{}{{\emph{\color{\comments@txtcolor}{#5}}}\par}\fi%%
-				    \set@statuscolor{#2}%
-			    \end{mdframed}%
-			  }%
-		  \fi%
-	  \fi%
-	}{%
-  	\gdef\tcppc@indreflst##1{\StrCut{##1}{:}\tcppc@parA\tcppc@parB\IfStrEq{\tcppc@parB}{}{\indref{#3}{\tcppc@parA}{}}{\indref[\tcppc@parA]{#3}{\tcppc@parB}{}}}%
-	  \expandafter\forcsvlist\expandafter\tcppc@indreflst\expandafter{#4}%
-	  \comment[#2]{comment}{#5}%
-	}%
-}%
-%
-% other default colors (xcolor pack): lime, olive, orange, pink, purple.
-%
-\def\tcppc@defcolorpair#1{\colorlet{light#1}{white!85!#1}\colorlet{dark#1}{#1!70!black!100}}
-%
-%
-\definecolor{grayblack}{rgb}{0.8,0.8,0.8}%
-%
-%
-\NewDocumentCommand{\ind@defstatus}{mmm}{%
-  \newcounter{ind@#1@count}%
-  \tcppc@defcolorpair{#2}%
-	\expandafter\gdef\csname #1@txtcolor\endcsname{dark#2}%
-	\expandafter\gdef\csname #1@bgcolor\endcsname{light#2}%
-	\expandafter\gdef\csname #1@text\endcsname{#3 (#2)}%
-	\@ifundefined{ind@statuslst}{\gdef\ind@statuslst{#1}}{\edef\ind@statuslst{\ind@statuslst,#1}}%
-}%
-%
-\ind@defstatus{tbd}{gray}{To Be Done}%
-\ind@defstatus{done}{green}{Done}%
-\ind@defstatus{review}{yellow}{to be reviewed}%
-\ind@defstatus{attention}{red}{needs Attention}%
-\ind@defstatus{NSA}{brown}{NSA}%
-\ind@defstatus{noref}{magenta}{no references}%
-\ind@defstatus{EAD}{violet}{EAD}%
-\ind@defstatus{MDi}{teal}{(courseware)...}%
-\ind@defstatus{DOCs}{blue}{other DOCs}%
-\ind@defstatus{default}{cyan}{everything else}%
-%
-\def\comments@txtcolor{darkblue}%
-%
-%
-\def\ind@TikZpos{0.44}%
-\NewDocumentCommand{\tikztitle}{m}{\tikz[baseline=(current bounding box.east),outer sep=0pt,xshift=1cm,thin,color=grayblack]  \draw  (0,0) (\ind@TikZpos,0) node[anchor=west,rectangle,rounded corners,fill=white,draw] at (\ind@TikZpos,0) {#1} node[anchor=west,rectangle,rounded corners,color=black] at (\ind@TikZpos,0) {#1};}%%
-%
-%
-\mdfdefinestyle{indicatorsTikZ}{%
-  linecolor=grayblack,%%
-  linewidth=0.4pt,%
-%  skipabove=0.65\baselineskip,%
-%  skipbelow=0.5\baselineskip,%
-  skipabove=0pt,%
-  skipbelow=0pt,%
-  leftmargin =-3.5pt,%
-  rightmargin=-3.5pt,%
-  innerleftmargin=3pt,%
-  innerrightmargin=3pt,%
-  needspace=3\baselineskip,%
-  backgroundcolor=\ind@bgcolor,%
-  usetwoside=false,%
-%	innertopmargin = 3pt,%
-%	innerbottommargin = 2pt,%
-	innertopmargin = 2pt,%
-	innerbottommargin = 2pt,%
-	roundcorner = 4pt,%
-	frametitle={\tikztitle{TITLE}},%
-	frametitleaboveskip=-0.6\baselineskip,%
-	frametitlebelowskip=0pt,%
-  frametitlealignment = \raggedleft,%
-	leftline = true,%
-	rightline = true,%
-	nobreak = true,%
-}%
 
-\NewDocumentCommand{\fancyquote}{O{-2\topsep-2\parsep-2\partopsep-2\parskip}+mmm}{%
- \vspace{#1}{%
-  \ \hfill\begin{minipage}{0.5\textwidth}\noindent\scriptsize\emph{''#2''}%
-	  {\vspace{-\parsep}\begin{flushright}\footnotesize#3\\\sc #4\end{flushright}} \end{minipage}\\
- }}
+
+
+\NewDocumentCommand{\fancyquote}{O{-2\topsep-2\parsep-2\partopsep-2\parskip}+mmm}
+  {
+    \vspace{#1}
+    {
+      \ \hfill
+      \begin{minipage}{0.5\textwidth}
+        \noindent\scriptsize\emph{''#2''}
+    	{ \vspace{-\parsep}
+          \begin{flushright}
+            \footnotesize 
+              #3\\
+              \sc #4
+          \end{flushright}
+        } 
+      \end{minipage}\\
+    }
+  }
 
 
 \NewDocumentEnvironment{ppc.quote}{}{\begin{displayquote}\begin{itshape}\smaller}{\end{itshape}\end{displayquote}}
 %\preto\displayquote{\begingroup\setlength{\leftmargini}{0mm}}
 %\appto\enddisplayquote{\endgroup}
-\RenewDocumentEnvironment{quote}{}{%
-  \list{}{\leftmargin20mm\rightmargin0mm}%
-  \item\relax%
-}{\endlist}
+\RenewDocumentEnvironment{quote}{}
+  {
+    \list{}{\leftmargin20mm\rightmargin0mm}
+    \item\relax
+  }
+  { \endlist }
 %
 
 \NewDocumentCommand{\labelhack}{m}{\def\@currentlabelname{#1}}
 
-\NewDocumentCommand{\acrolist}{}{}
-\NewDocumentCommand{\acrodef}{mmm}{%
-  %\expandafter\DeclareFixedFootnote\expandafter{\csname #1\endcsname}{#3}%
-	\expandafter\def\csname #1\endcsname{\footnote{#3}}%
-	\expandafter\def\csname acrolsti:#1\endcsname{\item[#2] #3}%
-	\appto\acrolist{\item[#2] #3}%
-	\expandafter\def\csname acroS:#1\endcsname{#2}%
-	\expandafter\def\csname acroL:#1\endcsname{#3}%
+
+
+\NewDocumentCommand{\acrodef}{mmm}
+  {
+    \starray_new_term:nn {acrolist}{#1}
+    \starray_set_from_keyval:nn {acrolist}
+    {
+      short = {#2} ,
+      long    = {#3}
+    }
+  }
+
+\NewDocumentCommand{\acro}{m}{\starray_get_prop:nn{acrolist[#1]}{short}}
+\NewDocumentCommand{\acrol}{m}{\starray_get_prop:nn{acrolist[#1]}{long}}
+\NewDocumentCommand{\acrols}{m}{\starray_get_prop:nn{acrolist[#1]}{long}, \starray_get_prop:nn{acrolist[#1]}{short}}
+\NewDocumentCommand{\acrosl}{m}{\starray_get_prop:nn{acrolist[#1]}{short}, \starray_get_prop:nn{acrolist[#1]}{long}}
+\NewDocumentCommand{\acrofoot}{m}{\starray_get_prop:nn{acrolist[#1]}{short}\footnote{\starray_get_prop:nn{acrolist[#1]}{long}}}
+\NewDocumentCommand{\printacrolist}{O{}m}{
+    \begin{listofabbrv}[#1]{#2}
+    \starray_iterate_over:nn {acrolist}
+      { \item[\starray_get_prop:nn{acrolist}{short}] \starray_get_prop:nn{acrolist}{long} }
+    \end{listofabbrv}
 }
-\NewDocumentCommand{\acroitem}{m}{\csname acrolsti:#1\endcsname}
-\NewDocumentCommand{\printacrolist}{O{}m}{\begin{listofabbrv}[#1]{#2}\acrolist\end{listofabbrv}}
-\NewDocumentCommand{\acro}{m}{\csname acroS:#1\endcsname}
-\NewDocumentCommand{\acrol}{m}{\csname acroL:#1\endcsname}
-\NewDocumentCommand{\acrols}{m}{\csname acroL:#1\endcsname, \csname acroS:#1\endcsname}
-\NewDocumentCommand{\acrosl}{m}{\csname acroS:#1\endcsname, \csname acroL:#1\endcsname}
-\NewDocumentCommand{\acrofoot}{m}{\csname acroS:#1\endcsname\csname #1\endcsname}
+
 
 
 \RenewDocumentCommand{\subparagraph}{m}{}
