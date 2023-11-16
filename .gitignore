@@ -15,6 +15,9 @@
 *.cb2
 .*.lb
 
+## ignore 'deprecated' files
+deprecated/
+
 ## TeXstudio
 *.txss2
 
