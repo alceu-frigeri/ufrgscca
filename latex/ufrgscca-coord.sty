@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,39 +27,89 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2023/11/10}
-    {1.99}
+    {2023/11/23}
+    {2.0}
     {UFRGS/CCA coord commands}
+
+
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-coord / pkg info}
+  {
+     name        .code:n = {ufrgscca-coord} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+
 
 \cs_generate_variant:Nn \tl_set:Nn {Ne}
 
-\keys_define:nn { ufrgscca.coord }
+\keys_define:nn { ufrgscca / coord }
   {
     calendar-I. bool_set:N   = \l__ufrgscca_calendarI_bool ,
     calendar-I. usage:n       = general , 
+    
     calendar-II. bool_set:N  = \l__ufrgscca_calendarII_bool ,
     calendar-II. usage:n      = general , 
+    
     report-I. bool_set:N     = \l__ufrgscca_reportI_bool ,
     report-I. usage:n         = general , 
+    
     report-II. bool_set:N    = \l__ufrgscca_reportII_bool ,
     report-II. usage:n        = general , 
+    
+    checklist-I. bool_set:N    = \l__ufrgscca_checklistI_bool ,
+    checklist-I. usage:n        = general , 
+
+    checklist-II. bool_set:N    = \l__ufrgscca_checklistII_bool ,
+    checklist-II. usage:n        = general , 
+
     boards. bool_set:N       = \l__ufrgscca_boards_bool ,
     boards. usage:n           = general , 
+    
     revforms-I. bool_set:N   = \l__ufrgscca_revformsI_bool ,
     revforms-I. usage:n       = general , 
+    
     revforms-II. bool_set:N  = \l__ufrgscca_revformsII_bool ,
     revforms-II. usage:n      = general , 
+    
     referral-I. bool_set:N   = \l__ufrgscca_referralI_bool ,
     referral-I. usage:n       = general , 
+    
     referral-II. bool_set:N  = \l__ufrgscca_referralII_bool ,
     referral-II. usage:n      = general , 
+    
     cocertificate. bool_set:N  = \l__ufrgscca_cocertificate_bool ,
     cocertificate. usage:n      = general , 
   }
 
-\ProcessKeyOptions[ufrgscca.coord]\relax
-%\NewDocumentCommand{\setreports}{m}{\SetKeys[ufrgscca-coord]{#1}}
-\NewDocumentCommand{\setreports}{m}{\keys_set:nn { ufrgscca.coord }{#1}}
+\cs_new_protected:Npn \__ufrgscca_set_reports:n #1 
+  {  \keys_set:nn { ufrgscca / coord }{#1}  }
 
 \def\c@one#1:#2:{\csname #1\endcsname}
 \def\c@two#1:#2:{\csname #1\endcsname[newpage]}
@@ -68,14 +118,45 @@
 
 \RequirePackage{longtable}
 \RequirePackage{multirow}
-%\RequirePackage{ufrgscca-gen}
+
 \RequirePackage{ufrgscca-core}
 \RequirePackage{ufrgscca-forms}
-\RequirePackage{pgfcalendar}
+%\RequirePackage{pgfcalendar}
 
 %
+
+\NewDocumentCommand{\ActivitySetNewEvent}{O{}mm}{
+  \tl_if_blank:nTF {#1}
+    {
+      \starray_new_term:nn {activity.calendar}{#2}
+      \starray_gset_prop:nnn {activity.calendar}{event}{#3}
+    }
+    {
+      \starray_new_term:nn {activity[#1].calendar}{#2}
+      \starray_gset_prop:nnn {activity[#1].calendar}{event}{#3}
+    }
+}
+
+\NewDocumentCommand{\ActivitySetEventDay}{O{}mmm}{
+  \tl_if_blank:nTF {#1}
+    {
+      \starray_gset_from_keyval:nn {activity.calendar[#2]}
+        {
+            date = {#3} ,
+            week = {#4} ,
+        }
+    }
+    {
+      \starray_gset_from_keyval:nn {activity[#1].calendar[#2]}
+        {
+            date = {#3} ,
+            week = {#4} ,
+        }
+    }
+}
+
 %
-\NewDocumentCommand{\studentFate}{O{}}{%%
+\NewDocumentCommand{\studentfate}{O{}}{%%
   \str_case:nnF  {#1}
     {
       {C}
@@ -181,7 +262,7 @@
         \starray_gset_prop:nnn {student}{flag-graded}{\c_true_bool}
     }
 %
-\NewDocumentCommand{\studenttimeslot}{O{}mm}{%%
+\NewDocumentCommand{\timeslot}{O{}mm}{%%
   \starray_gset_from_keyval:nn {student}
     {
       board-local = #1 ,
@@ -189,96 +270,119 @@
       board-time = #3 ,
     }
 }%
-\let\timeslot\studenttimeslot%
-%
-\NewDocumentCommand{\tccdate}{mm}{%%
-  \SetConsts{%
-    date:#1 = #2 ,
-  }
-}%
-%
-\NewDocumentCommand{\tccsemester}{m}{%%
-  \SetConsts{%
-    semester = #1 ,
-  }
-}%
 %
 
 
-\NewDocumentCommand{\studentturnindate}{m}{\tccoord@studentdatesplit#1,}
-%23/12/2022
 
-\def\tccoord@studentdatesplit#1/#2/#3,{
-   \pgfcalendarifdate{#3-#2-#1}{at least=\tc@internshipcommitB+1}{\tccoord@studentFF}{}
-   \pgfcalendarifdate{#3-#2-#1}{between=\tc@internshipcommitA+1 and \tc@internshipcommitB}{\tccoord@studentExam{X}}{}
-   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}date\endcsname{#1/#2/#3}%
+\NewDocumentCommand{\studentCase}{mmmmm}{
+    \starray_term_syntax:n{student}
+    \bool_case:nF
+    {
+      {\starray_parsed_get_prop:n{flag-ff}}
+        {#5}
+      {\starray_parsed_get_prop:n{flag-exam}}
+        {
+          \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
+            {#3}
+            {#4}
+        }
+    }
+    {
+      \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
+        {#1}
+        {#2}
+    }
 }
 
-\NewDocumentCommand{\intershipcommitdates}{mm}{%
-    \tccoord@commitdatesplit#1,A,%
-    \tccoord@commitdatesplit#2,B,%
+
+\NewDocumentCommand{\studentDismissCase}{mm}{
+    \starray_term_syntax:n{student}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss}}
+      {#1}
+      {#2}
 }
 
-\def\tccoord@commitdatesplit#1/#2/#3,#4,{
-   \expandafter\xdef\csname tc@internshipcommit#4\endcsname{#3-#2-#1}%
-   \expandafter\xdef\csname tc@internshipcommit#4#4\endcsname{#1/#2/#3}%
-}
-
-%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%% ufrgscca-coord !?!!
-%%%%%%%%%%%%%%%%
-%%%%\NewDocumentCommand{\studentworktitle}{m}{%%
-%%%%  \starray_gset_prop:nnn {student}{worktitle}{#1}
-%%%%}%
-%%%%\let\TCCtitle\studentworktitle%
-%%%%%
-%%%%%%%%%
-%%%%%%%%% ufrgscca-coord !!!
-%%%%%%%%%
-\NewDocumentCommand{\studentremark}{m}{%%
+\NewDocumentCommand{\studentremark}{m}{
   \starray_gset_prop:nnn {student}{remarks}{#1}
-}%
-%
-\NewDocumentCommand{\studentsetDistinctBoard}{}{%%
-  \starray_gset_prop:nnn {student}{flag-distinctboard}{\c_true_bool}
-}%
+}
 
-\NewDocumentCommand{\studentDistinctBoardCase}{mm}
+
+
+\NewDocumentCommand{\studentNewPageCase}{mm}
   {
     \starray_term_syntax:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-distinctboard}}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-newpage}}
       {#1}
       {#2}
   }
 
-\NewDocumentCommand{\studentsetnewpage}{O{}}{%%
+\NewDocumentCommand{\studentnewpage}{O{}}{
   \tl_if_blank:nTF {#1}
-    {\starray_set_iter_from_hash:nn {student}{#1}}
-  \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool}
+    { \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool} }
+    { \starray_gset_prop:nnn {student[#1]}{flag-newpage}{\c_true_bool} }
 }%
 
 
-  %%%
-  %%% TO BE ADAPTED for starray !
-  %%% TO BE DONE !
-%
-\NewDocumentCommand{\tccoord@checklist}{m}{\expandafter\gdef\csname tc@student\Alph{tc@studentcount}:#1\endcsname{}}%
-\NewDocumentCommand{\checklist}{m}{\forcsvlist{\tccoord@checklist}{#1}}%
-%
-\NewDocumentCommand{\addtostudent}{mm}{\@ifundefined{#1}{}{\csappto{#1.hook}{#2}}}
-%
-\NewDocumentCommand{\checkedbox}{}{\ooalign{$\square$\cr\hidewidth\raise.3ex\hbox{$\checkmark\mkern-7mu$}\hidewidth\cr}}%
-\NewDocumentCommand{\uncheckedbox}{}{$\square$}%
-\NewDocumentCommand{\tccoord@@check}{mm}{\@ifundefined{tc@student#1:#2}{\uncheckedbox}{\checkedbox}}%
-\NewDocumentCommand{\tccoord@check}{mm}{\@ifundefined{#2}{}{\tccoord@@check{#1}{\csname #2\endcsname} \csname @\csname #2\endcsname\endcsname}}%
-\NewDocumentCommand{\checkdef}{mmm}{\expandafter\gdef\csname #1\endcsname{#2}\expandafter\gdef\csname @#2\endcsname{#3}}%
-%\chekmark%
+
+\NewDocumentCommand{\boardtitle}{m}{%%
+  \SetTerms{%
+    board.title = {#1} ,
+  }
+}%
 
 
+\NewDocumentCommand{\boardobs}{m}{%%
+  \SetTerms{%
+    board.obs = {#1} ,
+  }
+}%
+
+
+\NewDocumentCommand{\boarddate}{mm}{%%
+  \SetConsts{%
+    date:#1 = {#2} ,
+  }
+}%
 %
+\NewDocumentCommand{\semester}{m}{%%
+  \SetTerms{%
+    semester = {#1} ,
+  }
+}%
+%
+
+
+%%%%%%\NewDocumentCommand{\studentturnindate}{m}{\tccoord@studentdatesplit#1,}
+%%%%%%%23/12/2022
+%%%%%%
+%%%%%%\def\tccoord@studentdatesplit#1/#2/#3,{
+%%%%%%   \pgfcalendarifdate{#3-#2-#1}{at least=\tc@internshipcommitB+1}{\tccoord@studentFF}{}
+%%%%%%   \pgfcalendarifdate{#3-#2-#1}{between=\tc@internshipcommitA+1 and \tc@internshipcommitB}{\tccoord@studentExam{X}}{}
+%%%%%%   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}date\endcsname{#1/#2/#3}%
+%%%%%%}
+%%%%%%
+%%%%%%\NewDocumentCommand{\intershipcommitdates}{mm}{%
+%%%%%%    \tccoord@commitdatesplit#1,A,%
+%%%%%%    \tccoord@commitdatesplit#2,B,%
+%%%%%%}
+%%%%%%
+%%%%%%\def\tccoord@commitdatesplit#1/#2/#3,#4,{
+%%%%%%   \expandafter\xdef\csname tc@internshipcommit#4\endcsname{#3-#2-#1}%
+%%%%%%   \expandafter\xdef\csname tc@internshipcommit#4#4\endcsname{#1/#2/#3}%
+%%%%%%}
+
+
+\cs_new_protected:Npn \__ufrgscca_checkedbox: 
+  {  $\checkmark$  }
+
+\cs_new_protected:Npn \__ufrgscca_uncheckedbox: 
+  {  $\square$  }
+
+
 \cs_generate_variant:Nn \starray_gset_prop:nnn {nne}
-%
-\NewDocumentCommand{\examinergrades}{mmmO{}}{%%
+
+
+\NewDocumentCommand{\examinergrades}{mmmO{}}{
   \tl_if_blank:nTF {#1}
     { \starray_gset_prop:nnn {student.reviewer}{grade}{0} }
     {
@@ -313,18 +417,39 @@
         }
     }
   
-}%
+}
 
 
-\NewDocumentCommand{\setstudentlist}{mm}{%
-  \seq_new:c {l__ufrgscca_#1_seq}
-  \seq_new:c {l__ufrgscca_#1_ff_seq}
-  \seq_new:c {l__ufrgscca_#1_dismiss_seq}
-  \seq_new:c {l__ufrgscca_#1_graded_seq}
+\NewDocumentCommand{\setstudentlist}{O{tcc}mm}{
+  \seq_new:c {l__ufrgscca_#2_seq}
+  \seq_new:c {l__ufrgscca_#2_ff_seq}
+  \seq_new:c {l__ufrgscca_#2_dismiss_seq}
+  \seq_new:c {l__ufrgscca_#2_graded_seq}
   
-    \seq_gset_from_clist:cn {l__ufrgscca_#1_seq}{#2}
-    \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_grade:n}
-    \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_listclassify:nn {#1}}
+  \seq_gset_from_clist:cn {l__ufrgscca_#2_seq}{#3}
+  \str_case:nn {#1}
+  {
+    {tcc} 
+      {
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_listclassify:nn {#2}}
+      }
+    {tccI} 
+      {
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_listclassify:nn {#2}}
+      }
+    {tccII} 
+      {
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_listclassify:nn {#2}}
+      }
+    {intern}
+      {  %% TO BE IMPLEMENTED !!!
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#2_seq} {\__ufrgscca_listclassify:nn {#2}}
+      }
+  }
 }
 
 \cs_new_protected:Npn \__ufrgscca_grade:n #1 
@@ -349,15 +474,10 @@
       
     }
 
-\NewDocumentCommand{\tcgrades}{m}{%
-    \seq_map_tokens:cn {l__ufrgscca_#1_seq} {\__ufrgscca_grade:n}
-}
-
-
 
 \NewDocumentCommand{\tcreports}{O{}m}{
   {
-      \setreports{#1}
+      \__ufrgscca_set_reports:n {#1}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_seq {l__ufrgscca_#2_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_ff_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_dismiss_seq}
@@ -371,11 +491,15 @@
         { \MakeForm{report-I} }
       \bool_if:NT \l__ufrgscca_reportII_bool
         { \MakeForm{report-II} }
+      \bool_if:NT \l__ufrgscca_checklistI_bool
+        { \MakeForm{checklist-I} }
+      \bool_if:NT \l__ufrgscca_checklistII_bool
+        { \MakeForm{checklist-II} }
       \bool_if:NT \l__ufrgscca_boards_bool
         { \MakeForm{boards} }      
       \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
         {
-          \studentSelect{##1}
+          \studentselect{##1}
           \bool_if:NT \l__ufrgscca_cocertificate_bool
             {
               \studentCoadvCase
@@ -415,21 +539,77 @@
             }
         }
   }
-}%%
+}
 
 
-%%% TO BE ADAPTED TO starray
+\prop_new:N \l__ufrgscca_check_prop
+\prop_new:N \l__ufrgscca_checkA_prop
+\prop_new:N \l__ufrgscca_checkB_prop
+\prop_new:N \l__ufrgscca_checkref_prop
 
-%\NewDocumentCommand{\internshipreports}{O{}m}{%%
-%    \setreports{#1}
-%    \@ifundefined{tcdef@coord@list#2}{}{%
-%        \expandafter\expandafter\expandafter\forcsvlist\expandafter\expandafter\expandafter\tccoord@student@exec\expandafter\expandafter\expandafter{\csname tcdef@coord@list#2\endcsname}
-%    }
-%    \iftcif@coord@checklist%
-%    \tccoord@TCCchecklist%
-%    \fi%
-%    \iftcif@coord@report%
-%    \tccoord@TCCreport%
-%    \fi%
-%}%%
+\NewDocumentCommand{\checkdef}{mmm}{
+  \starray_get_prop:nnN {activity}{chkmarked}\l__ufrgscca_check_prop
+  \prop_gput:Nnn \l__ufrgscca_check_prop {#1}{\__ufrgscca_checkedbox:~\ #3}
+  \starray_gset_prop:nnV {activity}{chkmarked}\l__ufrgscca_check_prop
+
+  \starray_get_prop:nnN {activity}{chkunmarked}\l__ufrgscca_check_prop
+  \prop_gput:Nnn \l__ufrgscca_check_prop {#1}{\__ufrgscca_uncheckedbox:~\ #3}
+  \starray_gset_prop:nnV {activity}{chkunmarked}\l__ufrgscca_check_prop
+  
+  \starray_get_prop:nnN {activity}{chkref}\l__ufrgscca_check_prop
+  \prop_gput:Nnn \l__ufrgscca_check_prop {#2}{#1}
+  \starray_gset_prop:nnV {activity}{chkref}\l__ufrgscca_check_prop
+}
+
+\cs_generate_variant:Nn \prop_gput:Nnn {Nee}
+
+
+\tl_new:N \l__ufrgscca_checkB_tl
+\tl_new:N \l__ufrgscca_checkref_tl
+\NewDocumentCommand{\checklist}{O{}m}{
+  \tl_if_blank:nF {#1}
+    {  \starray_set_iter_from_hash:nn {activity}{#1}  }
+  \starray_get_prop:nnN {student}{checklist}\l__ufrgscca_check_prop
+  \starray_get_prop:nnN {activity}{chkmarked}\l__ufrgscca_checkB_prop
+  \starray_get_prop:nnN {activity}{chkref}\l__ufrgscca_checkref_prop
+  \clist_map_inline:nn {#2}
+    {
+      \prop_get:NnNT \l__ufrgscca_checkref_prop {##1} \l__ufrgscca_checkref_tl
+        {
+          \prop_get:NeN \l__ufrgscca_checkB_prop {\l__ufrgscca_checkref_tl} \l__ufrgscca_checkB_tl
+          \prop_gput:Nee \l__ufrgscca_check_prop {\l__ufrgscca_checkref_tl} {\l__ufrgscca_checkB_tl}
+        }
+    }
+    \starray_gset_prop:nnV {student}{checklist}{\l__ufrgscca_check_prop}
+}
+
+\prop_new:N \l__ufrgscca_check_list_prop
+\tl_new:N \l__ufrgscca_tmpx_tl
+\tl_new:N \l__ufrgscca_tmpy_tl
+\tl_new:N \l__ufrgscca_table_tl
+
+
+\cs_new_protected:Npn \__ufrgscca_checktable_lines:nn #1#2 {
+  \starray_get_prop:nnN {activity} {chkunmarked} \l__ufrgscca_checkA_prop
+  \starray_get_prop:nnN {student}{checklist}\l__ufrgscca_check_prop
+  
+  \prop_map_inline:Nn \l__ufrgscca_check_prop
+    { \prop_gput:Nnn \l__ufrgscca_checkA_prop {##1}{##2}  }  
+
+  \tl_gclear:N \l__ufrgscca_table_tl
+  \clist_map_inline:nn {#1}    
+    { 
+      \tl_gclear:N \l_tmpa_tl    
+      \clist_map_inline:nn {#2}
+        {       
+         \tl_gset:Nn \l__ufrgscca_tmpx_tl {##1####1} 
+         \prop_get:NeNTF \l__ufrgscca_checkA_prop {\l__ufrgscca_tmpx_tl} \l__ufrgscca_tmpy_tl
+           {\tl_gput_right:Ne \l__ufrgscca_table_tl {\l_tmpa_tl~ \l__ufrgscca_tmpy_tl}}
+           {\tl_gput_right:Ne \l__ufrgscca_table_tl {\l_tmpa_tl~ }}
+         \tl_gset:Nn \l_tmpa_tl {~&~}
+        }
+      \tl_put_right:Nn \l__ufrgscca_table_tl {\\*}
+    }
+    \l__ufrgscca_table_tl   
+}
 

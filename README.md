@@ -73,43 +73,27 @@ The Current Maintainer of this work is Alceu Frigeri
     - cover pages macros
 * ufrgscca-lists.sty
     - New float environments (for code listing, for instance)
-* ufrgscca-gen.sty
-    - a switch/case macro construct and
-      'macro factory', for instance to create commands used in the .def files.
 * ufrgscca-forms.sty
     - forms creation macros (course specific)
-* ufrgscca-formsTR.sty
-    - forms creation macros (course specific, include by ufrgs-forms)
-* ufrgscca-formsintern.sty
-    - forms creation macros (course specific, include by ufrgs-forms)
 * ufrgscca-coord.sty
     - student work coordenation related macros (course specific)
 * ufrgscca-ppc.sty
     - ppc specific macros (ppc stands for Course Pedagogic Project)
 * ufrgscca-curr.sty
     - curricula specific macros (as a set of semesters and class dependency lists)
-* ufrgscca-curr-tab.sty
-    - curricula tabular macros (to display the curricula as tables)
-* ufrgscca-curr-graph.sty
-    - curricula graph macros (to display the curricula as a dependency graph)
 
-* ufrgscca-en-base.def
+* ufrgscca-base-en.def
     - locale, English, base def's (for babel)
-* ufrgscca-en-core.def
-    - locale, English, for -core.sty
-* ufrgscca-en-forms.def
-    - locale, English, for -forms.sty
-* ufrgscca-en-coord.def
-    - locale, English, for -coord.sty
-
-* ufrgscca-ptBR-base.def
+* ufrgscca-base-ptBR.def
     - locale, Portuguese, base def's (for babel)
-* ufrgscca-ptBR-core.def
-    - locale, Portuguese, for -core.sty
-* ufrgscca-ptBR-forms.def
-    - locale, Portuguese, for -forms.sty
-* ufrgscca-ptBR-coord.def
-    - locale, Portuguese, for -coord.sty
+* ufrgscca-terms-ptBR.tex
+    - locale, many defaults
+* ufrgscca-terms-en.tex
+    - locale, many defaults
+* ufrgscca-cover-ptBR.tex
+    - locale, defaults, for -cover.sty
+* ufrgscca-forms.tex
+    - locale, defaults, for -forms.sty
 
 * README.md  (this file)
     - quick introduction
@@ -121,7 +105,14 @@ The Current Maintainer of this work is Alceu Frigeri
 
 -------------
 
+
 ## Changelog
+* Version 2.0 (this)
+    - fully rewritten as Expl3 class/packages
+    - documentation
+    - (a few) commands changed (mostly auxiliary/background ones)
+    - some class options added and removed (see documentation)
+
 * Version 1.12 (this)
     - forms adjustments
     - documentation typo

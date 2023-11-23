@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 2.00 (2023/11/??)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,11 +22,7 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\makeatletter
-%\ExplSyntaxOff
 
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
 
 \location{Porto~Alegre}{RS}
 
@@ -38,8 +34,9 @@
     course                  = Engenharia de Controle e Automação ,
     course.title            = Bacharel em Engenharia de Controle e Automação ,
     ppc.comgrad             = {COMISSÃO DE GRADUAÇÃO - COMGRAD/CCA} ,
-    ppc.nde             = {NÚCLEO DOCENTE ESTRUTURANTE - NDE/CCA} ,
-    ppc.course          = {DO CURSO EM ENGENHARIA DE CONTROLE E AUTOMAÇÃO} ,
+    ppc.nde                 = {NÚCLEO DOCENTE ESTRUTURANTE - NDE/CCA} ,
+    ppc.course              = {DO CURSO EM ENGENHARIA DE CONTROLE E AUTOMAÇÃO} ,
+    department              = {Depto. de Sistemas Elétricos de Automação e Energia} ,
 }
 
 
@@ -47,23 +44,27 @@
 \ActivitySelect{course}
 \ActivitySet{CCA}{Eng. de Controle e Automação}
 \ActivitySetCoord{Nome Coordenador}
-\ActivitySetCoordTitle{Coordenador\ActivityCoord{course}{narticle} de Curso}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord[course]{narticle} de Curso}
 
 \ActivitySelect{tccI}
 \ActivitySet{TCC~-~I}{Trabalho de Conclusão de Curso CCA - I}
 \ActivitySetCoord{Nome Coordenador}
-\ActivitySetCoordTitle{Coordenador\ActivityCoord{tccI}{narticle} da Atividade de Ensino de\break Trabalho de Conclusão de Curso}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord[tccI]{narticle} da Atividade de Ensino de\break Trabalho de Conclusão de Curso}
 
 \ActivitySelect{tccII}
 \ActivitySet{TCC~-~II}{Trabalho de Conclusão de Curso CCA - II}
 \ActivitySetCoord{Nome Coordenador}
-\ActivitySetCoordTitle{Coordenador\ActivityCoord{tccII}{narticle} da Atividade de Ensino de\break Trabalho de Conclusão de Curso}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord[tccII]{narticle} da Atividade de Ensino de\break Trabalho de Conclusão de Curso}
 
 \ActivitySelect{internship}
 \ActivitySet{Est.Ob.}{Estágio Supervisionado Obrigatório}
 \ActivitySetCoord{Nome Coordenador}
-\ActivitySetCoordTitle{Coordenador\ActivityCoord{internship}{narticle} da Atividade de Ensino de\break Estágio Supervisionado Obrigatório}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord[internship]{narticle} da Atividade de Ensino de\newline Estágio Supervisionado Obrigatório}
 
+\ActivitySelect{internship}
+\ActivitySet{Est.Ob.}{Estágio Supervisionado Não Obrigatório}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord[internship]{narticle} da Atividade de Ensino de\newline Estágio Supervisionado Não Obrigatório}
 
 
 \SetTerms{%
@@ -72,9 +73,9 @@
   title.tccII               = Trabalho de Conclusão de Curso II ,  
   title.internship          = Estágio Supervisionado Obrigatório ,
   %
-  title.calendar            = {Calendário - \UseConst{semester}} , 
+  title.calendar            = {Calendário - \UseTerm{semester}} , 
   title.requestform         = Formulário de Requerimento de Matrícula ,
-  title.coadvisorform       = Requerimento de Autorização de Co-Orientação ,
+  title.coadvisorform       = Requerimento de Autorização de Coorientação ,
   title.boardapproval       = Formulário de Indicação da Banca Examinadora ,
   title.advisorsapproval-I  = Formulário de Aprovação para Avaliação ,
   title.advisorsapproval-II = Formulário de Aprovação para Apresentação ,
@@ -92,8 +93,8 @@
    %
   footnote.supervisorsform = {Favor utilizar a seguinte grade discreta: \begin{enumerate*}[start=0]\item Sofrível \item Regular \item Bom \item Muito Bom \item Excelente \end{enumerate*}} ,
    %
-  opening.requestform       = { Ilm\ActivityCoord{course}{article}. Sr\ActivityCoord{course}{narticle}.\par
- Coordenador\ActivityCoord{course}{narticle} da  Comissão de Graduação do Curso em \Activity{course}{name}\  da \UseHeading{university}.   } ,
+  opening.requestform       = { Ilm\ActivityCoord[course]{article}. Sr\ActivityCoord[course]{narticle}.\par
+ Coordenador\ActivityCoord[course]{narticle} da  Comissão de Graduação do Curso em \Activity[course]{name}\  da \UseHeading{university}.   } ,
   localdate                 = {\UseConst{publ.city},\hspace{4mm} de \hspace{1.2cm} de 20\hspace{4mm}.} ,
   %
   %
@@ -108,12 +109,12 @@
                                 \end{enumerate*}%
                                 } ,   %%% TCC I
   desc.requestform          = { \DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
-                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity{course}{name}}, desta universidade, 
+                              REGULARMENTE MATRICULAD\DataFields{student}{Article} neste período letivo no curso \emph{\Activity[course]{name}}, desta universidade, 
                               portador\DataFields{student}{narticle} do cartão de identificação n$^o$ \DataFields{student}{ID}, 
                               vem por meio deste solicitar matrícula na atividade de ensino} ,
   desc.coadvisorform            = {\DataFields{student}{Article} alun\DataFields{student}{article} \DataFields{student}{name}, 
                               REGULARMENTE MATRICULAD\DataFields{student}{Article} na atividade de TCC neste período letivo, 
-                              vem por meio deste solicitar autorização para registro de co-orientação de TCC, conforme justificativa abaixo.} ,
+                              vem por meio deste solicitar autorização para registro de coorientação de TCC, conforme justificativa abaixo.} ,
   desc.rectifyapproval      = { \begin{description}
                               \item[Observação 1:] Caso a versão final corrigida do trabalho, mais este formulário, não sejam entregues até a data estipulada, o conceito final passará a ser {\bf D}.
                               \item[Observação 2:] Caso as correções sejam satisfatórias, a nota final será a já atribuída pela Banca Examinadora. 
@@ -137,6 +138,29 @@
 
 
 
+\SetTerms{%
+  tccI.text-descpage         = {  Proposta de Trabalho de Conclusão de Curso submetida à
+		                              COMGRAD/\Activity[course]{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
+		                              obtenção do título de \emph{\UseHeading{course.title}.}
+                               } ,
+  tccI.text-approvalpage     = { Esta Proposta de Trabalho de Conclusão de Curso foi julgada adequada para a
+                            		obtenção dos créditos da Atividade de \emph{\Activity[tccI]{name}} e aprovada em sua forma final 
+		                            \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}} 
+                                e Banca Examinadora abaixo.
+                              } ,                               
+  tccII.text-descpage         = { Trabalho de Conclusão de Curso submetido à
+		                              COMGRAD/\Activity[course]{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
+		                              obtenção do título de \emph{\UseHeading{course.title}.}
+                                } ,
+  tccII.text-approvalpage    = { 	Este Trabalho de Conclusão de Curso foi julgado adequado para a
+		                              obtenção dos créditos da Atividade de \emph{\Activity[tccII]{name}} e aprovado em sua forma final 
+                                  \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article}
+		                              Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.
+                               } ,
+}
+
+
+
 
 %\SetTerms{%
 %  
@@ -148,9 +172,9 @@
   advisors                  = Orientadores ,
   advisor.gen               = Orientador(a) ,
   advisor.email             = Email d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle} ,
-  coadvisor                 = Co-orientador\DataFields{student.coadvisor}{narticle} ,
-  coadvisor.gen             = Co-orientador(a) ,
-  coadvisor.email           = Email d\DataFields{student.coadvisor}{article} Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  coadvisor                 = Coorientador\DataFields{student.coadvisor}{narticle} ,
+  coadvisor.gen             = Coorientador(a) ,
+  coadvisor.email           = Email d\DataFields{student.coadvisor}{article} Coorientador\DataFields{student.coadvisor}{narticle} ,
   reviewer.base             = Avaliador ,
   reviewer                  = Avaliador\DataFields{student.reviewer}{narticle} ,
   altreviewer               = Suplente ,  
@@ -168,13 +192,13 @@
   signature.student         = Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article} ,
   signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
   signature.advisor         = Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle} ,
-  signature.coadvisor       = Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Co-orientador\DataFields{student.coadvisor}{narticle} ,
+  signature.coadvisor       = Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Coorientador\DataFields{student.coadvisor}{narticle} ,
   signature.reviewer        = Assinatura\ \ d\DataFields{student.reviewer}{article}\ \ Avaliador\DataFields{student.reviewer}{narticle} ,
   signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
   signature.gen             = Assinatura ,
   signature.supervisor      = Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle} ,
   signature.tutor           = Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle} ,
-  signature.internshipcoord = Assinatura\ \ d\ActivityCoord{internship}{article}\ \ Coordenador\ActivityCoord{internship}{narticle} ,
+  signature.internshipcoord = Assinatura\ \ d\ActivityCoord[internship]{article}\ \ Coordenador\ActivityCoord[internship]{narticle} ,
   worktitle                 = Título do Trabalho ,
   worktitle.temp            = Título Provisório ,
   email                     = Email ,

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,14 +23,47 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\RequirePackage{expl3}
 
 
 \ProvidesExplPackage
     {ufrgscca-ppc}
-    {2023/11/10}
-    {1.99}
+    {2023/11/23}
+    {2.0}
     {UFRGS/CCA PPC commands}
+
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-ppc / pkg info}
+  {
+     name        .code:n = {ufrgscca-ppc} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~ auxiliary~ PPC-related~ (indicators)~ commands}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
 
 \keys_define:nn { ufrgscca / ppc}
   {
@@ -430,7 +463,7 @@
 %%%%%%%%%%%%%%%%%%%%%%
 
 
-\tl_new:N \l__ufrgscca_tmpc_tl
+\tl_new:N \l__ufrgscca_tmp_indref_tl
 \NewDocumentCommand{\indref}{sO{}mm+m}
   {
     \bool_if:NT \l__ufrgscca_showind_bool
@@ -445,10 +478,10 @@
     \starray_get_prop:nnN {indicator.ind}{cnt} \l_tmpb_tl
     \int_set:Nn \l_tmpa_int {\l_tmpb_tl + 1}
     \starray_set_prop:nnV {indicator.ind}{cnt} \l_tmpa_int
-    \tl_set:Ne \l__ufrgscca_tmpc_tl {@indlabel@ #3 @ #4 - \int_use:N \l_tmpa_int }
-    \seq_put_right:Ne \l_tmpa_seq{\l__ufrgscca_tmpc_tl}
+    \tl_set:Ne \l__ufrgscca_tmp_indref_tl {@indlabel@ #3 @ #4 - \int_use:N \l_tmpa_int }
+    \seq_put_right:Ne \l_tmpa_seq{\l__ufrgscca_tmp_indref_tl}
     \starray_set_prop:nnV {indicator.ind}{seqlst} \l_tmpa_seq
-    \label{\l__ufrgscca_tmpc_tl}
+    \label{\l__ufrgscca_tmp_indref_tl}
     \starray_term_syntax:n {indicator}
     \bool_if:nT {\starray_parsed_get_prop:n {view}}
     {

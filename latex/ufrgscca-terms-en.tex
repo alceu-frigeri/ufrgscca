@@ -1,0 +1,103 @@
+%%%==============================================================================
+%% Copyright 2022-23 by Alceu Frigeri
+%%
+%% This work may be distributed and/or modified under the conditions of
+%%
+%% * The [LaTeX Project Public License](http://www.latex-project.org/lppl.txt),
+%%   version 1.3c (or later), and/or
+%% * The [GNU Affero General Public License](https://www.gnu.org/licenses/agpl-3.0.html),
+%%   version 3 (or later)
+%%
+%% This work has the LPPL maintenance status *maintained*.
+%%
+%% The Current Maintainer of this work is Alceu Frigeri
+%%
+%% This is version {2.0} {2023/11/23}
+%%
+%% The list of files that compose this work can be found in the README.md file at
+%% https://ctan.org/pkg/ufrgscca
+%%
+%%%==============================================================================
+%% UFRGS stands for "Federal University of Rio Grande do Sul" in south Brazil
+%% EE    stands for "Engineering School"
+%% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
+%%%==============================================================================
+
+
+\SetHeadings{%
+    university              = Federal University of Rio Grande do Sul ,
+    acronym                 = UFRGS ,
+    unit                    = Engineering School ,
+    secretary               = SACAD/EE ,
+    course                  = Control and Automation Engineering  ,
+    course.title            = Bachelor in Control and Automation Engineering ,
+    department              = {Dept. of Electrical Systems} ,
+}
+
+
+
+\ActivitySelect{course}
+\ActivitySet{CCA}{Control and Automation Engineering}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Head of Course}
+
+\ActivitySelect{tccI}
+\ActivitySet{TCC~-~I}{Final Course Work I}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Final Course Work Coordinator}
+
+\ActivitySelect{tccII}
+\ActivitySet{TCC~-~II}{Final Course Work II}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Final Course Work Coordinator}
+
+\ActivitySelect{internship}
+\ActivitySet{Est.Ob.}{Estágio Supervisionado Obrigatório}
+\ActivitySetCoord{Nome Coordenador}
+\ActivitySetCoordTitle{Coordenador\ActivityCoord[internship]{narticle} da Atividade de Ensino de\newline Estágio Supervisionado Obrigatório}
+
+
+
+\SetTerms{%
+  title.tcc                 = Completions's Course Work ,
+  title.tccI                = Completions's Course Work I ,
+  title.tccII               = Completions's Course Work II ,  
+}
+
+
+\SetLabels{%
+  advisor                   = Advisor ,
+  advisors                  = Advisors ,
+  advisor.gen               = Advisor ,
+  advisor.email             = Advisor's Email ,
+  coadvisor                 = Co-advisor ,
+  coadvisor.gen             = Co-advisor ,
+  coadvisor.email           = Co-advisor's Email ,
+  reviewer.base             = Reviewer ,
+  reviewer                  = Reviewer ,
+  tutor                     = Tutor\DataFields{student.tutor}{narticle} ,
+  tutor.gen                 = Tutor(a) ,
+  tutor.email               = Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} ,  
+  supervisor                = Supervisor\DataFields{student.supervisor}{narticle} ,
+  supervisor.gen            = Supervisor(a) ,  
+  student                   = Student ,
+  student.gen               = Student ,
+  student.email             = Student's Email ,
+  student.ID                = Card N. ,
+  board                     = Exam's Board ,
+}
+
+\SetTerms{%
+  tccI.text-descpage         = {  This work's proposal was submitted to COMGRAD/\Activity[course]{acronym}\   -- \UseHeading{acronym}\  
+                                  as part of the requirements to obtain the title of \emph{\UseHeading{course.title}.}
+                               } ,
+  tccI.text-approvalpage     = { This work's proposal was considered adequate to finish the \emph{\Activity[tccI]{name}} and approved, in it's final form, by the  
+		                            \studentCoadvCase{Advisors}{Advisor} and Exam's Board below. } ,                               
+  tccII.text-descpage         = { This work was submitted to COMGRAD/\Activity[course]{acronym}\   -- \UseHeading{acronym}\  
+                                  as part of the requirements to obtain the title of \emph{\UseHeading{course.title}.}
+                                } ,
+  tccII.text-approvalpage    = { 	 This work  was considered adequate to finish the \emph{\Activity[tccII]{name}} and approved, in it's final form, by the  
+		                            \studentCoadvCase{Advisors}{Advisor} and Exam's Board below.
+                               } ,
+}
+

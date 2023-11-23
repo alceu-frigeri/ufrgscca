@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,23 +23,46 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-%%\def\tc@tmp@packname{ufrgscca-abnt}
-%%\def\tc@tmp@altpackname{ufrgsccaabnt}
-%%\def\tc@tmp@packdesc{UFRGS/CCA ABNT layout}
-%%\def\tc@tmp@packdate{2023/09/23}
-%%\def\tc@tmp@packversion{1.12}
-%%\let\@exp\expandafter
-%%\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-%%\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
-
 
 
 \ProvidesExplPackage
     {ufrgscca-abnt}
-    {2023/11/10}
-    {1.99}
+    {2023/11/23}
+    {2.0}
     {UFRGS/CCA ABNT layout}
 
+
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-abnt / pkg info}
+  {
+     name        .code:n = {ufrgscca-abnt} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~ abnt~layout}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }  
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
 
 
 
@@ -57,8 +80,8 @@
 		chapternopagenum  .usage:n      = load ,
 		chapternopagenum  .bool_set:N   = \l__ufrgscca_chapternopagenum_bool ,
 
-		english       .usage:n          = load ,
-		english       .bool_set:N       = \l__ufrgscca_english_bool ,
+%		english       .usage:n          = load ,
+%		english       .bool_set:N       = \l__ufrgscca_english_bool ,
 
 		relnum        .usage:n          = load ,
 		relnum        .bool_set:N       = \l__ufrgscca_relnum_bool ,
@@ -90,56 +113,25 @@
 
 \ProcessKeyOptions[ufrgscca.abnt]\relax
 
-\makeatletter
 
 
-%%\def\tc@tocdepth{3}  % Table of Contents depth
-%%\def\tc@secdepth{4} % Sectioning numbers depth (3 -> subsubsection)
-%%
-%%\DeclareKeys[ufrgscca-abnt]{
-%%    strict-abnt.usage = load,
-%%		strict-abnt.if = tcif@strictabnt,
-%%
-%%        pretextontoc.usage = load,
-%%        pretextontoc.if = tcif@pretextontoc,
-%%
-%%        yearsonly.usage = load,
-%%        yearsonly.if = tcif@yearsonly,
-%%
-%%
-%%		chapternopagenum.usage = load,
-%%		chapternopagenum.if = tcif@chapternopagenum,
-%%
-%%		english.usage = load,
-%%		english.if = tcif@english,
-%%		relnum.usage = load,
-%%		relnum.if = tcif@relnum,
-%%		repeatfields.usage = load,
-%%		repeatfields.if = tcif@repeatfields,
-%%
-%%		showframes.usage = load,
-%%		showframes.if = tcif@showframes,
-%%		showlabels.usage = load,
-%%		showlabels.if = tcif@showlabels,
-%%
-%%		tocdepth.usage = load,
-%%		tocdepth.store = \tc@tocdepth,
-%%		secdepth.usage = load,
-%%		secdepth.store = \tc@secdepth,
-%%
-%%		nomicrotype.usage = load,
-%%		nomicrotype.if = tcif@nomicrotype,
-%%
-%%		article.usage = load,
-%%		article.if = tcif@article,
-%%}
-%%
-%%\ProcessKeyOptions[ufrgscca-abnt]\relax
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading
 %%%%%%%%%%%%%%%%%%%%%
-\RequirePackage[english,brazilian]{babel}% see ufrgscca.cls in case of newtx* being loaded!
+\bool_if:NTF \l__ufrgscca_english_bool
+  {
+    \RequirePackage[brazilian,english]{babel}% see ufrgscca.cls in case of newtx* being loaded!
+    %\addto\extraenglish{\input{ufrgscca-base-en.def}}
+    \AtBeginDocument{\selectlanguage{english}\input{ufrgscca-base-en.def}}%
+  }
+  {
+    \RequirePackage[english,brazilian]{babel}% see ufrgscca.cls in case of newtx* being loaded!
+    %\addto\extrabrazilian{\input{ufrgscca-base-ptBR.def}}
+    \AtBeginDocument{\selectlanguage{brazilian}\input{ufrgscca-base-ptBR.def}}%
+  }
+  
+  
 \RequirePackage{csquotes}%
 
 \bool_if:NTF \l__ufrgscca_strictabnt_bool
@@ -152,15 +144,6 @@
         \RequirePackage[a4paper,inner=2.5cm,outer=2.5cm,top=3cm,bottom=2cm,twoside]{geometry}
       }
   }
-%%\iftcif@strictabnt
-%%  \RequirePackage[a4paper,inner=2cm,outer=3cm,top=3cm,bottom=2cm,twoside]{geometry}
-%%\else
-%%  \iftcif@nogeometry
-%%%    \RequirePackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.75cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
-%%  \else
-%%    \RequirePackage[a4paper,inner=2.5cm,outer=2.5cm,top=3cm,bottom=2cm,twoside]{geometry}
-%%  \fi
-%%\fi
 
 \RequirePackage[toc,page,title]{appendix}
 \RequirePackage[pagestyles,clearempty]{titlesec}
@@ -168,18 +151,17 @@
 \RequirePackage[inline]{enumitem}
 
 \RequirePackage{chngcntr}
-%%
-%% TO BE removed !
-\def\tc@captionwidth{0.75\textwidth}
-\def\tc@notewidth{0.635\textwidth}  %% 0.84666667\tc@captionwidth
+
+
 %
 % using Expl3
 \SetConsts{%
     caption.width   = 0.75\textwidth ,
     note.width      =  0.635\textwidth ,
 }
-%\RequirePackage[position=above,font=small,labelfont=bf,textfont=md,textfont+=sl,width=\tc@captionwidth]{caption}%
+
 \RequirePackage[position=above,font=small,labelfont=bf,textfont=md,textfont+=sl,width=\UseConst{caption.width}]{caption}%
+
 %%%
 %%% commands for 'floats'
 %%%
@@ -187,7 +169,19 @@
 \NewDocumentCommand{\sourcecitation}{m}{{\small{\sourcename\ #1}}}%
 %
 \newlength{\noteindent}%%auxiliary length
-\NewDocumentCommand{\note}{O{}+m}{{\footnotesize\settowidth{\noteindent}{\notename#1:}\addtolength{\noteindent}{3pt}\begin{center}\begin{minipage}{\UseConst{note.width}}{\parindent=-\the\noteindent\notename#1:\hspace{2.9pt}#2}\end{minipage}\end{center}}}%%
+\NewDocumentCommand{\note}{O{}+m}
+  {
+    {
+      \footnotesize
+      \settowidth{\noteindent}{\notename#1:}
+      \addtolength{\noteindent}{3pt}
+      \begin{center}
+        \begin{minipage}{\UseConst{note.width}}
+          { \parindent=-\the\noteindent\notename#1:\hspace{2.9pt}#2 }
+        \end{minipage}
+      \end{center}
+    }
+  }%%
 %
 %
 
@@ -221,33 +215,9 @@
     \RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear]{biblatex}%
   }
 
-%%\iftcif@repeatfields%
-%%	\RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear,repeatfields]{biblatex}%
-%%\else%
-%%	\RequirePackage[backend=biber,style=abnt,pretty,giveninits,extrayear]{biblatex}%
-%%\fi%
 
 %%
-%%%
-%%% Language selection {package babel}
-%%%
-\bool_if:NTF \l__ufrgscca_english_bool
-  {
-    \selectlanguage{english}%
-    \AtBeginDocument{\selectlanguage{english}}%
-  }
-  {
-    \selectlanguage{brazilian}%
-    \AtBeginDocument{\selectlanguage{brazilian}}%
-  }
 
-%%\iftcif@english%%
-%%  \selectlanguage{english}%
-%%  \AtBeginDocument{\selectlanguage{english}}%
-%%\else
-%%  \selectlanguage{brazilian}%
-%%  \AtBeginDocument{\selectlanguage{brazilian}}%
-%%\fi%
 
 
 %%%
@@ -261,11 +231,6 @@
       }
   }
 
-%%\iftcif@timesroman\else%
-%%\iftcif@nomicrotype\else\RequirePackage[tracking,kerning,spacing,babel]{microtype}\fi%
-%%\fi
-%%%\iftcif@nomicrotype\else\RequirePackage[babel]{microtype}\fi%
-%%%
 
 % pdftex native protruding
 %
@@ -292,16 +257,6 @@
   }
 
 
-%%\iftcif@showframes%
-%%  \RequirePackage{showframe}%%
-%%\fi
-%%
-%%\iftcif@showlabels%
-%%	\RequirePackage{showlabels}%%
-%%	\showlabels{cite}%%
-%%	\showlabels{textcite}%%
-%%	\RenewDocumentCommand{\showlabelfont}{}{\tiny\ttfamily\color{blue}}%%
-%%\fi%%
 
 
 %%%
@@ -311,32 +266,40 @@
 \setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}  % Table of Contents depth
 \setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl} % Sectioning numbers depth (3 -> subsubsection)
 
-\NewDocumentEnvironment{tocless}{}%
-   {\setcounter{secnumdepth}{-1}\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}\ignorespaces}}%
-   {\setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl}\addtocontents{toc}{\protect\setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}\ignorespaces}}%
+\NewDocumentEnvironment{tocless}{}
+   {
+     \setcounter{secnumdepth}{-1}
+     \addtocontents{toc}{\protect\setcounter{tocdepth}{-1}\ignorespaces}
+   }
+   {
+     \setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl}
+     \addtocontents{toc}{\protect\setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}\ignorespaces}
+   }
+   
 \def\notoc#1#2{\begin{tocless}#1{#2}\end{tocless}}
 
-\NewDocumentEnvironment{numberless}{}{\setcounter{secnumdepth}{-1}}{\setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl}}
+
+\NewDocumentEnvironment{numberless}{}
+  {
+    \setcounter{secnumdepth}{-1}
+  }
+  {
+    \setcounter{secnumdepth}{\l__ufrgscca_secdepth_tl}
+  }
+  
 \def\nonum#1#2{\begin{numberless}#1{#2}\end{numberless}}
 
-%%\setcounter{tocdepth}{\l__ufrgscca_tocdepth_tl}  % Table of Contents depth
-%%\setcounter{secnumdepth}{\tc@secdepth} % Sectioning numbers depth (3 -> subsubsection)
 
-%%\NewDocumentEnvironment{tocless}{}%
-%%   {\setcounter{secnumdepth}{-1}\addtocontents{toc}{\protect\setcounter{tocdepth}{-1}\ignorespaces}}%
-%%   {\setcounter{secnumdepth}{\tc@secdepth}\addtocontents{toc}{\protect\setcounter{tocdepth}{\tc@tocdepth}\ignorespaces}}%
-%%\def\notoc#1#2{\begin{tocless}#1{#2}\end{tocless}}
-%%
-%%\NewDocumentEnvironment{numberless}{}{\setcounter{secnumdepth}{-1}}{\setcounter{secnumdepth}{\tc@secdepth}}
-%%\def\nonum#1#2{\begin{numberless}#1{#2}\end{numberless}}
 
 %%%
 %%% Relative/Absolute numbering... argh !!!
 %%%
-  \def\tc@chapterspc{\vspace{2.5mm}}
-  \def\tc@sectionspc{\vspace{0.75mm}}
+  
+  \def\l__ufrgscca_chapter_spacing_tl{\vspace{2.5mm}}
+  \def\l__ufrgscca_section_spacing_tl{\vspace{0.75mm}}
   
   
+\makeatletter  
 \bool_if:NF \l__ufrgscca_article_bool
   {
     \bool_if:NF \l__ufrgscca_relnum_bool
@@ -346,18 +309,6 @@
       }
   }  
 
-%%\iftcif@article
-%%\else
-%%\iftcif@relnum%
-%%%  \def\tc@chapterspc{\vspace{2.5mm}}
-%%%  \def\tc@sectionspc{\vspace{0.75mm}}
-%%\else%
-%%%  \def\tc@chapterspc{}
-%%%  \def\tc@sectionspc{}
-%%  \patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH ~FAILED}}% LoF ... to supress extra space (figures of diverse chapters)
-%%  \patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH ~FAILED}}% LoT
-%%\fi
-%%\fi
 
 
 %%%
@@ -366,66 +317,185 @@
 \def\tc@lblmargin{22mm}
 \contentsmargin{2.2em}
 \def\tc@dotspacing{0.5pc}
-\titlecontents{chapter}[\tc@lblmargin]{\tc@chapterspc\normalfont\scshape\selectfont}{\contentslabel{\tc@lblmargin}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}
-\titlecontents{section}[\tc@lblmargin]{\tc@sectionspc}{\contentslabel{\tc@lblmargin}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\contentspage}
 
-\dottedcontents{subsection}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
+%%%\def\tc@lblmargin{22mm}
+%%%\contentsmargin{2.2em}
+%%%\def\tc@dotspacing{0.5pc}
 
-\dottedcontents{subsubsection}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
 
-\dottedcontents{figure}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
-\dottedcontents{table}[\tc@lblmargin]{}{\tc@lblmargin}{\tc@dotspacing}
+\titlecontents{chapter}[\tc@lblmargin]
+  {\l__ufrgscca_chapter_spacing_tl\normalfont\scshape\selectfont}
+  {\contentslabel{\tc@lblmargin}}
+  {\hspace{-\tc@lblmargin}}
+  {\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}
+  
+\titlecontents{section}[\tc@lblmargin]
+  {\l__ufrgscca_section_spacing_tl}
+  {\contentslabel{\tc@lblmargin}}
+  {\hspace{-\tc@lblmargin}}
+  {\titlerule*[\tc@dotspacing]{.}\contentspage}
+
+\dottedcontents{subsection}[\tc@lblmargin]
+  {}
+  {\tc@lblmargin}
+  {\tc@dotspacing}
+
+\dottedcontents{subsubsection}[\tc@lblmargin]
+  {}
+  {\tc@lblmargin}
+  {\tc@dotspacing}
+
+\dottedcontents{figure}[\tc@lblmargin]
+  {}
+  {\tc@lblmargin}
+  {\tc@dotspacing}
+  
+\dottedcontents{table}[\tc@lblmargin]
+  {}
+  {\tc@lblmargin}
+  {\tc@dotspacing}
+
+
+
+
 
 \renewcommand{\restoreapp}{} % to reset appendix counters each time (from appendix doc)
-\RenewDocumentEnvironment{appendix}{O{\defappendixpagename}O{\defappendixname}}{%
-       \titleformat{\chapter}{\bfseries\Large\sffamily}{#2 \thechapter\hspace{1.5ex}-}{2ex}{\MakeUppercase}%
-			 \titlecontents{chapter}[\tc@lblmargin]{\vspace{3mm}\sc}{\hspace{-\tc@lblmargin}{#2~\thecontentslabel\ -\enspace}}{\hspace{-\tc@lblmargin}}{\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}
-		   \def\appendixname{#2}%
-			 \def\appendixpagename{#1}%
-			 \def\appendixtocname{#1}%
+\RenewDocumentEnvironment{appendix}{O{\defappendixpagename}O{\defappendixname}}
+    {
+      \titleformat{\chapter}
+        {\bfseries\Large\sffamily}
+        {#2~ \thechapter\hspace{1.5ex}-}
+        {2ex}
+        {\MakeUppercase}%
+			\titlecontents{chapter}[\tc@lblmargin]
+        {\vspace{3mm}\sc}
+        {\hspace{-\tc@lblmargin}{#2\ ~\thecontentslabel\ ~ -\enspace}}
+        {\hspace{-\tc@lblmargin}}
+        {\titlerule*[\tc@dotspacing]{.}\normalsize\normalfont\contentspage}
+		  \def\appendixname{#2}%
+			\def\appendixpagename{#1}%
+			\def\appendixtocname{#1}%
 			\begin{appendices}%
-			\let\tc@appendixautorefname@tmp\appendixautorefname
-			\def\appendixautorefname{#2}
-		}%
-		{\let\appendixautorefname\tc@appendixautorefname@tmp\end{appendices}}
+			  \let\tc@appendixautorefname@tmp\appendixautorefname
+			  \def\appendixautorefname{#2}
+		}
+		{
+        \let\appendixautorefname\tc@appendixautorefname@tmp
+      \end{appendices}
+    }
 
-\NewDocumentEnvironment{annex}{O{\defannexpagename}O{\defannexname}}{\begin{appendix}[#1][#2]}{\end{appendix}}
+\NewDocumentEnvironment{annex}{O{\defannexpagename}O{\defannexname}}
+    {\begin{appendix}[#1][#2]}
+    {\end{appendix}}
+
+
+\makeatother
+
+
 
 %%%
 %%% Headings definitions {package titlesec}
 %%%
+%%%%\def\tc@chapbefore{70pt plus 12pt minus 8pt}
+%%%%\def\tc@chapafter{36pt plus 8pt minus 8pt}
+%%%%\def\tc@secbefore{27pt plus 6pt minus 6pt}
+%%%%\def\tc@secafter{18pt plus 4pt minus 4pt}
+
+\def\l__ufrgscca_chapter_before_skip{70pt plus 12pt minus 8pt}
+\def\l__ufrgscca_chapter_after_skip{36pt plus 8pt minus 8pt}
+\def\l__ufrgscca_section_before_skip{27pt plus 6pt minus 6pt}
+\def\l__ufrgscca_section_after_skip{18pt plus 4pt minus 4pt}
+
+
 %\RenewDocumentCommand{\thechapter}{}{\arabic{chapter}}
-\titleformat{\chapter}{\sffamily\bfseries\selectfont\Large}{\thechapter}{2ex}{\MakeUppercase}
-\titleformat{name=\chapter,numberless}{\sffamily\bfseries\selectfont\Large\center}{}{0pt}{\MakeUppercase}
-\titlespacing{\chapter}{0pt}{\tc@chapbefore}{\tc@chapafter}
+\titleformat{\chapter}
+    {\sffamily\bfseries\selectfont\Large}
+    {\thechapter}
+    {2ex}
+    {\MakeUppercase}
+    
+\titleformat{name=\chapter,numberless}
+    {\sffamily\bfseries\selectfont\Large\center}
+    {}
+    {0pt}
+    {\MakeUppercase}
+    
+\titlespacing{\chapter}
+    {0pt}
+    {\l__ufrgscca_chapter_before_skip}
+    {\l__ufrgscca_chapter_after_skip}
 
-%\def\tc@chapbefore{18pt plus 3pt minus 6pt}
-%\def\tc@chapafter{9pt plus 3pt minus 3pt}
-%\def\tc@secbefore{12pt plus 6pt minus 3pt}
-%\def\tc@secafter{6pt plus 2pt minus 2pt}
+%\def\l__ufrgscca_chapter_before_skip{18pt plus 3pt minus 6pt}
+%\def\l__ufrgscca_chapter_after_skip{9pt plus 3pt minus 3pt}
+%\def\l__ufrgscca_section_before_skip{12pt plus 6pt minus 3pt}
+%\def\l__ufrgscca_section_after_skip{6pt plus 2pt minus 2pt}
 
-\def\tc@chapbefore{70pt plus 12pt minus 8pt}
-\def\tc@chapafter{36pt plus 8pt minus 8pt}
-\def\tc@secbefore{27pt plus 6pt minus 6pt}
-\def\tc@secafter{18pt plus 4pt minus 4pt}
 
-\titleformat{\section}[hang]{\normalfont\scshape\selectfont\large}{\thesection}{.5em}{}
-\titlespacing{\section}{0pt}{\tc@secbefore}{\tc@secafter}
+\titleformat{\section}[hang]
+    {\normalfont\scshape\selectfont\large}
+    {\thesection}
+    {.5em}
+    {}
+    
+\titlespacing{\section}
+    {0pt}
+    {\l__ufrgscca_section_before_skip}
+    {\l__ufrgscca_section_after_skip}
 
-\titleformat{name=\section,numberless}[hang]{\normalfont\large\bfseries\scshape\selectfont\center}{}{0pt}{}
-\titlespacing{name=\section,numberless}{0pt}{\tc@secbefore}{\tc@secafter}
+\titleformat{name=\section,numberless}[hang]
+    {\normalfont\large\bfseries\scshape\selectfont\center}
+    {}
+    {0pt}
+    {}
+    
+\titlespacing{name=\section,numberless}
+    {0pt}
+    {\l__ufrgscca_section_before_skip}
+    {\l__ufrgscca_section_after_skip}
 
-\titleformat{\subsection}[hang]{\normalfont\sffamily\bfseries\slshape\selectfont}{\thesubsection}{.5em}{}
-\titlespacing{\subsection}{0pt}{\tc@secbefore}{\tc@secafter}
+\titleformat{\subsection}[hang]
+    {\normalfont\sffamily\bfseries\slshape\selectfont}
+    {\thesubsection}
+    {.5em}
+    {}
+    
+\titlespacing{\subsection}
+    {0pt}
+    {\l__ufrgscca_section_before_skip}
+    {\l__ufrgscca_section_after_skip}
 
-\titleformat{\subsubsection}[hang]{\normalfont\sffamily\slshape\selectfont}{\thesubsubsection}{.5em}{}
-\titlespacing{\subsubsection}{0pt}{\tc@secbefore}{\tc@secafter}
+\titleformat{\subsubsection}[hang]
+    {\normalfont\sffamily\slshape\selectfont}
+    {\thesubsubsection}
+    {.5em}
+    {}
+    
+\titlespacing{\subsubsection}
+    {0pt}
+    {\l__ufrgscca_section_before_skip}
+    {\l__ufrgscca_section_after_skip}
 
-\titleformat{\paragraph}[hang]{\normalfont\sffamily\selectfont}{\theparagraph}{.5em}{\tightul}
-\titlespacing{\paragraph}{0pt}{\tc@secbefore}{\tc@secafter}
+\titleformat{\paragraph}[hang]
+    {\normalfont\sffamily\selectfont}
+    {\theparagraph}
+    {.5em}
+    {\tightul}
+    
+\titlespacing{\paragraph}
+    {0pt}
+    {\l__ufrgscca_section_before_skip}
+    {\l__ufrgscca_section_after_skip}
 
-\titleformat{\subparagraph}[hang]{\normalfont\sffamily\selectfont}{\thesubparagraph}{.5em}{\tightul}
-\titlespacing{\subparagraph}{0pt}{\tc@secbefore}{\tc@secafter}
+\titleformat{\subparagraph}[hang]
+    {\normalfont\sffamily\selectfont}
+    {\thesubparagraph}
+    {.5em}
+    {\tightul}
+    
+\titlespacing{\subparagraph}
+    {0pt}
+    {\l__ufrgscca_section_before_skip}
+    {\l__ufrgscca_section_after_skip}
 
 %%%
 %%% Relative/Absolute counters... {package chngcntr}
@@ -434,40 +504,54 @@
   {
     \bool_if:NTF \l__ufrgscca_relnum_bool
       {
-          \counterwithin{figure}{chapter}%
-          \counterwithin{table}{chapter}%
-          \counterwithin{equation}{chapter}%
+          \counterwithin{figure}{chapter}
+          \counterwithin{table}{chapter}
+          \counterwithin{equation}{chapter}
       }
       {
-          \counterwithout{figure}{chapter}%
-          \counterwithout{table}{chapter}%
-          \counterwithout{equation}{chapter}%
+          \counterwithout{figure}{chapter}
+          \counterwithout{table}{chapter}
+          \counterwithout{equation}{chapter}
       }
   }
 
 
 
-%%\iftcif@article
-%%\else
-%%\iftcif@relnum%
-%%  \counterwithin{figure}{chapter}%
-%%  \counterwithin{table}{chapter}%
-%%  \counterwithin{equation}{chapter}%
-%%\else%
-%%  \counterwithout{figure}{chapter}%
-%%  \counterwithout{table}{chapter}%
-%%  \counterwithout{equation}{chapter}%
-%%  %\meaning\@chapter
-%%  %\patchcmd{\@chapter}{\addtocontents{lof}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoF
-%%  %\patchcmd{\@chapter}{\addtocontents{lot}{\protect\addvspace{10\p@}}}{}{}{{PATCH FAILED}}% LoT
-%%\fi
-%%\fi
 %%%
 %%% Page Heading format {titlesec/titleps}
 %%%
-\renewpagestyle{plain}{\sethead[\ifthechapter{\sffamily\thepage}{}][][]{}{}{\ifthechapter{\sffamily\thepage}{}}}
-\newpagestyle{main}{\sethead[\ifthechapter{\sffamily\thepage}{}][][]{}{}{\ifthechapter{\sffamily\thepage}{}}}
-\newpagestyle{bibliography}{\sethead[\sffamily\thepage][][]{}{}{\sffamily\thepage}}
+\renewpagestyle{plain}
+    {
+      \sethead[\ifthechapter{\sffamily\thepage}{}]  []  []
+          {}
+          {}
+          {  
+            \ifthechapter{\sffamily\thepage}
+              {}  
+          }
+    }
+    
+\newpagestyle{main}
+    {
+      \sethead[\ifthechapter{\sffamily\thepage}{}]  []  []
+          {}
+          {}
+          {
+            \ifthechapter{\sffamily\thepage}
+              {}
+          }
+    }
+    
+\newpagestyle{bibliography}
+    {
+      \sethead[\sffamily\thepage]  []  []
+          {}
+          {}
+          {
+            \sffamily\thepage
+          }
+    }
+    
 \pagestyle{main}
 
 
@@ -478,35 +562,24 @@
 
 %%\iftcif@chapternopagenum\renewpagestyle{plain}{\sethead[][][]{}{}{}}\fi
 
-\let\tc@temp@printbibliography\printbibliography
+%% ????
+%\let\tc@temp@printbibliography\printbibliography
 
 \defbibheading{bibliography}[\refname]{\nonum\chapter{#1}\pagestyle{bibliography}}
 
 
 \bool_if:NT \l__ufrgscca_pretextontoc_bool
   {
-    \let\tc@temp@listoffigures\listoffigures
-    \def\listoffigures{\tc@temp@listoffigures\addcontentsline{toc}{chapter}{\textsc\listfigurename}}
-%%
-    \let\tc@temp@listoftables\listoftables
-    \def\listoftables{\tc@temp@listoftables\addcontentsline{toc}{chapter}{\textsc\listtablename}}
+    \gappto{\listoffigures}{\addcontentsline{toc}{chapter}{\textsc\listfigurename}}
+    \gappto{\listoftables}{\addcontentsline{toc}{chapter}{\textsc\listtablename}}
   }
 
-%%\iftcif@pretextontoc
-%%    \let\tc@temp@listoffigures\listoffigures
-%%    \def\listoffigures{\tc@temp@listoffigures\addcontentsline{toc}{chapter}{\textsc\listfigurename}}
-%%%%
-%%    \let\tc@temp@listoftables\listoftables
-%%    \def\listoftables{\tc@temp@listoftables\addcontentsline{toc}{chapter}{\textsc\listtablename}}
-%%\fi
-
-%%
 
 
-\newlength{\tc@lblwidth}
+\newlength{\l__ufrgscca_label_width_dim}
 \NewDocumentCommand{\NewChapListEnv}{mm}{
     \NewDocumentEnvironment{#1}{O{}m}{%
-        \settowidth{\tc@lblwidth}{##2***}%
+        \settowidth{\l__ufrgscca_label_width_dim}{##2***}%
         \bool_if:NTF \l__ufrgscca_pretextontoc_bool
           {
             \nonum\chapter{\textsc{#2}}
@@ -514,12 +587,7 @@
           {
             \notoc\chapter{\textsc{#2}}
           }
-%%        \iftcif@pretextontoc
-%%            \nonum\chapter{\textsc{#2}}%
-%%        \else
-%%            \notoc\chapter{\textsc{#2}}%
-%%        \fi
-        \begin{description}[tcc,noindent,leftmargin=\tc@lblwidth,labelwidth=!,##1]%
+        \begin{description}[tcc,noindent,leftmargin=\l__ufrgscca_label_width_dim,labelwidth=!,##1]%
 		}{\end{description}}
 }
 
@@ -531,25 +599,32 @@
 %%% lists formating {package enumitem}
 %%%
 
-\def\tc@enumbase{6mm}
-\def\tc@enummarging{12mm}
-\def\tc@enummargingB{18mm}
-\def\tc@enumlabelsep{2.5mm}
-\setlength{\parindent}{\tc@enummarging}
+
+\def\l__ufrgscca_enum_base_dim{6mm}
+\def\l__ufrgscca_enum_margin_dim{12mm}
+\def\l__ufrgscca_enum_margin_dimB{18mm}
+\def\l__ufrgscca_enum_label_sep_dim{2.5mm}
+\setlength{\parindent}{\l__ufrgscca_enum_margin_dim}
 
 \SetEnumitemValue{label}{arabic}{\arabic*.}
 \SetEnumitemValue{label}{roman}{\roman*.}
 \SetEnumitemValue{label}{alpha}{\alph*.}
 \SetEnumitemValue{label}{bullet}{\hfill\textopenbullet}
 
-\SetEnumitemKey{ppc}{leftmargin=\tc@enummarging,labelindent=\tc@enumbase,labelsep=\tc@enumlabelsep,labelwidth=!,style=nextline}
-\SetEnumitemKey{tcc}{leftmargin=\tc@enummarging,labelindent=\tc@enumbase,labelsep=\tc@enumlabelsep,labelwidth=!,style=nextline}
+\SetEnumitemKey{ppc}
+    {leftmargin=\l__ufrgscca_enum_margin_dim,labelindent=\l__ufrgscca_enum_base_dim,labelsep=\l__ufrgscca_enum_label_sep_dim,labelwidth=!,style=nextline}
+\SetEnumitemKey{tcc}
+    {leftmargin=\l__ufrgscca_enum_margin_dim,labelindent=\l__ufrgscca_enum_base_dim,labelsep=\l__ufrgscca_enum_label_sep_dim,labelwidth=!,style=nextline}
 %
-\SetEnumitemKey{parindent}{leftmargin=\tc@enummargingB,labelindent=\tc@enummarging,labelwidth=!}
-\SetEnumitemKey{noindent}{labelindent=0pt,labelwidth=!}
-\SetEnumitemKey{tight}{leftmargin=0pt,listparindent=5mm,labelwidth=5mm}
+\SetEnumitemKey{parindent}
+    {leftmargin=\l__ufrgscca_enum_margin_dimB,labelindent=\l__ufrgscca_enum_margin_dim,labelwidth=!}
+\SetEnumitemKey{noindent}
+    {labelindent=0pt,labelwidth=!}
+\SetEnumitemKey{tight}
+    {leftmargin=0pt,listparindent=5mm,labelwidth=5mm}
 %
-\SetEnumitemKey{miditemsep}{parsep=0ex,itemsep=0.4ex}
+\SetEnumitemKey{miditemsep}
+    {parsep=0ex,itemsep=0.4ex}
 
 %\SetEnumitemKey{ppctight}{leftmargin=0pt,listparindent=5mm,labelwidth=5mm}
 
@@ -596,57 +671,118 @@
 %%%
 %%% keyword command definition (for abstract)
 %%%
-\newcounter{tc@kwcounter}%
-\NewDocumentCommand{\keyword}{m}{%%
-        \stepcounter{tc@kwcounter}%%
-        \expandafter\gdef\csname keyw\alph{tc@kwcounter}\endcsname{#1}%%
-}%
-\NewDocumentCommand{\tcabnt@abstractkw}{}{%%
-        \@ifundefined{keywa}{}{\expandafter\MakeUppercase\keywa}%%
-        \@ifundefined{keywb}{}{, \keywb}%%
-        \@ifundefined{keywc}{}{, \keywc}%%
-        \@ifundefined{keywd}{}{, \keywd}%
-        \@ifundefined{keywe}{}{, \keywe}%
-        \@ifundefined{keywf}{}{, \keywf}%
-        \@ifundefined{keywg}{}{, \keywg}%
-        \@ifundefined{keywh}{}{, \keywh}%
-        \@ifundefined{keywi}{}{, \keywi}%
-        \@ifundefined{keywj}{}{, \keywj}%
-}%
 
-\let\tc@org@abstract\abstract
-\let\tc@org@endabstract\endabstract
+\seq_new:N \l__ufrgscca_keywords_seq
+\seq_new:N \l__ufrgscca_other_keywords_seq
+\seq_new:N \l__ufrgscca_keywords_tmpa_seq
+\seq_new:N \l__ufrgscca_keywords_tmpb_seq
 
-\RenewDocumentEnvironment{abstract}{}{%%
-        \notoc\chapter{\abstractname}%
-}{%%
-        \par\vspace{2ex} %\vfill%
-        \noindent\textbf{\keywordsname :} \tcabnt@abstractkw.%
-}%
+\NewDocumentCommand{\mainkeywords}{m}
+  {
+    \seq_set_from_clist:Nn \l__ufrgscca_keywords_tmpa_seq {#1}
+    \seq_set_eq:NN \l__ufrgscca_keywords_tmpb_seq \l__ufrgscca_keywords_seq
+    \seq_gconcat:NNN \l__ufrgscca_keywords_seq \l__ufrgscca_keywords_tmpb_seq \l__ufrgscca_keywords_tmpa_seq
+  }
+\let\keyword\mainkeywords
 
-\NewDocumentEnvironment{otherabstract}{O{english}m}{%%
-        \gdef\tc@otherkeywords{#2}%%
-        \begin{otherlanguage}{#1}%
-        \notoc\chapter{\abstractname}%
-}{%
-        \par\vspace{2ex} %\vfill%
-        \noindent\textbf{\keywordsname :} \tc@otherkeywords.%
-        \end{otherlanguage}%
-}%
+\NewDocumentCommand{\lstkeywords}{O{,~ }}
+  {
+    \seq_sort:Nn \l__ufrgscca_keywords_seq 
+      {
+        \str_compare:nNnTF { ##1 } > { ##2 }
+          { \sort_return_swapped: }
+          { \sort_return_same: }
+      }
+    \seq_use:Nn \l__ufrgscca_keywords_seq {#1}
+  }
+
+\NewDocumentCommand{\otherkeywords}{m}
+  {
+    \seq_set_from_clist:Nn \l__ufrgscca_keywords_tmpa_seq {#1}
+    \seq_set_eq:NN \l__ufrgscca_keywords_tmpb_seq \l__ufrgscca_other_keywords_seq
+    \seq_gconcat:NNN \l__ufrgscca_other_keywords_seq \l__ufrgscca_keywords_tmpb_seq \l__ufrgscca_keywords_tmpa_seq
+  }
+
+\NewDocumentCommand{\lstotherkeywords}{O{,~ }}
+  {
+    \seq_sort:Nn \l__ufrgscca_other_keywords_seq 
+      {
+        \str_compare:nNnTF { ##1 } > { ##2 }
+          { \sort_return_swapped: }
+          { \sort_return_same: }
+      }
+    \seq_use:Nn \l__ufrgscca_other_keywords_seq {#1}
+  }
 
 
-%\ExplSyntaxOn
+\bool_if:NTF \l__ufrgscca_oldrenews_bool
+  {
+    \RenewDocumentEnvironment{abstract}{}
+      {
+        \notoc\chapter{\abstractname}
+      }
+      {
+        \par\vspace{2ex}
+        \noindent\textbf{\keywordsname :\ ~} \lstkeywords
+      }
+  }
+  {
+    \NewDocumentEnvironment{mainabstract}{}
+      {
+        \notoc\chapter{\abstractname}
+      }
+      {
+        \par\vspace{2ex}
+        \noindent\textbf{\keywordsname :\ ~} \lstkeywords
+      }
+  }
+
+\NewDocumentEnvironment{otherabstract}{O{english}}
+  {
+    \begin{otherlanguage}{#1}
+      \notoc\chapter{\abstractname}
+  }
+  {
+      \par\vspace{2ex}
+      \noindent\textbf{\keywordsname :\ ~} \lstotherkeywords
+    \end{otherlanguage}%
+  }
+
+
+
+%%
+%% if needed to be, double side.
+%%
+\cs_new_protected:Npn \__ufrgscca_clearpage: 
+  { 
+    \if@openright
+      \cleardoublepage
+    \else
+      \clearpage
+    \fi 
+  }
+
+%
+\bool_if:NTF \l__ufrgscca_yearsonly_bool
+  {
+    \SetConsts
+      {
+        publ.date = {\UseConst{publ.year}} ,
+        publ.monthyear = {\UseConst{publ.month} ~ - ~ \UseConst{publ.year}} ,
+      }
+  }
+  {
+    \SetConsts
+      {
+        publ.date = {\UseConst{publ.month} ~ - ~ \UseConst{publ.year}} ,
+        publ.monthyear = {\UseConst{publ.month} ~ - ~ \UseConst{publ.year}} ,
+      }
+  }
+
 %==============================================================================%
 % date redefinition (separated month and year)
 %==============================================================================%
 \RenewDocumentCommand{\date}{O{\number\day}mm}{%
-  %%%
-  %%% TO BE REMOVED !
-%%	\gdef\tc@publmonth{#2}%
-%%	\gdef\tc@publyear{#3}%
-%%	\gdef\tc@publday{\ifnum #1<10 0\fi #1}%
-  %%%
-  %%% USING STARRAY
   \int_compare:nNnTF {#1} < {10}
     {
       \SetConsts{%
@@ -665,71 +801,27 @@
 }%
 \date{\monthname}{\number\year}%
 
-%\ExplSyntaxOff
 
-%for english%
-\@namedef{captionsenglish}{%%
- \input{ufrgscca-en-base.def}%%
-}%
-\@namedef{dateenglish}{%%
-	\def\today{\monthname\space\number\day,\space\number\year}%%
-	\def\monthname{%%
-		\ifcase\month\or%%
-			January\or February\or March\or April\or%%
-			May\or June\or July\or August\or September\or%%
-			October\or November\or December%%
-		\fi%%
-	}%%
-}%
-%
-%para portugues%
-\@namedef{captionsbrazilian}{%%
- \input{ufrgscca-ptBR-base.def}%%
-}%
-\@namedef{datebrazilian}{%%
-	\def\today{\number\day\space de\space\monthname\space de\space\number\year}%%
-	\def\monthname{%%
-		\ifcase\month\or%%
-			Janeiro\or Fevereiro\or Março\or Abril\or%%
-			Maio\or Junho\or Julho\or Agosto\or Setembro\or%%
-			Outubro\or Novembro\or Dezembro%%
-		\fi%%
-	}%%
-}%
-%
-\def\tc@monthyeardate{\tc@publmonth~\tc@publyear}
-%
-% Mainly for 'cover pages'
-\def\tc@pagebreak{\if@openright\cleardoublepage\else\clearpage\fi}
-%
-\bool_if:NTF \l__ufrgscca_yearsonly_bool
+\bool_if:NTF \l__ufrgscca_english_bool
   {
-    \SetConsts
-      {
-        publ.date = {\UseConst{publ.year}} ,
-        publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
-      }
+  	\def\today{\monthname\space\number\day,\space\number\year}
+  	\def\monthname{
+  		\ifcase\month\or
+  			January\or February\or March\or April\or
+  			May\or June\or July\or August\or September\or
+  			October\or November\or December
+  		\fi
+    }
   }
   {
-    \SetConsts
-      {
-        publ.date = {\UseConst{publ.month}~\UseConst{publ.year}} ,
-        publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
-      }
+  	\def\today{\number\day\space de\space\monthname\space de\space\number\year}
+  	\def\monthname{
+  		\ifcase\month\or
+  			Janeiro\or Fevereiro\or Março\or Abril\or
+  			Maio\or Junho\or Julho\or Agosto\or Setembro\or
+  			Outubro\or Novembro\or Dezembro
+  		\fi
+    }
   }
 
-
-%%    \iftcif@yearsonly
-%%        \SetConsts
-%%          {
-%%            publ.date = {\UseConst{publ.year}} ,
-%%            publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
-%%          }
-%%    \else
-%%        \SetConsts
-%%          {
-%%            publ.date = {\UseConst{publ.month}~\UseConst{publ.year}} ,
-%%            publ.monthyear = {\UseConst{publ.month}~\UseConst{publ.year}} ,
-%%          }
-%%    \fi
 

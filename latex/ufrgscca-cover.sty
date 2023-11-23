@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,25 +27,53 @@
 
 \ProvidesExplPackage
     {ufrgscca-cover}
-    {2023/11/10}
-    {1.99}
+    {2023/11/23}
+    {2.0}
     {UFRGS/CCA cover commands}
 
 
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-cover / pkg info}
+  {
+     name        .code:n = {ufrgscca-cover} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~ cover~pages}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }  
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
 
 \NewDocumentCommand{\class}{mm}{%
-  \SetConsts{%
+  \SetHeadings{%
     class.code = {#1} ,
     class.name = {#2} ,
   }
 }%
 %
 
-
-
 \cs_generate_variant:Nn \text_uppercase:n {e}
-
-
 
 \NewDocumentCommand{\location}{mm}{%%
   \SetConsts{%
@@ -77,11 +105,11 @@
 \keys_define:nn { ufrgscca / layout }
   {
     cover        .usage:n    = general,
-	cover        .code:n     = {\CoverPage{#1}},
+	cover        .code:n     = {\__ufrgscca_cover_page:n{#1}},
     desc        .usage:n    = general,
-	desc        .code:n     = {\DescPage{#1}},
+	desc        .code:n     = {\__ufrgscca_desc_page:n{#1}},
     approval    .usage:n    = general,
-    approval    .code:n     = {\ApprovalPage{#1}},
+    approval    .code:n     = {\__ufrgscca_approval_page:n{#1}},
   }
   
 \cs_generate_variant:Nn \seq_map_inline:Nn {Ne}
@@ -110,91 +138,102 @@
 
 \dim_new:N \l__ufrgscca_adv_wd_dim
 \dim_new:N \l__ufrgscca_adv_ht_dim
+\dim_new:N \l__ufrgscca_adv_voffset_dim
 
 
-\NewDocumentCommand{\CoverPageBase}{m}{
-  \dim_gset:Nn \l__ufrgscca_title_wd_dim {0.6\textwidth}% {95mm}
-  \dim_gset:Nn \l__ufrgscca_desc_wd_dim {0.6\textwidth}% {95mm}
-  \dim_gset:Nn \l__ufrgscca_adv_wd_dim {0.68\textwidth}% {95mm}
-
-  \vcoffin_gset:Nnn \l__ufrgscca_top_coffin {\textwidth}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.top} }
-
-  \vcoffin_gset:Nnn \l__ufrgscca_student_coffin {\l__ufrgscca_title_wd_dim}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.students} }
-    
-  \vcoffin_gset:Nnn \l__ufrgscca_title_coffin {\l__ufrgscca_title_wd_dim}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.title} }
-
-  \dim_gset:Nn \l__ufrgscca_student_ht_dim {\coffin_ht:N \l__ufrgscca_student_coffin}
-  \dim_gset:Nn \l__ufrgscca_top_ht_dim {\coffin_ht:N \l__ufrgscca_top_coffin}
-  \dim_gset:Nn \l__ufrgscca_title_voffset_dim {0.3\textheight} %%{0.3\textheight} 
-  \dim_gset:Nn \l__ufrgscca_desc_voffset_dim {0.43\textheight} %%{0.45\textheight}   
-  \dim_gset:Nn \l__ufrgscca_student_voffset_dim {(\l__ufrgscca_title_voffset_dim + \l__ufrgscca_top_ht_dim - \l__ufrgscca_student_ht_dim)/2}
-
-  \coffin_gjoin:NnnNnnnn \l__ufrgscca_top_coffin {hc}{t} \l__ufrgscca_student_coffin {hc}{t} {0pt} {-\l__ufrgscca_student_voffset_dim} 
-  \coffin_gjoin:NnnNnnnn \l__ufrgscca_top_coffin {hc}{t} \l__ufrgscca_title_coffin {hc}{t} {0pt} {-\l__ufrgscca_title_voffset_dim} 
-}
-
-
-
-
-\NewDocumentCommand{\CoverPage}{m}{
-  \CoverPageBase{#1}
-    
-  \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
-
-  \vfill
-  { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom} }
-  \newpage
-}
-
-\NewDocumentCommand{\DescPage}{m}{
-  \CoverPageBase{#1}      
-
-  \vcoffin_gset:Nnn \l__ufrgscca_desc_coffin {\l__ufrgscca_desc_wd_dim}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.text-descpage} }
-
-  \vcoffin_gset:Nnn \l__ufrgscca_adv_coffin {\l__ufrgscca_adv_wd_dim}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.advisor-descpage} }
+\cs_new_protected:Npn \__ufrgscca_cover_page_base:n #1
+  {
+    \dim_gset:Nn \l__ufrgscca_title_wd_dim {0.6\textwidth}% {95mm}
+    \dim_gset:Nn \l__ufrgscca_desc_wd_dim {0.6\textwidth}% {95mm}
+    \dim_gset:Nn \l__ufrgscca_adv_wd_dim {0.68\textwidth}% {95mm}
   
-  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_desc_coffin {r}{t} {0pt} {-\l__ufrgscca_desc_voffset_dim} 
-   
-  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-3\parsep} 
+    \vcoffin_gset:Nnn \l__ufrgscca_top_coffin {\textwidth}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.top} }
+  
+    \vcoffin_gset:Nnn \l__ufrgscca_student_coffin {\l__ufrgscca_title_wd_dim}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.students} }
+      
+    \vcoffin_gset:Nnn \l__ufrgscca_title_coffin {\l__ufrgscca_title_wd_dim}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.title} }
+  
+    \dim_gset:Nn \l__ufrgscca_student_ht_dim {\coffin_ht:N \l__ufrgscca_student_coffin}
+    \dim_gset:Nn \l__ufrgscca_top_ht_dim {\coffin_ht:N \l__ufrgscca_top_coffin}
+    \dim_gset:Nn \l__ufrgscca_title_voffset_dim {0.29\textheight} %%{0.3\textheight} 
+    \dim_gset:Nn \l__ufrgscca_desc_voffset_dim {0.42\textheight} %%{0.45\textheight}   
+    \dim_gset:Nn \l__ufrgscca_adv_voffset_dim {0.54\textheight} 
+    \dim_gset:Nn \l__ufrgscca_student_voffset_dim {(\l__ufrgscca_title_voffset_dim + \l__ufrgscca_top_ht_dim - \l__ufrgscca_student_ht_dim)/2}
+  
+    \coffin_gjoin:NnnNnnnn \l__ufrgscca_top_coffin {hc}{t} \l__ufrgscca_student_coffin {hc}{t} {0pt} {-\l__ufrgscca_student_voffset_dim} 
+    \coffin_gjoin:NnnNnnnn \l__ufrgscca_top_coffin {hc}{t} \l__ufrgscca_title_coffin {hc}{t} {0pt} {-\l__ufrgscca_title_voffset_dim} 
+  }
+
+
+
+
+\cs_new_protected:Npn \__ufrgscca_cover_page:n #1 
+  {
+    \__ufrgscca_cover_page_base:n{#1}
+      
+    \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
+  
+    \vfill
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom} }
+    %\newpage
+    \__ufrgscca_clearpage:
+  }
+
+\cs_new_protected:Npn \__ufrgscca_desc_page:n #1 
+  {
+    \__ufrgscca_cover_page_base:n{#1}      
+  
+    \vcoffin_gset:Nnn \l__ufrgscca_desc_coffin {\l__ufrgscca_desc_wd_dim}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.text-descpage} }
+  
+    \vcoffin_gset:Nnn \l__ufrgscca_adv_coffin {\l__ufrgscca_adv_wd_dim}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.advisor-descpage} }
     
-  \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
+    \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_desc_coffin {r}{t} {0pt} {-\l__ufrgscca_desc_voffset_dim} 
+     
+    %\coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-3\parsep} 
+    \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-\l__ufrgscca_adv_voffset_dim}   
+      
+    \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
+  
+    \vfill
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom-descpage} }
+    %\newpage
+    \__ufrgscca_clearpage:
+  }
 
-  \vfill
-  { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom-descpage} }
-  \newpage
-}
 
-
-\NewDocumentCommand{\ApprovalPage}{m}{
-  \CoverPageBase{#1}        
-  \vcoffin_gset:Nnn \l__ufrgscca_desc_coffin {\l__ufrgscca_desc_wd_dim}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.text-approvalpage} }
-
-  \vcoffin_gset:Nnn \l__ufrgscca_adv_coffin {\l__ufrgscca_adv_wd_dim}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.advisor-approvalpage} }
-
-  \vcoffin_gset:Nnn \l__ufrgscca_board_coffin {\textwidth}
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.board} }
-
-  \vcoffin_gset:Nnn \l__ufrgscca_coord_coffin {\l__ufrgscca_adv_wd_dim} 
-    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.coord} }
-
-  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_desc_coffin {r}{t} {0pt} {-\l__ufrgscca_desc_voffset_dim} 
-   
-  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-3\parsep} 
-    
-  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {l}{b} \l__ufrgscca_board_coffin {l}{t} {0pt} {-3\parsep} 
-  \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_coord_coffin {r}{t} {0pt} {-3\parsep} 
-    
-  \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
-
-  \vfill
-  { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom-approvalpage} }
-  \newpage
-}
+\cs_new_protected:Npn \__ufrgscca_approval_page:n #1 
+  {
+    \__ufrgscca_cover_page_base:n{#1}        
+    \vcoffin_gset:Nnn \l__ufrgscca_desc_coffin {\l__ufrgscca_desc_wd_dim}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.text-approvalpage} }
+  
+    \vcoffin_gset:Nnn \l__ufrgscca_adv_coffin {\l__ufrgscca_adv_wd_dim}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.advisor-approvalpage} }
+  
+    \vcoffin_gset:Nnn \l__ufrgscca_board_coffin {\textwidth}
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.board} }
+  
+    \vcoffin_gset:Nnn \l__ufrgscca_coord_coffin {\l__ufrgscca_adv_wd_dim} 
+      { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.coord} }
+  
+    \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_desc_coffin {r}{t} {0pt} {-\l__ufrgscca_desc_voffset_dim} 
+     
+    %\coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-3\parsep} 
+    \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{t} \l__ufrgscca_adv_coffin {r}{t} {0pt} {-\l__ufrgscca_adv_voffset_dim}   
+      
+    \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {l}{b} \l__ufrgscca_board_coffin {l}{t} {0pt} {-3\parsep} 
+    \coffin_join:NnnNnnnn \l__ufrgscca_top_coffin {r}{b} \l__ufrgscca_coord_coffin {r}{t} {0pt} {-3\parsep} 
+      
+    \noindent\coffin_typeset:Nnnnn \l__ufrgscca_top_coffin {l}{b} {0pt}{0pt}
+  
+    \vfill
+    { \prop_item:Nn \l__ufrgscca_coverpages_prop {#1.bottom-approvalpage} }
+    %\newpage
+    \__ufrgscca_clearpage:
+  }
 

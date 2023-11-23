@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,64 +23,105 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\def\tc@tmp@packname{ufrgscca-lists}
-\def\tc@tmp@altpackname{ufrgsccalists}
-\def\tc@tmp@packdesc{UFRGS/CCA auxiliary lists commands}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
 
-\DeclareKeys[ufrgscca-lst]{
-    relnum.usage = load,
-	relnum.if = tcif@relnum,
-}
-\ProcessKeyOptions[ufrgscca-lst]\relax
+\ProvidesExplPackage
+    {ufrgscca-lists}
+    {2023/11/23}
+    {2.0}
+    {UFRGS/CCA auxiliary lists commands}
+
+
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-lists / pkg info}
+  {
+     name        .code:n = {ufrgscca-lists} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23} ,
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~Auxiliary~ lists~ commands}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+
+%==============================================================================
+% Declaração de opções
+%==============================================================================
+\keys_define:nn { ufrgscca  / lists}
+  {
+    relnum      .usage:n        = load ,
+	relnum      .bool_set:N     = \l__ufrgscca_relnum_bool ,
+  }
+
+\ProcessKeyOptions[ufrgscca / lists]\relax
+
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading
 %%%%%%%%%%%%%%%%%%%%%
 
 \RequirePackage{newfloat}
-\RequirePackage{listings}%
-\RequirePackage{xcolor}%
+\RequirePackage{listings}
+\RequirePackage{xcolor}
 
 %%%
 %%% command to declare a new 'list of ...' things {package newfloat}
 %%%
-\NewDocumentCommand{\DeclareNewFloat}{mmmm}{%
- \DeclareFloatingEnvironment[%
-  fileext={#2},%
-	listname={#4},%
-	name={#3},%
-	placement=htb,%
-	chapterlistsgaps=off]{#1} %
- \iftcif@relnum\SetupFloatingEnvironment{#1}{within=chapter}%
-   \else\SetupFloatingEnvironment{#1}{within=none}%
- \fi %
-}%
+\NewDocumentCommand{\DeclareNewFloat}{mmmm}{
+ \DeclareFloatingEnvironment[
+  fileext={#2},
+	listname={#4},
+	name={#3},
+	placement=htb,
+	chapterlistsgaps=off]{#1} 
+    \bool_if:NTF \l__ufrgscca_relnum_bool
+        { \SetupFloatingEnvironment{#1}{within=chapter} }
+        { \SetupFloatingEnvironment{#1}{within=none} }
+}
 
 
 %
 %%%%\def\listoflistings{\lstlistoflistings}%
-\definecolor{lstgray}{rgb}{0.965,0.965,0.965}%
-\lstset{basicstyle=\ttfamily\small,%
-  columns=fullflexible,%
-  keepspaces=true,%
-  frame=tb,%
-  inputencoding=latin1,%
-%  inputencoding=utf8,%
-  extendedchars=true,%
-  backgroundcolor=\color{lstgray},%
-	breaklines=true,%
-%	xleftmargin=7pt,%
-%	xrightmargin=7pt%
-}%
-%
-\def\listingname{Listing}%
-\def\listlistingname{List of Listings}%
-\DeclareNewFloat{codelist}{lox}{\listingname}{\listlistingname}%%
+\definecolor{lstgray}{rgb}{0.965,0.965,0.965}
+\lstset{basicstyle=\ttfamily\small,
+  columns=fullflexible,
+  keepspaces=true,
+  frame=tb,
+  inputencoding=latin1,
+%  inputencoding=utf8,
+  extendedchars=true,
+  backgroundcolor=\color{lstgray},
+	breaklines=true,
+%	xleftmargin=7pt,
+%	xrightmargin=7pt
+}
+
+
+\def\listingname{Listing}
+\def\listlistingname{List~ of~ Listings}
+\DeclareNewFloat{codelist}{lox}{\listingname}{\listlistingname}
+
 
 

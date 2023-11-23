@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 2.00 (2023/11/??)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,8 +22,7 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-%%%\makeatletter
-%\ExplSyntaxOff
+
 
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -35,7 +34,7 @@
         \noindent%
         \studentCoadvCase{%
           \UseTerm{advisors}:\\
-          \DataFields{student.advisor}{name}\\
+          \DataFields{student.advisor}{name}\\[1ex]
           \DataFields{student.coadvisor}{name}
         }{%
           \UseTerm{advisor}:\\
@@ -48,7 +47,7 @@
           \studentCoadvCase{%
             \UseTerm{advisors}:\\
             \DataFields{student.advisor}{name}, \DataFields{student.advisor}{institution}\\
-            \DataFields{student.advisor}{title}\\[0.5mm]
+            \DataFields{student.advisor}{title}\\[1ex]
             \DataFields{student.coadvisor}{name}, \DataFields{student.coadvisor}{institution}\\
             \DataFields{student.coadvisor}{title}
           }{
@@ -56,6 +55,19 @@
             \DataFields{student.advisor}{name}, \DataFields{student.advisor}{institution}\\
             \DataFields{student.advisor}{title}
           }
+  } ,
+  internship.tutorapproval  =
+  {         ~\\
+            \noindent\UseTerm{tutor}:\\
+            \DataFields{student.tutor}{name}, \DataFields{student.tutor}{institution}\\
+            \DataFields{student.tutor}{title}\\[1ex]
+            
+            \noindent\UseTerm{supervisor}:\\
+            \DataFields{student.supervisor}{name}, \DataFields{student.supervisor}{institution}\\
+            \DataFields{student.supervisor}{office}\\
+            \DataFields{student.internship}{company}\\
+            
+            
   } ,
   cover.students        = %
   {%
@@ -75,7 +87,7 @@
           \centering\textbf{\MakeUppercase{\eDataFields{worktitle}}}  
   } ,
   cover.bottom            = {%
-          \centering \UseConst{publ.city}\\ \UseConst{publ.year}\par
+          \centering \UseConst{publ.city}\\ \UseConst{publ.date}\par
   } ,
   ppc.top            = %
   {%
@@ -87,22 +99,17 @@
           \MakeUppercase{\UseHeading{ppc.course}}\\
 
   } ,
+  report.top            = %
+  {%
+        \centering
+          \MakeUppercase{\UseHeading{university}}\\
+          \MakeUppercase{\UseHeading{unit}}\\
+          \MakeUppercase{\UseHeading{department}}\\
+          \MakeUppercase{\UseHeading{class.code}~ -~ \UseHeading{class.name}}\\
+  } ,
 }
 
-\ExplSyntaxOn
 \SetTerms{
-  cover.studentsXX  = 
-    {
-      \starray_reset_iter:n {student}
-      \bool_set_true:N \l__ufrgscca_t_bool
-      \bool_do_while:Nn \l__ufrgscca_t_bool 
-        {
-          \eDataSet{student}
-          \centering{\MakeUppercase{\eDataFields{name}}~ -~ \eDataFields{ID}}\\  
-          \starray_next_iter:nF {student}
-            {\bool_set_false:N \l__ufrgscca_t_bool}
-        }
-    } ,
   cover.students   =
   {
     \studentiterate
@@ -113,7 +120,6 @@
   }  
 }
 
-\ExplSyntaxOff
 
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -129,20 +135,13 @@
 \SetCoverFields{tccI}{title}{ \UseTerm{cover.title} }
 \SetCoverFields{tccI}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
 
-\SetCoverFields{tccI}{text-descpage}{
-    Proposta de Trabalho de Conclusão de Curso submetida à
-		COMGRAD/\Activity{course}{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
-		obtenção do título de \emph{\UseHeading{course.title}.}}
+\SetCoverFields{tccI}{text-descpage}{ \UseTerm{tccI.text-descpage} }
 
 \SetCoverFields{tccI}{advisor-descpage}{ \UseTerm{advisor.descpage} }
 
 \SetCoverFields{tccI}{bottom-descpage}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
 
-\SetCoverFields{tccI}{text-approvalpage}{
-		Esta Proposta de Trabalho de Conclusão de Curso foi julgada adequada para a
-		obtenção dos créditos da Atividade de \emph{\Activity{tccI}{name}} e aprovada em sua forma final 
-		\studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.
-}
+\SetCoverFields{tccI}{text-approvalpage}{ \UseTerm{tccI.text-approvalpage} }
 \SetCoverFields{tccI}{advisor-approvalpage}{ \UseTerm{advisor.approvalpage} }
 
 \SetCoverFields{tccI}{bottom-approvalpage}{ \UseTerm{cover.bottom} }
@@ -160,9 +159,9 @@
 
 \SetCoverFields{tccI}{coord}{
 \noindent\hrulefill\\
-\ActivityCoord{course}{name}\\
-\ActivityCoord{course}{title}\\
-\Activity{course}{name}
+\ActivityCoord[course]{name}\\
+\ActivityCoord[course]{title}\\
+\Activity[course]{name}
 }
 
 
@@ -181,21 +180,13 @@
 \SetCoverFields{tccII}{title}{  \UseTerm{cover.title} }
 \SetCoverFields{tccII}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
 
-\SetCoverFields{tccII}{text-descpage}{
-    Trabalho de Conclusão de Curso submetido à
-		COMGRAD/\Activity{course}{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
-		obtenção do título de \emph{\UseHeading{course.title}.}}
+\SetCoverFields{tccII}{text-descpage}{ \UseTerm{tccII.text-descpage} }
 
 \SetCoverFields{tccII}{advisor-descpage}{ \UseTerm{advisor.descpage} }
 
 \SetCoverFields{tccII}{bottom-descpage}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
 
-\SetCoverFields{tccII}{text-approvalpage}{
-		Este Trabalho de Conclusão de Curso foi julgado adequado para a
-		obtenção dos créditos da Atividade de \emph{\Activity{tccII}{name}} e aprovado em sua forma final 
-    \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article}
-		Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.
-}
+\SetCoverFields{tccII}{text-approvalpage}{ \UseTerm{tccII.text-approvalpage} }
 \SetCoverFields{tccII}{advisor-approvalpage}{  \UseTerm{advisor.approvalpage} }
 
 \SetCoverFields{tccII}{bottom-approvalpage}{ \UseTerm{cover.bottom} }
@@ -204,11 +195,11 @@
 \SetCoverFields{tccII}{board}{
 \noindent \UseTerm{board}:\\
 \indent \DataFields{student.reviewer[1]}{name}, \DataFields{student.reviewer[1]}{institution}\\
-\indent \DataFields{student.reviewer[1]}{title}\\
-\\
+\indent \DataFields{student.reviewer[1]}{title}\\[-1ex]
+
 \indent \DataFields{student.reviewer[2]}{name}, \DataFields{student.reviewer[2]}{institution}\\
-\indent \DataFields{student.reviewer[2]}{title}\\
-\\
+\indent \DataFields{student.reviewer[2]}{title}\\[-1ex]
+
 \indent \DataFields{student.reviewer[3]}{name}, \DataFields{student.reviewer[2]}{institution}\\
 \indent \DataFields{student.reviewer[3]}{title}\\
 }
@@ -216,9 +207,9 @@
 
 \SetCoverFields{tccII}{coord}{
 \noindent\hrulefill\\
-\ActivityCoord{course}{name}\\
-\ActivityCoord{course}{title}\\
-\Activity{course}{name}
+\ActivityCoord[course]{name}\\
+\ActivityCoord[course]{title}\\
+\Activity[course]{name}
 }
 
 
@@ -231,6 +222,99 @@
 CURSO~ EM~ ENGENHARIA~ DE\\
 CONTROLE~ E~ AUTOMAÇÃO }
 \SetCoverFields{ppc}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%%%
+%%%  Internship
+%%%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\SetCoverFields{internship}{clist}{cover,approval}
+\SetCoverFields{internship}{top}{  \UseTerm{cover.topbase} }
+\SetCoverFields{internship}{students}{ \UseTerm{cover.students} }
+\SetCoverFields{internship}{title}{ \centering\textbf{ RELATÓRIO DE ESTÁGIO SUPERVISIONADO OBRIGATÓRIO EM ENG. DE CONTROLE E AUTOMAÇÃO}}
+\SetCoverFields{internship}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+\SetCoverFields{internship}{text-approvalpage}{
+    Este Relatório foi julgado adequado para a obtenção do conceito final na Atividade de Estágio Supervisionado Obrigatório em Eng. de Controle
+    e Automação e aprovado em sua forma final pel\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle}, Supervisor\DataFields{student.supervisor}{narticle} e Coordenador\DataFields{activity[internship].coord}{narticle} da Atividade.}
+
+\SetCoverFields{internship}{advisor-approvalpage}{ \UseTerm{internship.tutorapproval} }
+
+\SetCoverFields{internship}{bottom-approvalpage}{ \centering \UseConst{publ.city}\\\UseConst{publ.month}~ \UseConst{publ.year}\par }
+
+
+\SetCoverFields{internship}{board}{}
+
+
+\SetCoverFields{internship}{coord}{
+\noindent\hrulefill\\
+\ActivityCoord[internship]{name}\\
+\ActivityCoord[internship]{title}
+}
+
+
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%%%
+%%%  Nonrequired / Internship-optional
+%%%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\SetCoverFields{internship-opt}{clist}{cover,approval}
+\SetCoverFields{internship-opt}{top}{  \UseTerm{cover.topbase} }
+\SetCoverFields{internship-opt}{students}{ \UseTerm{cover.students} }
+\SetCoverFields{internship-opt}{title}{ \centering\textbf{ RELATÓRIO DE ESTÁGIO SUPERVISIONADO NÃO OBRIGATÓRIO EM ENG. DE CONTROLE E AUTOMAÇÃO}}
+\SetCoverFields{internship-opt}{bottom}{\centering \UseConst{publ.city}\\ \UseConst{publ.year}\par}
+
+\SetCoverFields{internship-opt}{text-approvalpage}{
+    Este Relatório foi julgado adequado para uma Atividade de Estágio Supervisionado Não Obrigatório em Eng. de Controle
+    e Automação e aprovado em sua forma final pel\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} e Supervisor\DataFields{student.supervisor}{narticle}.}
+
+\SetCoverFields{internship-opt}{advisor-approvalpage}{ \UseTerm{internship.tutorapproval} }
+
+\SetCoverFields{internship-opt}{bottom-approvalpage}{ \centering \UseConst{publ.city}\\\UseConst{publ.month}~ \UseConst{publ.year}\par }
+
+
+\SetCoverFields{internship-opt}{board}{}
+
+
+\SetCoverFields{internship-opt}{coord}{}
+
+
+
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+%%%
+%%%  class report
+%%%
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%
+
+\SetCoverFields{class-report}{clist}{cover}
+\SetCoverFields{class-report}{top}{  \UseTerm{report.top} }
+\SetCoverFields{class-report}{students}{ \UseTerm{cover.students} }
+\SetCoverFields{class-report}{title}{   \UseTerm{cover.title} }
+\SetCoverFields{class-report}{bottom}{\centering \UseConst{publ.city}\\\UseConst{publ.month}~ \UseConst{publ.year}\par}
+
+\SetCoverFields{class-report}{text-approvalpage}{}
+
+\SetCoverFields{class-report}{advisor-approvalpage}{}
+
+\SetCoverFields{class-report}{bottom-approvalpage}{}
+
+
+\SetCoverFields{class-report}{board}{}
+
+
+\SetCoverFields{class-report}{coord}{}
+
 
 
 

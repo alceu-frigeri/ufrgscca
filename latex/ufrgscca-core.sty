@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,24 +23,46 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\def\tc@tmp@packname{ufrgscca-core}
-\def\tc@tmp@altpackname{ufrgsccacore}
-\def\tc@tmp@packdesc{UFRGS/CCA core commands}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
-
-%%\ExplSyntaxOn
 
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2023/11/10}
-    {1.99}
+    {2023/11/23}
+    {2.0}
     {UFRGS/CCA core commands}
 
+
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-core / pkg info}
+  {
+     name        .code:n = {ufrgscca-core} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~core~commands/data}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
 
 
 
@@ -101,6 +123,7 @@
         carticle = ao(à) ,
         Carticle = Ao(À) ,
   remarks = ,
+  checklist = , %%% This shall be a property list of check items
   brief = \BlankLines{6} ,
   reason = \BlankLines{6} ,
   board-local = {local ~da~ apresentação} ,
@@ -223,7 +246,6 @@
   } ,
  }
 
-%\starray_show_def:n {student}
 
 \prop_new:N \l__ufrgscca_forms_prop
 \starray_new:n {activity}
@@ -247,69 +269,65 @@
         date = {-Dia-} ,
         week = {-semana-} ,
         event = {-Descrição-} ,
-      }
+      } ,
+    chkmarked = ,    %%% This shall be a prop list of   marked itens
+    chkunmarked = ,  %%% This shall be a prop list of unmarked itens
+    chkref = ,       %%% This shall be a prop list of ref      itens
   }
-%  \starray_show_def:n {activity}
 
 \NewDocumentCommand{\NewActivity}{m} {
     \starray_new_term:nn {activity}{#1}
     \starray_new_term:nn {activity.coord}{}
+    \starray_gset_prop:nnV {activity}{checkmarked}\c_empty_prop
+    \starray_gset_prop:nnV {activity}{checkunmarked}\c_empty_prop
+    \starray_gset_prop:nnV {activity}{checkref}\c_empty_prop
 }
-
-\NewActivity{course} % yeah, CCA as an activity...
-\NewActivity{tccI}
-\NewActivity{tccII}
-\NewActivity{internship}
-\NewActivity{internship-opt}
 
 
 \NewDocumentCommand{\ActivitySet}{O{}mm} {
-  \tl_if_blank:nF {#1}
-    {\starray_set_iter_from_hash:nn {activity}{#1}}
-  \starray_set_prop:nnn {activity}{name}{#3}
-  \starray_set_prop:nnn {activity}{acronym}{#2}
+  \tl_if_blank:nTF {#1}
+    {
+      \starray_set_prop:nnn {activity}{name}{#3}
+      \starray_set_prop:nnn {activity}{acronym}{#2}
+    }
+    {
+      \starray_set_prop:nnn {activity[#1]}{name}{#3}
+      \starray_set_prop:nnn {activity[#1]}{acronym}{#2}
+    }
 }
  
 \NewDocumentCommand{\ActivitySetCoordTitle}{O{}m} {
-  \tl_if_blank:nF {#1}
-    {\starray_set_iter_from_hash:nn {activity}{#1}}
-  \starray_set_prop:nnn {activity.coord}{title}{#2}
+  \tl_if_blank:nTF {#1}
+    { \starray_set_prop:nnn {activity.coord}{title}{#2} }
+    { \starray_set_prop:nnn {activity[#1].coord}{title}{#2} }
 }
 
 \NewDocumentCommand{\ActivitySetCoord}{O{}mO{}}{
-  \tl_if_blank:nF {#1}
-    {\starray_set_iter_from_hash:nn {activity}{#1}}
-  \starray_gset_prop:nnn {activity.coord}{name}{#2}
-  \__ufrgscca_setgender:nn {activity.coord}{#3}
-}
-
-\NewDocumentCommand{\ActivitySetNewEvent}{O{}mm}{
-  \tl_if_blank:nF {#1}
-    {\starray_set_iter_from_hash:nn {activity}{#1}}
-  \starray_new_term:nn {activity.calendar}{#2}
-  \starray_gset_prop:nnn {activity.calendar}{event}{#3}
-}
-
-\NewDocumentCommand{\ActivitySetEventDay}{O{}mmm}{
-  \tl_if_blank:nF {#1}
-    {\starray_set_iter_from_hash:nn {activity}{#1}}
-  \starray_gset_from_keyval:nn {activity.calendar[#2]}
+  \tl_if_blank:nTF {#1}
     {
-        date = {#3} ,
-        week = {#4} ,
+      \starray_gset_prop:nnn {activity.coord}{name}{#2}
+      \__ufrgscca_setgender:nn {activity.coord}{#3}
+    }
+    {
+      \starray_gset_prop:nnn {activity[#1].coord}{name}{#2}
+      \__ufrgscca_setgender:nn {activity[#1].coord}{#3}
     }
 }
 
 \NewDocumentCommand{\ActivitySelect}{m}{ \starray_set_iter_from_hash:nn {activity}{#1} }
-%\NewDocumentCommand{\ActivitySet}{m}{ \starray_set_iter_from_hash:nn {activity}{#1} }
 
 
-\NewDocumentCommand{\Activity}{mm}{
-  \starray_get_prop:nn {activity[#1]}{#2}
+\NewDocumentCommand{\Activity}{O{}m}{
+  \tl_if_blank:nTF {#1}
+    { \starray_get_prop:nn {activity}{#2} }
+    { \starray_get_prop:nn {activity[#1]}{#2} }
 }
-\NewDocumentCommand{\ActivityCoord}{mm}{
-  \starray_get_prop:nn {activity[#1].coord}{#2}
+\NewDocumentCommand{\ActivityCoord}{O{}m}{
+  \tl_if_blank:nTF {#1}
+    { \starray_get_prop:nn {activity.coord}{#2} }
+    { \starray_get_prop:nn {activity[#1].coord}{#2} }
 }
+
 
 \NewDocumentCommand{\ActivityCalLine}{O{}m}{
   \tl_if_blank:nF {#1}
@@ -318,48 +336,6 @@
   \starray_get_prop:nn {activity.calendar}{date} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}
 }
 
-
-%\prop_new:N \l__ufrgscca_headings_prop
-%\prop_set_from_keyval:Nn \l__ufrgscca_headings_prop 
-%  {
-%    university = Universidade~ Federal~ do~ Rio~ Grande~ do~ Sul ,
-%    acronym = UFRGS ,
-%    unit = Escola~ de~ Engenharia ,
-%    secretary = SACAD/EE     
-%  }
-%  
-%\NewDocumentCommand{\SetHeadings}{m}{
-%  \prop_put_from_keyval:Nn \l__ufrgscca_headings_prop {#1}
-%}
-%\NewDocumentCommand{\UseHeading}{m}{
-%  \prop_item:Nn \l__ufrgscca_headings_prop {#1}
-%}
-%
-%\prop_new:N \l__ufrgscca_cterms_prop
-%
-%\NewDocumentCommand{\SetTermKeys}{+m}{
-%  \prop_put_from_keyval:Nn \l__ufrgscca_cterms_prop {#1}
-%}
-%\NewDocumentCommand{\UseTerm}{m}{
-%  \prop_item:Nn \l__ufrgscca_cterms_prop {#1}
-%}
-%
-%\prop_new:N \l__ufrgscca_labels_prop
-%
-%\NewDocumentCommand{\SetLabels}{m}{
-%  \prop_put_from_keyval:Nn \l__ufrgscca_labels_prop {#1}
-%}
-%\NewDocumentCommand{\UseLabel}{m}{
-%  \prop_item:Nn \l__ufrgscca_labels_prop {#1}
-%}
-%
-%\prop_new:N \l__ufrgscca_const_prop
-%
-%\NewDocumentCommand{\SetConsts}{m}{
-%  \prop_put_from_keyval:Nn \l__ufrgscca_const_prop {#1}
-%}
-%\NewDocumentCommand{\UseConst}{m}{ \prop_item:Nn \l__ufrgscca_const_prop {#1} 
-%}
 
 %
 \cs_new_protected:Npn \__ufrgscca_setgender:nn #1#2 
@@ -392,93 +368,7 @@
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-% student commands%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%
-%%\NewDocumentCommand{\tccore@articledefx}{mmmmm}{%
-%%  \expandafter\gdef\csname #1article\endcsname{#2}%
-%%  \expandafter\gdef\csname #1narticle\endcsname{#3}%
-%%  \expandafter\gdef\csname #1Article\endcsname{#4}%
-%%  \expandafter\gdef\csname #1Narticle\endcsname{#5}%
-%%}%
-%%\NewDocumentCommand{\tccore@articledefn}{m}{%
-%%	\tccore@articledefx{#1}{o(a)}{(a)}{O(A)}{(A)}%
-%%}%
-%%\NewDocumentCommand{\tccore@articledefm}{m}{%
-%%	\tccore@articledefx{#1}{o}{}{O}{}%
-%%}%
-%%\NewDocumentCommand{\tccore@articledeff}{m}{%
-%%	\tccore@articledefx{#1}{a}{a}{A}{A}%
-%%}%
-%%\NewDocumentCommand{\tccore@articledef}{mm}{%
-%%	\ifthenelse{\equal{#2}{m}}{%%
-%%		\tccore@articledefm{#1}%%
-%%	}{%%
-%% 		\ifthenelse{\equal{#2}{f}}{%%
-%%	 	  \tccore@articledeff{#1}%%
-%%		}{%%
-%%		  \tccore@articledefn{#1}%%
-%%		}%%
-%%	}%%
-%%}%
-
-%
-% Exception:: those are only used at ufrgscca-forms, but, it make sense to be used at 'local.tex'
-%
-%%\cmdfactory<core>{formlocal}
-%%\cmdfactory<core>{tccbrief,tcccoadvisorbrief,tccadvisorsreview}
-%%\cmdfactory<core>{tccArgument}
-%%
-%%\cmdfactory<core>{TCCcoordtitle,TCCIcoordtitle}
-%%\NewDocumentCommand{\TCCcoord}{mO{}}{%
-%%	\tcgen@cdef<core>{TCCcoord}{#1}%
-%%	\tccore@articledef{tcdef@core@TCCcoord}{#2}%%
-%%}
-%%
-%%\cmdfactory<core>{internshipcoordtitle}
-%%\NewDocumentCommand{\internshipcoord}{mO{}}{%
-%%    \tcgen@cdef<core>{internshipcoord}{#1}%
-%%    \tccore@articledef{tcdef@core@internshipcoord}{#2}%%
-%%}
-%%
-%%\cmdfactory<core>{coursecoordtitle}%
-%%\NewDocumentCommand{\coursecoord}{mO{}}{%
-%%	\tcgen@cdef<core>{coursecoord}{#1}%
-%%	\tccore@articledef{tcdef@core@coursecoord}{#2}%%
-%%}
-%%%
-%%%
-%%\def\tccore@ref@advisor{tc@student\Alph{tc@studentcount}@advisor}
-%%\def\tccore@ref@coadvisor{tc@student\Alph{tc@studentcount}@coadvisor}
-%%\def\tccore@ref@tutor{tc@student\Alph{tc@studentcount}@tutor}
-%%\def\tccore@ref@supervisor{tc@student\Alph{tc@studentcount}@supervisor}
-%%\def\tccore@ref@internship{tc@student\Alph{tc@studentcount}@internship}
-%%
-%%\NewDocumentCommand{\tccore@examiners}{m}{\def\tc@@examiners{tc@student\Alph{tc@studentcount}@#1}}%
-%%\def\tccore@ref@examiner{\tc@@examiners}
-%%\def\tccore@ref@student{tc@student\Alph{tc@studentcount}}
-%%\def\tccore@ref@coursecoord{tcdef@core@coursecoord}
-%%\def\tccore@ref@TCCcoord{tcdef@core@TCCcoord}
-%%\def\tccore@ref@internshipcoord{tcdef@core@internshipcoord}
-%%
-%%\NewDocumentCommand{\tccore@@ref}{mm}{\expandafter\csname\csname tccore@ref@#1\endcsname#2\endcsname}%
-%%%
-%%%
-%%\let\tc@org@author\author
-%
-%\newcounter{tc@studentcount}%
 \NewDocumentCommand{\student}{O{}mmO{}}{%
-%    % TO BE REMOVED !
-%        \stepcounter{tc@studentcount}%
-%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}last\endcsname{#2}%
-%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}first\endcsname{#3}%
-%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}\endcsname{#3~ #2}%
-%		\tccore@articledef{tc@student\Alph{tc@studentcount}}{#4}%%
-  % USING STARRAY
   \tl_if_blank:nTF {#1}
     {\starray_new_term:nn {student}{}}
     {\starray_new_term:nn {student}{#1}}
@@ -489,6 +379,7 @@
       name = {#3~ #2} ,
     }
   \__ufrgscca_setgender:nn {student}{#4}
+  \starray_gset_prop:nnV {student}{checklist}\c_empty_prop
 }%
   %
 \NewDocumentCommand{\eDataSet}{m}{
@@ -506,25 +397,6 @@
   \starray_set_iter:nn {student.reviewer}{#1}
 }
   %
-\NewDocumentCommand{\studentCase}{mmmmm}{
-    \starray_term_syntax:n{student}
-    \bool_case:nF
-    {
-      {\starray_parsed_get_prop:n{flag-ff}}
-        {#5}
-      {\starray_parsed_get_prop:n{flag-exam}}
-        {
-          \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
-            {#3}
-            {#4}
-        }
-    }
-    {
-      \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
-        {#1}
-        {#2}
-    }
-}
 
 \NewDocumentCommand{\studentCoadvCase}{mm}{
     \starray_term_syntax:n{student}
@@ -532,44 +404,35 @@
       {#1}
       {#2}
 }
-%
-\NewDocumentCommand{\studentDismissCase}{mm}{
+
+
+
+\NewDocumentCommand{\distinctboard}{}{
+  \starray_gset_prop:nnn {student}{flag-distinctboard}{\c_true_bool}
+}
+
+\NewDocumentCommand{\studentDistinctBoardCase}{mm}
+  {
     \starray_term_syntax:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss}}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-distinctboard}}
       {#1}
       {#2}
-}
+  }
 
-
-\bool_new:N \l__ufrgscca_iter_bool
-
-\NewDocumentCommand{\stiterate}{mm}{
-    \starray_reset_iter:n {#1}
-    \bool_set_true:N \l__ufrgscca_iter_bool
-    \bool_do_while:Nn \l__ufrgscca_iter_bool 
-    {
-      #2
-      \starray_next_iter:nF {#1}
-        {\bool_set_false:N \l__ufrgscca_t_bool}
-    }
-}
 
 \NewDocumentCommand{\studentiterate}{m}{
     \starray_iterate_over:nn{student}{#1}
 }
 
 
-%
-%%%%%%%%% ufrgscca-coord !?!!
-%%%%%%%%%
-\NewDocumentCommand{\studentworktitle}{m}{%%
-  %%%
-  %%% USING STARRAY
+\NewDocumentCommand{\worktitle}{m}{%%
   \starray_gset_prop:nnn {student}{worktitle}{#1}
-}%
+}
+
 \NewDocumentCommand{\workbrief}{m}{
   \starray_gset_prop:nnn {student}{brief}{#1}
 }
+
 \NewDocumentCommand{\workchange}{m}{
   \starray_gset_prop:nnn {student}{reason}{#1}
 }
@@ -585,13 +448,6 @@
 
 
 \NewDocumentCommand{\studentinfo}{O{}mm}{%
-%%  %%%
-%%  %%% TO BE REMOVED !
-%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}Nproc\endcsname{#1}%
-%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}ID\endcsname{#2}%
-%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}email\endcsname{#3}%
-%%  %%%
-  %%% USING STARRAY
   \starray_gset_from_keyval:nn {student}
     {
       Nproc = {#1} ,
@@ -599,27 +455,18 @@
       email = {#3} ,
     }
 }%
-%%\NewDocumentCommand{\student}{O{}mmO{}}{\author[#1]{#2}{#3}[#4]}%
-%%\NewDocumentCommand{\studentinfo}{O{}mm}{\authorinfo[#1]{#2}{#3}}%
 
 
-\RenewDocumentCommand{\author}{O{}mmO{}}{\student[#1]{#2}{#3}[#4]}%
-\NewDocumentCommand{\authorinfo}{O{}mm}{\studentinfo[#1]{#2}{#3}}%
+\bool_if:NT \l__ufrgscca_oldrenews_bool
+  {
+    \RenewDocumentCommand{\author}{O{}mmO{}}{\student[#1]{#2}{#3}[#4]}%
+    \NewDocumentCommand{\authorinfo}{O{}mm}{\studentinfo[#1]{#2}{#3}}%
+    \NewDocumentCommand{\title}{m}{\worktitle{#1}}%
+  }
 
-\NewDocumentCommand{\studentSelect}{m}{ \starray_set_iter_from_hash:nn {student}{#1} }
-%----------
-%----------
-%
-  %%%
-  %%% TO BE REMOVED !
-%%%%\NewDocumentCommand{\tccore@ProfFields}{mmmmm}{%%
-%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1last\endcsname{#3}%%
-%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1first\endcsname{#4}%%
-%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1\endcsname{#2~#4~ #3}%%
-%%%%		\tccore@articledef{tc@student\Alph{tc@studentcount}@#1}{#5}%
-%%%%}%
-  %%%
-  %%% USING STARRAY
+
+\NewDocumentCommand{\studentselect}{m}{ \starray_set_iter_from_hash:nn {student}{#1} }
+
 \cs_new_protected:Npn \__ufrgscca_set_prof:nnnnn #1#2#3#4#5 
   {
     \starray_gset_from_keyval:nn {student.#1}
@@ -632,16 +479,6 @@
   }
 
 
-  %%%
-  %%% TO BE REMOVED !
-%%%%%\NewDocumentCommand{\tccore@ProfInfo}{mmmmm}{%%
-%%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1institution\endcsname{#2}%%
-%%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1titleinfo\endcsname{#3}%%
-%%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1email\endcsname{#4}%%
-%%%%%        \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@#1phone\endcsname{#5}%%
-%%%%}%
-  %%%
-  %%% USING STARRAY
 \cs_new_protected:Npn \__ufrgscca_set_prof_info:nnnnn #1#2#3#4#5
   {
     \starray_gset_from_keyval:nn {student.#1}
@@ -652,268 +489,93 @@
         phone = {#5} ,
       }
   }
-%
-%
-%
-%\newcounter{tc@examinercount}[tc@studentcount]%
-%
+
+
 \NewDocumentCommand{\advisor}{O{}mmO{}}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%	\tccore@ProfFields{advisor}{#1}{#2}{#3}{#4}%%
-%%%%  %%% the advisor is also the first examiner if not @nBoard%
-%%%%%%	\@ifundefined{tc@nBoard}{\examiner[#1]{#2}{#3}[#4]}{}%% see below, with starray (to avoid dups).
-  %%%
-  %%% USING STARRAY
   \starray_new_term:nn {student.advisor}{}
   \__ufrgscca_set_prof:nnnnn {advisor}{#1}{#2}{#3}{#4}
   \starray_term_syntax:n{student}
   \bool_if:nF {\starray_parsed_get_prop:n{flag-distinctboard}}
     { \examiner[#1]{#2}{#3}[#4] }
-}%
+}
+
 \NewDocumentCommand{\advisorinfo}{mmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%	\tccore@ProfInfo{advisor}{#1}{#2}{#3}{#4}%%
-%%%%  %%% the advisor is also the first examiner if not @nBoard%
-%%%%%%	\@ifundefined{tc@nBoard}{\examinerinfo{#1}{#2}{#3}{#4}}{}%%
-  %%%
-  %%% USING STARRAY
   \__ufrgscca_set_prof_info:nnnnn {advisor}{#1}{#2}{#3}{#4}
   \starray_term_syntax:n{student}
   \bool_if:nF {\starray_parsed_get_prop:n{flag-distinctboard}}
     { \examinerinfo{#1}{#2}{#3}{#4} }
 }%
-%
+
+
 \NewDocumentCommand{\coadvisor}{O{}mmO{}}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%				\tccore@ProfFields{coadvisor}{#1}{#2}{#3}{#4}%%
-%%%%  %%%
-  %%% USING STARRAY
   \starray_new_term:nn {student.coadvisor}{}
   \__ufrgscca_set_prof:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
   \starray_set_prop:nnn {student}{flag-coadvisor}{\c_true_bool}
 }%
+
 \NewDocumentCommand{\coadvisorinfo}{mmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%				\tccore@ProfInfo{coadvisor}{#1}{#2}{#3}{#4}%%
-  %%%
-  %%% USING STARRAY
   \__ufrgscca_set_prof_info:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
 }%
-%
+
+
 \NewDocumentCommand{\coadvisoremptyifnone}{}{%%
-  %%%
-  %%% USING STARRAY
   \starray_get_cnt:nN {student.coadvisor} \l_tmpa_int
   \int_if_zero:nTF \l_tmpa_int
     { \starray_new_term:nn {student.coadvisor}{} }
     {}
 }%
-%
+
+
 \NewDocumentCommand{\tutor}{O{}mmO{}}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%    \tccore@ProfFields{tutor}{#1}{#2}{#3}{#4}%%
-  %%%
-  %%% USING STARRAY
   \starray_new_term:nn {student.tutor}{}
   \__ufrgscca_set_prof:nnnnn {tutor}{#1}{#2}{#3}{#4}
 }%
+
 \NewDocumentCommand{\tutorinfo}{mmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%    \tccore@ProfInfo{tutor}{#1}{#2}{#3}{#4}%%
-  %%%
-  %%% USING STARRAY
   \__ufrgscca_set_prof_info:nnnnn {tutor}{#1}{#2}{#3}{#4}
 }%
-%
-%
+
 \NewDocumentCommand{\supervisor}{O{}mmO{}}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%    \tccore@ProfFields{supervisor}{#1}{#2}{#3}{#4}%%
-  %%%
-  %%% USING STARRAY
   \starray_new_term:nn {student.supervisor}{}
   \__ufrgscca_set_prof:nnnnn {supervisor}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\supervisorinfo}{mmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisorregister\endcsname{#1}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisoroffice\endcsname{#2}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisoremail\endcsname{#3}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@supervisorphone\endcsname{#4}%%
-  %%%
-  %%% USING STARRAY
     \starray_gset_from_keyval:nn {student.supervisor}
       {
-        register = #1 ,
-        office = #2 ,
-        email = #3 ,
-        phone = #4 ,
+        register = {#1} ,
+        office = {#2} ,
+        email = {#3} ,
+        phone = {#4} ,
       }
 }%
 \NewDocumentCommand{\internship}{mmmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipcompany\endcsname{#1}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipfield\endcsname{#2}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipstart\endcsname{#3}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshipend\endcsname{#4}%%
-%%%%  \expandafter\gdef\csname tc@student\Alph{tc@studentcount}@internshiplength\endcsname{#5}%%
-  %%%
-  %%% USING STARRAY
     \starray_new_term:nn {student.internship}{}
     \starray_gset_from_keyval:nn {student.internship}
       {
-        company = #1 ,
-        field = #2 ,
-        start = #3 ,
-        end = #4 ,
-        length = #5 ,
+        company = {#1} ,
+        field = {#2} ,
+        start = {#3} ,
+        end = {#4} ,
+        length = {#5} ,
       }
 }%
-%
-%
+
 \NewDocumentCommand{\examiner}{O{}mmO{}}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%        \stepcounter{tc@examinercount}%%
-%%%%				\tccore@ProfFields{examiner\Alph{tc@examinercount}}{#1}{#2}{#3}{#4}%%
-%%%%  %%%
-  %%% USING STARRAY
   \starray_new_term:nn {student.reviewer}{}
   \__ufrgscca_set_prof:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\examinerinfo}{mmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%				\tccore@ProfInfo{examiner\Alph{tc@examinercount}}{#1}{#2}{#3}{#4}%%
-%%%%  %%%
-  %%% USING STARRAY
   \__ufrgscca_set_prof_info:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
-%
-%\newcounter{tc@altexaminercount}[tc@studentcount]%
+
 \NewDocumentCommand{\altexaminer}{O{}mmO{}}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%        \stepcounter{tc@altexaminercount}%%
-%%%%				\tccore@ProfFields{altexaminer\Alph{tc@altexaminercount}}{#1}{#2}{#3}{#4}%%
-  %%%
-  %%% USING STARRAY
   \starray_new_term:nn {student.altreviewer}{}
   \__ufrgscca_set_prof:nnnnn {altreviewer}{#1}{#2}{#3}{#4}
 }%
 \NewDocumentCommand{\altexaminerinfo}{mmmm}{%%
-%%%%  %%%
-%%%%  %%% TO BE REMOVED !
-%%%%				\tccore@ProfInfo{altexaminer\Alph{tc@altexaminercount}}{#1}{#2}{#3}{#4}%%
-  %%%
-  %%% USING STARRAY
   \__ufrgscca_set_prof_info:nnnnn {altreviewer}{#1}{#2}{#3}{#4}
 }%
-%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%
-%
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%
-%% assure that student/advisor/examiners... commands are defined with underlines (if not already defined)%
-%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%\def\tc@IDrule{30mm}%
-%%%%\def\tc@emailrule{40mm}%
-%%%%\def\tc@namerule{50mm}%
-%%%%\def\tc@titlerule{40mm}%
-%%%%\def\tc@phonerule{20mm}%
-%%%%\def\tc@agreerule{25mm}%
-%%%%\def\tc@daterule{15mm}%
-%%%%%%%
-%%
-%%%
-%%%%\NewDocumentCommand{\tccore@emptyfields}{}{%
-%%%%
-%%%%	\@ifundefined{tc@studentA}{%
-%%%%		\student{\rule{\tc@namerule}{.1pt}}{}%
-%%%%		\studentinfo{\rule{\tc@IDrule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}%
-%%%%	}{}%
-%%%%	\@ifundefined{tc@studentA@advisor}{%
-%%%%		\advisor{\rule{\tc@namerule}{.1pt}}{}%
-%%%%		\advisorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%	}{}%
-%%%%%
-%%%%	\@ifundefined{tc@studentA@examinerC}{%
-%%%%		\examiner{\rule{\tc@namerule}{.1pt}}{}%
-%%%%		\examinerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%	}{}%
-%%%%	\@ifundefined{tc@studentA@examinerC}{%
-%%%%		\examiner{\rule{\tc@namerule}{.1pt}}{}%
-%%%%		\examinerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%	}{}%
-%%%%	\@ifundefined{tc@studentA@examinerC}{%
-%%%%		\examiner{\rule{\tc@namerule}{.1pt}}{}%
-%%%%		\examinerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%	}{}%
-%%%%	\@ifundefined{tc@studentA@altexaminerA}{%
-%%%%		\altexaminer{\rule{\tc@namerule}{.1pt}}{}%
-%%%%		\altexaminerinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%	}{}%
-%%%%	%
-%%%%	\@ifundefined{tc@studentA@supervisor}{%
-%%%%        \supervisor{\rule{\tc@namerule}{.1pt}}{}%
-%%%%        \supervisorinfo{\rule{\tc@phonerule}{.1pt}}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%    }{}%
-%%%%    %
-%%%%    \@ifundefined{tc@studentA@tutor}{%
-%%%%        \tutor{\rule{\tc@namerule}{.1pt}}{}%
-%%%%        \tutorinfo{}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@emailrule}{.1pt}}{\rule{\tc@phonerule}{.1pt}}%
-%%%%    }{}%
-%%%%    %
-%%%%    %
-%%%%    \@ifundefined{tc@studentA@internshipcompany}{%
-%%%%        \internship{\rule{\tc@namerule}{.1pt}}{\rule{\tc@titlerule}{.1pt}}{\rule{\tc@daterule}{.1pt}}{\rule{\tc@daterule}{.1pt}}{\rule{\tc@daterule}{.1pt}}%
-%%%%    }{}%
-%%%%
-%%%%    %
-%%%%	% add an \iftcif@forms !!!
-%%%%	%
-%%%%	\@ifundefined{tcdef@core@tccbrief}{%
-%%%%		\tccbrief{\tcdef@core@formsblanklines}%
-%%%%	}{}%
-%%%%	\@ifundefined{tcdef@core@tccArgument}{%
-%%%%		\tccArgument{\tcdef@core@formsblanklines}%
-%%%%	}{}%
-%%%%	\@ifundefined{tcdef@core@tcccoadvisorbrief}{%
-%%%%		\tcccoadvisorbrief{\tcdef@core@formsblanklines}%
-%%%%	}{}%
-%%%%	\@ifundefined{tcdef@core@tccadvisorsreview}{%
-%%%%		\tccadvisorsreview{\tcdef@core@formsblanklines}%
-%%%%	}{}%
-%%%%}%
-%%%%
-%%%%\NewDocumentCommand{\tccore@resetfields}{}{%
-%%%%	\setcounter{tc@studentcount}{0}
-%%%%	\csundef{tc@studentA}
-%%%%	\csundef{tc@studentA@advisor}
-%%%%	\csundef{tc@studentA@coadvisor}
-%%%%	\csundef{tc@studentA@examinerC}
-%%%%	\csundef{tc@studentA@altexaminerA}
-%%%%    \csundef{tc@studentA@supervisor}
-%%%%    \csundef{tc@studentA@tutor}
-%%%%    \csundef{tc@studentA@internshipcompany}
-%%%%	\csundef{tcdef@core@tccbrief}
-%%%%	\csundef{tcdef@core@tccArgument}
-%%%%	\csundef{tcdef@core@tcccoadvisorbrief}
-%%%%	\csundef{tcdef@core@tccadvisorsreview}
-%%%%}
+
 
 \cs_new_protected:Npn \__ufrgscca_emptyfields:
   {
@@ -931,4 +593,3 @@
 
 \def\emptybox{\framebox[3em]{\color{white}W}}
   
-%\ExplSyntaxOff

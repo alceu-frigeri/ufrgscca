@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,21 +23,45 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\RequirePackage{expl3}
-\def\tc@tmp@packname{ufrgscca-curr}
-\def\tc@tmp@altpackname{ufrgsccacurr}
-\def\tc@tmp@packdesc{UFRGS/CCA curricula commands}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12beta}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
 
-\ExplSyntaxOn
+\ProvidesExplPackage
+    {ufrgscca-curr}
+    {2023/11/23}
+    {2.0}
+    {UFRGS/CCA curricula commands}
 
-
-
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca-curr / pkg info}
+  {
+     name        .code:n = {ufrgscca-curr} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~ curricula~ commands}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
 
 
 \starray_new:n {topics}
@@ -151,7 +175,7 @@
       }
   }
 
-\NewDocumentCommand{\altdef}{}
+\NewDocumentCommand{\altdep}{}
   {
     \starray_new_term:nn {curricula.sem.class.prereqset}{}
   }
@@ -208,11 +232,11 @@
     \starray_set_prop:nnn {classes}{remark}{#1}
   }
 
-\NewDocumentCommand{\bibdef}{O{default}m}
+\NewDocumentCommand{\bibdef}{O{main}m}
   {
     \str_case:nnF {#1}
       {
-        {default}
+        {main}
           {
             \starray_get_prop:nnN {classes}{bib seq} \l_tmpa_seq
             \seq_put_right:Nn \l_tmpa_seq {#2}
@@ -224,7 +248,7 @@
             \seq_put_right:Nn \l_tmpa_seq {#2}
             \starray_set_prop:nnV {classes}{bib basic seq} \l_tmpa_seq
           }
-        {comp}%{ \starray_get_prop:nnN {classes}{bib compl seq} \l_tmpa_seq }
+        {compl}%{ \starray_get_prop:nnN {classes}{bib compl seq} \l_tmpa_seq }
           {
             \starray_get_prop:nnN {classes}{bib compl seq} \l_tmpa_seq
             \seq_put_right:Nn \l_tmpa_seq {#2}
@@ -272,7 +296,7 @@
 \seq_new:N \l__ufrgscca_tmp_bib_seq
 \seq_new:N \l__ufrgscca_tmp_bibB_seq
 \seq_new:N \l__ufrgscca_tmp_prereq_seq
-\bool_new:N \l__ufrgscca_tmp_bool
+\bool_new:N \l__ufrgscca_tmp_second_bool
 
 \NewDocumentCommand\TabEtp{sO{\notoc\section}mO{\footnotesize}}{%
     \starray_set_iter_from_hash:nn {curricula.sem}{#3}
@@ -321,7 +345,7 @@
           }
 
           %% Pre-reqs
-        \bool_gset_false:N \l__ufrgscca_tmp_bool
+        \bool_gset_false:N \l__ufrgscca_tmp_second_bool
         \starray_iterate_over:nn {curricula.sem.class.prereqset}
           {
             \seq_gclear:N \l__ufrgscca_tmp_prereq_seq
@@ -332,13 +356,13 @@
               }
             \seq_if_empty:NF \l__ufrgscca_tmp_prereq_seq
               {
-                \bool_if:NTF \l__ufrgscca_tmp_bool
+                \bool_if:NTF \l__ufrgscca_tmp_second_bool
                   {
                     &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{~\ ~OU}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~E~} }\\*
                   }
                   {
                     &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~E~} }\\*
-                    \bool_gset_true:N \l__ufrgscca_tmp_bool
+                    \bool_gset_true:N \l__ufrgscca_tmp_second_bool
                   }
               }
           }
@@ -655,127 +679,3 @@
 
   }
 
-\ExplSyntaxOff
-
-
-
-
-
-
-%%%%\newcounter{gr@credob}
-%%%%\newcounter{gr@credel}
-%%%%\newcounter{gr@credalt}
-%%%%\newcounter{gr@credad}
-%%%%\NewDocumentCommand{\gr@setcred}{}{\setcounter{gr@credob}{0}\setcounter{gr@credel}{0}\setcounter{gr@credalt}{0}}
-%%%%\NewDocumentCommand{\gr@addclasscred}{m}{\addtocounter{gr@cred\csname gr@class:#1.typ\endcsname}{\csname gr@class:#1.cred\endcsname}}
-%%%%
-%%%%\let\@ex\expandafter
-%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%
-%%%%\NewDocumentCommand\topicdef{O{black}mm}
-%%%%  {
-%%%%    \expandafter\gdef\csname gr@topic:#2.txt\endcsname{#3}%
-%%%%    \expandafter\gdef\csname gr@topic:#2.color\endcsname{#1}%
-%%%%  }
-%%%%
-%%%%\NewDocumentCommand\defaulttopic{m}{\xdef\gr@defaulttopic{#1}}
-%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%
-%%%%\NewDocumentCommand\semdef{O{#3}D<>{#3}m}{%
-%%%%    \expandafter\gdef\csname gr@et:#3.idx\endcsname{x#3}%
-%%%%    \expandafter\gdef\csname gr@etidx:x#3.cod\endcsname{#2}%
-%%%%    \expandafter\gdef\csname gr@etidx:x#3.nam\endcsname{#3}%
-%%%%    \expandafter\gdef\csname gr@etidx:x#3.pos\endcsname{#1}%
-%%%%    \gdef\gr@sem{#3}%
-%%%%    \gdef\gr@semcod{#2}%
-%%%%}
-%%%%%%%%%%%
-%%%%%%%%%%%
-%%%%%%%%%%%
-%%%%
-%%%%\NewDocumentCommand\classdef{O{\gr@defaulttopic}D<>{}mmmmm}{%
-%%%%    \@ifundefined{gr@topic:#1.txt}%
-%%%%		    {\expandafter\gdef\csname gr@class:#3.topic\endcsname{\gr@defaulttopic}}%
-%%%%				{\expandafter\gdef\csname gr@class:#3.topic\endcsname{#1}}%
-%%%%    \expandafter\gdef\csname gr@class:#3.pos\endcsname{#2}%
-%%%%    \expandafter\gdef\csname gr@class:#3.cred\endcsname{#4}%
-%%%%    \expandafter\gdef\csname gr@class:#3.typ\endcsname{#5}%
-%%%%    \expandafter\gdef\csname gr@class:#3.nam\endcsname{#6}%
-%%%%    \expandafter\gdef\csname gr@class:#3.desc\endcsname{#7}%
-%%%%    \expandafter\xdef\csname gr@class:#3.et\endcsname{\gr@semcod}%
-%%%%    \gdef\gr@disc{#3}
-%%%%		\newcounter{gr@class:#3.bibcnt}
-%%%%		\newcounter{gr@class:#3.basiccnt}
-%%%%		\newcounter{gr@class:#3.compcnt}
-%%%%		\newcounter{gr@class:#3.dep}
-%%%%		\stepcounter{gr@class:#3.dep}
-%%%%    \ifcsundef{gr@et:\gr@sem}{\csgdef{gr@et:\gr@sem}{#3}}{\csgappto{gr@et:\gr@sem}{,#3}}
-%%%%    \ifcsundef{gr@topic:#1}{\csgdef{gr@topic:#1}{#3}}{\csgappto{gr@topic:#1}{,#3}}
-%%%%}
-%%%%
-%%%%\NewDocumentCommand{\setclass}{m}{\ifcsundef{gr@class:#1.et}{{\color{red} #1 undef\\}}{\gdef\gr@disc{#1}}}
-%%%%
-%%%%\NewDocumentCommand{\classremark}{m}{%
-%%%%   \expandafter\gdef\csname gr@class:\gr@disc.remark\endcsname{#1}%
-%%%%}
-%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%
-%%%%\NewDocumentCommand\depdef{O{\csname gr@class:\gr@disc.topic\endcsname}D<>{}m}{%
-%%%%    \ifcsundef{gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}}{\csgdef{gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}}{#3}}{\csgappto{gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}}{,#3}}
-%%%%    \expandafter\gdef\csname gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}:#3.topic\endcsname{#1}%
-%%%%    \expandafter\gdef\csname gr@class:\gr@disc.dep\Alph{gr@class:\gr@disc.dep}:#3.pos\endcsname{#2}%
-%%%%}
-%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%
-%%%%\NewDocumentCommand\bibdef{O{bib}m}{%
-%%%%		\stepcounter{gr@class:\gr@disc.#1cnt}%
-%%%%    \expandafter\gdef\csname gr@class:\gr@disc.#1\Alph{gr@class:\gr@disc.#1cnt}\endcsname{#2}%
-%%%%}
-%%%%
-%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%
-%%%%
-%%%%\NewDocumentCommand\altdef{}{%
-%%%%	\stepcounter{gr@class:\gr@disc.dep}%
-%%%%}
-%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%
-%%%%
-%%%%\NewDocumentCommand\goo{m}{}
-%%%%\NewDocumentCommand\gooble{m}{}
-%%%%
-%%%%\NewDocumentCommand\LstDep{O{\goo}D<>{A}m}{%
-%%%%    \xdef\gr@disc{#3}%
-%%%%    \xdef\gr@depSeq{#2}%
-%%%%    \ifcsdef{gr@class:#3.dep#2}{\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex#1\@ex\@ex\@ex{\csname gr@class:#3.dep#2\endcsname}}{}
-%%%%}
-%%%%
-%%%%\NewDocumentCommand\LstClass{O{\gooble}m}{%
-%%%%\xdef\gr@sem{#2}%
-%%%%\gr@setcred%
-%%%%\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex\gr@addclasscred\@ex\@ex\@ex{\csname gr@et:#2\endcsname}%
-%%%%\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex#1\@ex\@ex\@ex{\csname gr@et:#2\endcsname}%
-%%%%}
-%%%%
-%%%%\NewDocumentCommand\LstTopic{O{\goo}m}{%
-%%%%\xdef\gr@topic{#2}%
-%%%%\@ex\@ex\@ex\forcsvlist\@ex\@ex\@ex#1\@ex\@ex\@ex{\csname gr@topic:#2\endcsname}%
-%%%%}
-%%%%

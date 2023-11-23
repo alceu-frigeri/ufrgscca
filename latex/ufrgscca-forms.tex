@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.11 (2023/05/29)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,10 +22,6 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-%\makeatletter
-%\ExplSyntaxOff
-
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -50,7 +46,7 @@
 
 %%%
 \SetForm{internshiprequest}{body}{
-  \UseTerm{desc.requestform} \Activity{internship}{name}.
+  \UseTerm{desc.requestform} \Activity[internship]{name}.
     \vfill%
    \UseLabel{student.email}: {\bf \DataFields{student}{email}} %
 \vspace{2mm}
@@ -161,10 +157,10 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
  %   \hline
     \vfill%
 
-    Avaliação d\ActivityCoord{internship}{article} Prof\ActivityCoord{internship}{narticle}. Coordenador\ActivityCoord{internship}{narticle}:\emptybox%
+    Avaliação d\ActivityCoord[internship]{article} Prof\ActivityCoord[internship]{narticle}. Coordenador\ActivityCoord[internship]{narticle}:\emptybox%
     \vfill
 
-    Considerações d\ActivityCoord{internship}{article} Prof\ActivityCoord{internship}{narticle}. Coordenador\ActivityCoord{internship}{narticle} sobre o Estágio:
+    Considerações d\ActivityCoord[internship]{article} Prof\ActivityCoord[internship]{narticle}. Coordenador\ActivityCoord[internship]{narticle} sobre o Estágio:
     
      \BlankLines{5}%
     \vfill%
@@ -284,7 +280,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 
 %%%
 \SetForm{request-I}{body}{%
-  \UseTerm{desc.requestform} \Activity{tccI}{name}.
+  \UseTerm{desc.requestform} \Activity[tccI]{name}.
   \vfill%
 
   \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
@@ -515,7 +511,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
 %%%
 \SetForm{request-II}{body}{
-  \UseTerm{desc.requestform} \Activity{tccII}{name}.
+  \UseTerm{desc.requestform} \Activity[tccII]{name}.
   \vfill%
 
   \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
@@ -534,7 +530,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
 
   \vfill%
-  O Tema do Trabalho e Orientador (Co-orientador) seguem sendo os mesmos de TCC I ?
+  O Tema do Trabalho e Orientador (Coorientador) seguem sendo os mesmos de TCC I ?
 \begin{itemize}[tcc,noitemsep]
  \item[$\Box$] SIM
  \item[$\Box$] NÃO, neste caso \textbf{justifique} a mudança no espaço a seguir:
@@ -630,6 +626,8 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 %%%%%%%%%%%%%%%
 
 
+
+
 %%%%%%%%%%%%%%%
 %%  advisor's approval - II
 %%%%%%%%%%%%%%%
@@ -673,7 +671,7 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
 %%%
 \SetForm{receipts-II}{body}{ %
-  Declaro que encontra-se em minha posse cópia da versão final do \Activity{tccII}{name} em \Activity{course}{name}  d\DataFields{student}{article} alun\DataFields{student}{article} 
+  Declaro que encontra-se em minha posse cópia da versão final do \Activity[tccII]{name} em \Activity[course]{name}  d\DataFields{student}{article} alun\DataFields{student}{article} 
   \textbf{\DataFields{student}{name}}.
 
   \vfill%
@@ -830,7 +828,7 @@ O texto submetido:
 %%  referall letter- I
 %%%%%%%%%%%%%%%
 \SetForm{referral-I}{heading}{\UseTerm{title.tccI}}
-\SetForm{referral-I}{title}{\UseConst{semester}}
+\SetForm{referral-I}{title}{\UseTerm{semester}}
 \SetForm{referral-I}{opening}{\UseTerm{desc.sacad}}
 
 %%%
@@ -936,7 +934,7 @@ O texto submetido:
 %%  referall letter- II
 %%%%%%%%%%%%%%%
 \SetForm{referral-II}{heading}{\UseTerm{title.tccII}}
-\SetForm{referral-II}{title}{\UseConst{semester}}
+\SetForm{referral-II}{title}{\UseTerm{semester}}
 \SetForm{referral-II}{opening}{\UseTerm{desc.sacad}}
 
 %%%
@@ -1037,7 +1035,7 @@ O texto submetido:
 %%  report TCC - I
 %%%%%%%%%%%%%%%
 \SetForm{report-I}{heading}{\UseTerm{title.tccI}}
-\SetForm{report-I}{title}{Relatório Acompanhamento - \UseConst{semester}}
+\SetForm{report-I}{title}{Relatório Acompanhamento - \UseTerm{semester}}
 \SetForm{report-I}{opening}{}
 
 \ExplSyntaxOn
@@ -1069,7 +1067,7 @@ O texto submetido:
         \multicolumn{#1}{l}{\textbf{\color{#4}#3}}\\\hline
         \seq_map_inline:Nn #2 
           {
-            \studentSelect{##1}
+            \studentselect{##1}
             &\\*
             \multicolumn{#1}{l}{\textbf{\color{#4}\DataFields{student}{name}}}\\*
             \studentExtLine{#1}\\*
@@ -1086,7 +1084,7 @@ O texto submetido:
 %%  report TCC - II
 %%%%%%%%%%%%%%%
 \SetForm{report-II}{heading}{\UseTerm{title.tccII}}
-\SetForm{report-II}{title}{Relatório Acompanhamento - \UseConst{semester}}
+\SetForm{report-II}{title}{Relatório Acompanhamento - \UseTerm{semester}}
 \SetForm{report-II}{opening}{}
 
 \ExplSyntaxOn
@@ -1110,7 +1108,75 @@ O texto submetido:
 %%%
 \SetForm{report-II}{closing}{}
 
+
+\NewDocumentCommand{\CheckList}{mmmO{red}}{
+    \seq_if_empty:NF #2
+      {
+        &\\
+        \multicolumn{#1}{l}{\textbf{\color{#4}#3}}\\\hline
+        \seq_map_inline:Nn #2 
+          {
+            \studentselect{##1}
+            &\\[-2ex]
+            ~\multicolumn{#1}{l}{\textbf{\color{#4}\DataFields{student}{name}}}\\*
+            \__ufrgscca_checktable_lines:nn {L1,L2,L3,L4}{C1,C2,C3,C4,C5}\hline
+          }     
+      }
+      
+}
+
+
+%%%%%%%%%%%%%%%
+%%  Check List TCC - I
+%%%%%%%%%%%%%%%
+\SetForm{checklist-I}{heading}{\UseTerm{title.tccI}}
+\SetForm{checklist-I}{title}{Check~ List~ TCC~ I~ -~ \UseTerm{semester}}
+\SetForm{checklist-I}{opening}{}
+
+%%%
+\SetForm{checklist-I}{opening}{  %
+  \ActivitySelect{tccI}
+  { \scriptsize
+    \begin{longtable}{lllll}%
+    \CheckList{5}{\l__ufrgscca_baselist_graded_seq}{Alunos~Com~ Conceito}[black]
+    \CheckList{5}{\l__ufrgscca_baselist_ff_seq}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
+    \CheckList{5}{\l__ufrgscca_baselist_dismiss_seq}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
+    \end{longtable}
+  }
+  ~\vfill
+}
+
+%%%
+\SetForm{checklist-I}{closing}{}
+
+
+%%%%%%%%%%%%%%%
+%%  Check List TCC - II
+%%%%%%%%%%%%%%%
+\SetForm{checklist-II}{heading}{\UseTerm{title.tccII}}
+\SetForm{checklist-II}{title}{Check~ List~ TCC~ II~ -~ \UseTerm{semester}}
+\SetForm{checklist-II}{opening}{}
+
+%%%
+\SetForm{checklist-II}{opening}{  %
+  \ActivitySelect{tccII}
+  { \scriptsize
+    \begin{longtable}{lllll}%
+    \CheckList{5}{\l__ufrgscca_baselist_graded_seq}{Alunos~Com~ Conceito}[black]
+    \CheckList{5}{\l__ufrgscca_baselist_ff_seq}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
+    \CheckList{5}{\l__ufrgscca_baselist_dismiss_seq}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
+    \end{longtable}
+  }
+  ~\vfill
+}
+
+%%%
+\SetForm{checklist-II}{closing}{}
+
 \ExplSyntaxOff
+
+
+
 
 
 
@@ -1118,7 +1184,7 @@ O texto submetido:
 %%  Boards TCC - II
 %%%%%%%%%%%%%%%
 \SetForm{boards}{heading}{\UseTerm{title.tccII}}
-\SetForm{boards}{title}{\UseConst{semester}}
+\SetForm{boards}{title}{\UseTerm{board.title}}
 \SetForm{boards}{opening}{}
 
 \ExplSyntaxOn
@@ -1126,7 +1192,8 @@ O texto submetido:
 \SetForm{boards}{opening}{  %
   {\footnotesize
     \begin{longtable}{p{\UseConst{board.tabA}}p{\UseConst{board.tabB}}p{\UseConst{board.tabC}}p{\UseConst{board.tabD}}}%
-    \multicolumn{4}{c}{Apresentações ~de ~ TCC ~ - ~ \UseConst{semester}}\\\hline
+    %\multicolumn{4}{c}{\UseTerm{board.title}}\\\hline
+    \hline
     \tl_gclear:N \l__ufrgscca_daytmpa_tl
     \tl_gclear:N \l__ufrgscca_daytmpb_tl
     \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
@@ -1137,6 +1204,9 @@ O texto submetido:
         \tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{date:\l__ufrgscca_daytmpb_tl}}
         %\tl_gset:Ne \l__ufrgscca_daytmpD_tl {date:\l__ufrgscca_daytmpb_tl}
         %\tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{\l__ufrgscca_daytmpD_tl}}
+        \studentNewPageCase
+          {\kill\pagebreak\tl_gset:Nn \l__ufrgscca_daytmpa_tl {}}
+          {}
         \tl_if_eq:NNF \l__ufrgscca_daytmpa_tl \l__ufrgscca_daytmpb_tl
           {
             &\multicolumn{3}{r}{\textbf{\l__ufrgscca_daytmpc_tl\  ~- ~ \l__ufrgscca_daytmpb_tl}}\\*
@@ -1150,28 +1220,29 @@ O texto submetido:
         \multicolumn{4}{l}{\textsc{Título:}\ \emph{\DataFields{student}{worktitle}}}\\\hline      
       }
     \end{longtable} 
+    
+    {\scriptsize\UseTerm{board.obs}}
   }
 }
+\ExplSyntaxOff
 
 %%%
-\SetForm{boards}{closing}{}
-
-
-\ExplSyntaxOff
+\SetForm{boards}{body}{~}
+\SetForm{boards}{closing}{~}
 
 
 %%%%%%%%%%%%%%%
 %%  cocertificate
 %%%%%%%%%%%%%%%
 \SetForm{cocertificate}{heading}{\UseTerm{title.tcc}}
-\SetForm{cocertificate}{title}{\UseConst{semester}}
+\SetForm{cocertificate}{title}{\UseTerm{semester}}
 \SetForm{cocertificate}{opening}{À quem interessar possa,\\ certificamos que}
 \SetForm{cocertificate}{body}{%
   \begin{center}
     \textsc{\DataFields{student.coadvisor}{name}}
   \end{center}
   \vfill
-  atuou como co-orientador\DataFields{student.coadvisor}{narticle} d\DataFields{student}{article} alun\DataFields{student}{article}\ \emph{\DataFields{student}{name}}\ no Trabalho de Conclusão de Curso intitulado \emph{\DataFields{student}{worktitle}}\ no semestre \UseConst{semester}.
+  atuou como coorientador\DataFields{student.coadvisor}{narticle} d\DataFields{student}{article} alun\DataFields{student}{article}\ \emph{\DataFields{student}{name}}\ no Trabalho de Conclusão de Curso intitulado \emph{\DataFields{student}{worktitle}}\ no semestre \UseTerm{semester}.
 }
 
 \SetForm{cocertificate}{closing}{%

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,14 +22,7 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\makeatletter
-\def\tc@tmp@packname{ufrgscca-en-base}
-\def\tc@tmp@altpackname{ufrgsccaenbase}
-\def\tc@tmp@packdesc{UFRGS/CCA English base defs}
-\def\tc@tmp@packdate{2023/09/23}
-\def\tc@tmp@packversion{1.12}
-\let\@exp\expandafter
-\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
+
 
 %%%%%
 %%
@@ -39,6 +32,8 @@
 
 %	\def\bibname{References}% deprecated by biber
 %	\def\refname{\bibname}
+%  \setlocalecaption{english}{refname}{References}
+  \defbibheading{bibliography}[References]{\nonum\chapter{#1}\pagestyle{bibliography}}
 	\def\abstractname{Abstract}%
 	\def\englishabstractname{Abstract}%
 	\def\contentsname{Contents}%

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version 1.12 (2023/09/23)
+%% This is version {2.0} {2023/11/23}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,22 +23,50 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2022/06/01]
-\RequirePackage{expl3}
-%%\def\tc@tmp@packname{ufrgscca}
-%%\def\tc@tmp@altpackname{ufrgscca}
-%%\def\tc@tmp@packdesc{UFRGS/CCA  class}
-%%\def\tc@tmp@packdate{2023/09/23}
-%%\def\tc@tmp@packversion{1.12}
-%%\let\@exp\expandafter
-%%\@exp\edef\csname\tc@tmp@altpackname version\endcsname{\tc@tmp@packversion}
-%%\@exp\@exp\@exp\ProvidesPackage\@exp\@exp\@exp{\@exp\tc@tmp@packname\@exp}\@exp[\tc@tmp@packdate\space v\tc@tmp@packversion\space\tc@tmp@packdesc]
 
 
 \ProvidesExplClass
     {ufrgscca}
-    {2023/11/10}
-    {1.99}
+    {2023/11/23}
+    {2.0}
     {UFRGS/CCA class}
+
+
+%%%%%%%
+%%%
+%%% Just an attempt of having my packages info in a regular way
+%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%%
+%%%%%%%
+\keys_define:nn { ufrgscca / pkg info}
+  {
+     name        .code:n = {ufrgscca} ,
+     prefix      .code:n = {ufrgscca} ,
+     date        .code:n = {2023/11/23},
+     version     .code:n = {2.0} ,
+     description .code:n = {UFRGS/CCA~a~report~based~class~bundle}
+  }
+\cs_if_exist:NF \__codedesc_pkg_info:nn 
+  {
+    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
+      { \keys_set:nn {#1 / pkg info}{#2} }
+  }
+\cs_if_exist:NF \PkgInfo
+  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
+\cs_if_exist:NF \PkgDescription
+  { 
+    \NewDocumentCommand \PkgDescription {m} 
+      { 
+        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
+      } 
+  }
+%%%%%%%
+%%% End of cut-n-paste
+%%%%%%%
+
+
+
+
 
 \RequirePackage{etex}
 \RequirePackage{etoolbox}
@@ -53,7 +81,6 @@
 %%% 
 %%%%%%%%%%%%%%%%%%%%%%
 
-%\ExplSyntaxOn
 \prop_new:N \l__ufrgscca_terms_prop
   
 \NewDocumentCommand{\SetHeadings}{m}
@@ -114,9 +141,6 @@
   { \prop_item:Ne \l__ufrgscca_const_prop {#1} }
 
 
-%\ExplSyntaxOff
-
-
 \bool_new:N \l__ufrgscca_repeatfields_bool
 \bool_new:N \l__ufrgscca_timesroman_bool
 \bool_new:N \l__ufrgscca_nolocal_bool
@@ -131,8 +155,12 @@
     secdepth        .usage:n    = load,
 	secdepth        .code:n     = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
-    english        .usage:n     = load,
-    english        .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
+%    english        .usage:n     = load,
+%    english        .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
+
+		english       .usage:n          = load ,
+		english       .bool_set:N       = \l__ufrgscca_english_bool ,
+    
     relnum         .usage:n     = load,
     relnum         .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\PassOptionsToPackage{\CurrentOption}{ufrgscca-lists}\OptionNotUsed},
 
@@ -191,87 +219,24 @@
 	nogeometry    .usage:n      = load,
 	nogeometry    .bool_set:N   = \l__ufrgscca_nogeometry_bool,
 
+    oldrenews     .usage:n      = load,
+	oldrenews     .bool_set:N   = \l__ufrgscca_oldrenews_bool,
+
     unknown       .code:n       = {\PassOptionsToClass{\CurrentOption}{report}},
   }
 \ProcessKeyOptions[ufrgscca]\relax
 
 
 
-
-%%\DeclareKeys[tc]{
-%%    tocdepth.usage = load,
-%%	tocdepth.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%    secdepth.usage = load,
-%%	secdepth.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%
-%%    english.usage = load,
-%%    english.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\OptionNotUsed},
-%%    relnum.usage = load,
-%%    relnum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}\PassOptionsToPackage{\CurrentOption}{ufrgscca-lists}\OptionNotUsed},
-%%
-%%    pretextontoc.usage = load,
-%%    pretextontoc.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%	timesroman.usage = load,
-%%    timesroman.if = tcif@timesroman,
-%%    yearsonly.usage = load,
-%%    yearsonly.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%
-%%    oneside.usage = load,
-%%    oneside.code = {\AtEndOfClass{\@twosidefalse}\OptionNotUsed},
-%%    strict-abnt.usage = load,
-%%    strict-abnt.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%    repeatfields.usage = load,
-%%    repeatfields.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%	chapternopagenum.usage = load,
-%%	chapternopagenum.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%
-%%    nomicrotype.usage = load,
-%%    nomicrotype.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%
-%%    showframes.usage = load,
-%%    showframes.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%    showlabes.usage = load,
-%%    showlabes.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
-%%
-%%	xlists.usage = load,
-%%    xlists.if = tc@xlists,
-%%	xpacks.usage = load,
-%%	xpacks.if = tc@xpacks,
-%%
-%%	nolocal.usage = load,
-%%	nolocal.if = tcif@nolocal,
-%%
-%%    nofontwarning.usage = load,
-%%    nofontwarning.if = @nofontwarning,
-%%
-%%    report.usage = load,
-%%    report.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
-%%    internship.usage = load,
-%%	internship.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
-%%    nonrequired.usage = load,
-%%    nonrequired.code = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-cover}},
-%%
-%%	texlive.usage = load,
-%%	texlive.if = tcif@texlive,
-%%	overleaf.usage = load,
-%%	overleaf.if = tcif@overleaf,
-%%	miktex.usage = load,
-%%	miktex.if = tcif@miktex,
-%%
-%%	article.usage = load,
-%%	article.if = tcif@article,
-%%
-%%	nogeometry.usage = load,
-%%	nogeometry.if = tcif@nogeometry,
-%%}
-
-%%\DeclareUnknownKeyHandler[tc]{\PassOptionsToClass{\CurrentOption}{report}}
-%%\ProcessKeyOptions[tc]\relax
-
-
 \bool_if:NTF \l__ufrgscca_timesroman_bool
   {
-    \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
+    \bool_if:NTF \l__ufrgscca_english_bool
+      {
+        \RequirePackage[brazilian,english]{babel}% babel has to be loaded BEFORE newtx*
+      }
+      {
+        \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
+      }
     \RequirePackage{mathptmx}
     \PackageWarning{ufrgscca}{(obsolete) package mathptmx loaded. It loads a free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
     \PackageWarning{ufrgscca}{package microtype is suppressed, resulting in a subpar layout. Again, the “Roman” font used isn't a true Times Roman nor Times New Roman}
@@ -301,41 +266,6 @@
   }
 
 
-%%\iftcif@timesroman
-%%    \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
-%%    \RequirePackage{mathptmx}
-%%%    \RequirePackage[scale=1.05,looser]{newtxtext}%
-%%%    \RequirePackage[scale=1.05]{newtxmath}%
-%%%    \PackageWarning{ufrgscca}{Fonts newtxtext and newtxmath loaded. Those are free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
-%%%    \PackageWarning{ufrgscca}{newtxtext and newtxmath are based on URW Nimbus Roman with some extra math support. Again, those are not real Times Roman nor Times New Roman}
-%%    \PackageWarning{ufrgscca}{(obsolete) package mathptmx loaded. It loads a free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
-%%    \PackageWarning{ufrgscca}{package microtype is suppressed, resulting in a subpar layout. Again, the “Roman” font used isn't a true Times Roman nor Times New Roman}
-%%
-%%\else
-%%    \RequirePackage{lmodern}%
-%%\fi
-
-%%\iftcif@article
-%%    \LoadClass[12pt]{article}
-%%\else
-%%    \LoadClass[12pt,twoside,openright]{report}
-%%%    \LoadClass[12pt]{report}
-%%\fi
-
-%%\iftcif@miktex
-%%% \def\BabelCaseHack{}
-%% \ifcsdef{miktexHack}{\miktexHack}{}
-%%\fi
-%%
-%%\iftcif@overleaf
-%% \ifcsdef{overleafHack}{\overleafHack}{}
-%%\fi
-%%
-%%\iftcif@texlive
-%% \ifcsdef{texliveHack}{\texliveHack}{}
-%%\fi
-
-
 %%%%%%%%%%%%%%%%%%%%%
 %%% Packages Loading
 %%%%%%%%%%%%%%%%%%%%%
@@ -348,12 +278,6 @@
   \WarningFilter{latexfont}{Some font shapes were not available}%
   }
 
-%%\if@nofontwarning%
-%%  \WarningFilter{latexfont}{Font shape}%
-%%  \WarningFilter{latexfont}{Size substitutions with differences}%
-%%  \WarningFilter{latexfont}{Some font shapes were not available}%
-%%\fi%
-
 
 \RequirePackage{ufrgscca-abnt}
 
@@ -362,9 +286,7 @@
     \RequirePackage{ufrgscca-lists}
   }
 
-%%\iftc@xlists\RequirePackage{ufrgscca-lists}\fi
 
-%\RequirePackage{ufrgscca-gen}
 \RequirePackage{ufrgscca-cover}
 \RequirePackage{ufrgscca-core}
 
@@ -400,98 +322,48 @@
 
 
 
-%%\iftc@xpacks
-%%    \RequirePackage{relsize}
-%%    \RequirePackage{keyval,graphicx}
-%%    \RequirePackage{mathtools}
-%%    \RequirePackage{empheq}
-%%    \RequirePackage{mathrsfs, amsfonts,amssymb}%
-%%    \RequirePackage{amsthm}%
-%%    \RequirePackage{extarrows}%
-%%    \RequirePackage{mathfixs}%
-%%    \RequirePackage{bigdelim}%
-%%	\RequirePackage[american,siunitx,cuteinductors,smartlabels,arrowmos,EFvoltages,betterproportions]{circuitikz}%
-%%	\usetikzlibrary{fit}%
-%%	\usetikzlibrary{math}%
-%%	\usetikzlibrary{calc}%
-%%	\usetikzlibrary{shapes.geometric} %needed for the triangle%
-%%	\usetikzlibrary{shapes.misc} %needed for the triangle%
-%%	\usetikzlibrary{shapes.multipart}
-%%	\usetikzlibrary{graphs}%
-%%	\usetikzlibrary{3d}%
-%%	\usetikzlibrary{positioning}%
-%%	\usetikzlibrary{shadows}%
-%%	\usetikzlibrary{babel}
-%%    \RequirePackage{steinmetz}%
-%%\fi
-
-%\bool_show:N \l__ufrgscca_repeatfields_bool
-%\bool_show:N \l__ufrgscca_timesroman_bool
-%\bool_show:N \l__ufrgscca_nolocal_bool
-
 
 \WarningFilter{hyperref}{Option `pdftex' has already}
 
-\RequirePackage[hidelinks,hypertexnames=false]{hyperref}%
+\RequirePackage[hidelinks,hypertexnames=false]{hyperref}
+
 %%
 %% A few (hyperref related) commands
 %%
-\NewDocumentCommand{\autonameref}{O{, }mO{\space}}{\autoref{#2}#1\nameref{#2}#3}
+\NewDocumentCommand{\autonameref}{O{,\space}mO{}}{\autoref{#2}#1\nameref{#2}#3}
 \gdef\annexref#1{\hyperref[#1]{\defannexname\   \ref*{#1}}}
-\NewDocumentCommand{\autoannexref}{O{, }mO{\space}}{\annexref{#2}#1\nameref{#2}#3}
+\NewDocumentCommand{\autoannexref}{O{,~ }mO{}}{\annexref{#2}#1\nameref{#2}#3}
 
 
-%\bool_show:N \l__ufrgscca_repeatfields_bool
-%\bool_show:N \l__ufrgscca_timesroman_bool
-%\bool_show:N \l__ufrgscca_nolocal_bool
+\NewActivity{course} % yeah, CCA as an activity...
+\NewActivity{tccI}
+\NewActivity{tccII}
+\NewActivity{internship}
+\NewActivity{internship-opt}
 
 
 
-%%move this to ufrgscca-terms-
-%%\bool_if:NTF \l__ufrgscca_english_bool
-%%  {
-%%    \input{ufrgscca-en-core.def}%
-%%  }
-%%  {
-%%    \input{ufrgscca-ptBR-core.def}%
-%%  }
+\ExplSyntaxOff
+    \input{ufrgscca-terms-ptBR.tex}
+    \input{ufrgscca-cover-ptBR.tex}
+\ExplSyntaxOn
 
 
-%\bool_show:N \l__ufrgscca_repeatfields_bool
-%\bool_show:N \l__ufrgscca_timesroman_bool
-%\bool_show:N \l__ufrgscca_nolocal_bool
-
-
-%%
-%%\iftcif@english%
-%% \input{ufrgscca-en-core.def}%
-%%\else%
-%% \input{ufrgscca-ptBR-core.def}%
-%%\fi%
-%%
-    \ExplSyntaxOff
-\input{ufrgscca-terms-ptBR.tex}
-\input{ufrgscca-cover-ptBR.tex}
-    \ExplSyntaxOn
-
-%\bool_show:N \l__ufrgscca_repeatfields_bool
-%\bool_show:N \l__ufrgscca_timesroman_bool
-%\bool_show:N \l__ufrgscca_nolocal_bool
+\bool_if:NT \l__ufrgscca_english_bool
+  {
+    \AtBeginDocument{\input{ufrgscca-terms-en.tex}}
+  }
 
 
 \bool_if:NF \l__ufrgscca_nolocal_bool
   {
     \ExplSyntaxOff
-    \IfFileExists{local.tex}{\input{local.tex}}{}%
-%    \tccore@emptyfields%
+      \IfFileExists{local.tex}
+        { \AtBeginDocument{ \input{local.tex} } }
+        {}%
     \ExplSyntaxOn
   }
 
 
-%%\iftcif@nolocal%
-%%\else%
-%%    \IfFileExists{local.tex}{\input{local.tex}}{}%
-%%    \tccore@emptyfields%
-%%\fi
 
 
