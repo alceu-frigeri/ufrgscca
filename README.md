@@ -113,7 +113,7 @@ The Current Maintainer of this work is Alceu Frigeri
     - (a few) commands changed (mostly auxiliary/background ones)
     - some class options added and removed (see documentation)
 
-* Version 1.12 (this)
+* Version 1.12
     - forms adjustments
     - documentation typo
     - expl3 initial preparation
