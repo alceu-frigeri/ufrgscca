@@ -107,7 +107,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.0 (this)
+* Version 2.1 (this)
+    - A few typos corrected
+    - better error handling
+    - a bit of code clean up (private macro/functions only)
+    - added a few \...prof commands (-coord auxiliary ones)
+
+* Version 2.0 
     - fully rewritten as Expl3 class/packages
     - documentation
     - (a few) commands changed (mostly auxiliary/background ones)

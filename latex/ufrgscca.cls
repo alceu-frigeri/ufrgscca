@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.0} {2023/11/23}
+%% This is version {2.1} {2023/11/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplClass
     {ufrgscca}
-    {2023/11/23}
-    {2.0}
+    {2023/11/30}
+    {2.1}
     {UFRGS/CCA class}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/11/23},
-     version     .code:n = {2.0} ,
+     date        .code:n = {2023/11/30},
+     version     .code:n = {2.1} ,
      description .code:n = {UFRGS/CCA~a~report~based~class~bundle}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -132,6 +132,14 @@
   {
     \prop_put_from_keyval:Nn \l__ufrgscca_const_prop {#1}
   }
+
+\cs_generate_variant:Nn \prop_put:Nnn {Nee}
+\NewDocumentCommand{\eSetConst}{mm}
+  {
+    \prop_put:Nee \l__ufrgscca_const_prop {#1}{#2}
+  }
+
+
 
 \cs_generate_variant:Nn \prop_item:Nn {Ne}
 

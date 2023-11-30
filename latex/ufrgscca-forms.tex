@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.0} {2023/11/23}
+%% This is version {2.1} {2023/11/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -194,22 +194,18 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 \SetForm{calendar-I}{opening}{}
 
 %%%
-  \ExplSyntaxOn
-  \bool_new:N \l__ufrgscca_tmp_bool
+
 \SetForm{calendar-I}{body}{%
-  \starray_set_iter_from_hash:nn {activity}{tccI}
-  \starray_reset_iter:n {activity.calendar}
-  \bool_set_true:N \l__ufrgscca_tmp_bool
+  \ActivitySelect{tccI}
   { \footnotesize%
     \begin{center}
 %
       \resizebox{\textwidth}{!}{%%
         \begin{tabular}{ccp{11.5cm}}%
         Data/Período & Semana~ Letiva & Evento\\\hline
-        \bool_do_while:Nn \l__ufrgscca_tmp_bool
+        \ActivityCalendarIterate
           {
-            \textbf{\starray_get_prop:nn {activity.calendar}{date}} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}\\\hline
-            \starray_next_iter:nF {activity.calendar}{\bool_set_false:N \l__ufrgscca_tmp_bool}
+            \textbf{\DataFields{activity.calendar}{date}} & \DataFields{activity.calendar}{week} & \DataFields{activity.calendar}{event}\\\hline
           }
         \end{tabular}}%
 %
@@ -217,7 +213,6 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
     \scriptsize \UseTerm{notes.calendarI}
   }%
 }
-  \ExplSyntaxOff
 
 %%%
 \SetForm{calendar-I}{closing}{\vfill}%
@@ -229,30 +224,24 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 \SetForm{calendar-II}{opening}{}
 
 %%%
-  \ExplSyntaxOn
-%  \bool_new:N \l__ufrgscca_tmp_bool
 \SetForm{calendar-II}{body}{%
-  \starray_set_iter_from_hash:nn {activity}{tccII}
-  \starray_reset_iter:n {activity.calendar}
-  \bool_set_true:N \l__ufrgscca_tmp_bool
+  \ActivitySelect{tccII}
   { \footnotesize%
     \begin{center}
 %
       \resizebox{\textwidth}{!}{%%
         \begin{tabular}{ccp{11.5cm}}%
-        Data/Período & Semana~ Letiva & Evento\\\hline
-        \bool_do_while:Nn \l__ufrgscca_tmp_bool
-          {
-            \textbf{\starray_get_prop:nn {activity.calendar}{date}} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}\\\hline
-            \starray_next_iter:nTF {activity.calendar}{}{\bool_set_false:N \l__ufrgscca_tmp_bool}
-          }
+          Data/Período & Semana~ Letiva & Evento\\\hline
+          \ActivityCalendarIterate
+            {
+              \textbf{\DataFields{activity.calendar}{date}} & \DataFields{activity.calendar}{week} & \DataFields{activity.calendar}{event}\\\hline
+            }
         \end{tabular}}%
 %
     \end{center}%
     \scriptsize \UseTerm{notes.calendarII}
   }%
 }
-  \ExplSyntaxOff
 
 %%%
 \SetForm{calendar-II}{closing}{\vfill}%
@@ -316,7 +305,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 \SetForm{coadvisor-I}{opening}{%
 
   \UseTerm{opening.requestform}
-  \coadvisoremptyifnone
+  \emptytermifnone{student.coadvisor}
 }
 
 %%%
@@ -364,7 +353,6 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
     \UseLabel{board}
   \end{center}%
 
-%%% TODO: That's do be done... convert it to starray!!!
  
   \BoardDescSignature{Avaliador\DataFields{student.reviewer[2]}{narticle}}{student.reviewer[2]}
 
@@ -554,39 +542,39 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 %%%%%%%%%%%%%%%
 \SetForm{coadvisor-II}{heading}{\UseTerm{title.tccII}}
 \SetForm{coadvisor-II}{title}{\UseTerm{title.coadvisorform}}
-\SetForm{coadvisor-II}{opening}{%
+\SetForm{coadvisor-II}{opening}{
 
   \UseTerm{opening.requestform}
-  \coadvisoremptyifnone
+  \emptytermifnone{student.coadvisor}
 }
 
 %%%
-\SetForm{coadvisor-II}{body}{%
+\SetForm{coadvisor-II}{body}{
   \UseTerm{desc.coadvisorform}
   \vfill%
 
-  \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}%\@title %
+  \UseLabel{worktitle.temp}: \DataFields{student}{worktitle}
 
   \UseLabel{advisor}: \DataFields{student.advisor}{name}
 
-  \UseLabel{coadvisor}: \DataFields{student.coadvisor}{name}%
+  \UseLabel{coadvisor}: \DataFields{student.coadvisor}{name}
 
-  \UseLabel{coadvisor.email}: {\bf \DataFields{student.coadvisor}{email}}%
-  \hfill \UseLabel{phone}: {\bf \DataFields{student.coadvisor}{phone}}\\%
+  \UseLabel{coadvisor.email}: {\bf \DataFields{student.coadvisor}{email}}
+  \hfill \UseLabel{phone}: {\bf \DataFields{student.coadvisor}{phone}}\\
 
-  {\bf Justificativa}:%
+  {\bf Justificativa}:
   \vfill
 
   \DataFields{student.coadvisor}{reason}
 }
 
 %%%
-\SetForm{coadvisor-II}{closing}{%
+\SetForm{coadvisor-II}{closing}{
 
   \SignatureDate{\UseLabel{signature.student}}
 
-  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}\hfill%
-  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.coadvisor}}}%
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.advisor}}}\hfill
+  \parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.coadvisor}}}
 }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -602,9 +590,9 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 \SetForm{boardapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
-\SetForm{boardapproval-II}{body}{%
+\SetForm{boardapproval-II}{body}{
   \begin{center}
-    \UseLabel{board}%
+    \UseLabel{board}
   \end{center}%
 
   \BoardDescSignature{Avaliador\DataFields{student.reviewer[1]}{narticle}}{student.reviewer[1]}
@@ -615,9 +603,9 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
   \BoardDescSignature{Suplente}{student.altreviewer[1]}
 
-  \vfill%
+  \vfill
 
-    Indicamos a nominata da Banca Examinadora acima relacionada.%
+    Indicamos a nominata da Banca Examinadora acima relacionada.
 }
 
 %%%
@@ -646,10 +634,10 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 
 %%%
 \SetForm{advisorsapproval-II}{closing}{%
-  \SignatureDate{\UseLabel{signature.advisor}}%
+  \SignatureDate{\UseLabel{signature.advisor}}
   \vfill%
 
-  \SignatureDate{\UseLabel{signature.student}}%
+  \SignatureDate{\UseLabel{signature.student}}
  }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -663,20 +651,20 @@ Outras considerações, parecer (se necessário): \BlankLines{6}
 \SetForm{receipts-II}{footnote}{\UseTerm{footnote.receipts}}
 
 %%%
-\SetForm{receipts-II}{opening}{%
-  \UseTerm{desc.studentwork.full}\\%
+\SetForm{receipts-II}{opening}{
+  \UseTerm{desc.studentwork.full}\\
 
-  \noindent Membro da Banca : {\bf \DataFields{student.reviewer}{name} }%
+  \noindent Membro da Banca : {\bf \DataFields{student.reviewer}{name} }
 }
 
 %%%
-\SetForm{receipts-II}{body}{ %
+\SetForm{receipts-II}{body}{ 
   Declaro que encontra-se em minha posse cópia da versão final do \Activity[tccII]{name} em \Activity[course]{name}  d\DataFields{student}{article} alun\DataFields{student}{article} 
   \textbf{\DataFields{student}{name}}.
 
   \vfill%
 
- \SignatureDate{\UseLabel{signature.board}}%
+ \SignatureDate{\UseLabel{signature.board}}
  
 }
 
@@ -706,22 +694,22 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
   \vfill%
 
   \begin{center}
-    \begin{tabular}{|c|c|c|}%
+    \begin{tabular}{|c|c|c|}
       \hline%
       \UseLabel{TCC-II.pointA} & \UseLabel{TCC-II.pointB} & \UseLabel{TCC-II.pointC} \\\hline%
       & & \\\hline
-    \end{tabular}%
-  \end{center}%
+    \end{tabular}
+  \end{center}
 }
 
 %%%
 \SetForm{examinersform-II}{closing}{ 
   
- \SignatureDate{\UseLabel{signature.reviewer}}%
+ \SignatureDate{\UseLabel{signature.reviewer}}
   \vfill%
   \begin{description}
     \item[Observações:] \ \\A nota final, de cada membro da banca examinadora, será calculada conforme:\\[2mm] {\bf Nota Final = \UseConst{TCC-II.weightA}\ x \UseLabel{TCC-II.pointA}\  + \UseConst{TCC-II.weightB}\ x \UseLabel{TCC-II.pointB}\  + \UseConst{TCC-II.weightC}\ x \UseLabel{TCC-II.pointC}\ }\\[2mm] A média final da atividade será dada pela média das notas finais atribuidas por cada um dos membros da banca examinadora.
-  \end{description}%
+  \end{description}
 }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -742,7 +730,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 }
 
 %%%
-\SetForm{correctionsform-II}{body}{  \resizebox{0.9\textwidth}{!}{%%
+\SetForm{correctionsform-II}{body}{  \resizebox{0.9\textwidth}{!}{
 O texto submetido:
  \parbox[t]{.75\textwidth}{
     \begin{itemize}[tcc,nosep]
@@ -776,12 +764,12 @@ O texto submetido:
 	~\\\hline
 	~\\\hline
 	\end{tabular}\\[-1mm]
-	\end{itemize}}  }%
-  \footnotetext[2]{Neste caso \DataFields{student}{article} alun\DataFields{student}{article} estará em EXAME e receberá conceito final C ou D, conforme revisão final do texto.}%
+	\end{itemize}}  }
+  \footnotetext[2]{Neste caso \DataFields{student}{article} alun\DataFields{student}{article} estará em EXAME e receberá conceito final C ou D, conforme revisão final do texto.}
 }
 
 %%%
-\SetForm{correctionsform-II}{closing}{  \SignatureDate{\UseLabel{signature.reviewer}}%
+\SetForm{correctionsform-II}{closing}{  \SignatureDate{\UseLabel{signature.reviewer}}
  }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
@@ -796,17 +784,17 @@ O texto submetido:
 \SetForm{rectifyapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
 %%%
-\SetForm{rectifyapproval-II}{body}{  %
+\SetForm{rectifyapproval-II}{body}{ 
   \SetTerms{temp.formrefname = {Formulário de Correções}}
   \UseTerm{desc.rectifyapproval}
 
-  \vfill%
+  \vfill
 
   \ApprovalSignature[\UseLabel{advisor}]{\DataFields{student.advisor}{name}}
 }
 
 %%%
-\SetForm{rectifyapproval-II}{closing}{%
+\SetForm{rectifyapproval-II}{closing}{
   \studentDistinctBoardCase
     {
       \SetReviewer{1}
@@ -832,32 +820,32 @@ O texto submetido:
 \SetForm{referral-I}{opening}{\UseTerm{desc.sacad}}
 
 %%%
-\SetForm{referral-I}{body}{  %
+\SetForm{referral-I}{body}{  
 
 \studentCase%
   {
     \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido APROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
     \studentBoardGradedI
-  }%
+  }
   {
     \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido REAPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
     \studentBoardGradedI
-  }%
+  }
   {
     \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi APROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
     \studentBoardI
-  }%
+  }
   {
     \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi REPROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
     \studentBoardI
-  }%
+  }
   {
     \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido REPROVAD\DataFields{student}{Article}  com conceito final \textbf{FF}.
   }
 }
 
 %%%
-\SetForm{referral-I}{closing}{%
+\SetForm{referral-I}{closing}{
     \begin{flushright}
     Porto Alegre, \UseConst{publ.day} de \UseConst{publ.month} de \UseConst{publ.year}.\\[2em]
 
@@ -870,8 +858,8 @@ O texto submetido:
 }
 
 
-\NewDocumentCommand{\studentCoadvLabelCase}{}{%%
-  \studentCoadvCase{\UseLabel{advisors} : \DataFields{student.advisor}{name} / \DataFields{student.coadvisor}{name}}{\UseLabel{advisor} : \DataFields{student.advisor}{name}}%%
+\NewDocumentCommand{\studentCoadvLabelCase}{}{
+  \studentCoadvCase{\UseLabel{advisors} : \DataFields{student.advisor}{name} / \DataFields{student.coadvisor}{name}}{\UseLabel{advisor} : \DataFields{student.advisor}{name}}
 }
 
 \NewDocumentCommand{\studentBoardI}{}{
@@ -880,9 +868,10 @@ O texto submetido:
     \begin{center}%
       \begin{tabular}{p{\UseConst{report.tabA*}}@{\ }p{\UseConst{report.tabB*}}@{\ }c}%\hline%
         & \UseLabel{board} \\\hline%
-        \multirow{2}={\DataFields{student}{name}} %
+        \multirow{3}={\DataFields{student}{name}} %
         &\DataFields{student.reviewer[2]}{name}\\%
         &\DataFields{student.reviewer[3]}{name}\\%
+        & ~\\[-2.5ex]
         \multicolumn{2}{l}{\ \ \studentCoadvLabelCase} \\\hline%
       \end{tabular}%
     \end{center}%
@@ -908,9 +897,10 @@ O texto submetido:
     \UseLabel{Ngrade} & \UseLabel{grade}\\\hline%
 }
 \NewDocumentCommand{\studentLineI}{}{%
-   \multirow{2}={\textbf{\DataFields{student}{name}}} %
+   \multirow{3}={\textbf{\DataFields{student}{name}}} %
     \ReviewerLineI{2}\\*%
     \ReviewerLineI{3}\\*%
+    \nopagebreak & ~\\[-2.5ex]
     \multicolumn{6}{l}{\ \ \ \studentCoadvLabelCase} & \textbf{\DataFields{student}{gradeavrg}} & \textbf{\DataFields{student}{grade}}%\\* \hline%   
 }
 
@@ -919,9 +909,9 @@ O texto submetido:
  }
 
 
-\NewDocumentCommand{\studentExtLine}{m}{%
+\NewDocumentCommand{\studentExtLine}{mm}{%
    \\[-1em]%
-   \multicolumn{#1}{l}{\ \ \ \UseLabel{worktitle}: \DataFields{student}{worktitle}}\\*       
+   \multicolumn{#1}{p{#2}}{\ \ \ \UseLabel{worktitle}: \DataFields{student}{worktitle}}\\*       
    \multicolumn{#1}{l}{\ \ \ (\UseLabel{Nproc}: \DataFields{student}{Nproc}) \UseLabel{student.ID}: \DataFields{student}{ID} / \DataFields{student}{email}}\\*       
    \multicolumn{#1}{l}{\ \ \ \UseLabel{remarks}: \DataFields{student}{remarks}}%\\ \hline
 }
@@ -985,10 +975,11 @@ O texto submetido:
     \begin{center}%
       \begin{tabular}{p{\UseConst{report.tabA*}}@{\ }p{\UseConst{report.tabB*}}@{\ }c}%\hline%
         & \UseLabel{board} \\\hline%
-        \multirow{3}={\DataFields{student}{name}} %
+        \multirow{4}={\DataFields{student}{name}} %
         &\DataFields{student.reviewer[1]}{name}\\%
         &\DataFields{student.reviewer[2]}{name}\\%
         &\DataFields{student.reviewer[3]}{name}\\%
+        & ~\\[-2.5ex]
         \multicolumn{2}{l}{\ \ \studentCoadvLabelCase} \\\hline%
       \end{tabular}%
     \end{center}%
@@ -1013,10 +1004,11 @@ O texto submetido:
   \UseLabel{Ngrade} & \UseLabel{grade}\\\hline%
 }
 \NewDocumentCommand{\studentLineII}{}{%
-   \multirow{3}={\textbf{\DataFields{student}{name}}} %
+   \multirow{4}={\textbf{\DataFields{student}{name}}} %
     \ReviewerLineII{1}\\*%
     \ReviewerLineII{2}\\*%
     \ReviewerLineII{3}\\*%
+    \nopagebreak & ~\\[-2.5ex]
     \multicolumn{5}{l}{\ \ \ \studentCoadvLabelCase} & \textbf{\DataFields{student}{gradeavrg}} & \textbf{\DataFields{student}{grade}}%\\ \hline%   
 }
 
@@ -1030,6 +1022,8 @@ O texto submetido:
 
 
 
+\ExplSyntaxOn
+
 
 %%%%%%%%%%%%%%%
 %%  report TCC - I
@@ -1038,17 +1032,16 @@ O texto submetido:
 \SetForm{report-I}{title}{Relatório Acompanhamento - \UseTerm{semester}}
 \SetForm{report-I}{opening}{}
 
-\ExplSyntaxOn
 %%%
 \SetForm{report-I}{opening}{  %
   { \tiny
     \begin{longtable}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }p{\UseConst{report.tabC}}@{\ }p{\UseConst{report.tabD}}@{\ }p{\UseConst{report.tabE}}@{\ }p{\UseConst{report.tabEx}}@{\ }p{\UseConst{report.tabF}}@{\ }p{\UseConst{report.tabG}}}%
     \HeaderLineI
-    \seq_map_inline:cn {l__ufrgscca_baselist_graded_seq} 
+    \seq_map_inline:Nn \l__ufrgscca_baselist_graded_seq
       {
-        \starray_set_iter_from_hash:nn {student} {#1}
+        \studentselect{#1}
         \studentLineI\\*\hline
-        \studentExtLine{8}\\\hline        
+        \studentExtLine{8}{\UseConst{report.tabMult.I}}\\\hline        
       }
     \reportMissCase{8}{\l__ufrgscca_baselist_ff_seq}{Desistentes~ com~ conceito~ (2o ~ semestre)}
     \reportMissCase{8}{\l__ufrgscca_baselist_dismiss_seq}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
@@ -1076,8 +1069,6 @@ O texto submetido:
       }
 }
 
-\ExplSyntaxOff
-
 
 
 %%%%%%%%%%%%%%%
@@ -1087,17 +1078,16 @@ O texto submetido:
 \SetForm{report-II}{title}{Relatório Acompanhamento - \UseTerm{semester}}
 \SetForm{report-II}{opening}{}
 
-\ExplSyntaxOn
 %%%
 \SetForm{report-II}{opening}{  %
   { \tiny
     \begin{longtable}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }p{\UseConst{report.tabC}}@{\ }p{\UseConst{report.tabD}}@{\ }p{\UseConst{report.tabE}}@{\ }p{\UseConst{report.tabF}}@{\ }p{\UseConst{report.tabG}}}%
     \HeaderLineII
-    \seq_map_inline:cn {l__ufrgscca_baselist_graded_seq} 
+    \seq_map_inline:Nn \l__ufrgscca_baselist_graded_seq
       {
-        \starray_set_iter_from_hash:nn {student} {#1}
+        \studentselect{#1}
         \studentLineII\\*\hline
-        \studentExtLine{7}\\\hline        
+        \studentExtLine{7}{\UseConst{report.tabMult.II}}\\\hline        
       }
     \reportMissCase{7}{\l__ufrgscca_baselist_ff_seq}{Desistentes~ com~ conceito~ (2o ~ semestre)}
     \reportMissCase{7}{\l__ufrgscca_baselist_dismiss_seq}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
@@ -1173,10 +1163,6 @@ O texto submetido:
 %%%
 \SetForm{checklist-II}{closing}{}
 
-\ExplSyntaxOff
-
-
-
 
 
 
@@ -1187,7 +1173,6 @@ O texto submetido:
 \SetForm{boards}{title}{\UseTerm{board.title}}
 \SetForm{boards}{opening}{}
 
-\ExplSyntaxOn
 %%%
 \SetForm{boards}{opening}{  %
   {\footnotesize
@@ -1202,8 +1187,6 @@ O texto submetido:
         \starray_term_syntax:n {student}
         \tl_gset:Ne \l__ufrgscca_daytmpb_tl {\starray_parsed_get_prop:n{board-date}}
         \tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{date:\l__ufrgscca_daytmpb_tl}}
-        %\tl_gset:Ne \l__ufrgscca_daytmpD_tl {date:\l__ufrgscca_daytmpb_tl}
-        %\tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{\l__ufrgscca_daytmpD_tl}}
         \studentNewPageCase
           {\kill\pagebreak\tl_gset:Nn \l__ufrgscca_daytmpa_tl {}}
           {}
@@ -1217,13 +1200,14 @@ O texto submetido:
         && \DataFields{student.reviewer[2]}{name} \\*
         && \DataFields{student.reviewer[3]}{name} \\*
         && (\DataFields{student.altreviewer[1]}{name}) \\*
-        \multicolumn{4}{l}{\textsc{Título:}\ \emph{\DataFields{student}{worktitle}}}\\\hline      
+        \multicolumn{4}{p{\UseConst{board.tabAll}}}{\textsc{Título:}\ \emph{\DataFields{student}{worktitle}}}\\\hline      
       }
     \end{longtable} 
     
     {\scriptsize\UseTerm{board.obs}}
   }
 }
+
 \ExplSyntaxOff
 
 %%%

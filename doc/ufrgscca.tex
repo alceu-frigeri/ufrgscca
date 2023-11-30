@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.0} {2023/11/23}
+%% This is version {2.1} {2023/11/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -92,7 +92,7 @@
 \end{tsremark}
 
 \begin{tsremark}[Version 1.12a:]
-	In case you need the old version, for some odd \tsobj[pkg]{expl3} compatibility issue, you can find it at \tsverb{https://github.com/ alceu-frigeri/ufrgscca/releases/tag/v1.12}
+	In case you need the old version, for some odd \tsobj[pkg]{expl3} compatibility issue, you can find it at \tsverb{https://github.com/ alceu-frigeri/ufrgscca/releases/tag/v1.12a}
 \end{tsremark}
 
 \subsection{Current Version}
@@ -649,6 +649,12 @@ These are, respectively, \tsobj{\starray_get_prop:nn, \starray_term_syntax:n,\st
 This is \tsobj{\starray_iterate_over:nn} from \tsobj[pack]{starray}. \tsobj[meta]{code} will be executed for every defined student.
 \end{codedescribe}
 
+\begin{codedescribe}[code,new=2023/11/29]{\ActivityCalendarIterate}
+	\begin{codesyntax}%
+    \tsmacro{\ActivityCalendarIterate}{code}
+	\end{codesyntax}
+This is \tsobj{\starray_iterate_over:nn} from \tsobj[pack]{starray}. \tsobj[meta]{code} will be executed for every defined calendar item.
+\end{codedescribe}
 
 
 \subsection{Core Specific Commands}\label{core-specific-commands}
@@ -1055,6 +1061,20 @@ These are a set of auxiliary conditionals, for instance, \tsobj{\StudentCase} wi
 \end{codedescribe}
 
 
+\begin{codedescribe}[code,new=2023/11/30]{\professor,\advisorprof,\coadvisorprof,\examinerprof,\altexaminerprof}
+	\begin{codesyntax}%
+		\tsobj[code]{\professor}\tsargs[oarg]{prof-ref}\tsargs[marg]{last,first}\tsargs[oarg]{gender}
+		\tsmacro{\advisorprof}{prof-ref}
+		\tsmacro{\coadvisorprof}{prof-ref}
+		\tsmacro{\examinerprof}{prof-ref}
+		\tsmacro{\altexaminerprof}{prof-ref}
+	\end{codesyntax}
+\tsobj{\professor} creates a \tsobj[oarg]{prof-ref} alias to a person's full name.  \tsobj{\advisorprof} expands to a call for \tsobj{\advisor} using the properties stored by \tsobj{\professor}. Similarly, \tsobj{\coadvisorprof,\examinerprof,\altexaminerprof} results in call to \tsobj{\coadvisor,\examinerprof,\altexaminerprof} respectively.
+\end{codedescribe}
+\begin{tsremark}
+\tsobj{\professor} creates/uses an auxiliary \tsobj[pkg]{starray}, just mapping names for users convenience.
+\end{tsremark}
+
 
 \begin{codedescribe}[code,new=2023/11/18]{\boardtitle,\boardobs,\semester}
 	\begin{codesyntax}%
@@ -1166,12 +1186,16 @@ This assigns the \tsobj[meta]{fate} of a student, for those cases that one canno
 \end{codedescribe}
 
 
-\begin{codedescribe}[code,update=2023/11/18]{\timeslot}
+\begin{codedescribe}[code,update=2023/11/29]{\timeslot}
 	\begin{codesyntax}%
 		\tsmacro{\timeslot}[local]{date,time}
 	\end{codesyntax}
-To set, for the Boards Report, the \tsobj[meta]{local}, \tsobj[meta]{date} and \tsobj[meta]{time} of a student's presentation work.
+To set the \tsobj[meta]{local}, \tsobj[meta]{date} and \tsobj[meta]{time} of a student's presentation work.
 \end{codedescribe}
+
+\begin{tsremark}
+\tsobj[meta]{date} must be given in numerical form, either \tsmeta{day}/\tsmeta{month} or \tsmeta{day}/\tsmeta{month}/\tsmeta{year}. The day-of-the-week will be obtained  using \tsobj[pkg]{pgfcalendar}.
+\end{tsremark}
 
 
 
@@ -1221,11 +1245,12 @@ Quite obvious, this set the grades given by an examiner (the one defined by the 
 
 
 
-\begin{codedescribe}{\setstudentlist}
+\begin{codedescribe}[code,update=2023/11/29]{\setstudentlist}
 	\begin{codesyntax}%
 		\tsmacro{\setstudentlist}{listID,list}
+		\tsmacro{\setstudentlist*}{listID,list}
 	\end{codesyntax}
-This command will define/create a list named \tsobj[meta]{listID} composed of a csv \tsobj[meta]{list}~ of student names (as defined by \tsmacro{\Newstudent}{}).
+This command will define/create a list named \tsobj[meta]{listID} composed of a csv \tsobj[meta]{list}~ of student names (as defined by \tsmacro{\Newstudent}{}). The star version sorts the list first (by student's name).
 \end{codedescribe}
 
 \begin{codedescribe}{\tcreports}

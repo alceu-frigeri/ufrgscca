@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.0} {2023/11/23}
+%% This is version {2.1} {2023/11/30}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2023/11/23}
-    {2.0}
+    {2023/11/30}
+    {2.1}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/11/23},
-     version     .code:n = {2.0} ,
+     date        .code:n = {2023/11/30},
+     version     .code:n = {2.1} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -126,11 +126,12 @@
   checklist = , %%% This shall be a property list of check items
   brief = \BlankLines{6} ,
   reason = \BlankLines{6} ,
-  board-local = {local ~da~ apresentação} ,
-  board-date   = {dia~ da~ apresentação} ,
-  board-time  = {hora~da~apresentação} ,
+  board-local = {local} ,
+  board-date   = {dia} ,
+  board-time  = {hora} ,
   gradeavrg = 0,
   grade = ,
+  flag-null = \c_false_bool , %% IF no grade was given
   flag-graded = \c_false_bool , %%% IF gradeavrg AND finalgrade already calculated (or defined)
   flag-exam = \c_false_bool ,
   flag-ff = \c_false_bool ,
@@ -336,6 +337,10 @@
   \starray_get_prop:nn {activity.calendar}{date} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}
 }
 
+\NewDocumentCommand{\ActivityCalendarIterate}{m}{
+    \starray_iterate_over:nn{activity.calendar}{#1}
+}
+
 
 %
 \cs_new_protected:Npn \__ufrgscca_setgender:nn #1#2 
@@ -490,6 +495,33 @@
       }
   }
 
+\cs_new_protected:Npn \__ufrgscca_emptyterm_if_none:nnn #1#2#3
+  {
+    \starray_get_cnt:nN {#2} \l_tmpa_int
+    \int_while_do:nNnn {\l_tmpa_int} < {#1}
+      { 
+        \starray_new_term:nn {#2}{} 
+        #3
+        \starray_get_cnt:nN {#2} \l_tmpa_int
+      }
+  }
+
+\NewDocumentCommand{\emptytermifnone}{O{1}mO{}}
+  {
+    \__ufrgscca_emptyterm_if_none:nnn {#1}{#2}{#3}
+  }
+
+\cs_new_protected:Npn \__ufrgscca_student_emptyfields_if_none:
+  {
+    \__ufrgscca_emptyterm_if_none:nnn {1}{student}{}
+    \__ufrgscca_emptyterm_if_none:nnn {1}{student.advisor}{}
+    \__ufrgscca_emptyterm_if_none:nnn {3}{student.reviewer}{}
+    \__ufrgscca_emptyterm_if_none:nnn {1}{student.altreviewer}{}
+    \__ufrgscca_emptyterm_if_none:nnn {1}{student.tutor}{}
+    \__ufrgscca_emptyterm_if_none:nnn {1}{student.supervisor}{}
+    \__ufrgscca_emptyterm_if_none:nnn {1}{student.internship}{}
+  }
+
 
 \NewDocumentCommand{\advisor}{O{}mmO{}}{%%
   \starray_new_term:nn {student.advisor}{}
@@ -518,12 +550,12 @@
 }%
 
 
-\NewDocumentCommand{\coadvisoremptyifnone}{}{%%
-  \starray_get_cnt:nN {student.coadvisor} \l_tmpa_int
-  \int_if_zero:nTF \l_tmpa_int
-    { \starray_new_term:nn {student.coadvisor}{} }
-    {}
-}%
+%%%\NewDocumentCommand{\coadvisoremptyifnone}{}{%%
+%%%  \starray_get_cnt:nN {student.coadvisor} \l_tmpa_int
+%%%  \int_if_zero:nTF \l_tmpa_int
+%%%    { \starray_new_term:nn {student.coadvisor}{} }
+%%%    {}
+%%%}%
 
 
 \NewDocumentCommand{\tutor}{O{}mmO{}}{%%
@@ -535,10 +567,12 @@
   \__ufrgscca_set_prof_info:nnnnn {tutor}{#1}{#2}{#3}{#4}
 }%
 
+
 \NewDocumentCommand{\supervisor}{O{}mmO{}}{%%
   \starray_new_term:nn {student.supervisor}{}
   \__ufrgscca_set_prof:nnnnn {supervisor}{#1}{#2}{#3}{#4}
-}%
+}
+
 \NewDocumentCommand{\supervisorinfo}{mmmm}{%%
     \starray_gset_from_keyval:nn {student.supervisor}
       {
@@ -548,6 +582,7 @@
         phone = {#4} ,
       }
 }%
+
 \NewDocumentCommand{\internship}{mmmmm}{%%
     \starray_new_term:nn {student.internship}{}
     \starray_gset_from_keyval:nn {student.internship}
@@ -564,6 +599,7 @@
   \starray_new_term:nn {student.reviewer}{}
   \__ufrgscca_set_prof:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
+
 \NewDocumentCommand{\examinerinfo}{mmmm}{%%
   \__ufrgscca_set_prof_info:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
