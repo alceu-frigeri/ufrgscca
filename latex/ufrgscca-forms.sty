@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.1} {2023/11/30}
+%% This is version {2.2} {2023/12/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-forms}
-    {2023/11/30}
-    {2.1}
+    {2023/12/02}
+    {2.2}
     {UFRGS/CCA forms commands}
    
     
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-forms} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/11/30},
-     version     .code:n = {2.1} ,
+     date        .code:n = {2023/12/02},
+     version     .code:n = {2.2} ,
      description .code:n = {UFRGS/CCA~ forms~commands}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -175,14 +175,13 @@
 
 \int_new:N \l__ufrgscca_a_int
 \int_new:N \l__ufrgscca_b_int
-\NewDocumentCommand{\BlankLines}{m}{
+\NewDocumentCommand{\BlankLines}{O{0pt}m}{
   \int_zero:N \l__ufrgscca_a_int
-  \int_set:Nn \l__ufrgscca_b_int {#1}
+  \int_set:Nn \l__ufrgscca_b_int {#2}
   \int_do_until:nNnn {\l__ufrgscca_a_int} {=} {\l__ufrgscca_b_int}
     {
       \int_incr:N \l__ufrgscca_a_int
-      \hrulefill\\\par%
-
+      \hrulefill\\[#1]\par%
     }
 }
 

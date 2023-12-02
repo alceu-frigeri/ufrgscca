@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.1} {2023/11/30}
+%% This is version {2.2} {2023/12/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -86,6 +86,8 @@
   title.internsupervisorform = Formulário de Avaliação do Supervisor (Pela Empresa) ,
   title.interntutorform      = Formulário de Avaliação do Tutor e Coordenador ,
   %
+  title.attendancelist       = {Lista de Preseça - 1$^o$ Encontro do Semestre \UseTerm{semester}} ,
+  %
   %footnote.reviewersform
   footnote.reviewersform    = {Entregar a cada membro da banca juntamente com a cópia do trabalho.} , %%% TCC I / II
   footnote.receipts         = {Entregar a cada membro da banca juntamente com a cópia do trabalho final e após encaminhar à coordenação de TCC.} , %%% TCC II
@@ -139,24 +141,37 @@
 
 
 \SetTerms{%
-  tccI.text-descpage         = {  Proposta de Trabalho de Conclusão de Curso submetida à
-		                              COMGRAD/\Activity[course]{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
-		                              obtenção do título de \emph{\UseHeading{course.title}.}
-                               } ,
-  tccI.text-approvalpage     = { Esta Proposta de Trabalho de Conclusão de Curso foi julgada adequada para a
-                            		obtenção dos créditos da Atividade de \emph{\Activity[tccI]{name}} e aprovada em sua forma final 
-		                            \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}} 
-                                e Banca Examinadora abaixo.
-                              } ,                               
-  tccII.text-descpage         = { Trabalho de Conclusão de Curso submetido à
-		                              COMGRAD/\Activity[course]{acronym}\   da \UseHeading{acronym}\  como parte dos requisitos para a
-		                              obtenção do título de \emph{\UseHeading{course.title}.}
-                                } ,
-  tccII.text-approvalpage    = { 	Este Trabalho de Conclusão de Curso foi julgado adequado para a
-		                              obtenção dos créditos da Atividade de \emph{\Activity[tccII]{name}} e aprovado em sua forma final 
-                                  \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article}
-		                              Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.
-                               } ,
+  tccI.text-descpage         = 
+      {  Proposta de Trabalho de Conclusão de Curso submetida à COMGRAD/\Activity[course]{acronym}\   da \UseHeading{acronym}\  
+         como parte dos requisitos para a obtenção do título de \emph{\UseHeading{course.title}.}%
+      } ,
+  tccI.text-approvalpage     = 
+      { Esta Proposta de Trabalho de Conclusão de Curso foi julgada adequada para a obtenção dos créditos da Atividade 
+        de \emph{\Activity[tccI]{name}} e aprovada em sua forma final \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.%
+      } ,                               
+  tccII.text-descpage         = 
+      { Trabalho de Conclusão de Curso submetido à COMGRAD/\Activity[course]{acronym}\   da \UseHeading{acronym}\  como 
+        parte dos requisitos para a obtenção do título de \emph{\UseHeading{course.title}.}%
+      } ,
+  tccII.text-approvalpage    = 
+      { Este Trabalho de Conclusão de Curso foi julgado adequado para a obtenção dos créditos da Atividade 
+        de \emph{\Activity[tccII]{name}} e aprovado em sua forma final \studentCoadvCase{pelos Orientadores}{pel\DataFields{student.advisor}{article}
+        Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.%
+      } ,
+  internship.title = 
+      { RELATÓRIO DE ESTÁGIO SUPERVISIONADO OBRIGATÓRIO EM ENG. DE CONTROLE E AUTOMAÇÃO } ,
+  internship.text-approvalpage = 
+      { Este Relatório foi julgado adequado para a obtenção do conceito final na Atividade de Estágio Supervisionado Obrigatório em 
+        Eng. de Controle e Automação e aprovado em sua forma final pel\DataFields{student.tutor}{article} 
+        Tutor\DataFields{student.tutor}{narticle}, Supervisor\DataFields{student.supervisor}{narticle} e 
+        Coordenador\DataFields{activity[internship].coord}{narticle} da Atividade.%
+      } , 
+  internship-opt.text-approvalpage = 
+      { Este Relatório foi julgado adequado para uma Atividade de Estágio Supervisionado Não Obrigatório em Eng. de Controle
+        e Automação e aprovado em sua forma final pel\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} e Supervisor\DataFields{student.supervisor}{narticle}.%
+      } ,
+  internship-opt.title = 
+      { RELATÓRIO DE ESTÁGIO SUPERVISIONADO NÂO OBRIGATÓRIO EM ENG. DE CONTROLE E AUTOMAÇÃO } ,
 }
 
 
@@ -212,14 +227,15 @@
 }
 
 \SetLabels{%
-  TCC-I.pointA              = {Tema} ,
-  TCC-I.pointB              = {Biblio.} ,
-  TCC-I.pointC              = {Plano Trab.} ,
-  TCC-I.pointD              = {Texto} ,
+  TCC-I.pointA               = {Tema} ,
+  TCC-I.pointB               = {Biblio.} ,
+  TCC-I.pointC               = {Plano Trab.} ,
+  TCC-I.pointD               = {Texto} ,
   TCC-II.pointA              = {Conteúdo} , 
   TCC-II.pointB              = {Trab. Escrito} ,
   TCC-II.pointC              = {Apresentação} ,
-  Ngrade                  = {Nota} ,
+  TCC-II.pointD              = {} ,
+  Ngrade                     = {Nota} ,
   grade                      = {Conceito} ,
 }
 
@@ -228,19 +244,19 @@
   TCC-I.weightB              = {2} ,
   TCC-I.weightC              = {2} ,
   TCC-I.weightD              = {1} ,
-  TCC-II.weightA              = {0.35} , 
-  TCC-II.weightB              = {0.35} ,
-  TCC-II.weightC              = {0.3} ,
-  NgradeA                      = {9.0} ,
-  NgradeB                      = {7.5} ,
-  NgradeC                      = {6.0} ,  
+  TCC-II.weightA             = {0.35} , 
+  TCC-II.weightB             = {0.35} ,
+  TCC-II.weightC             = {0.3} ,
+  NgradeA                    = {9.0} ,
+  NgradeB                    = {7.5} ,
+  NgradeC                    = {6.0} ,  
 }
 
 
 
 \SetConsts{%
-  report.tabA = {34mm} ,
-  report.tabA* = {42mm} ,
+  report.tabA = {40mm} ,
+  report.tabA* = {44mm} ,
   report.tabB = {42mm} ,
   report.tabB* = {62mm} ,
   report.tabC = {15mm} ,

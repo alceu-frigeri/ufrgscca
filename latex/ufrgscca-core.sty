@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.1} {2023/11/30}
+%% This is version {2.2} {2023/12/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2023/11/30}
-    {2.1}
+    {2023/12/02}
+    {2.2}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/11/30},
-     version     .code:n = {2.1} ,
+     date        .code:n = {2023/12/02},
+     version     .code:n = {2.2} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -403,7 +403,7 @@
 }
   %
 
-\NewDocumentCommand{\studentCoadvCase}{mm}{
+\NewDocumentCommand{\studentCoadvCase}{+m+m}{
     \starray_term_syntax:n{student}
     \bool_if:nTF {\starray_parsed_get_prop:n{flag-coadvisor}}
       {#1}
@@ -457,7 +457,7 @@
     {
       Nproc = {#1} ,
       ID    = {#2} ,
-      email = {#3} ,
+      email = {\tl_to_str:n{#3}} ,
     }
 }%
 
@@ -466,7 +466,7 @@
   {
     \RenewDocumentCommand{\author}{O{}mmO{}}{\student[#1]{#2}{#3}[#4]}%
     \NewDocumentCommand{\authorinfo}{O{}mm}{\studentinfo[#1]{#2}{#3}}%
-    \NewDocumentCommand{\title}{m}{\worktitle{#1}}%
+    \RenewDocumentCommand{\title}{m}{\worktitle{#1}}%
   }
 
 
@@ -490,7 +490,7 @@
       {
         institution = {#2} ,
         title = {#3} ,
-        email = {#4} ,
+        email = {\tl_to_str:n{#4}} ,
         phone = {#5} ,
       }
   }
@@ -578,7 +578,7 @@
       {
         register = {#1} ,
         office = {#2} ,
-        email = {#3} ,
+        email = {\tl_to_str:n{#3}} ,
         phone = {#4} ,
       }
 }%

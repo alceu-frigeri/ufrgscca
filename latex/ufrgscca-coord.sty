@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.1} {2023/11/30}
+%% This is version {2.2} {2023/12/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2023/11/30}
-    {2.1}
+    {2023/12/02}
+    {2.2}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/11/30},
-     version     .code:n = {2.1} ,
+     date        .code:n = {2023/12/02},
+     version     .code:n = {2.2} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -71,6 +71,9 @@
 
 \keys_define:nn { ufrgscca / coord }
   {
+    attendance. bool_set:N   = \l__ufrgscca_attendance_bool ,
+    attendance. usage:n       = general , 
+    
     calendar-I. bool_set:N   = \l__ufrgscca_calendarI_bool ,
     calendar-I. usage:n       = general , 
     
@@ -136,47 +139,63 @@
    gender = ,
  }
  
-\NewDocumentCommand{\professor}{O{}mmO{}}
+\NewDocumentCommand{\professor}{O{}mmmmO{}}
   {
     \starray_new_term:nn {prof}{#1}
     \starray_set_from_keyval:nn {prof}
       {
         last = {#2},
         first = {#3},
-        gender = {#4},
+        email = {#4},
+        phone = {#5},
+        gender = {#6},
       }
   }
 
-\cs_new_protected:Npn \__ufrgscca_prof_ref_set:nnnn #1#2#3#4
-  {  #1 {#2}{#3}[#4]  }
+\cs_new_protected:Npn \__ufrgscca_prof_ref_set:nnnnnnn #1#2#3#4#5#6#7
+  {  
+    #1 {#3}{#4}[#5]  
+    #2 {}{}{#6}{#7}
+  }
   
-\cs_generate_variant:Nn \__ufrgscca_prof_ref_set:nnnn {eeee}  
+\cs_generate_variant:Nn \__ufrgscca_prof_ref_set:nnnnnnn {nneeeee}  
 
-\cs_new_protected:Npn \__ufrgscca_prof_ref:nn #1#2
+\cs_new_protected:Npn \__ufrgscca_prof_ref:nnn #1#2#3
   {
-    \starray_set_iter_from_hash:nnTF {prof}{#2}
+    \starray_set_iter_from_hash:nnTF {prof}{#3}
       {
         \starray_term_syntax:n {prof}
-        \__ufrgscca_prof_ref_set:eeee {#1}{\starray_parsed_get_prop:n{last}}{\starray_parsed_get_prop:n{first}}{\starray_parsed_get_prop:n{gender}}
+        \__ufrgscca_prof_ref_set:nneeeee {#1}{#2}
+          {\starray_parsed_get_prop:n{last}}{\starray_parsed_get_prop:n{first}}{\starray_parsed_get_prop:n{gender}}
+          {\starray_parsed_get_prop:n{email}}{\starray_parsed_get_prop:n{phone}}
       }
       {
-        #1{definido:(#2)}{não}
+        #1{definido:(#3)}{não}
       }    
   }
 
 \NewDocumentCommand{\advisorprof}{m}
-  {  \__ufrgscca_prof_ref:nn {\advisor}{#1}  }
+  {  \__ufrgscca_prof_ref:nnn {\advisor}{\advisorinfo}{#1}  }
 
 \NewDocumentCommand{\coadvisorprof}{m}
-  {  \__ufrgscca_prof_ref:nn {\coadvisor}{#1}  }
+  {  \__ufrgscca_prof_ref:nnn {\coadvisor}{\coadvisorinfo}{#1}  }
   
 \NewDocumentCommand{\examinerprof}{m}
-  {  \__ufrgscca_prof_ref:nn {\examiner}{#1}  }
+  {  \__ufrgscca_prof_ref:nnn {\examiner}{\examinerinfo}{#1}  }
   
 \NewDocumentCommand{\altexaminerprof}{m}
-  {  \__ufrgscca_prof_ref:nn {\altexaminer}{#1}  }
+  {  \__ufrgscca_prof_ref:nnn {\altexaminer}{\altexaminerinfo}{#1}  }
 
-
+%%% from -ppc
+\cs_new:Npn \__ufrgscca_def_colorpair:n #1
+  {
+    \colorlet{light#1}{white!85!#1}
+    \colorlet{dark#1}{#1!70!black!100}
+    \colorlet{darker#1}{#1!40!black!100}
+  }
+\__ufrgscca_def_colorpair:n {red}
+\__ufrgscca_def_colorpair:n {green}
+\__ufrgscca_def_colorpair:n {blue}
 
 \NewDocumentCommand{\ActivitySetNewEvent}{O{}mm}{
   \tl_if_blank:nTF {#1}
@@ -267,12 +286,14 @@
 \tl_new:N \l__ufrgscca_tmpb_tl
 \tl_new:N \l__ufrgscca_tmpc_tl
 \tl_new:N \l__ufrgscca_tmpd_tl
+\tl_new:N \l__ufrgscca_tmpe_tl
+\prg_generate_conditional_variant:Nnn \str_case:nn {en}{T,F,TF}
 \cs_new_protected:Npn \__ufrgscca_studentgrade: 
     {
       \starray_term_syntax:n {student}
       \bool_if:nTF {\starray_parsed_get_prop:n {flag-null}}
         {
-           \starray_gset_prop:nnn {student}{grade}{D*}
+           \starray_gset_prop:nnn {student}{grade}{\color{red}D*}
         }
         {
           %(\DataFields{student}{name})\par
@@ -282,7 +303,8 @@
           \tl_set:Ne \l__ufrgscca_tmpb_tl {\starray_parsed_get_prop:n {grade}}
           \starray_term_syntax:n {student.reviewer[3]}
           \tl_set:Ne \l__ufrgscca_tmpc_tl {\starray_parsed_get_prop:n {grade}}
-          \str_case:nnF {\starray_parsed_get_prop:n {gradetype}}
+          \tl_set:Ne \l__ufrgscca_tmpe_tl {\starray_parsed_get_prop:n {gradetype}}
+          \str_case:enF {\l__ufrgscca_tmpe_tl}
             {
               {1}
                 {
@@ -295,7 +317,9 @@
                     {\fpeval{round(((\l__ufrgscca_tmpa_tl + \l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/3),2,1)}}
                 }
             }
-            {  \tl_set:Nn \l__ufrgscca_tmpd_tl {0} }
+            {  \tl_set:Nn \l__ufrgscca_tmpd_tl {7.99}
+               \starray_gset_prop:nne {student}{reason}{\l__ufrgscca_tmpa_tl-\l__ufrgscca_tmpb_tl-\l__ufrgscca_tmpc_tl-\l__ufrgscca_tmpe_tl}
+             }
             
           \starray_gset_prop:nne {student}{gradeavrg}{\l__ufrgscca_tmpd_tl}
           \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeC}}
@@ -324,46 +348,99 @@
       \starray_gset_prop:nnn {student}{flag-graded}{\c_true_bool}
     }
 
-
-\cs_new_protected:Npn \__ufrgscca_set_timeslot:nnnn #1#2#3#4
+\cs_new_protected:Npn \__ufrgscca_set_timeslot:nnnnn #1#2#3#4#5
   {
   \starray_gset_from_keyval:nn {student}
     {
       board-local = {#1} ,
       board-time = {#2} ,
       board-date = {#3} ,
+      board-datetime = {#5} ,
     }
     \SetConsts {
       date:#3 = {\__ufrgscca_weekday:n {#4}} ,
     }    
   }
-\cs_generate_variant:Nn \__ufrgscca_set_timeslot:nnnn {nnee}    
+\cs_generate_variant:Nn \__ufrgscca_set_timeslot:nnnnn {neeee}    
 
+\cs_generate_variant:Nn \int_set:Nn {Ne}
 
-\seq_new:N \l__ufrgscca_cal_seq
+\seq_new:N \l__ufrgscca_date_seq
+\seq_new:N \l__ufrgscca_time_seq
 \newcount\l__ufrgscca_day_counter
 \newcount\l__ufrgscca_weekday_counter
-\NewDocumentCommand{\timeslot}{O{}mm}{%%
-  \seq_set_split:Nnn \l__ufrgscca_cal_seq {/} {#2}
-  \int_case:nnF {\seq_count:N \l__ufrgscca_cal_seq}
-    {
-      {2}{ \seq_put_right:Ne \l__ufrgscca_cal_seq {\number\year}  }
-      {3}{}
-    }
-    {
-      \seq_clear:N \l__ufrgscca_cal_seq
-      \seq_put_right:Nn \l__ufrgscca_cal_seq {31}
-      \seq_put_right:Nn \l__ufrgscca_cal_seq {12}
-      \seq_put_right:Ne \l__ufrgscca_cal_seq {\number\year}
-    }
-  \seq_reverse:N \l__ufrgscca_cal_seq
-  \pgfcalendardatetojulian{\seq_use:Nn \l__ufrgscca_cal_seq {-}}{\l__ufrgscca_day_counter}
-  \pgfcalendarjuliantoweekday{\the\l__ufrgscca_day_counter}{\l__ufrgscca_weekday_counter}
-  \seq_reverse:N \l__ufrgscca_cal_seq
-  \seq_pop_right:NN \l__ufrgscca_cal_seq \l_tmpa_tl
-
-  \__ufrgscca_set_timeslot:nnee {#1}{#3}{\seq_use:Nn \l__ufrgscca_cal_seq {/}}{\the\l__ufrgscca_weekday_counter}
-}%
+\tl_new:N \l__ufrgscca_cal_datetime_tl
+\int_new:N \l__ufrgscca_day_tmp_int
+\int_new:N \l__ufrgscca_month_tmp_int
+\int_new:N \l__ufrgscca_year_tmp_int
+\int_new:N \l__ufrgscca_hour_tmp_int
+\int_new:N \l__ufrgscca_min_tmp_int
+\cs_generate_variant:Nn \seq_set_split:Nnn {Nen}
+\NewDocumentCommand{\timeslot}{O{}mm}
+  {%%
+    \tl_set:Ne \l_tmpa_tl {\tl_to_str:n{:}}
+    \seq_set_split:Nen \l__ufrgscca_time_seq {\l_tmpa_tl} {#3}
+    \int_case:nnF {\seq_count:N \l__ufrgscca_time_seq}
+      {
+        {2}{
+             \seq_pop_left:NNTF \l__ufrgscca_time_seq \l_tmpa_tl 
+               { \int_set:Ne \l__ufrgscca_hour_tmp_int {\l_tmpa_tl} }
+               {}
+             \seq_pop_left:NNTF \l__ufrgscca_time_seq \l_tmpa_tl 
+               { \int_set:Ne \l__ufrgscca_min_tmp_int {\l_tmpa_tl} }
+               {}
+           }
+      }
+      {
+        \int_set:Nn \l__ufrgscca_hour_tmp_int {12}
+        \int_set:Nn \l__ufrgscca_min_tmp_int {12}
+      }
+    \seq_clear:N \l__ufrgscca_time_seq
+    \int_compare:nNnTF {\l__ufrgscca_hour_tmp_int} < {10}
+      {\seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_hour_tmp_int}}
+      {\seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_hour_tmp_int}}  
+    \int_compare:nNnTF {\l__ufrgscca_min_tmp_int} < {10}
+      {\seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_min_tmp_int}}
+      {\seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_min_tmp_int}}  
+  
+    \seq_set_split:Nnn \l__ufrgscca_date_seq {/} {#2}
+    \int_case:nnF {\seq_count:N \l__ufrgscca_date_seq}
+      {
+        {2}{ \seq_put_right:Ne \l__ufrgscca_date_seq {\number\year}  }
+        {3}{}
+      }
+      {
+        \seq_clear:N \l__ufrgscca_date_seq
+        \seq_put_right:Nn \l__ufrgscca_date_seq {31}
+        \seq_put_right:Nn \l__ufrgscca_date_seq {12}
+        \seq_put_right:Ne \l__ufrgscca_date_seq {\number\year}
+      }
+    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l_tmpa_tl 
+      { \int_set:Ne \l__ufrgscca_day_tmp_int {\l_tmpa_tl} }
+      {}
+    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l_tmpa_tl 
+      { \int_set:Ne \l__ufrgscca_month_tmp_int {\l_tmpa_tl} }
+      {}
+    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l_tmpa_tl 
+      { \int_set:Ne \l__ufrgscca_year_tmp_int {\l_tmpa_tl} }
+      {}
+    \seq_clear:N \l__ufrgscca_date_seq
+    \seq_put_right:Ne \l__ufrgscca_date_seq {\int_use:N \l__ufrgscca_year_tmp_int}
+    \int_compare:nNnTF {\l__ufrgscca_month_tmp_int} < {10}
+      {\seq_put_right:Ne \l__ufrgscca_date_seq {0 \int_use:N \l__ufrgscca_month_tmp_int}}
+      {\seq_put_right:Ne \l__ufrgscca_date_seq {  \int_use:N \l__ufrgscca_month_tmp_int}}  
+    \int_compare:nNnTF {\l__ufrgscca_day_tmp_int} < {10}
+      {\seq_put_right:Ne \l__ufrgscca_date_seq {0 \int_use:N \l__ufrgscca_day_tmp_int}}
+      {\seq_put_right:Ne \l__ufrgscca_date_seq {  \int_use:N \l__ufrgscca_day_tmp_int}}  
+         
+    \tl_set:Ne \l__ufrgscca_cal_datetime_tl {\seq_use:Nn \l__ufrgscca_date_seq {-} - \seq_use:Nn \l__ufrgscca_time_seq {:}}
+    \pgfcalendardatetojulian{\seq_use:Nn \l__ufrgscca_date_seq {-}}{\l__ufrgscca_day_counter}
+    \pgfcalendarjuliantoweekday{\the\l__ufrgscca_day_counter}{\l__ufrgscca_weekday_counter}
+    \seq_greverse:N \l__ufrgscca_date_seq
+    \seq_gpop_right:NN \l__ufrgscca_date_seq \l_tmpa_tl
+  
+    \__ufrgscca_set_timeslot:neeee {#1}{\seq_use:Nn \l__ufrgscca_time_seq {:}}{\seq_use:Nn \l__ufrgscca_date_seq {/}}{\the\l__ufrgscca_weekday_counter}{\l__ufrgscca_cal_datetime_tl}
+  }%
 
 
 
@@ -517,20 +594,36 @@
   
 }
 
+
+
 \tl_new:N \l__ufrgscca_sortA_tl
 \tl_new:N \l__ufrgscca_sortB_tl
+\cs_new_protected:Npn \__ufrgscca_seq_sort:nn #1#2
+  {
+    \seq_gsort:cn {l__ufrgscca_#1_seq }
+      {
+        \starray_set_iter_from_hash:nn {student}{##1}
+        \starray_get_prop:nnN {student}{#2} \l__ufrgscca_sortA_tl
+        \starray_set_iter_from_hash:nn {student}{##2}
+        \starray_get_prop:nnN {student}{#2} \l__ufrgscca_sortB_tl          
+        \str_compare:eNeTF { \l__ufrgscca_sortA_tl } > { \l__ufrgscca_sortB_tl }
+          { \sort_return_swapped: }
+          { \sort_return_same: }
+      }  
+  }
 
-\NewDocumentCommand{\setstudentlist}{sO{tcc}mm}{
-  \seq_new:c {l__ufrgscca_#3_seq}
-  \seq_new:c {l__ufrgscca_#3_ff_seq}
-  \seq_new:c {l__ufrgscca_#3_dismiss_seq}
-  \seq_new:c {l__ufrgscca_#3_graded_seq}
+
+\NewDocumentCommand{\setstudentlist}{st+O{tcc}mm}{
+  \seq_new:c {l__ufrgscca_#4_seq}
+  \seq_new:c {l__ufrgscca_#4_ff_seq}
+  \seq_new:c {l__ufrgscca_#4_dismiss_seq}
+  \seq_new:c {l__ufrgscca_#4_graded_seq}
   
-  \clist_map_inline:nn {#4}
+  \clist_map_inline:nn {#5}
     {
       \starray_set_iter_from_hash:nnT {student}{##1}
         {  
-          \seq_put_right:cn {l__ufrgscca_#3_seq} {##1} 
+          \seq_put_right:cn {l__ufrgscca_#4_seq} {##1} 
           \emptytermifnone{student.advisor}
           \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
           \emptytermifnone{student.altreviewer}
@@ -538,43 +631,34 @@
     }
 %  \seq_gset_from_clist:cn {l__ufrgscca_#3_seq}{#4}
 
-  \bool_if:nT {#1}
-    {  
-      \seq_gsort:cn {l__ufrgscca_#3_seq }
-        {
-          \starray_set_iter_from_hash:nn {student}{##1}
-          \starray_get_prop:nnN {student}{name} \l__ufrgscca_sortA_tl
-          \starray_set_iter_from_hash:nn {student}{##2}
-          \starray_get_prop:nnN {student}{name} \l__ufrgscca_sortB_tl          
-          \str_compare:eNeTF { \l__ufrgscca_sortA_tl } > { \l__ufrgscca_sortB_tl }
-            { \sort_return_swapped: }
-            { \sort_return_same: }
-        }
+  \bool_if:nTF {#1}
+    { \__ufrgscca_seq_sort:nn {#4}{name}  }
+    { 
+      \bool_if:nT {#2}
+        { \__ufrgscca_seq_sort:nn {#4}{board-datetime} }
     }
   
-  
-  
-  \str_case:nn {#2}
+  \str_case:nn {#3}
   {
     {tcc} 
       {
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_listclassify:nn {#3}}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
       }
     {tccI} 
       {
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_listclassify:nn {#3}}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
       }
     {tccII} 
       {
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_listclassify:nn {#3}}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
       }
     {intern}
       {  %% TO BE IMPLEMENTED !!!
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#3_seq} {\__ufrgscca_listclassify:nn {#3}}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
+        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
       }
   }
 }
@@ -609,6 +693,10 @@
       \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_ff_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_dismiss_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq {l__ufrgscca_#2_graded_seq}
+
+      \bool_if:NT \l__ufrgscca_attendance_bool
+        { \MakeForm{attendancelist} 
+          \MakeForm{attendancelist} }
     
       \bool_if:NT \l__ufrgscca_calendarI_bool
         { \MakeForm{calendar-I} }
@@ -649,7 +737,9 @@
             }
           \bool_if:NT \l__ufrgscca_referralII_bool
             {
-              \MakeForm{referral-II}
+              \studentDismissCase
+                {}
+                { \MakeForm{referral-II} }
             }
           \bool_if:NT \l__ufrgscca_revformsII_bool
             {
@@ -740,3 +830,18 @@
     \l__ufrgscca_table_tl   
 }
 
+\NewDocumentCommand{\CheckList}{mmmO{red}}{
+    \seq_if_empty:cF {l__ufrgscca_baselist_#2_seq}
+      {
+        &\\
+        \multicolumn{#1}{l}{\textbf{\color{#4}#3}}\\\hline
+        \seq_map_inline:cn {l__ufrgscca_baselist_#2_seq}
+          {
+            \studentselect{##1}
+            &\\[-2ex]
+            ~\multicolumn{#1}{l}{\textbf{\color{#4}\DataFields{student}{name}}}\\*
+            \__ufrgscca_checktable_lines:nn {L1,L2,L3,L4,L5}{C1,C2,C3,C4,C5}\hline
+          }     
+      }
+      
+}

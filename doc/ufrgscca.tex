@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.1} {2023/11/30}
+%% This is version {2.2} {2023/12/02}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -81,7 +81,7 @@
 	\section{Introduction}
 	\emph{ABNT} rules can be quite challenging at times (read: bibliography style/references) and sometimes just odd (line spacing, front matter, page layout), nevertheless it is a \emph{Brazilian Standard} for typography whose students at UFRGS should grow cherished to follow.
 
-	In short, as of version \PkgInfo{ufrgscca}{version}\space the bundle is composed of a class, \tsobj[pkg]{ufrgscca} (based on \tsobj[pkg]{report} class), which pre-loads, as needed: \tsobj[pkg]{ufrgscca-abnt, ufrgscca\-core, ufrgscca-cover, ufrgscca-forms, ufrgscca-lists}. The packages \tsobj[pkg]{ufrgscca-curr, ufrgscca-coord, ufrgscca-ppc} need to be loaded explicitly, thought.
+	In short, as of version \PkgInfo{ufrgscca}{version}\space the bundle is composed of a class, \tsobj[pkg]{ufrgscca} (based on \tsobj[pkg]{report} class), which pre-loads, as needed: \tsobj[pkg]{ufrgscca-abnt, ufrgscca\-core, ufrgscca-cover, ufrgscca-lists}. The packages \tsobj[pkg]{ufrgscca-forms,ufrgscca-curr, ufrgscca-coord, ufrgscca-ppc} need to be loaded explicitly, thought.
 
 \begin{tsremark}[N.B.:]
 	This bundle requires a quite recent \LaTeX2e kernel, at least as recent as June 2022, which allows to declare package options using the \tsobj[key]{key}~=\tsobj[key]{value} system and declare commands with \tsmacro{\NewDocumentCommand}{}, out-of-the-box.
@@ -220,7 +220,7 @@ Take note that \tsobj[pkg]{biblatex} is loaded with the \textbf{\tsobj[option]{b
 
 	\describe {repeatfields} { in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.}
 
-    \describe {yearsonly} { Approval page, at it's bottom, will display the years only (instead of the default mouth year construct).}
+    \describe {yearsonly} { In some cover pages (like the ones for TCC) the bottom of the approval's page, will only displays the year (instead of the default mouth year construction).}
   
 	\describe {nomicrotype} { in some rare cases, \tsobj[pkg]{microtype} might hurt page layout, this allows the suppression of \tsobj[pkg]{microtype}.}
 
@@ -298,15 +298,17 @@ Creates those \emph{chapter like} lists, like `List of Symbols' or `List of acro
 \end{codestore}
 \tscode*{d.newchapenv}
 
-\begin{codedescribe}{\date,\today,\monthname}
+\begin{codedescribe}[code,update=2023/11/30]{\pubdate,\today,\monthname}
 	\begin{codesyntax}%
-		\tsmacro{\date}[day]{month,year}
+		\tsmacro{\pubdatedate}[day]{month,year}
 		\tsmacro{\today}{}
 		\tsmacro{\monthname}{}
 	\end{codesyntax}
 \end{codedescribe}
-The command \tsmacro{\date}{} is redefined, to allow a separation between the many arguments \tsobj[meta]{day}, \tsobj[meta]{month} and \tsobj[meta]{year}. If not called by the user it \emph{defaults} to current month / year. \tsmacro{\today}{} returns the current \emph{locale} date, whilst \tsmacro{\monthname}{} returns the \emph{locale} name of the current month.
-
+\tsmacro{\pubdate}{} sets the publication date. If not called by the user it \emph{defaults} to current month / year. \tsmacro{\today}{} returns the current \emph{locale} date, whilst \tsmacro{\monthname}{} returns the \emph{locale} name of the current month.
+\begin{tsremark}[N.B.:]
+ If the package option \tsobj[option]{oldrenews} is used, the command \tsobj{\date} will be redefined as an allias to \tsobj{\pubdate}.
+\end{tsremark}
 
 \subsection{Environments}
 \begin{codedescribe}[env,new=2023/11/18]{mainabstract}
@@ -1002,7 +1004,7 @@ One can (should) use the commands listed at \autonameref{core-commands}[], and t
     \tsmacro{\checkdef}{LxCy,check-item,check-text}
     \tsmacro{\checklist}{check-items-list}
 \end{codesyntax}
-Whereas one has a '4x5 matrix' (\tsobj[meta]{checkLC} being one of L1C1...L1C5, ... , L4C1...L4C5). \tsobj[meta]{chek-item} is a free identifier (to be used with the \tsmacro{\checklist}{}), and \tsobj[meta]{check-text} the text to appear in the 'check list report'.  Note this is a list \textbf{per activity} (the current one being set).
+Whereas one has a '5x5 matrix' (\tsobj[meta]{checkLC} being one of L1C1...L1C5, ... , L5C1...L5C5). \tsobj[meta]{chek-item} is a free identifier (to be used with the \tsmacro{\checklist}{}), and \tsobj[meta]{check-text} the text to appear in the 'check list report'.  Note this is a list \textbf{per activity} (the current one being set).
 
 \tsmacro{\checklist}{} set's those items for the current student. \tsobj[marg]{check-items-list} is a comma separated list of \tsobj[marg]{check-item}.
 
@@ -1063,13 +1065,13 @@ These are a set of auxiliary conditionals, for instance, \tsobj{\StudentCase} wi
 
 \begin{codedescribe}[code,new=2023/11/30]{\professor,\advisorprof,\coadvisorprof,\examinerprof,\altexaminerprof}
 	\begin{codesyntax}%
-		\tsobj[code]{\professor}\tsargs[oarg]{prof-ref}\tsargs[marg]{last,first}\tsargs[oarg]{gender}
+		\tsobj[code]{\professor}\tsargs[oarg]{prof-ref}\tsargs[marg]{last,first,email,phone}\tsargs[oarg]{gender}
 		\tsmacro{\advisorprof}{prof-ref}
 		\tsmacro{\coadvisorprof}{prof-ref}
 		\tsmacro{\examinerprof}{prof-ref}
 		\tsmacro{\altexaminerprof}{prof-ref}
 	\end{codesyntax}
-\tsobj{\professor} creates a \tsobj[oarg]{prof-ref} alias to a person's full name.  \tsobj{\advisorprof} expands to a call for \tsobj{\advisor} using the properties stored by \tsobj{\professor}. Similarly, \tsobj{\coadvisorprof,\examinerprof,\altexaminerprof} results in call to \tsobj{\coadvisor,\examinerprof,\altexaminerprof} respectively.
+\tsobj{\professor} creates a \tsobj[oarg]{prof-ref} alias to a person's full name.  \tsobj{\advisorprof} expands to a call for \tsobj{\advisor,\advisorinfo} using the properties stored by \tsobj{\professor}. Similarly, \tsobj{\coadvisorprof,\examinerprof,\altexaminerprof} results in call to \tsobj{\coadvisor,\coadvisorinfo,\examiner,\examinerinfo,\altexaminer,\altexaminerinfo} respectively.
 \end{codedescribe}
 \begin{tsremark}
 \tsobj{\professor} creates/uses an auxiliary \tsobj[pkg]{starray}, just mapping names for users convenience.
@@ -1082,7 +1084,7 @@ These are a set of auxiliary conditionals, for instance, \tsobj{\StudentCase} wi
 		\tsmacro{\boardobs}{obs}
 		\tsmacro{\semester}{semester}
 	\end{codesyntax}
- \tsmacro{\boardobs}{} allows to add an observation (\tsobj[meta]{obs}) for the 'boards schedule report', and \tsmacro{\semester} sets the current semester value.
+ \tsmacro{\boardobs}{} allows to add an observation (\tsobj[meta]{obs}) for the 'boards schedule report', and \tsobj{\semester} sets the current semester value.
 \end{codedescribe}
 
 
@@ -1212,7 +1214,7 @@ To set the \tsobj[meta]{local}, \tsobj[meta]{date} and \tsobj[meta]{time} of a s
 	\begin{codesyntax}%
 		\tsmacro{\distinctboard}{}
 	\end{codesyntax}
-Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \tsmacro{\DistinctBoard}{} after setting a student's name (via \tsmacro{\student}{}) and before setting its advisor name (via \tsmacro{\advisor}{}). 
+Normally, the default, it's assumed that the student's advisor will also be a member of the student's exam board. For the ones in which this doesn't holds true, one should use the \tsmacro{\distinctboard}{} after setting a student's name (via \tsmacro{\student}{}) and before setting its advisor name (via \tsmacro{\advisor}{}). 
 \end{codedescribe}
 For example:
 
@@ -1249,8 +1251,9 @@ Quite obvious, this set the grades given by an examiner (the one defined by the 
 	\begin{codesyntax}%
 		\tsmacro{\setstudentlist}{listID,list}
 		\tsmacro{\setstudentlist*}{listID,list}
+    \tsmacro{\setstudentlist+}{listID,list}
 	\end{codesyntax}
-This command will define/create a list named \tsobj[meta]{listID} composed of a csv \tsobj[meta]{list}~ of student names (as defined by \tsmacro{\Newstudent}{}). The star version sorts the list first (by student's name).
+This command will define/create a list named \tsobj[meta]{listID} composed of a csv \tsobj[meta]{list}~ of student hashes (as defined by \tsmacro{\student}[student-hash]{...}). The star version sorts the list by student's full name, the \emph{plus} version sorts the list by student's presentation date.
 \end{codedescribe}
 
 \begin{codedescribe}{\tcreports}
@@ -1273,7 +1276,7 @@ This command will define/create a list named \tsobj[meta]{listID} composed of a 
 	\describe {revforms-II} { per student reviews forms, TCC-II.}
 	\describe {referral-II} { per student referral letters, TCC-II.}
 	\describe {boards} { exam board dates, TCC-II.}
-	\describe {studentlist} { a simple student list.}
+	\describe {attendance} { a simple student's attendance list.}
 	\describe {cocertificate} { per student coadvisor certificate letter (if any).}
 %	\describe {checklist} { a students check list.}
 \end{describelist}

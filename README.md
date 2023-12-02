@@ -107,7 +107,12 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.1 (this)
+* Version 2.2 (this)
+    - fixed the reports table broken by last update :/
+    - added an option to sort student's list (-coord) by presentation's date
+    - further code clean up
+
+* Version 2.1
     - A few typos corrected
     - better error handling
     - a bit of code clean up (private macro/functions only)
