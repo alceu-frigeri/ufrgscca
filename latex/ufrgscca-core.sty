@@ -1,5 +1,5 @@
 %%%==============================================================================
-%% Copyright 2022-23 by Alceu Frigeri
+%% Copyright 2022-present by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.2} {2023/12/02}
+%% This is version {2.3} {2023/12/05}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2023/12/02}
-    {2.2}
+    {2023/12/05}
+    {2.3}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/12/02},
-     version     .code:n = {2.2} ,
+     date        .code:n = {2023/12/05},
+     version     .code:n = {2.3} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -109,6 +109,7 @@
 \starray_new:n {student}
 \starray_def_from_keyval:nn {student}
  {
+  self = , %% this shall be self hash (if any)
   first = ,
   last = ,
   name = \rule{\l__ufrgscca_name_rule_dim}{.1pt} ,
@@ -379,6 +380,7 @@
     {\starray_new_term:nn {student}{#1}}
   \starray_gset_from_keyval:nn {student}
     {
+      self  = {#1} ,
       first = {#3} ,
       last = {#2} ,
       name = {#3~ #2} ,
@@ -410,6 +412,12 @@
       {#2}
 }
 
+\NewDocumentCommand{\studentAdvCase}{mm}{
+    \starray_term_syntax:n{student.advisor}
+    \int_compare:nNnTF {\starray_parsed_get_cnt:} > {1}
+      {#1}
+      {#2}
+}
 
 
 \NewDocumentCommand{\distinctboard}{}{
@@ -429,6 +437,9 @@
     \starray_iterate_over:nn{student}{#1}
 }
 
+\NewDocumentCommand{\studentadvisoriterate}{m}{
+    \starray_iterate_over:nn{student.advisor}{#1}
+}
 
 \NewDocumentCommand{\worktitle}{m}{%%
   \starray_gset_prop:nnn {student}{worktitle}{#1}

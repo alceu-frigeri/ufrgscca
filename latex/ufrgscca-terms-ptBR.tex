@@ -1,5 +1,5 @@
 %%%==============================================================================
-%% Copyright 2022-23 by Alceu Frigeri
+%% Copyright 2022-present by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.2} {2023/12/02}
+%% This is version {2.3} {2023/12/05}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -159,7 +159,9 @@
         Orientador\DataFields{student.advisor}{narticle}} e Banca Examinadora abaixo.%
       } ,
   internship.title = 
-      { RELATÓRIO DE ESTÁGIO SUPERVISIONADO OBRIGATÓRIO EM ENG. DE CONTROLE E AUTOMAÇÃO } ,
+      {   \centering\textbf{%
+          RELATÓRIO DE ESTÁGIO SUPERVISIONADO OBRIGATÓRIO, DESENVOLVIDO\\DE \DataFields{student.internship}{start} ATÉ \DataFields{student.internship}{end} }  
+      },
   internship.text-approvalpage = 
       { Este Relatório foi julgado adequado para a obtenção do conceito final na Atividade de Estágio Supervisionado Obrigatório em 
         Eng. de Controle e Automação e aprovado em sua forma final pel\DataFields{student.tutor}{article} 
@@ -171,7 +173,9 @@
         e Automação e aprovado em sua forma final pel\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} e Supervisor\DataFields{student.supervisor}{narticle}.%
       } ,
   internship-opt.title = 
-      { RELATÓRIO DE ESTÁGIO SUPERVISIONADO NÂO OBRIGATÓRIO EM ENG. DE CONTROLE E AUTOMAÇÃO } ,
+      {   \centering\textbf{%
+          RELATÓRIO DE ESTÁGIO SUPERVISIONADO NÂO OBRIGATÓRIO, DESENVOLVIDO\\DE \DataFields{student.internship}{start} ATÉ \DataFields{student.internship}{end} }  
+      },
 }
 
 
@@ -183,47 +187,49 @@
 
 
 \SetLabels{%
-  advisor                   = Orientador\DataFields{student.advisor}{narticle} ,
-  advisors                  = Orientadores ,
-  advisor.gen               = Orientador(a) ,
-  advisor.email             = Email d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle} ,
-  coadvisor                 = Coorientador\DataFields{student.coadvisor}{narticle} ,
-  coadvisor.gen             = Coorientador(a) ,
-  coadvisor.email           = Email d\DataFields{student.coadvisor}{article} Coorientador\DataFields{student.coadvisor}{narticle} ,
-  reviewer.base             = Avaliador ,
-  reviewer                  = Avaliador\DataFields{student.reviewer}{narticle} ,
-  altreviewer               = Suplente ,  
-  altreviewer.sig           = Avaliador\DataFields{student.altreviewer}{narticle} ,
-  tutor                     = Tutor\DataFields{student.tutor}{narticle} ,
-  tutor.gen                 = Tutor(a) ,
-  tutor.email               = Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle} ,  
-  supervisor                = Supervisor\DataFields{student.supervisor}{narticle} ,
-  supervisor.gen            = Supervisor(a) ,  
-  student                   = Alun\DataFields{student}{article} ,
-  student.gen               = Aluno(a) ,
-  student.email             = Email d\DataFields{student}{article} Alun\DataFields{student}{article} ,
-  student.ID                = Cartão ,
-  signature.gen             = Assinatura , 
-  signature.student         = Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article} ,
-  signature.student.gen     = Assinatura\ \ do(a)\ \ Aluno(a) ,
-  signature.advisor         = Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle} ,
-  signature.coadvisor       = Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Coorientador\DataFields{student.coadvisor}{narticle} ,
-  signature.reviewer        = Assinatura\ \ d\DataFields{student.reviewer}{article}\ \ Avaliador\DataFields{student.reviewer}{narticle} ,
-  signature.board           = Assinatura\ \ do\ \ Membro\ \ da\ \ Banca ,
-  signature.gen             = Assinatura ,
-  signature.supervisor      = Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle} ,
-  signature.tutor           = Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle} ,
-  signature.internshipcoord = Assinatura\ \ d\ActivityCoord[internship]{article}\ \ Coordenador\ActivityCoord[internship]{narticle} ,
-  worktitle                 = Título do Trabalho ,
-  worktitle.temp            = Título Provisório ,
-  email                     = Email ,
-  phone                     = ramal ,
-  board                     = Banca Examinadora ,
-  board.member              = Membro da Banca ,
-  agree                     = De Acordo ,
-  Nproc                     = SEI ,
-  remarks                   = remarks ,
-  boardtime.gen             = Horário , 
+  professor                 = {Professor\DataFields{student.advisor}{narticle}} ,
+  professors                = {Professores} ,
+  advisor                   = {Orientador\DataFields{student.advisor}{narticle}} ,
+  advisors                  = {Orientadores} ,
+  advisor.gen               = {Orientador(a)} ,
+  advisor.email             = {Email d\DataFields{student.advisor}{article} Orientador\DataFields{student.advisor}{narticle}} ,
+  coadvisor                 = {Coorientador\DataFields{student.coadvisor}{narticle}} ,
+  coadvisor.gen             = {Coorientador(a)} ,
+  coadvisor.email           = {Email d\DataFields{student.coadvisor}{article} Coorientador\DataFields{student.coadvisor}{narticle}} ,
+  reviewer.base             = {Avaliador} ,
+  reviewer                  = {Avaliador\DataFields{student.reviewer}{narticle}} ,
+  altreviewer               = {Suplente} ,  
+  altreviewer.sig           = {Avaliador\DataFields{student.altreviewer}{narticle}} ,
+  tutor                     = {Tutor\DataFields{student.tutor}{narticle}} ,
+  tutor.gen                 = {Tutor(a)} ,
+  tutor.email               = {Email d\DataFields{student.tutor}{article} Tutor\DataFields{student.tutor}{narticle}} ,  
+  supervisor                = {Supervisor\DataFields{student.supervisor}{narticle}} ,
+  supervisor.gen            = {Supervisor(a)} ,  
+  student                   = {Alun\DataFields{student}{article}} ,
+  student.gen               = {Aluno(a)} ,
+  student.email             = {Email d\DataFields{student}{article} Alun\DataFields{student}{article}} ,
+  student.ID                = {Cartão} ,
+  signature.gen             = {Assinatura} , 
+  signature.student         = {Assinatura\ \ d\DataFields{student}{article}\ \ Alun\DataFields{student}{article}} ,
+  signature.student.gen     = {Assinatura\ \ do(a)\ \ Aluno(a)} ,
+  signature.advisor         = {Assinatura\ \ d\DataFields{student.advisor}{article}\ \ Orientador\DataFields{student.advisor}{narticle}} ,
+  signature.coadvisor       = {Assinatura\ \ d\DataFields{student.coadvisor}{article}\ \ Coorientador\DataFields{student.coadvisor}{narticle}} ,
+  signature.reviewer        = {Assinatura\ \ d\DataFields{student.reviewer}{article}\ \ Avaliador\DataFields{student.reviewer}{narticle}} ,
+  signature.board           = {Assinatura\ \ do\ \ Membro\ \ da\ \ Banca} ,
+  signature.gen             = {Assinatura} ,
+  signature.supervisor      = {Assinatura\ \ d\DataFields{student.supervisor}{article}\ \ Supervisor\DataFields{student.supervisor}{narticle}} ,
+  signature.tutor           = {Assinatura\ \ d\DataFields{student.tutor}{article}\ \ Tutor\DataFields{student.tutor}{narticle}} ,
+  signature.internshipcoord = {Assinatura\ \ d\ActivityCoord[internship]{article}\ \ Coordenador\ActivityCoord[internship]{narticle}} ,
+  worktitle                 = {Título do Trabalho} ,
+  worktitle.temp            = {Título Provisório} ,
+  email                     = {Email} ,
+  phone                     = {ramal} ,
+  board                     = {Banca Examinadora} ,
+  board.member              = {Membro da Banca} ,
+  agree                     = {De Acordo} ,
+  Nproc                     = {SEI} ,
+  remarks                   = {remarks} ,
+  boardtime.gen             = {Horário} , 
 }
 
 \SetLabels{%

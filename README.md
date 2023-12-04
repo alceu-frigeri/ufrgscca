@@ -46,7 +46,7 @@ Please do not use the issue page for generic help on how to use the package.
 * git: https://github.com/alceu-frigeri/ufrgscca
 
 -------------
-Copyright 2022-23 by Alceu Frigeri
+Copyright 2022-present by Alceu Frigeri
 
  This work may be distributed and/or modified under the
  conditions of
@@ -107,7 +107,12 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.2 (this)
+* Version 2.3 (this)
+    - adjustments to report's cover
+    - added two student's list related commands \studentaddtolist and \sortstudentlist (-coord)
+    - some code clean up
+
+* Version 2.2
     - fixed the reports table broken by last update :/
     - added an option to sort student's list (-coord) by presentation's date
     - further code clean up

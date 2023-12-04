@@ -1,5 +1,5 @@
 %%%==============================================================================
-%% Copyright 2022-23 by Alceu Frigeri
+%% Copyright 2022-present by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.2} {2023/12/02}
+%% This is version {2.3} {2023/12/05}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -106,6 +106,20 @@
           \MakeUppercase{\UseHeading{unit}}\\
           \MakeUppercase{\UseHeading{department}}\\
           \MakeUppercase{\UseHeading{class.code}~ -~ \UseHeading{class.name}}\\
+  } ,
+  report.prof-descpage       = %
+  {%
+    \noindent\raggedleft
+    \studentAdvCase{%
+      \UseTerm{professors}:\\
+      \studentadvisoriterate%
+        {%
+          \DataFields{student.advisor}{name}\\
+        }
+    }{%
+      \UseTerm{professor}:\\
+      \DataFields{student.advisor}{name}\\
+    }
   } ,
 }
 
@@ -293,11 +307,17 @@ CONTROLE~ E~ AUTOMAÇÃO }
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 
-\SetCoverFields{class-report}{clist}{cover}
+\SetCoverFields{class-report}{clist}{desc}
 \SetCoverFields{class-report}{top}{  \UseTerm{report.top} }
 \SetCoverFields{class-report}{students}{ \UseTerm{cover.students} }
 \SetCoverFields{class-report}{title}{   \UseTerm{cover.title} }
 \SetCoverFields{class-report}{bottom}{\centering \UseConst{publ.city}\\\UseConst{publ.month}~ \UseConst{publ.year}\par}
+
+\SetCoverFields{class-report}{text-descpage}{ \UseTerm{class-report.desc} }
+
+\SetCoverFields{class-report}{advisor-descpage}{ \UseTerm{report.prof-descpage} }
+
+\SetCoverFields{class-report}{bottom-descpage}{\centering \UseConst{publ.city}\\\UseConst{publ.month}~  \UseConst{publ.year}\par}
 
 \SetCoverFields{class-report}{text-approvalpage}{}
 

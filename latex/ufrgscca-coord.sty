@@ -1,5 +1,5 @@
 %%%==============================================================================
-%% Copyright 2022-23 by Alceu Frigeri
+%% Copyright 2022-present by Alceu Frigeri
 %%
 %% This work may be distributed and/or modified under the conditions of
 %%
@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.2} {2023/12/02}
+%% This is version {2.3} {2023/12/05}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2023/12/02}
-    {2.2}
+    {2023/12/05}
+    {2.3}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/12/02},
-     version     .code:n = {2.2} ,
+     date        .code:n = {2023/12/05},
+     version     .code:n = {2.3} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \__codedesc_pkg_info:nn 
@@ -400,7 +400,7 @@
       {\seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_hour_tmp_int}}
       {\seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_hour_tmp_int}}  
     \int_compare:nNnTF {\l__ufrgscca_min_tmp_int} < {10}
-      {\seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_min_tmp_int}}
+      { \seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_min_tmp_int} }
       {\seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_min_tmp_int}}  
   
     \seq_set_split:Nnn \l__ufrgscca_date_seq {/} {#2}
@@ -587,11 +587,9 @@
             \starray_gset_prop:nne {student.reviewer}{grade}
                 {%
                     \fpeval{round((#1 * \UseConst{TCC-I.weightA} + #2 * \UseConst{TCC-I.weightB} + #3 * \UseConst{TCC-I.weightC} + #4 * \UseConst{TCC-I.weightD}) / ( \UseConst{TCC-I.weightA} + \UseConst{TCC-I.weightB} + \UseConst{TCC-I.weightC} + \UseConst{TCC-I.weightD}) , 2 , 1) }
-                }
-    
+                }    
         }
     }
-  
 }
 
 
@@ -600,7 +598,7 @@
 \tl_new:N \l__ufrgscca_sortB_tl
 \cs_new_protected:Npn \__ufrgscca_seq_sort:nn #1#2
   {
-    \seq_gsort:cn {l__ufrgscca_#1_seq }
+    \seq_gsort:cn {l__ufrgscca_#1_list_seq }
       {
         \starray_set_iter_from_hash:nn {student}{##1}
         \starray_get_prop:nnN {student}{#2} \l__ufrgscca_sortA_tl
@@ -612,55 +610,56 @@
       }  
   }
 
+\cs_generate_variant:Nn \seq_gput_right:Nn {ce}
 
-\NewDocumentCommand{\setstudentlist}{st+O{tcc}mm}{
-  \seq_new:c {l__ufrgscca_#4_seq}
-  \seq_new:c {l__ufrgscca_#4_ff_seq}
-  \seq_new:c {l__ufrgscca_#4_dismiss_seq}
-  \seq_new:c {l__ufrgscca_#4_graded_seq}
+\NewDocumentCommand{\studentaddtolist}{m}
+  {
+    \seq_if_exist:cF {l__ufrgscca_#1_list_seq}
+      {
+        \seq_new:c {l__ufrgscca_#1_list_seq}
+        \seq_new:c {l__ufrgscca_#1_list_ff_seq}
+        \seq_new:c {l__ufrgscca_#1_list_dismiss_seq}
+        \seq_new:c {l__ufrgscca_#1_list_graded_seq}
+
+        \bool_new:c {l__ufrgscca_#1_classified_bool}
+      }
+    \bool_set_false:c {l__ufrgscca_#1_classified_bool}  
+    \starray_term_syntax:n {student}
+    \seq_gput_right:ce {l__ufrgscca_#1_list_seq} {\starray_parsed_get_prop:n {self}}
+  }
   
-  \clist_map_inline:nn {#5}
+\NewDocumentCommand{\sortstudentlist}{st+m}
+  {
+    \bool_set_true:c {l__ufrgscca_#3_classified_bool}
+    \bool_if:nTF {#1}
+      { \__ufrgscca_seq_sort:nn {#3}{name}  }
+      { 
+        \bool_if:nT {#2}
+          { \__ufrgscca_seq_sort:nn {#3}{board-datetime} }
+      }    
+    \seq_map_tokens:cn {l__ufrgscca_#3_list_seq} {\__ufrgscca_grade:n}
+    \seq_map_tokens:cn {l__ufrgscca_#3_list_seq} {\__ufrgscca_listclassify:nn {#3}}    
+  }
+
+
+\NewDocumentCommand{\setstudentlist}{mm}{
+  \seq_gclear_new:c {l__ufrgscca_#1_list_seq}
+  \seq_gclear_new:c {l__ufrgscca_#1_list_ff_seq}
+  \seq_gclear_new:c {l__ufrgscca_#1_list_dismiss_seq}
+  \seq_gclear_new:c {l__ufrgscca_#1_list_graded_seq}
+  \bool_if_exist:cF {l__ufrgscca_#1_classified_bool}
+    { \bool_new:c {l__ufrgscca_#1_classified_bool} }
+  
+  \clist_map_inline:nn {#2}
     {
       \starray_set_iter_from_hash:nnT {student}{##1}
         {  
-          \seq_put_right:cn {l__ufrgscca_#4_seq} {##1} 
+          \seq_put_right:cn {l__ufrgscca_#1_list_seq} {##1} 
           \emptytermifnone{student.advisor}
           \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
           \emptytermifnone{student.altreviewer}
         }
     }
-%  \seq_gset_from_clist:cn {l__ufrgscca_#3_seq}{#4}
-
-  \bool_if:nTF {#1}
-    { \__ufrgscca_seq_sort:nn {#4}{name}  }
-    { 
-      \bool_if:nT {#2}
-        { \__ufrgscca_seq_sort:nn {#4}{board-datetime} }
-    }
-  
-  \str_case:nn {#3}
-  {
-    {tcc} 
-      {
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
-      }
-    {tccI} 
-      {
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
-      }
-    {tccII} 
-      {
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
-      }
-    {intern}
-      {  %% TO BE IMPLEMENTED !!!
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_grade:n}
-        \seq_map_tokens:cn {l__ufrgscca_#4_seq} {\__ufrgscca_listclassify:nn {#4}}
-      }
-  }
 }
 
 \cs_new_protected:Npn \__ufrgscca_grade:n #1 
@@ -678,21 +677,22 @@
       \starray_term_syntax:n {student}
       \bool_case:nF
         {
-          {\starray_parsed_get_prop:n {flag-ff}}{\seq_gput_right:cn {l__ufrgscca_#1_ff_seq}{#2}}
-          {\starray_parsed_get_prop:n {flag-dismiss}}{\seq_gput_right:cn {l__ufrgscca_#1_dismiss_seq}{#2}}
+          {\starray_parsed_get_prop:n {flag-ff}}{\seq_gput_right:cn {l__ufrgscca_#1_list_ff_seq}{#2}}
+          {\starray_parsed_get_prop:n {flag-dismiss}}{\seq_gput_right:cn {l__ufrgscca_#1_list_dismiss_seq}{#2}}
         }
-        {\seq_gput_right:cn {l__ufrgscca_#1_graded_seq}{#2}}
-      
+        {\seq_gput_right:cn {l__ufrgscca_#1_list_graded_seq}{#2}}     
     }
 
 
 \NewDocumentCommand{\tcreports}{O{}m}{
   {
       \__ufrgscca_set_reports:n {#1}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_seq {l__ufrgscca_#2_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_ff_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_dismiss_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq {l__ufrgscca_#2_graded_seq}
+      \bool_if:cF {l__ufrgscca_#2_classified_bool}
+        { \sortstudentlist{#2} }
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_seq {l__ufrgscca_#2_list_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_list_ff_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_list_dismiss_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq {l__ufrgscca_#2_list_graded_seq}
 
       \bool_if:NT \l__ufrgscca_attendance_bool
         { \MakeForm{attendancelist} 
