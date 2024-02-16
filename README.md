@@ -107,7 +107,11 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.3 (this)
+* Version 2.4 (this)
+    - a few typos
+    - extended \studentfate possible values.
+
+* Version 2.3
     - adjustments to report's cover
     - added two student's list related commands \studentaddtolist and \sortstudentlist (-coord)
     - some code clean up

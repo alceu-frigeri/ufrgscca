@@ -777,6 +777,7 @@ O texto submetido:
          \item[$\Box$] basta a revisão final do texto pelo orientador,
          \item[$\Box$] revisarei o trabalho depois de corrigido.
        \end{itemize}
+  \item[]
 	\item[$\Box$] Outras considerações (se necessário): \\
 	\begin{tabular}{p{0.7\textwidth}}
 	~\\\hline
@@ -894,7 +895,9 @@ O texto submetido:
 }
 
 \NewDocumentCommand{\ReviewerLine}{m}{%
-  & \hspace{-0.4em}\DataFields{student.reviewer[#1]}{name} 
+  \studentReviewerCase{#1}
+    {& \hspace{-0.4em}\textcolor{red}{\DataFields{student.reviewer[#1]}{name}}}
+    {& \hspace{-0.4em}\DataFields{student.reviewer[#1]}{name}}
   & \DataFields{student.reviewer[#1]}{pointA} & \DataFields{student.reviewer[#1]}{pointB} & \DataFields{student.reviewer[#1]}{pointC}  
   & \DataFields{student.reviewer[#1]}{pointD} & \DataFields{student.reviewer[#1]}{grade} & %
 }
@@ -945,7 +948,7 @@ O texto submetido:
     \studentBoardGraded
   }
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido REAPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido REPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
      \studentBoardGraded
  }
   {
@@ -990,7 +993,7 @@ O texto submetido:
     \studentBoardGraded*
   }%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-date}, tendo sido REAPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-date}, tendo sido REPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
     \studentBoardGraded*
   }%
   {
@@ -1224,7 +1227,7 @@ O texto submetido:
         & \multirow{4}={ \DataFields{student}{board-time}\\[1mm]\DataFields{student}{board-local} }\\*
         && \DataFields{student.reviewer[2]}{name} \\*
         && \DataFields{student.reviewer[3]}{name} \\*
-        && (\DataFields{student.altreviewer[1]}{name}) \\*
+        && ({\DataFields{student.altreviewer[1]}{name}}) \\*
         \multicolumn{4}{p{\UseConst{board.tabAll}}}
            {\textsc{Título:}\ \emph{\DataFields{student}{worktitle}}}\\\hline      
       }

@@ -46,20 +46,12 @@
      version     .code:n = {2.3} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
-\cs_if_exist:NF \__codedesc_pkg_info:nn 
+\cs_if_exist:NF \PkgInfo 
   {
-    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
-      { \keys_set:nn {#1 / pkg info}{#2} }
-  }
-\cs_if_exist:NF \PkgInfo
-  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
-\cs_if_exist:NF \PkgDescription
-  { 
+    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
     \NewDocumentCommand \PkgDescription {m} 
-      { 
-        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
-      } 
-  }
+      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
+  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -134,9 +126,9 @@
 \starray_new:n {prof}
 \starray_def_from_keyval:nn {prof}
  {
-   last = ,
-   first = ,
-   gender = ,
+   last   = {},
+   first  = {},
+   gender = {},
  }
  
 \NewDocumentCommand{\professor}{O{}mmmmO{}}
@@ -144,10 +136,10 @@
     \starray_new_term:nn {prof}{#1}
     \starray_set_from_keyval:nn {prof}
       {
-        last = {#2},
-        first = {#3},
-        email = {#4},
-        phone = {#5},
+        last   = {#2},
+        first  = {#3},
+        email  = {#4},
+        phone  = {#5},
         gender = {#6},
       }
   }
@@ -229,56 +221,87 @@
 
 %
 \NewDocumentCommand{\studentfate}{O{}}{%%
-  \str_case:nnF  {#1}
+  \tl_if_blank:nTF {#1}
     {
-      {C}
-        {
-          \starray_gset_from_keyval:nn {student} 
-            {
-              grade = C ,
-              flag-exam = \c_true_bool ,
-              flag-graded = \c_true_bool ,
-              flag-approved = \c_true_bool ,
-            }
-        }
-      {D}
-        {
-          \starray_gset_from_keyval:nn {student} 
-            {
-              grade = D ,
-              flag-exam = \c_true_bool ,
-              flag-graded = \c_true_bool ,
-            }
-        }
-      {FF}
-        {
-          \starray_gset_from_keyval:nn {student} 
-            {
-              grade = FF ,
-              flag-ff = \c_true_bool ,
-              flag-graded = \c_true_bool ,
-            }
-        }
-      {dismiss}
-        {
-          \starray_gset_from_keyval:nn {student} 
-            {
-              flag-dismiss = \c_true_bool ,
-              flag-graded = \c_true_bool ,
-            }
-        }
-      {none}
-        {
-          \starray_gset_from_keyval:nn {student} 
-            {
-              flag-dismiss = \c_true_bool ,
-              flag-graded = \c_true_bool ,
-            }
-        }
-    }
-    { %% in case of none of above...
       \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
       \__ufrgscca_studentgrade:
+    }
+    {
+      \str_case:nnF  {#1}
+        {
+          {C}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  grade = C ,
+                  flag-exam = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                  flag-approved = \c_true_bool ,
+                }
+            }
+          {D}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  grade = D ,
+                  flag-exam = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
+          {exam}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  grade = {\textcolor{red}{exame}} ,
+                  flag-exam = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
+          {exame}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  grade = {\textcolor{red}{exame}} ,
+                  flag-exam = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
+          {FF}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  grade = FF ,
+                  flag-ff = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
+          {dismiss}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  flag-dismiss = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
+          {none}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  flag-dismiss = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
+        }
+        { %% in case of none of above...
+          \starray_gset_from_keyval:nn {student} 
+            {
+              grade = {\textcolor{red}{\textbf{#1}}} ,
+              flag-exam = \c_true_bool ,
+              flag-graded = \c_true_bool ,
+            }       
+%%%          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
+%%%          \__ufrgscca_studentgrade:
+        }
     }
 }%%
 %
@@ -464,6 +487,13 @@
     }
 }
 
+\NewDocumentCommand{\studentReviewerCase}{mmm}{
+    \starray_term_syntax:n{student.reviewer[#1]}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-exam}}
+      {#2}
+      {#3}
+}
+
 
 \NewDocumentCommand{\studentDismissCase}{mm}{
     \starray_term_syntax:n{student}
@@ -554,7 +584,7 @@
 \cs_generate_variant:Nn \starray_gset_prop:nnn {nne}
 
 
-\NewDocumentCommand{\examinergrades}{mmmO{}}{
+\NewDocumentCommand{\examinergrades}{mmmO{}s}{
   \tl_if_blank:nTF {#1}
     { 
       \starray_gset_prop:nnn {student.reviewer}{grade}{0} 
@@ -589,6 +619,8 @@
                     \fpeval{round((#1 * \UseConst{TCC-I.weightA} + #2 * \UseConst{TCC-I.weightB} + #3 * \UseConst{TCC-I.weightC} + #4 * \UseConst{TCC-I.weightD}) / ( \UseConst{TCC-I.weightA} + \UseConst{TCC-I.weightB} + \UseConst{TCC-I.weightC} + \UseConst{TCC-I.weightD}) , 2 , 1) }
                 }    
         }
+      \bool_if:nT {#5}
+        {\starray_gset_prop:nnn {student.reviewer}{flag-exam}{\c_true_bool}}
     }
 }
 

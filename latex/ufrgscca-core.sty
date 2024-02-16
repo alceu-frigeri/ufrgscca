@@ -46,20 +46,12 @@
      version     .code:n = {2.3} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
-\cs_if_exist:NF \__codedesc_pkg_info:nn 
+\cs_if_exist:NF \PkgInfo 
   {
-    \cs_new_protected:Npn \__codedesc_pkg_info:nn #1#2
-      { \keys_set:nn {#1 / pkg info}{#2} }
-  }
-\cs_if_exist:NF \PkgInfo
-  { \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } }
-\cs_if_exist:NF \PkgDescription
-  { 
+    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
     \NewDocumentCommand \PkgDescription {m} 
-      { 
-        \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par 
-      } 
-  }
+      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
+  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -192,7 +184,8 @@
     pointC = ,
     pointD = ,
     grade = 0 ,
-    gradetype = ,    
+    gradetype = ,   
+    flag-exam = \c_false_bool , 
   } ,
   altreviewer . struct = {
     first = ,
@@ -485,11 +478,22 @@
 
 \cs_new_protected:Npn \__ufrgscca_set_prof:nnnnn #1#2#3#4#5 
   {
-    \starray_gset_from_keyval:nn {student.#1}
+    \tl_if_blank:nTF {#2}
       {
-        last = {#3} ,
-        first = {#4} ,
-        name = {#2~#4~ #3} ,
+        \starray_gset_from_keyval:nn {student.#1}
+          {
+            last = {#3} ,
+            first = {#4} ,
+            name = {#4~ #3} ,
+          }
+      }
+      {
+        \starray_gset_from_keyval:nn {student.#1}
+          {
+            last = {#3} ,
+            first = {#4} ,
+            name = {#2~#4~ #3} ,
+          }
       }
    \__ufrgscca_setgender:nn {student.#1}{#5}
   }
