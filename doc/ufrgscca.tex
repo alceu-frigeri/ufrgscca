@@ -558,7 +558,7 @@ All data is stored in two main \tsobj[pack]{starray} defined as follow:
   reviewer . struct {
     first , last , name , institution , title , email , phone ,    
         article , Article , narticle , Narticle , carticle , Carticle ,
-    pointA , pointB , pointC , pointD , grade , gradetype ,    
+    pointA , pointB , pointC , pointD , grade , gradetype ,  flag-examreview ,  
   } ,
   altreviewer . struct {
     first , last , name , institution , title , email , phone ,    
@@ -1251,7 +1251,7 @@ For example:
 	\begin{codesyntax}%
 		\tsmacro{\examinersgrades}{N1,N2,N3}\tsargs[oarg]{N4}\tsverb[oarg]{*}
 	\end{codesyntax}
-Quite obvious, this set the grades given by an examiner (the one defined by the 'last' \tsmacro{\examiner}{} before this.). In case \tsobj[oarg]{N4} is given it's assumed the TCC-I case, otherwise TCC-II. The 'star' at the end will mark said reviewer, in red, when generating a report.
+Quite obvious, this set the grades given by an examiner (the one defined by the 'last' \tsmacro{\examiner}{} before this.). In case \tsobj[oarg]{N4} is given it's assumed the TCC-I case, otherwise TCC-II. (update:2024/02/15) The 'star' at the end will mark said reviewer, in red, when generating a report.
 \end{codedescribe}
 
 

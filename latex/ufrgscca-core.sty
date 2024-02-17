@@ -185,7 +185,7 @@
     pointD = ,
     grade = 0 ,
     gradetype = ,   
-    flag-exam = \c_false_bool , 
+    flag-examreview = \c_false_bool , 
   } ,
   altreviewer . struct = {
     first = ,
@@ -273,9 +273,9 @@
 \NewDocumentCommand{\NewActivity}{m} {
     \starray_new_term:nn {activity}{#1}
     \starray_new_term:nn {activity.coord}{}
-    \starray_gset_prop:nnV {activity}{checkmarked}\c_empty_prop
-    \starray_gset_prop:nnV {activity}{checkunmarked}\c_empty_prop
-    \starray_gset_prop:nnV {activity}{checkref}\c_empty_prop
+    \starray_gset_prop:nnV {activity}{chkmarked}\c_empty_prop
+    \starray_gset_prop:nnV {activity}{chkunmarked}\c_empty_prop
+    \starray_gset_prop:nnV {activity}{chkref}\c_empty_prop
 }
 
 

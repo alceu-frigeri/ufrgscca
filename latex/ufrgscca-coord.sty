@@ -478,7 +478,7 @@
 
 \NewDocumentCommand{\studentReviewerCase}{mmm}{
     \starray_term_syntax:n{student.reviewer[#1]}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-exam}}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-examreview}}
       {#2}
       {#3}
 }
@@ -609,7 +609,7 @@
                 }    
         }
       \bool_if:nT {#5}
-        {\starray_gset_prop:nnn {student.reviewer}{flag-exam}{\c_true_bool}}
+        {\starray_gset_prop:nnn {student.reviewer}{flag-examreview}{\c_true_bool}}
     }
 }
 

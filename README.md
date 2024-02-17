@@ -108,7 +108,7 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 * Version 2.4 (this)
-    - a few typos
+    - a few typos (including [l3kernel prop check](https://github.com/latex3/latex3/issues/1460))
     - extended \studentfate possible values (see documentation).
 
 * Version 2.3
