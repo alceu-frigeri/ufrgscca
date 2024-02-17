@@ -109,7 +109,7 @@ The Current Maintainer of this work is Alceu Frigeri
 ## Changelog
 * Version 2.4 (this)
     - a few typos
-    - extended \studentfate possible values.
+    - extended \studentfate possible values (see documentation).
 
 * Version 2.3
     - adjustments to report's cover

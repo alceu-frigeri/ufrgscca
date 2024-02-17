@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.3} {2023/12/05}
+%% This is version {2.4} {2024/02/19}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2023/12/05}
-    {2.3}
+    {2024/02/19}
+    {2.4}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2023/12/05},
-     version     .code:n = {2.3} ,
+     date        .code:n = {2024/02/19},
+     version     .code:n = {2.4} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -257,15 +257,6 @@
                   flag-graded = \c_true_bool ,
                 }
             }
-          {exame}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
-                  grade = {\textcolor{red}{exame}} ,
-                  flag-exam = \c_true_bool ,
-                  flag-graded = \c_true_bool ,
-                }
-            }
           {FF}
             {
               \starray_gset_from_keyval:nn {student} 
@@ -299,8 +290,6 @@
               flag-exam = \c_true_bool ,
               flag-graded = \c_true_bool ,
             }       
-%%%          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
-%%%          \__ufrgscca_studentgrade:
         }
     }
 }%%

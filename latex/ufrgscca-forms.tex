@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.3} {2023/12/05}
+%% This is version {2.4} {2024/02/19}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -921,9 +921,9 @@ O texto submetido:
    \multicolumn{#1}{p{#2}}{\ \ \ \UseLabel{worktitle}: \DataFields{student}{worktitle}}\\*       
    \multicolumn{#1}{l}{\ \ \ (\UseLabel{Nproc}: \DataFields{student}{Nproc}) \UseLabel{student.ID}: \DataFields{student}{ID} / \DataFields{student}{email}}\\*  
    \multicolumn{#1}{l}{\ \ \ \color{darkerblue}\UseLabel{advisor.email}: \DataFields{student.advisor}{email} \UseLabel{phone}: \DataFields{student.advisor}{phone}}\\*          
-   \multicolumn{#1}{l}{\ \ \ \color{darkerred}\UseLabel{board}: \DataFields{student.reviewer[1]}{email} / \DataFields{student.reviewer[2]}{email} / \DataFields{student.reviewer[3]}{email}}\\*          
+   \multicolumn{#1}{p{#2}}{\ \ \ \color{darkerred}\UseLabel{board}: \DataFields{student.reviewer[1]}{email} (\DataFields{student.reviewer[1]}{phone}) / \DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone}) / \DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}\\*          
 
-   \multicolumn{#1}{l}{\ \ \ \UseLabel{remarks}: {\color{red}\textbf{\DataFields{student}{remarks}}}}%\\ \hline
+   \multicolumn{#1}{p{#2}}{\ \ \ \UseLabel{remarks}: {\color{red}\textbf{\DataFields{student}{remarks}}}}%\\ \hline
 }
 
 
