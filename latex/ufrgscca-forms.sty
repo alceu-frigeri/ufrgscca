@@ -188,24 +188,40 @@
       {
         \centering
           {
-            \UseTerm{cover.topbase}\\
-			{\sc \prop_item:Nn \l__ufrgscca_forms_prop {#1.heading}}
+            \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.top} \l_tmpa_tl 
+              { \l_tmpa_tl }
+              { \UseTerm{cover.topbase}\\ }
+            \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.heading} \l_tmpa_tl 
+              { {\sc \l_tmpa_tl}\\[6mm] }
+              { \par\vspace{5mm} }
           }
-      }\\[7mm]
-    {\bf \prop_item:Nn \l__ufrgscca_forms_prop {#1.title}}
-    \prop_if_in:NnTF \l__ufrgscca_forms_prop {#1.footnote}
-      {\footnote[1]{\prop_item:Nn \l__ufrgscca_forms_prop {#1.footnote}}}
-      {}\\
+      }\par
+      \prop_get:NnNT \l__ufrgscca_forms_prop {#1.title} \l_tmpa_tl 
+        {
+          \textbf{\l_tmpa_tl}
+          \prop_get:NnNT \l__ufrgscca_forms_prop {#1.footnote} \l_tmpa_tl
+            { \footnote[1]{\l_tmpa_tl} }
+          \\
+        }
   \end{center}
 %
   \vfill
-   \prop_item:Nn \l__ufrgscca_forms_prop {#1.opening}
-  \vfill
-  \prop_item:Nn \l__ufrgscca_forms_prop {#1.body}
-  \vfill
-  \prop_item:Nn \l__ufrgscca_forms_prop {#1.closing}
+  \prop_get:NnNT \l__ufrgscca_forms_prop {#1.opening} \l_tmpa_tl 
+    {
+      \l_tmpa_tl
+      \vfill
+    }
+  \prop_get:NnNT \l__ufrgscca_forms_prop {#1.body} \l_tmpa_tl 
+    {
+      \l_tmpa_tl
+      \vfill
+    }
+  \prop_get:NnNT \l__ufrgscca_forms_prop {#1.closing} \l_tmpa_tl 
+    {
+      \l_tmpa_tl
+    }
   \pagebreak
-  }
+}
 
 
 \NewDocumentCommand{\SignatureDate}{m}{

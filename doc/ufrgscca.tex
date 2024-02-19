@@ -1183,7 +1183,7 @@ These are a set of auxiliary conditionals, for instance, \tsobj{\StudentCase} wi
 This assigns the \tsobj[meta]{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \tsobj[meta]{fate} can be either \emph{exam} (if the student is in exam, but didn't got a grade yet) \emph{C} or \emph{D} (in case a student in exam got graded), \emph{FF} for those that haven't finished the work or \emph{dismiss} for those that, for whatever reason, got dismissed. The default is 'do nothing' (no \tsobj[meta]{fate} assigned)
 \end{codedescribe}
 \begin{tsremark}
-(updated in 2024/02/15) In case some other, odd, value is assigned, this command will record as if the student is in 'exam', with the given grade \tsobj[oarg]{fate} marked in bold red.
+(2024/02/15) In case some other, odd, value is assigned, this command will record as if the student is in 'exam', with the given grade \tsobj[oarg]{fate} marked in bold red.
 \end{tsremark}
 
 \begin{codedescribe}[code,new=2023/12/04]{\studentaddtolist}
@@ -1303,6 +1303,12 @@ By default, the list remains unchanged (no sort).
 %	\describe {checklist} { a students check list.}
 \end{describelist}
 
+\begin{codedescribe}[code,new=2024/02/18]{\suppresschecklist}
+	\begin{codesyntax}%
+		\tsmacro{\suppresschecklist}{}
+	\end{codesyntax}
+	This will suppress the “student checklist” on the general report.
+\end{codedescribe}
 
 \section{\tightul{ufrgscca-ppc} Package (extended documentation)}
 This contains a set of auxiliary commands to keep track of many \emph{indicators} whilst writing  a \emph{PPC document} (which is going to be evaluated based on said \emph{indicators}, though the track of those \emph{indicators} themselves shall not appear in the final version of it). Keep in mind, when considering the use of it: “it works as is” but it hasn't being properly debugged, and it might change “as needed locally”.

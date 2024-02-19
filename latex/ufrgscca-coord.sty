@@ -861,8 +861,14 @@
             \studentselect{##1}
             &\\[-2ex]
             ~\multicolumn{#1}{l}{\textbf{\color{#4}\DataFields{student}{name}}}\\*
-            \__ufrgscca_checktable_lines:nn {L1,L2,L3,L4,L5}{C1,C2,C3,C4,C5}\hline
+            \__ufrgscca_checktable_lines:nn {L1,L2,L3}{C1,C2,C3,C4,C5,C6}\hline
           }     
       }
       
+}
+
+\bool_new:N \l__ufrgscca_checklist_bool
+\bool_set_true:N \l__ufrgscca_checklist_bool
+\NewDocumentCommand{\suppresschecklist}{}{
+  \bool_set_false:N \l__ufrgscca_checklist_bool
 }

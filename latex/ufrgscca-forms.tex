@@ -1025,12 +1025,17 @@ O texto submetido:
 
 \ExplSyntaxOn
 
+\cs_new:Npn \__ufrgscca_hline:nnn #1#2#3 {\noalign{\vskip #1\vskip 0pt\hrule height #2\arrayrulewidth\vskip #3\vskip 0pt\penalty 10000}}
+\cs_new:Npn \__ufrgscca_hline:n #1       {\__ufrgscca_hline:nnn {-0.5ex}{#1}{0.25ex}}
+\cs_new:Npn \__ufrgscca_hline:           {\__ufrgscca_hline:nnn {-0.5ex}{0.5}{0.25ex}}
+
 \cs_new_protected:Npn \reportBody #1#2
   {
     \str_case:nn {#1}
       {
         {I} 
           {
+            \ActivitySelect{tccI}
             \begin{longtable}
               {
                 p{\UseConst{report.tabA}}@{\ }
@@ -1045,6 +1050,7 @@ O texto submetido:
           }
         {II}
           {
+            \ActivitySelect{tccII}
             \begin{longtable}
               {
                 p{\UseConst{report.tabA}}@{\ }
@@ -1062,8 +1068,17 @@ O texto submetido:
     \seq_map_inline:Nn \l__ufrgscca_baselist_graded_seq
       {
         \studentselect{##1}
-        #2\\*\hline
-        \studentExtLine{7}{\UseConst{report.tabMult.#1}}\\\hline        
+        #2\\\hline
+        \studentExtLine{7}{\UseConst{report.tabMult.#1}}\\\hline
+        \bool_if:nT {\l__ufrgscca_checklist_bool}
+        {
+          \multicolumn{7}{l}
+            {
+              \begin{tabular}{llllll}
+                \__ufrgscca_checktable_lines:nn {L1,L2,L3}{C1,C2,C3,C4,C5,C6}
+              \end{tabular}
+            }\\\hline     
+        }
       }
     \__ufrgscca_miss_case:nnnnn 
       {7} {report.tabMult.#1}
@@ -1082,7 +1097,7 @@ O texto submetido:
   {
     \seq_if_empty:NF #3
       {
-        &\\
+        &\\\pagebreak
         \multicolumn{#1}{l}{\textbf{\color{#5}#4}}\\\hline
         \seq_map_inline:Nn #3 
           {
@@ -1100,13 +1115,14 @@ O texto submetido:
 %%%%%%%%%%%%%%%
 %%  report TCC - I
 %%%%%%%%%%%%%%%
-\SetForm{report-I}{heading}{\UseTerm{title.tccI}}
-\SetForm{report-I}{title}{Relatório Acompanhamento - \UseTerm{semester}}
+\SetForm{report-I}{top}{}
+\SetForm{report-I}{heading}{\vspace*{-5ex}\UseTerm{title.tccI}~ - ~\textbf{\UseTerm{semester}}}
+%\SetForm{report-I}{title}{}
 \SetForm{report-I}{opening}{}
 
 %%%
 \SetForm{report-I}{opening}{  %
-  { \tiny
+  { \vspace*{-5ex}\tiny
     \reportBody {I}{\studentLine}
   }
 }
@@ -1118,14 +1134,16 @@ O texto submetido:
 %%%%%%%%%%%%%%%
 %%  report TCC - II
 %%%%%%%%%%%%%%%
-\SetForm{report-II}{heading}{\UseTerm{title.tccII}}
-\SetForm{report-II}{title}{Relatório Acompanhamento - \UseTerm{semester}}
+\SetForm{report-II}{top}{}
+\SetForm{report-II}{heading}{\vspace*{-5ex}\UseTerm{title.tccII}~ - ~\textbf{\UseTerm{semester}}}
+%\SetForm{report-II}{title}{Relatório Acompanhamento - \UseTerm{semester}}
+%\SetForm{report-II}{title}{\vspace*{-2ex}\UseTerm{semester}}
 \SetForm{report-II}{opening}{}
 
 
 %%%
 \SetForm{report-II}{opening}{  %
-  { \tiny
+  { \vspace{-2ex}\tiny
     \reportBody {II}{\studentLine*}
   }
 }
@@ -1148,10 +1166,10 @@ O texto submetido:
 \SetForm{checklist-I}{opening}{  %
   \ActivitySelect{tccI}
   { \scriptsize
-    \begin{longtable}{lllll}%
-    \CheckList{5}{graded}{Alunos~Com~ Conceito}[black]
-    \CheckList{5}{ff}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
-    \CheckList{5}{dismiss}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
+    \begin{longtable}{llllll}%
+    \CheckList{6}{graded}{Alunos~Com~ Conceito}[black]
+    \CheckList{6}{ff}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
+    \CheckList{6}{dismiss}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
     \end{longtable}
   }
   ~\vfill
@@ -1172,10 +1190,10 @@ O texto submetido:
 \SetForm{checklist-II}{opening}{  %
   \ActivitySelect{tccII}
   { \scriptsize
-    \begin{longtable}{lllll}%
-    \CheckList{5}{graded}{Alunos~Com~ Conceito}[black]
-    \CheckList{5}{ff}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
-    \CheckList{5}{dismiss}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
+    \begin{longtable}{llllll}%
+    \CheckList{6}{graded}{Alunos~Com~ Conceito}[black]
+    \CheckList{6}{ff}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
+    \CheckList{6}{dismiss}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
     \end{longtable}
   }
   ~\vfill
