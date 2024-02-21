@@ -110,6 +110,8 @@ The Current Maintainer of this work is Alceu Frigeri
 * Version 2.4 (this)
     - a few typos (including [l3kernel prop check](https://github.com/latex3/latex3/issues/1460))
     - extended \studentfate possible values (see documentation).
+    - \makeforms code cleanup. switching to \prop_get:NnNTF instead of \prop_item:Nn
+    - reports: some info adjustment
 
 * Version 2.3
     - adjustments to report's cover

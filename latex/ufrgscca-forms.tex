@@ -438,15 +438,18 @@ Nome do(a) Aluno(a) --- Email\\
      \item \emptybox\ \textbf{Abordagem/Plano de Trabalho Proposto}. {\footnotesize(peso:2)}\\ {\footnotesize Considerar se a abordagem, plano de trabalho proposto, é adequada e factivel.}
      \item \emptybox\ \textbf{Redação}. {\footnotesize(peso:1)}\\ {\footnotesize     Considerar a qualidade do trabalho escrito apresentado.}
      \item { O Trabalho Submetido}
-     \begin{itemize}[tcc,nosep]
-       \item[$\Box$] Está adequado, dispensando correções do texto.
-       \item[$\Box$] Está adequado, sendo necessário correções, conforme anotações anexas.
-       \item[$\Box$] Necessita ser revisto/re-escrito,\footnotemark[3] e: 
-       \begin{itemize}
-         \item[$\Box$] basta a revisão final do texto pelo orientador,
-         \item[$\Box$] revisarei o trabalho depois de corrigido.
-       \end{itemize}
-     \end{itemize} 
+     \begin{enumerate}[tcc,nosep]
+       \item[$\Box$ a)] Está adequado, 
+       \begin{enumerate}
+         \item[$\Box$ a.1)]  dispensando correções do texto.
+         \item[$\Box$ a.2)]  sendo necessário correções, conforme anotações anexas.
+       \end{enumerate}
+       \item[$\Box$ b)]  Necessita ser revisto/re-escrito,\footnotemark[3] e: 
+       \begin{enumerate}
+         \item[$\Box$ b.1)] basta a revisão final do texto pelo orientador,
+         \item[$\Box$ b.2)] revisarei o trabalho depois de corrigido.
+       \end{enumerate}
+     \end{enumerate} 
    \end{enumerate}
    
 Outras considerações, parecer (se necessário): \BlankLines{6}
@@ -751,41 +754,46 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 
 %%%
 \SetForm{correctionsform-II}{body}{  \resizebox{0.9\textwidth}{!}{
-O texto submetido:
- \parbox[t]{.75\textwidth}{
-    \begin{itemize}[tcc,nosep]
-     \item[$\Box$] Está adequado, dispensando correções do texto.
-     \item[$\Box$] Está adequado, sendo necessário correções, conforme a
-      seguir (e anotações anexas).
-      	\begin{description}[tcc,noitemsep]
-        	\item[$\Box$] Ortográfica
-        	\item[$\Box$] Regras de Escrita
-        	\item[$\Box$] Equações
-        	\item[$\Box$] Resumo
-        	\item[$\Box$] Abstract
-        	\item[$\Box$] Índice
-        	\item[$\Box$] Introdução
-        	\item[$\Box$] Conclusões
-        	\item[$\Box$] Corpo do Trabalho
-        	\item[$\Box$] Resultados
-        	\item[$\Box$] Adicionar mais exemplos
-        	\item[$\Box$] Figuras
-        	\item[$\Box$] Tabelas
-        \end{description}
-     \item[$\Box$] Necessita ser revisto/re-escrito,\footnotemark[2] e: 
-       \begin{itemize}
-         \item[$\Box$] basta a revisão final do texto pelo orientador,
-         \item[$\Box$] revisarei o trabalho depois de corrigido.
-       \end{itemize}
-  \item[]
-	\item[$\Box$] Outras considerações (se necessário): \\
-	\begin{tabular}{p{0.7\textwidth}}
-	~\\\hline
-	~\\\hline
-	~\\\hline
-	~\\\hline
-	\end{tabular}\\[-1mm]
-	\end{itemize}}  }
+ \parbox[t]{.9\textwidth}{
+ O texto submetido:
+ 
+    \begin{enumerate}[tcc,nosep]
+      \item[$\Box$ a)] Está adequado, 
+        \begin{enumerate}
+          \item[$\Box$ a.1)] dispensando correções do texto.
+          \item[$\Box$ a.2)] sendo necessário correções, conforme a seguir (e anotações anexas).        
+            \begin{description}[tcc,noitemsep]
+            	\item[$\Box$] Ortográfica
+            	\item[$\Box$] Regras de Escrita
+            	\item[$\Box$] Equações
+            	\item[$\Box$] Resumo
+            	\item[$\Box$] Abstract
+            	\item[$\Box$] Índice
+            	\item[$\Box$] Introdução
+            	\item[$\Box$] Conclusões
+            	\item[$\Box$] Corpo do Trabalho
+            	\item[$\Box$] Resultados
+            	\item[$\Box$] Adicionar mais exemplos
+            	\item[$\Box$] Figuras
+            	\item[$\Box$] Tabelas
+            \end{description}
+        \end{enumerate}
+      \item[$\Box$ b)] Necessita ser revisto/re-escrito,\footnotemark[2] e: 
+        \begin{itemize}
+          \item[$\Box$ b.1)] basta a revisão final do texto pelo orientador.
+          \item[$\Box$ b.2)] revisarei o trabalho depois de corrigido.
+        \end{itemize}
+      \item[]
+	    \item[$\Box$] Outras considerações (se necessário): \\
+    	\begin{tabular}{p{0.7\textwidth}}
+        	~\\\hline
+        	~\\\hline
+        	~\\\hline
+        	~\\\hline
+    	\end{tabular}\\[-1mm]
+	\end{enumerate}
+}  
+}
   \footnotetext[2]{Neste caso \DataFields{student}{article} alun\DataFields{student}{article} estará em EXAME e receberá conceito final C ou D, conforme revisão final do texto.}
 }
 
@@ -848,15 +856,15 @@ O texto submetido:
         & \UseLabel{board} \\\hline%
         \IfBooleanTF{#1}
           {
-            \multirow{4}={\DataFields{student}{name}} %
+            \multirow{3}={\DataFields{student}{name}} %
             &\DataFields{student.reviewer[1]}{name}\\%
           }%
           {%
-            \multirow{3}={\DataFields{student}{name}}%
+            \multirow{2}={\DataFields{student}{name}}%
           }
         &\DataFields{student.reviewer[2]}{name}\\%
-        &\DataFields{student.reviewer[3]}{name}\\%
-        & ~\\[-2.5ex]
+        &\DataFields{student.reviewer[3]}{name}\\[0.25ex]%
+%        & ~\\[-2.5ex]
         \multicolumn{2}{l}{\studentCoadvLabelCase} \\\hline%
       \end{tabular}%
     \end{center}%
@@ -905,14 +913,14 @@ O texto submetido:
 \NewDocumentCommand{\studentLine}{s}{%
   \IfBooleanTF{#1}%
     {%
-      \multirow{4}={\textbf{\DataFields{student}{name}}}
+      \multirow[c]{3}={\textbf{\DataFields{student}{name}}}%
       \ReviewerLine{1}\\*
-    }
+    }%
     {%
-      \multirow{3}={\textbf{\DataFields{student}{name}}}    
-    }
+      \multirow[c]{2}={\textbf{\DataFields{student}{name}}}%    
+    }%
     \ReviewerLine{2}\\*%
-    \nopagebreak\ReviewerLine{3}\\[0.75ex]%
+    \ReviewerLine{3}\\*%[0.75ex]%
     \multicolumn{6}{l}{\studentCoadvLabelCase} & \textbf{\DataFields{student}{gradeavrg}} & \textbf{\DataFields{student}{grade}}%\\ \hline%   
 }
 
@@ -920,8 +928,11 @@ O texto submetido:
    \kill\nopagebreak\\[-2ex]%
    \multicolumn{#1}{p{#2}}{\ \ \ \UseLabel{worktitle}: \DataFields{student}{worktitle}}\\*       
    \multicolumn{#1}{l}{\ \ \ (\UseLabel{Nproc}: \DataFields{student}{Nproc}) \UseLabel{student.ID}: \DataFields{student}{ID} / \DataFields{student}{email}}\\*  
-   \multicolumn{#1}{l}{\ \ \ \color{darkerblue}\UseLabel{advisor.email}: \DataFields{student.advisor}{email} \UseLabel{phone}: \DataFields{student.advisor}{phone}}\\*          
-   \multicolumn{#1}{p{#2}}{\ \ \ \color{darkerred}\UseLabel{board}: \DataFields{student.reviewer[1]}{email} (\DataFields{student.reviewer[1]}{phone}) / \DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone}) / \DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}\\*          
+%%%   \multicolumn{#1}{l}{\ \ \ \color{darkerblue}\UseLabel{advisor.email}: \DataFields{student.advisor}{email} \UseLabel{phone}: \DataFields{student.advisor}{phone}}\\*          
+%%%   \multicolumn{#1}{p{#2}}{\ \ \ \color{darkerred}\UseLabel{board}: \DataFields{student.reviewer[1]}{email} (\DataFields{student.reviewer[1]}{phone}) / \DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone}) / \DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}\\*          
+
+   \multicolumn{#1}{p{#2}}{{\ \ \ \color{darkerblue}\bf \DataFields{student.advisor}{email} (\DataFields{student.advisor}{phone})} ~~ - ~~
+   {\color{darkerred} \DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone}) / \DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}}\\*          
 
    \multicolumn{#1}{p{#2}}{\ \ \ \UseLabel{remarks}: {\color{red}\textbf{\DataFields{student}{remarks}}}}%\\ \hline
 }
@@ -944,23 +955,23 @@ O texto submetido:
 
 \studentCase%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido APROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido \textbf{APROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
     \studentBoardGraded
   }
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido REPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, tendo sido \textbf{REPROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
      \studentBoardGraded
  }
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi APROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi \textbf{APROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}.\\[2em]
     \studentBoard
   }
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi REPROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ submeteu o trabalho intitulado \emph{\DataFields{student}{worktitle}}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi \textbf{REPROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}.\\[2em]
     \studentBoard
   }
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido REPROVAD\DataFields{student}{Article}  com conceito final \textbf{FF}.
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido \textbf{REPROVAD\DataFields{student}{Article}}  com conceito final \textbf{FF}.
   }
 }
 
@@ -989,23 +1000,23 @@ O texto submetido:
 
 \studentCase%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-date}, tendo sido APROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-date}, tendo sido \textbf{APROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
     \studentBoardGraded*
   }%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-date}, tendo sido REPROVAD\DataFields{student}{Article} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia \DataFields{student}{board-date}, tendo sido \textbf{REPROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}, conforme quadro de notas abaixo.\\[2em]
     \studentBoardGraded*
   }%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia  \DataFields{student}{board-date}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi APROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia  \DataFields{student}{board-date}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi \textbf{APROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}.\\[2em]
     \studentBoard*
   }%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia  \DataFields{student}{board-date}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi REPROVAD\DataFields{student}{Article} com conceito final \DataFields{student}{grade}.\\[2em]
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ apresentou o trabalho intitulado \emph{\DataFields{student}{worktitle}}\  no dia  \DataFields{student}{board-date}, não tendo sido considerad\DataFields{student}{article} apt\DataFields{student}{article} pela banca listada abaixo. Posto em exame, \DataFields{student}{article} mesm\DataFields{student}{article} foi \textbf{REPROVAD\DataFields{student}{Article}} com conceito final \textbf{\DataFields{student}{grade}}.\\[2em]
     \studentBoard*
   }%
   {
-    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido REPROVAD\DataFields{student}{Article}  com conceito final \textbf{FF}.
+    \DataFields{student}{Article} alun\DataFields{student}{article} \emph{\DataFields{student}{name}}\ não concluiu o trabalho de conclusão de Curso tendo sido \textbf{REPROVAD\DataFields{student}{Article}}  com conceito final \textbf{FF}.
   }
 }
 
