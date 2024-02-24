@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.4a} {2024/02/19}
+%% This is version {2.5} {2024/02/25}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -36,7 +36,9 @@
 %%%%%%%%%%%%%%%
 %%  req form - Internship
 %%%%%%%%%%%%%%%
-\SetForm{internshiprequest}{heading}{\UseTerm{title.internship}}
+\ExplSyntaxOn
+\SetForm{internshiprequest}{heading}{\UseTerm{title.internship}\exp_args:Nee \pdfbookmark{\UseTerm{book.internrequestform}}{\UseTerm{book.internrequestform}}}
+\ExplSyntaxOff
 \SetForm{internshiprequest}{title}{\UseTerm{title.requestform}}
 
 %%%
@@ -85,7 +87,9 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 %%%%%%%%%%%%%%%
 %%  supervisor`s form - Internship
 %%%%%%%%%%%%%%%
-\SetForm{internshipsupervisorform}{heading}{\UseTerm{title.internship}}
+\ExplSyntaxOn
+\SetForm{internshipsupervisorform}{heading}{\UseTerm{title.internship}\exp_args:Nee \pdfbookmark{\UseTerm{book.internsupervisorform}}{\UseTerm{book.internsupervisorform}}}
+\ExplSyntaxOff
 \SetForm{internshipsupervisorform}{title}{\UseTerm{title.internsupervisorform}}
 \SetForm{internshipsupervisorform}{footnote}{\UseTerm{footnote.supervisorsform}}
 
@@ -130,7 +134,9 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 %%%%%%%%%%%%%%%
 %%  tutor`s form - Internship
 %%%%%%%%%%%%%%%
-\SetForm{internshiptutorform}{heading}{\UseTerm{title.internship}}
+\ExplSyntaxOn
+\SetForm{internshiptutorform}{heading}{\UseTerm{title.internship}\exp_args:Nee \pdfbookmark{\UseTerm{book.interntutorform}}{\UseTerm{book.interntutorform}}}
+\ExplSyntaxOff
 \SetForm{internshiptutorform}{title}{\UseTerm{title.interntutorform}}
 
 %%%
@@ -147,8 +153,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
     \vfill%
 
     Considerações d\DataFields{student.tutor}{article} Prof\DataFields{student.tutor}{narticle}. Tutor\DataFields{student.tutor}{narticle} sobre o Estágio: 
-    
-    \BlankLines{5}%
+    \BlankLines{6}%
 
     \vfill%
 
@@ -161,8 +166,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
     \vfill
 
     Considerações d\ActivityCoord[internship]{article} Prof\ActivityCoord[internship]{narticle}. Coordenador\ActivityCoord[internship]{narticle} sobre o Estágio:
-    
-     \BlankLines{5}%
+     \BlankLines{6}%
     \vfill%
 
     \hfill\parbox[t]{.45\textwidth}{\SignatureDate{\UseLabel{signature.internshipcoord}}}
@@ -180,7 +184,9 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\SetForm{attendancelist}{heading}{\UseTerm{title.tcc}}
+\ExplSyntaxOn
+\SetForm{attendancelist}{heading}{\UseTerm{title.tcc}\exp_args:Nee \pdfbookmark{\UseTerm{book.attendancelist}}{\UseTerm{book.attendancelist}}}
+\ExplSyntaxOff
 \SetForm{attendancelist}{title}{\UseTerm{title.attendancelist}}
 \SetForm{attendancelist}{opening}{}
 
@@ -205,7 +211,11 @@ Nome do(a) Aluno(a) --- Email\\
 %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\SetForm{calendar-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{calendar-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.calendar-I}}{\UseTerm{book.calendar-I}}}
+\ExplSyntaxOff
+
+%\SetForm{calendar-I}{heading}{\UseTerm{title.tccI}}
 \SetForm{calendar-I}{title}{\UseTerm{title.calendar}}
 \SetForm{calendar-I}{opening}{}
 
@@ -235,7 +245,11 @@ Nome do(a) Aluno(a) --- Email\\
 %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%
 
-\SetForm{calendar-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{calendar-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.calendar-II}}{\UseTerm{book.calendar-II}}}
+\ExplSyntaxOff
+
+%\SetForm{calendar-II}{heading}{\UseTerm{title.tccII}}
 \SetForm{calendar-II}{title}{\UseTerm{title.calendar}}
 \SetForm{calendar-II}{opening}{}
 
@@ -279,7 +293,9 @@ Nome do(a) Aluno(a) --- Email\\
 %%%%%%%%%%%%%%%
 %%  req form - I
 %%%%%%%%%%%%%%%
-\SetForm{request-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{request-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.requestform-I}}{\UseTerm{book.requestform-I}}}
+\ExplSyntaxOff
 \SetForm{request-I}{title}{\UseTerm{title.requestform}}
 \SetForm{request-I}{opening}{
 
@@ -318,7 +334,9 @@ Nome do(a) Aluno(a) --- Email\\
 %%%%%%%%%%%%%%%
 %%  coadvisor - I
 %%%%%%%%%%%%%%%
-\SetForm{coadvisor-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{coadvisor-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.coadvisorform-I}}{\UseTerm{book.coadvisorform-I}}}
+\ExplSyntaxOff
 \SetForm{coadvisor-I}{title}{\UseTerm{title.coadvisorform}}
 \SetForm{coadvisor-I}{opening}{
 
@@ -362,7 +380,9 @@ Nome do(a) Aluno(a) --- Email\\
 %%%%%%%%%%%%%%%
 %%  board approval - I
 %%%%%%%%%%%%%%%
-\SetForm{boardapproval-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{boardapproval-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.boardapproval-I}}{\UseTerm{book.boardapproval-I}}}
+\ExplSyntaxOff
 \SetForm{boardapproval-I}{title}{\UseTerm{title.boardapproval}}
 \SetForm{boardapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
@@ -390,7 +410,9 @@ Nome do(a) Aluno(a) --- Email\\
 %%%%%%%%%%%%%%%
 %%  advisor's approval - I
 %%%%%%%%%%%%%%%
-\SetForm{advisorsapproval-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{advisorsapproval-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.advisorapproval-I}}{\UseTerm{book.advisorapproval-I}}}
+\ExplSyntaxOff
 \SetForm{advisorsapproval-I}{title}{\UseTerm{title.advisorsapproval-I}}
 \SetForm{advisorsapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
@@ -417,7 +439,9 @@ Nome do(a) Aluno(a) --- Email\\
 %%%%%%%%%%%%%%%
 %%  examiner's form - I
 %%%%%%%%%%%%%%%
-\SetForm{examinersform-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{examinersform-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.reviewersform-I}}{\UseTerm{book.reviewersform-I}}}
+\ExplSyntaxOff
 \SetForm{examinersform-I}{title}{\UseTerm{title.reviewersform}}
 \SetForm{examinersform-I}{footnote}{\UseTerm{footnote.reviewersform}}
 \SetForm{examinersform-I}{opening}{%
@@ -469,7 +493,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  rectify approval - I
 %%%%%%%%%%%%%%%
-\SetForm{rectifyapproval-I}{heading}{\UseTerm{title.tccI}}
+\ExplSyntaxOn
+\SetForm{rectifyapproval-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.rectifyapproval-I}}{\UseTerm{book.rectifyapproval-I}}}
+\ExplSyntaxOff
 \SetForm{rectifyapproval-I}{title}{\UseTerm{title.rectifyapproval}}
 \SetForm{rectifyapproval-I}{opening}{\UseTerm{desc.studentwork.full}}
 
@@ -511,7 +537,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  req form - II
 %%%%%%%%%%%%%%%
-\SetForm{request-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{request-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.requestform-II}}{\UseTerm{book.requestform-II}}}
+\ExplSyntaxOff
 \SetForm{request-II}{title}{\UseTerm{title.requestform}}
 
 \SetForm{request-II}{opening}{
@@ -544,10 +572,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
  Os Objetivos do Trabalho e Orientador\DataFields{student.advisor}{narticle}\studentCoadvCase{/Coorientador\DataFields{student.coadvisor}{narticle}}{} seguem sendo os mesmos de TCC I ?
 \begin{itemize}[tcc,nosep]
  \item[$\Box$] SIM
- \item[$\Box$] NÃO, neste caso \textbf{justifique} a mudança no espaço a seguir:
+ \item[$\Box$] NÃO, neste caso \textbf{justifique} a mudança no espaço a seguir:\\[1ex]
  \end{itemize}
   
-
   \DataFields{student}{reason}
 
 }
@@ -563,7 +590,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  coadvisor - II
 %%%%%%%%%%%%%%%
-\SetForm{coadvisor-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{coadvisor-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.coadvisorform-II}}{\UseTerm{book.coadvisorform-II}}}
+\ExplSyntaxOff
 \SetForm{coadvisor-II}{title}{\UseTerm{title.coadvisorform}}
 \SetForm{coadvisor-II}{opening}{
 
@@ -608,7 +637,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  board approval - II
 %%%%%%%%%%%%%%%
-\SetForm{boardapproval-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{boardapproval-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.boardapproval-II}}{\UseTerm{book.boardapproval-II}}}
+\ExplSyntaxOff
 \SetForm{boardapproval-II}{title}{\UseTerm{title.boardapproval}}
 \SetForm{boardapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
@@ -642,7 +673,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  advisor's approval - II
 %%%%%%%%%%%%%%%
-\SetForm{advisorsapproval-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{advisorsapproval-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.advisorapproval-II}}{\UseTerm{book.advisorapproval-II}}}
+\ExplSyntaxOff
 \SetForm{advisorsapproval-II}{title}{\UseTerm{title.advisorsapproval-II}}
 \SetForm{advisorsapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
@@ -669,7 +702,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  receipts - II
 %%%%%%%%%%%%%%%
-\SetForm{receipts-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{receipts-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.receipts-II}}{\UseTerm{book.receipts-II}}}
+\ExplSyntaxOff
 \SetForm{receipts-II}{title}{\UseTerm{title.receipts}}
 \SetForm{receipts-II}{footnote}{\UseTerm{footnote.receipts}}
 
@@ -700,7 +735,9 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%%%%%%%%%%%%%
 %%  examiner's form - II
 %%%%%%%%%%%%%%%
-\SetForm{examinersform-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{examinersform-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.reviewersform-II}}{\UseTerm{book.reviewersform-II}}}
+\ExplSyntaxOff
 \SetForm{examinersform-II}{title}{\UseTerm{title.reviewersform}}
 \SetForm{examinersform-II}{footnote}{\UseTerm{footnote.reviewersform}}
 
@@ -741,7 +778,9 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%%%%%%%%%%%%%
 %%  examiner's form - II
 %%%%%%%%%%%%%%%
-\SetForm{correctionsform-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{correctionsform-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.correctionsform-II}}{\UseTerm{book.correctionsform-II}}}
+\ExplSyntaxOff
 \SetForm{correctionsform-II}{title}{\UseTerm{title.correctionsform}}
 \SetForm{correctionsform-II}{footnote}{\UseTerm{footnote.correctionsform}}
 
@@ -761,22 +800,16 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
       \item[$\Box$ a)] Está adequado, 
         \begin{enumerate}
           \item[$\Box$ a.1)] dispensando correções do texto.
-          \item[$\Box$ a.2)] sendo necessário correções, conforme a seguir (e anotações anexas).        
-            \begin{description}[tcc,noitemsep]
-            	\item[$\Box$] Ortográfica
-            	\item[$\Box$] Regras de Escrita
-            	\item[$\Box$] Equações
-            	\item[$\Box$] Resumo
-            	\item[$\Box$] Abstract
-            	\item[$\Box$] Índice
-            	\item[$\Box$] Introdução
-            	\item[$\Box$] Conclusões
-            	\item[$\Box$] Corpo do Trabalho
-            	\item[$\Box$] Resultados
-            	\item[$\Box$] Adicionar mais exemplos
-            	\item[$\Box$] Figuras
-            	\item[$\Box$] Tabelas
-            \end{description}
+          \item[$\Box$ a.2)] sendo necessário correções, conforme a seguir (e anotações anexas).   
+            \begin{tabular}{llp{2em}ll}
+              $\Box$ & Ortográfica & & $\Box$ & Regras de Escrita \\
+              $\Box$ & Resumo      & & $\Box$ & Abstract \\
+              $\Box$ & Introdução  & & $\Box$ & Conclusões \\
+              $\Box$ & Resultados  & & $\Box$ & Corpo do Trabalho \\
+              $\Box$ & Mais exemplos  & & $\Box$ & Equações \\
+              $\Box$ & Figuras     & & $\Box$ & Tabelas \\
+              $\Box$ & Índice      & &  &  \\
+            \end{tabular}
         \end{enumerate}
       \item[$\Box$ b)] Necessita ser revisto/re-escrito,\footnotemark[2] e: 
         \begin{itemize}
@@ -784,13 +817,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
           \item[$\Box$ b.2)] revisarei o trabalho depois de corrigido.
         \end{itemize}
       \item[]
-	    \item[$\Box$] Outras considerações (se necessário): \\
-    	\begin{tabular}{p{0.7\textwidth}}
-        	~\\\hline
-        	~\\\hline
-        	~\\\hline
-        	~\\\hline
-    	\end{tabular}\\[-1mm]
+	    \item[$\Box$] Outras considerações (se necessário): \BlankLines[-1ex]{6}
 	\end{enumerate}
 }  
 }
@@ -808,7 +835,9 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%%%%%%%%%%%%%
 %%  rectify approval - II
 %%%%%%%%%%%%%%%
-\SetForm{rectifyapproval-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{rectifyapproval-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.rectifyapproval-II}}{\UseTerm{book.rectifyapproval-II}}}
+\ExplSyntaxOff
 \SetForm{rectifyapproval-II}{title}{\UseTerm{title.rectifyapproval}}
 \SetForm{rectifyapproval-II}{opening}{\UseTerm{desc.studentwork.full}}
 
@@ -932,7 +961,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%   \multicolumn{#1}{p{#2}}{\ \ \ \color{darkerred}\UseLabel{board}: \DataFields{student.reviewer[1]}{email} (\DataFields{student.reviewer[1]}{phone}) / \DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone}) / \DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}\\*          
 
    \multicolumn{#1}{p{#2}}{{\ \ \ \color{darkerblue}\bf \DataFields{student.advisor}{email} (\DataFields{student.advisor}{phone})} ~~ - ~~
-   {\color{darkerred} \DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone}) / \DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}}\\*          
+   {\color{darkerred} \studentReviewerSetCase{2}{\DataFields{student.reviewer[2]}{email} (\DataFields{student.reviewer[2]}{phone})}{} / \studentReviewerSetCase{3}{\DataFields{student.reviewer[3]}{email} (\DataFields{student.reviewer[3]}{phone})}{}}}\\*          
 
    \multicolumn{#1}{p{#2}}{\ \ \ \UseLabel{remarks}: {\color{red}\textbf{\DataFields{student}{remarks}}}}%\\ \hline
 }
@@ -942,7 +971,12 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%%%%%%%%%%%%%
 %%  referall letter- I
 %%%%%%%%%%%%%%%
-\SetForm{referral-I}{heading}{\UseTerm{title.tccI}}
+%\SetForm{referral-I}{heading}{\UseTerm{title.tccI}}
+
+\ExplSyntaxOn
+\SetForm{referral-I}{heading}{\UseTerm{title.tccI}\exp_args:Nee \pdfbookmark{\UseTerm{book.referral-I}}{\UseTerm{book.referral-I}}}
+\ExplSyntaxOff
+
 \SetForm{referral-I}{title}{\UseTerm{semester}}
 \SetForm{referral-I}{opening}{\UseTerm{desc.sacad}}
 
@@ -991,7 +1025,11 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%%%%%%%%%%%%%
 %%  referall letter- II
 %%%%%%%%%%%%%%%
-\SetForm{referral-II}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{referral-II}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.referral-II}}{\UseTerm{book.referral-II}}}
+\ExplSyntaxOff
+
+%\SetForm{referral-II}{heading}{\UseTerm{title.tccII}}
 \SetForm{referral-II}{title}{\UseTerm{semester}}
 \SetForm{referral-II}{opening}{\UseTerm{desc.sacad}}
 
@@ -1079,6 +1117,8 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
     \seq_map_inline:Nn \l__ufrgscca_baselist_graded_seq
       {
         \studentselect{##1}
+%        \__ufrgscca_student_emptyfields_if_none:
+        \__ufrgscca_emptyterm_if_none:nnn {3}{student.reviewer}{}
         #2\\\hline
         \studentExtLine{7}{\UseConst{report.tabMult.#1}}\\\hline
         \bool_if:nT {\l__ufrgscca_checklist_bool}
@@ -1113,6 +1153,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
         \seq_map_inline:Nn #3 
           {
             \studentselect{##1}
+            \__ufrgscca_emptyterm_if_none:nnn {3}{student.reviewer}{}
             &\\*
             \multicolumn{#1}{l}{\textbf{\color{#5}\DataFields{student}{name}}}\\*
             \studentExtLine{#1}{\UseConst{#2}}\\*
@@ -1127,7 +1168,9 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%  report TCC - I
 %%%%%%%%%%%%%%%
 \SetForm{report-I}{top}{}
-\SetForm{report-I}{heading}{\vspace*{-5ex}\UseTerm{title.tccI}~ - ~\textbf{\UseTerm{semester}}}
+\ExplSyntaxOn
+\SetForm{report-I}{heading}{\vspace*{-5ex}\UseTerm{title.tccI}~ - ~\textbf{\UseTerm{semester}}\exp_args:Nee \pdfbookmark{\UseTerm{book.report-I}}{\UseTerm{book.report-I}}}
+\ExplSyntaxOff
 %\SetForm{report-I}{title}{}
 \SetForm{report-I}{opening}{}
 
@@ -1146,7 +1189,10 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%  report TCC - II
 %%%%%%%%%%%%%%%
 \SetForm{report-II}{top}{}
-\SetForm{report-II}{heading}{\vspace*{-5ex}\UseTerm{title.tccII}~ - ~\textbf{\UseTerm{semester}}}
+\ExplSyntaxOn
+\SetForm{report-II}{heading}{\vspace*{-5ex}\UseTerm{title.tccII}~ - ~\textbf{\UseTerm{semester}}\exp_args:Nee \pdfbookmark{\UseTerm{book.report-II}}{\UseTerm{book.report-II}}}
+\ExplSyntaxOff
+%\SetForm{report-II}{heading}{\vspace*{-5ex}\UseTerm{title.tccII}~ - ~\textbf{\UseTerm{semester}}}
 %\SetForm{report-II}{title}{Relatório Acompanhamento - \UseTerm{semester}}
 %\SetForm{report-II}{title}{\vspace*{-2ex}\UseTerm{semester}}
 \SetForm{report-II}{opening}{}
@@ -1164,62 +1210,14 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 \SetForm{report-II}{closing}{}
 
 
-
-
-%%%%%%%%%%%%%%%
-%%  Check List TCC - I
-%%%%%%%%%%%%%%%
-\SetForm{checklist-I}{heading}{\UseTerm{title.tccI}}
-\SetForm{checklist-I}{title}{Check~ List~ TCC~ I~ -~ \UseTerm{semester}}
-\SetForm{checklist-I}{opening}{}
-
-%%%
-\SetForm{checklist-I}{opening}{  %
-  \ActivitySelect{tccI}
-  { \scriptsize
-    \begin{longtable}{llllll}%
-    \CheckList{6}{graded}{Alunos~Com~ Conceito}[black]
-    \CheckList{6}{ff}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
-    \CheckList{6}{dismiss}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
-    \end{longtable}
-  }
-  ~\vfill
-}
-
-%%%
-\SetForm{checklist-I}{closing}{}
-
-
-%%%%%%%%%%%%%%%
-%%  Check List TCC - II
-%%%%%%%%%%%%%%%
-\SetForm{checklist-II}{heading}{\UseTerm{title.tccII}}
-\SetForm{checklist-II}{title}{Check~ List~ TCC~ II~ -~ \UseTerm{semester}}
-\SetForm{checklist-II}{opening}{}
-
-%%%
-\SetForm{checklist-II}{opening}{  %
-  \ActivitySelect{tccII}
-  { \scriptsize
-    \begin{longtable}{llllll}%
-    \CheckList{6}{graded}{Alunos~Com~ Conceito}[black]
-    \CheckList{6}{ff}{Desistentes~ com~ conceito~ (2o ~ semestre)}[red]
-    \CheckList{6}{dismiss}{Desistentes~ sem~ conceito~ (1o ~ semestre)}[magenta]
-    \end{longtable}
-  }
-  ~\vfill
-}
-
-%%%
-\SetForm{checklist-II}{closing}{}
-
-
-
-
 %%%%%%%%%%%%%%%
 %%  Boards TCC - II
 %%%%%%%%%%%%%%%
-\SetForm{boards}{heading}{\UseTerm{title.tccII}}
+\ExplSyntaxOn
+\SetForm{boards}{heading}{\UseTerm{title.tccII}\exp_args:Nee \pdfbookmark{\UseTerm{book.boards}}{\UseTerm{book.boards}}}
+\ExplSyntaxOff
+
+%\SetForm{boards}{heading}{\UseTerm{title.tccII}}
 \SetForm{boards}{title}{\UseTerm{board.title}}
 \SetForm{boards}{opening}{}
 
@@ -1276,7 +1274,11 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%%%%%%%%%%%%%
 %%  cocertificate
 %%%%%%%%%%%%%%%
-\SetForm{cocertificate}{heading}{\UseTerm{title.tcc}}
+\ExplSyntaxOn
+\SetForm{cocertificate}{heading}{\UseTerm{title.tcc}\exp_args:Nee \pdfbookmark{\UseTerm{book.cocertificate}}{\UseTerm{book.cocertificate}}}
+\ExplSyntaxOff
+
+%\SetForm{cocertificate}{heading}{\UseTerm{title.tcc}}
 \SetForm{cocertificate}{title}{\UseTerm{semester}}
 \SetForm{cocertificate}{opening}{À quem interessar possa,\\ certificamos que}
 \SetForm{cocertificate}{body}{%

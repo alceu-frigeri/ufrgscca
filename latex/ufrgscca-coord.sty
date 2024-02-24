@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.4a} {2024/02/19}
+%% This is version {2.5} {2024/02/25}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2024/02/19}
-    {2.4a}
+    {2024/02/25}
+    {2.5}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/19},
-     version     .code:n = {2.4a} ,
+     date        .code:n = {2024/02/25},
+     version     .code:n = {2.5} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -78,12 +78,6 @@
     report-II. bool_set:N    = \l__ufrgscca_reportII_bool ,
     report-II. usage:n        = general , 
     
-    checklist-I. bool_set:N    = \l__ufrgscca_checklistI_bool ,
-    checklist-I. usage:n        = general , 
-
-    checklist-II. bool_set:N    = \l__ufrgscca_checklistII_bool ,
-    checklist-II. usage:n        = general , 
-
     boards. bool_set:N       = \l__ufrgscca_boards_bool ,
     boards. usage:n           = general , 
     
@@ -119,8 +113,6 @@
 \RequirePackage{ufrgscca-core}
 \RequirePackage{ufrgscca-forms}
 %\RequirePackage{pgfcalendar}
-
-%
 
 
 \starray_new:n {prof}
@@ -526,15 +518,6 @@
   }
 }%
 
-%%
-%% DEPRECATED, to be removed.
-%%
-%\NewDocumentCommand{\boarddate}{mm}{%%
-%  \SetConsts{%
-%    date:#1 = {#2} ,
-%  }
-%}%
-%
 \NewDocumentCommand{\semester}{m}{%%
   \SetTerms{%
     semester = {#1} ,
@@ -703,10 +686,11 @@
         }
         {\seq_gput_right:cn {l__ufrgscca_#1_list_graded_seq}{#2}}     
     }
-
+    
 
 \NewDocumentCommand{\tcreports}{O{}m}{
   {
+      
       \__ufrgscca_set_reports:n {#1}
       \bool_if:cF {l__ufrgscca_#2_classified_bool}
         { \sortstudentlist{#2} }
@@ -727,15 +711,15 @@
         { \MakeForm{report-I} }
       \bool_if:NT \l__ufrgscca_reportII_bool
         { \MakeForm{report-II} }
-      \bool_if:NT \l__ufrgscca_checklistI_bool
-        { \MakeForm{checklist-I} }
-      \bool_if:NT \l__ufrgscca_checklistII_bool
-        { \MakeForm{checklist-II} }
       \bool_if:NT \l__ufrgscca_boards_bool
         { \MakeForm{boards} }      
       \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
         {
           \studentselect{##1}
+          \eDataSet{student}
+          \__ufrgscca_tlset_rem_accents:Ne \StudentBookMarkTL {\eDataFields{name}~-~}          
+          \__ufrgscca_student_emptyfields_if_none:
+
           \bool_if:NT \l__ufrgscca_cocertificate_bool
             {
               \studentCoadvCase
@@ -751,8 +735,24 @@
           \bool_if:NT \l__ufrgscca_revformsI_bool
             {
               \SetReviewer{2}
+              \studentReviewerSetCase{2}
+                {
+                  \eDataSet{student.reviewer}
+                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                }
+                {
+                  \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+                }
               \MakeForm{examinersform-I}
               \SetReviewer{3}
+              \studentReviewerSetCase{3}
+                {
+                  \eDataSet{student.reviewer}
+                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                }
+                {
+                  \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+                }
               \MakeForm{examinersform-I}
               \MakeForm{rectifyapproval-I}
             }
@@ -765,12 +765,36 @@
           \bool_if:NT \l__ufrgscca_revformsII_bool
             {
               \SetReviewer{1}
+              \studentReviewerSetCase{1}
+                {
+                  \eDataSet{student.reviewer}
+                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                }
+                {
+                  \tl_set:Nn \ReviewerBookMarkTL {~-~1}
+                }
               \MakeForm{examinersform-II}
               \MakeForm{correctionsform-II}
               \SetReviewer{2}
+              \studentReviewerSetCase{2}
+                {
+                  \eDataSet{student.reviewer}
+                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                }
+                {
+                  \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+                }
               \MakeForm{examinersform-II}
               \MakeForm{correctionsform-II}
               \SetReviewer{3}
+              \studentReviewerSetCase{3}
+                {
+                  \eDataSet{student.reviewer}
+                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                }
+                {
+                  \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+                }
               \MakeForm{examinersform-II}
               \MakeForm{correctionsform-II}
               \MakeForm{rectifyapproval-II}
@@ -851,21 +875,6 @@
     \l__ufrgscca_table_tl   
 }
 
-\NewDocumentCommand{\CheckList}{mmmO{red}}{
-    \seq_if_empty:cF {l__ufrgscca_baselist_#2_seq}
-      {
-        &\\
-        \multicolumn{#1}{l}{\textbf{\color{#4}#3}}\\\hline
-        \seq_map_inline:cn {l__ufrgscca_baselist_#2_seq}
-          {
-            \studentselect{##1}
-            &\\[-2ex]
-            ~\multicolumn{#1}{l}{\textbf{\color{#4}\DataFields{student}{name}}}\\*
-            \__ufrgscca_checktable_lines:nn {L1,L2,L3}{C1,C2,C3,C4,C5,C6}\hline
-          }     
-      }
-      
-}
 
 \bool_new:N \l__ufrgscca_checklist_bool
 \bool_set_true:N \l__ufrgscca_checklist_bool

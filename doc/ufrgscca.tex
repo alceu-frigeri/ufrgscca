@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.4a} {2024/02/19}
+%% This is version {2.5} {2024/02/25}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -1052,7 +1052,7 @@ Those commands are only of use when using \tsobj[pkg]{ufrgscca-coord}. \tsmacro{
 \end{codedescribe}
 
 
-\begin{codedescribe}[code,new=2023/11/18,update=2023/12/02,update=2024/01/15]{\studentCase,\studentAdvCase,\studentCoadvCase,\studentDismissCase,\studentNewPageCase,\studentDistinctBoardCase,\studentReviewerCase}
+\begin{codedescribe}[code,new=2023/11/18,update=2023/12/02,update=2024/01/15,update=2024/02/22]{\studentCase,\studentAdvCase,\studentCoadvCase,\studentDismissCase,\studentNewPageCase,\studentDistinctBoardCase,\studentReviewerCase,\studentReviewerSetCase}
 	\begin{codesyntax}%
     \tsmacro{\studentCase}{if-A-B-C,if-D,if-Exam-C,if-Exam-D,if-FF}
     \tsmacro{\studentAdvCase}{if-more-than-one,if-not}
@@ -1060,7 +1060,8 @@ Those commands are only of use when using \tsobj[pkg]{ufrgscca-coord}. \tsmacro{
     \tsmacro{\studentDismissCase}{if-dismiss,if-not}
     \tsmacro{\studentNewPageCase}{if-newpage,if-not}
     \tsmacro{\studentDistinctBoardCase}{if-distinct,if-not}
-    \tsmacro{\studentReviewerCase}{if-marked,if-not}
+    \tsmacro{\studentReviewerCase}{rev-num,if-marked,if-not}
+    \tsmacro{\studentReviewerSetCase}{rev-num,if-set,if-not}
 	\end{codesyntax}
 These are a set of auxiliary conditionals, for instance, \tsobj{\StudentCase} will execute \emph{only one} of the \tsobj[meta]{if-} accordingly.
 \end{codedescribe}

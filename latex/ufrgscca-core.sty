@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.4a} {2024/02/19}
+%% This is version {2.5} {2024/02/25}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2024/02/19}
-    {2.4a}
+    {2024/02/25}
+    {2.5}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/19},
-     version     .code:n = {2.4a} ,
+     date        .code:n = {2024/02/25},
+     version     .code:n = {2.5} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -186,6 +186,7 @@
     grade = 0 ,
     gradetype = ,   
     flag-examreview = \c_false_bool , 
+    flag-set = \c_false_bool , 
   } ,
   altreviewer . struct = {
     first = ,
@@ -425,6 +426,12 @@
       {#2}
   }
 
+\NewDocumentCommand{\studentReviewerSetCase}{mmm}{
+    \starray_term_syntax:n{student.reviewer[#1]}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-set}}
+      {#2}
+      {#3}
+}
 
 \NewDocumentCommand{\studentiterate}{m}{
     \starray_iterate_over:nn{student}{#1}
@@ -612,6 +619,7 @@
 
 \NewDocumentCommand{\examiner}{O{}mmO{}}{%%
   \starray_new_term:nn {student.reviewer}{}
+  \starray_gset_prop:nnn {student.reviewer}{flag-set}{\c_true_bool}
   \__ufrgscca_set_prof:nnnnn {reviewer}{#1}{#2}{#3}{#4}
 }%
 
@@ -644,3 +652,47 @@
 
 \def\emptybox{\framebox[3em]{\color{white}W}}
   
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
+%
+% This below is to create PDF bookmarks without accents (if needed) 
+% for instance, PDFsam uses bookmarks as file names
+%
+%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%
+
+  
+\cs_new_protected:Npn \__ufrgscca_tlset_rem_accents:Nn #1#2
+  {
+    \str_set:Ne \l_tmpa_str {#2}
+    \str_replace_all:Nnn \l_tmpa_str {ã}{a}
+    \str_replace_all:Nnn \l_tmpa_str {õ}{o}
+    \str_replace_all:Nnn \l_tmpa_str {ñ}{n}
+    \str_replace_all:Nnn \l_tmpa_str {á}{a}
+    \str_replace_all:Nnn \l_tmpa_str {é}{e}
+    \str_replace_all:Nnn \l_tmpa_str {í}{i}
+    \str_replace_all:Nnn \l_tmpa_str {ó}{o}
+    \str_replace_all:Nnn \l_tmpa_str {ú}{u}
+    \str_replace_all:Nnn \l_tmpa_str {à}{a}
+    \str_replace_all:Nnn \l_tmpa_str {è}{e}
+    \str_replace_all:Nnn \l_tmpa_str {ì}{i}
+    \str_replace_all:Nnn \l_tmpa_str {ò}{o}
+    \str_replace_all:Nnn \l_tmpa_str {ù}{u}
+    \str_replace_all:Nnn \l_tmpa_str {ä}{a}
+    \str_replace_all:Nnn \l_tmpa_str {ë}{e}
+    \str_replace_all:Nnn \l_tmpa_str {ï}{i}
+    \str_replace_all:Nnn \l_tmpa_str {ö}{o}
+    \str_replace_all:Nnn \l_tmpa_str {ü}{u}
+    \str_replace_all:Nnn \l_tmpa_str {â}{a}
+    \str_replace_all:Nnn \l_tmpa_str {ê}{e}
+    \str_replace_all:Nnn \l_tmpa_str {î}{i}
+    \str_replace_all:Nnn \l_tmpa_str {ô}{o}
+    \str_replace_all:Nnn \l_tmpa_str {û}{u}
+    \str_replace_all:Nnn \l_tmpa_str {ç}{c}
+    \tl_set:Ne #1 {\l_tmpa_str}
+  }    
+  
+\cs_generate_variant:Nn \__ufrgscca_tlset_rem_accents:Nn {Ne}
+

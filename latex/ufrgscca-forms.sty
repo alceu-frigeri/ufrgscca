@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.4a} {2024/02/19}
+%% This is version {2.5} {2024/02/25}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-forms}
-    {2024/02/19}
-    {2.4a}
+    {2024/02/25}
+    {2.5}
     {UFRGS/CCA forms commands}
    
     
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-forms} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/19},
-     version     .code:n = {2.4a} ,
+     date        .code:n = {2024/02/25},
+     version     .code:n = {2.5} ,
      description .code:n = {UFRGS/CCA~ forms~commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -110,35 +110,106 @@
   advisorsapproval-II.code = {
         \MakeForm{advisorsapproval-II}
         },
-  receipts-I.usage = general,
-  receipts-I.code = {
-        \MakeForm{receipts-II}
-        },
   receipts-II.usage = general,
   receipts-II.code = {
-        \MakeForm{receipts-II}
+      \bool_if:nTF \l__ufrgscca_emptyforms_bool
+        {
+          \SetReviewer{1}
+          \tl_set:Nn \ReviewerBookMarkTL {}
+          \MakeForm{receipts-II}
+        }
+        {        
+          \SetReviewer{1}
+          \studentReviewerSetCase{1}
+            {
+              \eDataSet{student.reviewer}
+              \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+            }
+            {
+              \tl_set:Nn \ReviewerBookMarkTL {~-~1}
+            }
+          \MakeForm{receipts-II}
+        }
         },
   examinersforms-I.usage = general,
   examinersforms-I.code = {
-        \SetReviewer{2}
-        \MakeForm{examinersform-I}
-        \SetReviewer{3}
-        \MakeForm{examinersform-I}
+        \bool_if:nTF \l__ufrgscca_emptyforms_bool
+          {
+            \SetReviewer{1}
+            \tl_set:Nn \ReviewerBookMarkTL {}
+            \MakeForm{examinersform-I}
+          }
+          {
+            \SetReviewer{2}
+            \studentReviewerSetCase{2}
+              {
+                \eDataSet{student.reviewer}
+                \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+              }
+              {
+                \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+              }
+            \MakeForm{examinersform-I}
+            \SetReviewer{3}
+            \studentReviewerSetCase{3}
+              {
+                \eDataSet{student.reviewer}
+                \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+              }
+              {
+                \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+              }
+            \MakeForm{examinersform-I}
+          }
         },
   examinersforms-II.usage = general,
   examinersforms-II.code = {
-        \SetReviewer{1}
-        \MakeForm{receipts-II}
-        \MakeForm{examinersform-II}
-        \MakeForm{correctionsform-II}
-        \SetReviewer{2}
-        \MakeForm{receipts-II}
-        \MakeForm{examinersform-II}
-        \MakeForm{correctionsform-II}
-        \SetReviewer{3}
-        \MakeForm{receipts-II}
-        \MakeForm{examinersform-II}
-        \MakeForm{correctionsform-II}
+        \bool_if:nTF \l__ufrgscca_emptyforms_bool
+        {
+          \SetReviewer{1}
+          \tl_set:Nn \ReviewerBookMarkTL {}
+          \MakeForm{receipts-II}
+          \MakeForm{examinersform-II}
+          \MakeForm{correctionsform-II}
+        }
+        {
+          \SetReviewer{1}
+             \studentReviewerSetCase{1}
+              {
+                \eDataSet{student.reviewer}
+                \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+              }
+              {
+                \tl_set:Nn \ReviewerBookMarkTL {~-~1}
+              }
+          \MakeForm{receipts-II}
+          \MakeForm{examinersform-II}
+          \MakeForm{correctionsform-II}
+          \SetReviewer{2}
+            \studentReviewerSetCase{2}
+              {
+                \eDataSet{student.reviewer}
+                \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+              }
+              {
+                \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+              }
+          \MakeForm{receipts-II}
+          \MakeForm{examinersform-II}
+          \MakeForm{correctionsform-II}
+          \SetReviewer{3}
+            \studentReviewerSetCase{3}
+              {
+                \eDataSet{student.reviewer}
+                \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+              }
+              {
+                \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+              }
+          \MakeForm{receipts-II}
+          \MakeForm{examinersform-II}
+          \MakeForm{correctionsform-II}
+        }
         },
   rectifyapproval-I.usage = general,
   rectifyapproval-I.code = {
@@ -152,14 +223,19 @@
 
 
 \NewDocumentCommand{\tcforms}{m}{%
+  \bool_set_false:N \l__ufrgscca_emptyforms_bool
   \__ufrgscca_student_emptyfields_if_none:
+  \eDataSet{student}
+  \tl_set:Ne \StudentBookMarkTL {\eDataFields{name}~-~}
   \SetKeys[forms]{#1}%
 }
 
 
 \NewDocumentCommand{\tcemptyforms}{m}
   {
+    \bool_set_true:N \l__ufrgscca_emptyforms_bool
     \__ufrgscca_emptyfields:
+    \tl_set:Nn \StudentBookMarkTL {}
     \SetKeys[forms]{#1}%
   }
 
@@ -180,6 +256,15 @@
 \NewDocumentCommand{\SetForm}{mm+m}{
   \prop_put:Nnn \l__ufrgscca_forms_prop {#1.#2}{#3}
 }
+
+
+%%%
+%  Those variables below are used to set bookmarks at the many forms
+%  They *must* be fully expandable !
+%%%
+\tl_new:N \StudentBookMarkTL
+\tl_new:N \ReviewerBookMarkTL
+\bool_new:N \l__ufrgscca_emptyforms_bool
 
 \NewDocumentCommand{\MakeForm}{m} {
   \begin{center}
