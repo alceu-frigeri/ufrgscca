@@ -513,10 +513,10 @@ Outras considerações, parecer (se necessário): \BlankLines{5}
 %%%
 \SetForm{rectifyapproval-I}{closing}{ 
 
-  \SetReviewer{2}
+  \studentReviewerSelect{2}
   \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
-  \SetReviewer{3}
+  \studentReviewerSelect{3}
   \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
  }
@@ -855,15 +855,15 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 \SetForm{rectifyapproval-II}{closing}{
   \studentDistinctBoardCase
     {
-      \SetReviewer{1}
+      \studentReviewerSelect{1}
       \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
     }
     {}
 
-  \SetReviewer{2}
+  \studentReviewerSelect{2}
   \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
-  \SetReviewer{3}
+  \studentReviewerSelect{3}
   \ApprovalSignature{\DataFields{student.reviewer}{name}}\vfill
 
 

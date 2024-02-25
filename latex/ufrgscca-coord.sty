@@ -448,63 +448,6 @@
 
 
 
-\NewDocumentCommand{\studentCase}{mmmmm}{
-    \starray_term_syntax:n{student}
-    \bool_case:nF
-    {
-      {\starray_parsed_get_prop:n{flag-ff}}
-        {#5}
-      {\starray_parsed_get_prop:n{flag-exam}}
-        {
-          \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
-            {#3}
-            {#4}
-        }
-    }
-    {
-      \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
-        {#1}
-        {#2}
-    }
-}
-
-\NewDocumentCommand{\studentReviewerCase}{mmm}{
-    \starray_term_syntax:n{student.reviewer[#1]}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-examreview}}
-      {#2}
-      {#3}
-}
-
-
-\NewDocumentCommand{\studentDismissCase}{mm}{
-    \starray_term_syntax:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss}}
-      {#1}
-      {#2}
-}
-
-\NewDocumentCommand{\studentremark}{m}{
-  \starray_gset_prop:nnn {student}{remarks}{#1}
-}
-
-
-
-\NewDocumentCommand{\studentNewPageCase}{mm}
-  {
-    \starray_term_syntax:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-newpage}}
-      {#1}
-      {#2}
-  }
-
-\NewDocumentCommand{\studentnewpage}{O{}}{
-  \tl_if_blank:nTF {#1}
-    { \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool} }
-    { \starray_gset_prop:nnn {student[#1]}{flag-newpage}{\c_true_bool} }
-}%
-
-
-
 \NewDocumentCommand{\boardtitle}{m}{%%
   \SetTerms{%
     board.title = {#1} ,
@@ -734,7 +677,7 @@
             }
           \bool_if:NT \l__ufrgscca_revformsI_bool
             {
-              \SetReviewer{2}
+              \studentReviewerSelect{2}
               \studentReviewerSetCase{2}
                 {
                   \eDataSet{student.reviewer}
@@ -744,7 +687,7 @@
                   \tl_set:Nn \ReviewerBookMarkTL {~-~2}
                 }
               \MakeForm{examinersform-I}
-              \SetReviewer{3}
+              \studentReviewerSelect{3}
               \studentReviewerSetCase{3}
                 {
                   \eDataSet{student.reviewer}
@@ -764,7 +707,7 @@
             }
           \bool_if:NT \l__ufrgscca_revformsII_bool
             {
-              \SetReviewer{1}
+              \studentReviewerSelect{1}
               \studentReviewerSetCase{1}
                 {
                   \eDataSet{student.reviewer}
@@ -775,7 +718,7 @@
                 }
               \MakeForm{examinersform-II}
               \MakeForm{correctionsform-II}
-              \SetReviewer{2}
+              \studentReviewerSelect{2}
               \studentReviewerSetCase{2}
                 {
                   \eDataSet{student.reviewer}
@@ -786,7 +729,7 @@
                 }
               \MakeForm{examinersform-II}
               \MakeForm{correctionsform-II}
-              \SetReviewer{3}
+              \studentReviewerSelect{3}
               \studentReviewerSetCase{3}
                 {
                   \eDataSet{student.reviewer}

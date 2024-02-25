@@ -108,8 +108,9 @@ The Current Maintainer of this work is Alceu Frigeri
 
 ## Changelog
 * Version 2.5 (this)
-    - Added PDF bookmarcks to each and every Form/Report page.
+    - Added PDF bookmarks to each and every Form/Report page.
     - Added \studentReviewerSetCase (see manual)
+    - Some reports fine tuning.
 
 * Version 2.4/2.4a (this)
     - a few typos (including [l3kernel prop check](https://github.com/latex3/latex3/issues/1460))

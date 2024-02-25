@@ -114,12 +114,12 @@
   receipts-II.code = {
       \bool_if:nTF \l__ufrgscca_emptyforms_bool
         {
-          \SetReviewer{1}
+          \studentReviewerSelect{1}
           \tl_set:Nn \ReviewerBookMarkTL {}
           \MakeForm{receipts-II}
         }
         {        
-          \SetReviewer{1}
+          \studentReviewerSelect{1}
           \studentReviewerSetCase{1}
             {
               \eDataSet{student.reviewer}
@@ -135,12 +135,12 @@
   examinersforms-I.code = {
         \bool_if:nTF \l__ufrgscca_emptyforms_bool
           {
-            \SetReviewer{1}
+            \studentReviewerSelect{1}
             \tl_set:Nn \ReviewerBookMarkTL {}
             \MakeForm{examinersform-I}
           }
           {
-            \SetReviewer{2}
+            \studentReviewerSelect{2}
             \studentReviewerSetCase{2}
               {
                 \eDataSet{student.reviewer}
@@ -150,7 +150,7 @@
                 \tl_set:Nn \ReviewerBookMarkTL {~-~2}
               }
             \MakeForm{examinersform-I}
-            \SetReviewer{3}
+            \studentReviewerSelect{3}
             \studentReviewerSetCase{3}
               {
                 \eDataSet{student.reviewer}
@@ -166,14 +166,14 @@
   examinersforms-II.code = {
         \bool_if:nTF \l__ufrgscca_emptyforms_bool
         {
-          \SetReviewer{1}
+          \studentReviewerSelect{1}
           \tl_set:Nn \ReviewerBookMarkTL {}
           \MakeForm{receipts-II}
           \MakeForm{examinersform-II}
           \MakeForm{correctionsform-II}
         }
         {
-          \SetReviewer{1}
+          \studentReviewerSelect{1}
              \studentReviewerSetCase{1}
               {
                 \eDataSet{student.reviewer}
@@ -185,7 +185,7 @@
           \MakeForm{receipts-II}
           \MakeForm{examinersform-II}
           \MakeForm{correctionsform-II}
-          \SetReviewer{2}
+          \studentReviewerSelect{2}
             \studentReviewerSetCase{2}
               {
                 \eDataSet{student.reviewer}
@@ -197,7 +197,7 @@
           \MakeForm{receipts-II}
           \MakeForm{examinersform-II}
           \MakeForm{correctionsform-II}
-          \SetReviewer{3}
+          \studentReviewerSelect{3}
             \studentReviewerSetCase{3}
               {
                 \eDataSet{student.reviewer}

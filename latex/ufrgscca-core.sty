@@ -394,7 +394,8 @@
 \NewDocumentCommand{\DataFields}{mm}{
   \starray_get_prop:nn{#1}{#2}
 }  
-\NewDocumentCommand{\SetReviewer}{m}{
+
+\NewDocumentCommand{\studentReviewerSelect}{m}{
   \starray_set_iter:nn {student.reviewer}{#1}
 }
   %
@@ -411,6 +412,10 @@
     \int_compare:nNnTF {\starray_parsed_get_cnt:} > {1}
       {#1}
       {#2}
+}
+
+\NewDocumentCommand{\studentremark}{m}{
+  \starray_gset_prop:nnn {student}{remarks}{#1}
 }
 
 
@@ -432,6 +437,58 @@
       {#2}
       {#3}
 }
+
+
+
+\NewDocumentCommand{\studentCase}{mmmmm}{
+    \starray_term_syntax:n{student}
+    \bool_case:nF
+    {
+      {\starray_parsed_get_prop:n{flag-ff}}
+        {#5}
+      {\starray_parsed_get_prop:n{flag-exam}}
+        {
+          \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
+            {#3}
+            {#4}
+        }
+    }
+    {
+      \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
+        {#1}
+        {#2}
+    }
+}
+
+
+\NewDocumentCommand{\studentDismissCase}{mm}{
+    \starray_term_syntax:n{student}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss}}
+      {#1}
+      {#2}
+}
+
+\NewDocumentCommand{\studentReviewerCase}{mmm}{
+    \starray_term_syntax:n{student.reviewer[#1]}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-examreview}}
+      {#2}
+      {#3}
+}
+
+
+\NewDocumentCommand{\studentnewpage}{O{}}{
+  \tl_if_blank:nTF {#1}
+    { \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool} }
+    { \starray_gset_prop:nnn {student[#1]}{flag-newpage}{\c_true_bool} }
+}%
+
+\NewDocumentCommand{\studentNewPageCase}{mm}
+  {
+    \starray_term_syntax:n{student}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-newpage}}
+      {#1}
+      {#2}
+  }
 
 \NewDocumentCommand{\studentiterate}{m}{
     \starray_iterate_over:nn{student}{#1}
