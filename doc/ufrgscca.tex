@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.5} {2024/02/25}
+%% This is version {2.6} {2024/02/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -541,6 +541,7 @@ All data is stored in two main \tsobj[pack]{starray} defined as follow:
   flag-exam ,
   flag-ff ,
   flag-dismiss , %%% IF it was the 1st semester.
+  flag-other   , %%% "other list", placeholder for 'none of the above' lists.
   flag-newpage , %% if it should go in a new page (board)
   flag-distinctboard , %% if advisor isn't in the board
   flag-approved ,
@@ -1053,12 +1054,12 @@ Those commands are only of use when using \tsobj[pkg]{ufrgscca-coord}. \tsmacro{
 \end{codedescribe}
 
 
-\begin{codedescribe}[code,new=2023/11/18,update=2023/12/02,update=2024/01/15,update=2024/02/22]{\studentCase,\studentAdvCase,\studentCoadvCase,\studentDismissCase,\studentNewPageCase,\studentDistinctBoardCase,\studentReviewerCase,\studentReviewerSetCase}
+\begin{codedescribe}[code,new=2023/11/18,update=2023/12/02,update=2024/01/15,update=2024/02/22,update=2024/02/27]{\studentCase,\studentAdvCase,\studentCoadvCase,\studentDismissOtherCase,\studentNewPageCase,\studentDistinctBoardCase,\studentReviewerCase,\studentReviewerSetCase}
 	\begin{codesyntax}%
     \tsmacro{\studentCase}{if-A-B-C,if-D,if-Exam-C,if-Exam-D,if-FF}
     \tsmacro{\studentAdvCase}{if-more-than-one,if-not}
     \tsmacro{\studentCoadvCase}{if-defined,if-not}
-    \tsmacro{\studentDismissCase}{if-dismiss,if-not}
+    \tsmacro{\studentDismissOtherCase}{if-dismiss-other,if-not}
     \tsmacro{\studentNewPageCase}{if-newpage,if-not}
     \tsmacro{\studentDistinctBoardCase}{if-distinct,if-not}
     \tsmacro{\studentReviewerCase}{rev-num,if-marked,if-not}
@@ -1178,11 +1179,11 @@ These are a set of auxiliary conditionals, for instance, \tsobj{\StudentCase} wi
 %%%%
 
 \paragraph{Student Specific Commands}\label{student-specific-commands}
-\begin{codedescribe}[code,update=2023/11/18,update=2024/02/15]{\studentfate}
+\begin{codedescribe}[code,update=2023/11/18,update=2024/02/15,update=2024/02/25]{\studentfate}
 	\begin{codesyntax}%
 		\tsmacro{\studentfate}[fate]{}
 	\end{codesyntax}
-This assigns the \tsobj[meta]{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \tsobj[meta]{fate} can be either \emph{exam} (if the student is in exam, but didn't got a grade yet) \emph{C} or \emph{D} (in case a student in exam got graded), \emph{FF} for those that haven't finished the work or \emph{dismiss} for those that, for whatever reason, got dismissed. The default is 'do nothing' (no \tsobj[meta]{fate} assigned)
+This assigns the \tsobj[meta]{fate} of a student, for those cases that one cannot rely on the 'calculated one' (from examiners individual grades). \tsobj[meta]{fate} can be either \emph{exam} (if the student is in exam, but didn't got a grade yet) \emph{C} or \emph{D} (in case a student in exam got graded), \emph{FF} for those that haven't finished the work, \emph{dismiss} for those that, for whatever reason, got dismissed and (finally, 2024/02/25) \emph{other} for all other cases (mainly record keeping). The default is 'do nothing' (no \tsobj[meta]{fate} assigned)
 \end{codedescribe}
 \begin{tsremark}
 (2024/02/15) In case some other, odd, value is assigned, this command will record as if the student is in 'exam', with the given grade \tsobj[oarg]{fate} marked in bold red.

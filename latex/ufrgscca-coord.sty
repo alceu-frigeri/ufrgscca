@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.5} {2024/02/25}
+%% This is version {2.6} {2024/02/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2024/02/25}
-    {2.5}
+    {2024/02/29}
+    {2.6}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/25},
-     version     .code:n = {2.5} ,
+     date        .code:n = {2024/02/29},
+     version     .code:n = {2.6} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -274,6 +274,14 @@
                   flag-graded = \c_true_bool ,
                 }
             }
+          {other}
+            {
+              \starray_gset_from_keyval:nn {student} 
+                {
+                  flag-other = \c_true_bool ,
+                  flag-graded = \c_true_bool ,
+                }
+            }
         }
         { %% in case of none of above...
           \starray_gset_from_keyval:nn {student} 
@@ -292,6 +300,7 @@
 \tl_new:N \l__ufrgscca_tmpd_tl
 \tl_new:N \l__ufrgscca_tmpe_tl
 \prg_generate_conditional_variant:Nnn \str_case:nn {en}{T,F,TF}
+
 \cs_new_protected:Npn \__ufrgscca_studentgrade: 
     {
       \starray_term_syntax:n {student}
@@ -314,43 +323,51 @@
                 {
                   \tl_set:Ne \l__ufrgscca_tmpd_tl
                     {\fpeval{round(((\l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/2),2,1)}}
+                  \__ufrgscca_set_grade:n \l__ufrgscca_tmpd_tl
                 }
               {2}
                 {
                   \tl_set:Ne \l__ufrgscca_tmpd_tl
                     {\fpeval{round(((\l__ufrgscca_tmpa_tl + \l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/3),2,1)}}
+                  \__ufrgscca_set_grade:n \l__ufrgscca_tmpd_tl
                 }
             }
-            {  \tl_set:Nn \l__ufrgscca_tmpd_tl {7.99}
-               \starray_gset_prop:nne {student}{reason}{\l__ufrgscca_tmpa_tl-\l__ufrgscca_tmpb_tl-\l__ufrgscca_tmpc_tl-\l__ufrgscca_tmpe_tl}
-             }
-            
-          \starray_gset_prop:nne {student}{gradeavrg}{\l__ufrgscca_tmpd_tl}
-          \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeC}}
-            { % D
-              \starray_gset_prop:nnn {student}{grade}{D}
-            }
-            {
-              \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeB}}
-                { % C
-                  \starray_gset_prop:nnn {student}{grade}{C}
-                  \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
-                }
-                {
-                  \fp_compare:nNnTF {\l__ufrgscca_tmpd_tl} < {\UseConst{NgradeA}}
-                    { % B
-                      \starray_gset_prop:nnn {student}{grade}{B}
-                      \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
-                    }
-                    { % A
-                      \starray_gset_prop:nnn {student}{grade}{A}
-                      \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
-                    }
-                }
+            {  
+              \starray_gset_prop:nne {student}{gradeavrg}{0}
+              \starray_gset_prop:nnn {student}{grade}{\color{red}D*}
             }
         }
       \starray_gset_prop:nnn {student}{flag-graded}{\c_true_bool}
     }
+
+
+\cs_new_protected:Npn \__ufrgscca_set_grade:n #1
+  {
+    \starray_gset_prop:nne {student}{gradeavrg}{#1}
+    \fp_compare:nNnTF {#1} < {\UseConst{NgradeC}}
+      { % D
+        \starray_gset_prop:nnn {student}{grade}{D}
+      }
+      {
+        \fp_compare:nNnTF {#1} < {\UseConst{NgradeB}}
+          { % C
+            \starray_gset_prop:nnn {student}{grade}{C}
+            \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
+          }
+          {
+            \fp_compare:nNnTF {#1} < {\UseConst{NgradeA}}
+              { % B
+                \starray_gset_prop:nnn {student}{grade}{B}
+                \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
+              }
+              { % A
+                \starray_gset_prop:nnn {student}{grade}{A}
+                \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
+              }
+          }
+      }
+  }
+
 
 \cs_new_protected:Npn \__ufrgscca_set_timeslot:nnnnn #1#2#3#4#5
   {
@@ -567,6 +584,7 @@
         \seq_new:c {l__ufrgscca_#1_list_ff_seq}
         \seq_new:c {l__ufrgscca_#1_list_dismiss_seq}
         \seq_new:c {l__ufrgscca_#1_list_graded_seq}
+        \seq_new:c {l__ufrgscca_#1_list_other_seq}
 
         \bool_new:c {l__ufrgscca_#1_classified_bool}
       }
@@ -593,6 +611,7 @@
   \seq_gclear_new:c {l__ufrgscca_#1_list_seq}
   \seq_gclear_new:c {l__ufrgscca_#1_list_ff_seq}
   \seq_gclear_new:c {l__ufrgscca_#1_list_dismiss_seq}
+  \seq_gclear_new:c {l__ufrgscca_#1_list_other_seq}
   \seq_gclear_new:c {l__ufrgscca_#1_list_graded_seq}
   \bool_if_exist:cF {l__ufrgscca_#1_classified_bool}
     { \bool_new:c {l__ufrgscca_#1_classified_bool} }
@@ -614,7 +633,10 @@
       \starray_set_iter_from_hash:nn {student}{#1}
       \starray_term_syntax:n {student}
       \bool_if:nF {\starray_parsed_get_prop:n {flag-graded}}
-        { \__ufrgscca_studentgrade: }        
+        {
+          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
+          \__ufrgscca_studentgrade: 
+        }        
     }
 
 
@@ -626,6 +648,7 @@
         {
           {\starray_parsed_get_prop:n {flag-ff}}{\seq_gput_right:cn {l__ufrgscca_#1_list_ff_seq}{#2}}
           {\starray_parsed_get_prop:n {flag-dismiss}}{\seq_gput_right:cn {l__ufrgscca_#1_list_dismiss_seq}{#2}}
+          {\starray_parsed_get_prop:n {flag-other}}{\seq_gput_right:cn {l__ufrgscca_#1_list_other_seq}{#2}}
         }
         {\seq_gput_right:cn {l__ufrgscca_#1_list_graded_seq}{#2}}     
     }
@@ -640,6 +663,7 @@
       \seq_gset_eq:Nc \l__ufrgscca_baselist_seq {l__ufrgscca_#2_list_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_list_ff_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_list_dismiss_seq}
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_other_seq {l__ufrgscca_#2_list_other_seq}
       \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq {l__ufrgscca_#2_list_graded_seq}
 
       \bool_if:NT \l__ufrgscca_attendance_bool
@@ -671,7 +695,7 @@
             }
           \bool_if:NT \l__ufrgscca_referralI_bool
             {
-              \studentDismissCase
+              \studentDismissOtherCase
                 {}
                 { \MakeForm{referral-I} }
             }
@@ -701,7 +725,7 @@
             }
           \bool_if:NT \l__ufrgscca_referralII_bool
             {
-              \studentDismissCase
+              \studentDismissOtherCase
                 {}
                 { \MakeForm{referral-II} }
             }

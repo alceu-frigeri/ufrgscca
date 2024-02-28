@@ -107,12 +107,16 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.5 (this)
+* Version 2.6 (this)
+    - Added other's case (student fate) for record keeping.
+    - Report adjustments (other's case).
+
+* Version 2.5
     - Added PDF bookmarks to each and every Form/Report page.
     - Added \studentReviewerSetCase (see manual)
     - Some reports fine tuning.
 
-* Version 2.4/2.4a (this)
+* Version 2.4/2.4a
     - a few typos (including [l3kernel prop check](https://github.com/latex3/latex3/issues/1460))
     - extended \studentfate possible values (see documentation).
     - \makeforms code cleanup. switching to \prop_get:NnNTF instead of \prop_item:Nn

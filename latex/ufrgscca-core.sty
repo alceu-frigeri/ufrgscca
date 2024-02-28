@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.5} {2024/02/25}
+%% This is version {2.6} {2024/02/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2024/02/25}
-    {2.5}
+    {2024/02/29}
+    {2.6}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/25},
-     version     .code:n = {2.5} ,
+     date        .code:n = {2024/02/29},
+     version     .code:n = {2.6} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -129,6 +129,7 @@
   flag-exam = \c_false_bool ,
   flag-ff = \c_false_bool ,
   flag-dismiss = \c_false_bool , %%% IF it was the 1st semester.
+  flag-other  = \c_false_bool , %%% "other list", placeholder for 'none of the above' lists.
   flag-newpage = \c_false_bool , %% if it should go in a new page (board)
   flag-distinctboard = \c_false_bool , %% if advisor isn't in the board
   flag-approved = \c_false_bool ,
@@ -461,9 +462,9 @@
 }
 
 
-\NewDocumentCommand{\studentDismissCase}{mm}{
+\NewDocumentCommand{\studentDismissOtherCase}{mm}{
     \starray_term_syntax:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss}}
+    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss} || \starray_parsed_get_prop:n{flag-other}}
       {#1}
       {#2}
 }

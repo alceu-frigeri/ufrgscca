@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.5} {2024/02/25}
+%% This is version {2.6} {2024/02/29}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -105,7 +105,7 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
 \begin{itemize}[tcc,nosep]
  \item Grupo I - Aspectos Profissionais
    \begin{enumerate}[tcc,nosep]
-     \item \textbf{Qualidade do Trabalho}:\emptybox\\ {\footnotesize considerar a qualidade do trabalho tendo em vista o que seria desejável}
+     \item \textbf{Qualidade do Trabalho}:\emptybox\\ {\footnotesize considerar a qualidade do trabalho tendo em vista o que seria desejável.}
      \item \textbf{Engenhosidade}:\emptybox\\ {\footnotesize capacidade de sugerir, projetar ou executar modificações ou inovações.}
      \item \textbf{Conhecimentos}:\emptybox\\ {\footnotesize conhecimento demonstrado no desenvolvimento das atividades programadas.}
      \item \textbf{Cumprimentos das Tarefas}:\emptybox\\ {\footnotesize     considerar o volume de atividades cumpridas dentro de um padrão razoável.}
@@ -113,10 +113,10 @@ Data de Início: {\bf \DataFields{student.internship}{start}}\hfill Previsão de
    \end{enumerate}
  \item Grupo II - Aspectos Humanos
     \begin{enumerate}[tcc,nosep]
-     \item \textbf{Assiduidade}:\emptybox\\ {\footnotesize cumprimento do horário do estágio e ausência de falhas}
+     \item \textbf{Assiduidade}:\emptybox\\ {\footnotesize cumprimento do horário do estágio e ausência de falhas.}
 \item \textbf{Disciplina}:\emptybox\\ {\footnotesize observância das normas e regulamentos internos da empresa.}
 \item \textbf{Sociabilidade}:\emptybox\\ {\footnotesize facilidade de se integrar com colegas e ambiente de trabalho.}
-\item \textbf{Cooperação}:\emptybox\\ {\footnotesize     disposição para cooperar com colegas e para atender a atividades..}
+\item \textbf{Cooperação}:\emptybox\\ {\footnotesize     disposição para cooperar com colegas e para atender a atividades.}
 \item \textbf{Senso de Responsabilidade}:\emptybox\\ {\footnotesize zelo pelo material, equipamentos e bens da empresa.}
     \end{enumerate}
 \end{itemize}
@@ -459,7 +459,7 @@ Nome do(a) Aluno(a) --- Email\\
      \begin{enumerate}[tcc,nosep]
      \item \emptybox\  \textbf{Enquadramento do Tema}. {\footnotesize(peso:2)}\\ {\footnotesize Quão bem o mesmo se enquadra no perfil de um formando em Eng. de Controle e Automação.}
      \item \emptybox\ \textbf{Revisão Bibliográfica}. {\footnotesize(peso:2)}\\ {\footnotesize A revisão apresentada é adequada, suficiente, para o tema do trabalho?}
-     \item \emptybox\ \textbf{Abordagem/Plano de Trabalho Proposto}. {\footnotesize(peso:2)}\\ {\footnotesize Considerar se a abordagem, plano de trabalho proposto, é adequada e factivel.}
+     \item \emptybox\ \textbf{Abordagem/Plano de Trabalho Proposto}. {\footnotesize(peso:2)}\\ {\footnotesize Considerar se a abordagem, plano de trabalho proposto, é adequada e factível.}
      \item \emptybox\ \textbf{Redação}. {\footnotesize(peso:1)}\\ {\footnotesize     Considerar a qualidade do trabalho escrito apresentado.}
      \item { O Trabalho Submetido}
      \begin{enumerate}[tcc,nosep]
@@ -470,7 +470,7 @@ Nome do(a) Aluno(a) --- Email\\
        \end{enumerate}
        \item[$\Box$ b)]  Necessita ser revisto/re-escrito,\footnotemark[3] e: 
        \begin{enumerate}
-         \item[$\Box$ b.1)] basta a revisão final do texto pelo orientador,
+         \item[$\Box$ b.1)] basta a revisão final do texto pelo orientador.
          \item[$\Box$ b.2)] revisarei o trabalho depois de corrigido.
        \end{enumerate}
      \end{enumerate} 
@@ -800,7 +800,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
       \item[$\Box$ a)] Está adequado, 
         \begin{enumerate}
           \item[$\Box$ a.1)] dispensando correções do texto.
-          \item[$\Box$ a.2)] sendo necessário correções, conforme a seguir (e anotações anexas).   
+          \item[$\Box$ a.2)] sendo necessário correções, conforme a seguir (e anotações anexas):   
             \begin{tabular}{llp{2em}ll}
               $\Box$ & Ortográfica & & $\Box$ & Regras de Escrita \\
               $\Box$ & Resumo      & & $\Box$ & Abstract \\
@@ -1134,13 +1134,18 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
     \__ufrgscca_miss_case:nnnnn 
       {7} {report.tabMult.#1}
       {\l__ufrgscca_baselist_ff_seq}
-      {Desistentes~ com~ conceito~ (2o ~ semestre)}
+      {Desistentes~ com~ conceito~FF~ (2o ~ semestre)}
       {red}
     \__ufrgscca_miss_case:nnnnn 
       {7} {report.tabMult.#1}
       {\l__ufrgscca_baselist_dismiss_seq}
       {Desistentes~ sem~ conceito~ (1o ~ semestre)}
       {magenta}
+    \__ufrgscca_miss_case:nnnnn 
+      {7} {report.tabMult.#1}
+      {\l__ufrgscca_baselist_other_seq}
+      {Outros~ (não~ matriculados)}
+      {teal}
     \end{longtable}  
   }
 
@@ -1172,7 +1177,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 \SetForm{report-I}{heading}{\vspace*{-5ex}\UseTerm{title.tccI}~ - ~\textbf{\UseTerm{semester}}\exp_args:Nee \pdfbookmark{\UseTerm{book.report-I}}{\UseTerm{book.report-I}}}
 \ExplSyntaxOff
 %\SetForm{report-I}{title}{}
-\SetForm{report-I}{opening}{}
+\SetForm{report-I}{preopening}{}
 
 %%%
 \SetForm{report-I}{opening}{  %
@@ -1182,7 +1187,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 }
 
 %%%
-\SetForm{report-I}{closing}{}
+%\SetForm{report-I}{closing}{}
 
 
 %%%%%%%%%%%%%%%
@@ -1195,9 +1200,9 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %\SetForm{report-II}{heading}{\vspace*{-5ex}\UseTerm{title.tccII}~ - ~\textbf{\UseTerm{semester}}}
 %\SetForm{report-II}{title}{Relatório Acompanhamento - \UseTerm{semester}}
 %\SetForm{report-II}{title}{\vspace*{-2ex}\UseTerm{semester}}
-\SetForm{report-II}{opening}{}
+%\SetForm{report-II}{opening}{}
 
-
+\SetForm{report-II}{preopening}{}  %
 %%%
 \SetForm{report-II}{opening}{  %
   { \vspace{-2ex}\tiny
@@ -1207,7 +1212,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 
 
 %%%
-\SetForm{report-II}{closing}{}
+%\SetForm{report-II}{closing}{}
 
 
 %%%%%%%%%%%%%%%
