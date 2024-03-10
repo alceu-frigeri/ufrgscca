@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.6} {2024/02/29}
+%% This is version {2.7} {2024/03/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplClass
     {ufrgscca}
-    {2024/02/29}
-    {2.6}
+    {2024/03/10}
+    {2.7}
     {UFRGS/CCA class}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/29},
-     version     .code:n = {2.6} ,
+     date        .code:n = {2024/03/10},
+     version     .code:n = {2.7} ,
      description .code:n = {UFRGS/CCA~a~report~based~class~bundle}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -69,7 +69,7 @@
 %%%%%%%%%%%%%%%%%%%%%%
 %%%
 %%% TODO: to be decided, where to leave that !! 
-%%%       general purpose _propeties !!
+%%%       general purpose _properties !!
 %%% 
 %%%%%%%%%%%%%%%%%%%%%%
 
@@ -140,6 +140,12 @@
 \cs_new:Npn \UseConst #1 
   { \prop_item:Ne \l__ufrgscca_const_prop {#1} }
 
+\NewDocumentCommand{\GetConst}{mm}
+  {
+    \prop_get:NnNTF \l__ufrgscca_const_prop {#1} \l_tmpa_tl
+      {\tl_gset:Ne #2 \l_tmpa_tl}
+      {\tl_gset:Nn #2 {}}
+  }
 
 \bool_new:N \l__ufrgscca_repeatfields_bool
 \bool_new:N \l__ufrgscca_timesroman_bool

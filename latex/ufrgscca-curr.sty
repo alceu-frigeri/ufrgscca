@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.6} {2024/02/29}
+%% This is version {2.7} {2024/03/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-curr}
-    {2024/02/29}
-    {2.6}
+    {2024/03/10}
+    {2.7}
     {UFRGS/CCA curricula commands}
 
 %%%%%%%
@@ -41,8 +41,8 @@
   {
      name        .code:n = {ufrgscca-curr} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/29},
-     version     .code:n = {2.6} ,
+     date        .code:n = {2024/03/10},
+     version     .code:n = {2.7} ,
      description .code:n = {UFRGS/CCA~ curricula~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -56,6 +56,18 @@
 %%%%%%%
 
 
+%%%%%%%
+%%%
+%%% V-less nightmare TO BE DONE!
+%%%        => convert all V referenced sequences into 'starray sub structures'
+%%%           less efficient, but 'portable' and V-safe.
+%%%
+%%%        => Alternative approach: convert a _seq into a clist then store it into starray (argh! double damm)
+%%%        => or just use ..._clist instead of _seq (replacing all _seq that are stored in starrays by a _clist)
+%%%
+%%%%%%%
+
+
 \starray_new:n {topics}
 \starray_new:n {classes}
 \starray_new:n {curricula}
@@ -65,7 +77,7 @@
     self  = ,
     name = ,
     color = ,
-    class lst = , %list (sequence) of classes
+    uniqueID = , % to replace class list (V-less)
   }
 
 \starray_def_from_keyval:nn {classes}
@@ -76,9 +88,7 @@
    summary = ,
    topic = ,
    remark = ,
-   bib seq = ,
-   bib basic seq = ,
-   bib compl seq = ,
+   uniqueID = , % to replace the many V sequences (bib)
    ref . struct = {
      curr = ,
      sem = ,
@@ -184,8 +194,13 @@
         name = {#3} ,
         color = {#1} ,
       }
-%    \seq_clear:N \l_tmpa_seq
-    \starray_set_prop:nnV {topics}{class lst} \c_empty_seq
+    %% V-less : replacing / new seq
+    \starray_get_unique_id:nNTF {topics}\l__ufrgscca_uniqueID_tmpa_tl
+      {}
+      {\tl_set:Nn \l__ufrgscca_uniqueID_tmpa_tl {}}
+    \starray_set_prop:nnV {topics}{uniqueID} \l__ufrgscca_uniqueID_tmpa_tl
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpa_tl _seq}
+    
   }
 
 \tl_new:N \l__ufrgscca_default_topic_tl
@@ -203,16 +218,22 @@
         name = {#4} ,
         topic = {#1} ,
       }
-%    \seq_clear:N \l_tmpa_seq
-    \starray_set_prop:nnV {classes}{bib seq} \c_empty_seq
-    \starray_set_prop:nnV {classes}{bib basic seq} \c_empty_seq
-    \starray_set_prop:nnV {classes}{bib compl seq} \c_empty_seq
+  %% V-less : new
+    \starray_get_unique_id:nNTF {classes}\l__ufrgscca_uniqueID_tmpb_tl
+      {}
+      {\tl_set:Nn \l__ufrgscca_uniqueID_tmpb_tl {}}
+    \starray_set_prop:nnV {classes}{uniqueID} \l__ufrgscca_uniqueID_tmpb_tl
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq}
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq}
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq}
+    
 
     \starray_set_iter_from_hash:nn {topics}{#1}
-    \starray_get_prop:nnN {topics}{class lst} \l_tmpa_seq
-    \seq_put_right:Nn \l_tmpa_seq{#2}
-    \starray_set_prop:nnV {topics}{class lst} \l_tmpa_seq
+    %% V-less : new seq
+    \starray_get_prop:nnN {topics}{uniqueID} \l__ufrgscca_uniqueID_tmpa_tl
+    \seq_put_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpa_tl _seq} {#2}    
   }
+  
 \NewDocumentCommand{\csummary}{m}
   {
     \starray_set_prop:nnn {classes}{summary}{#1}
@@ -226,31 +247,30 @@
 
 \NewDocumentCommand{\bibdef}{O{main}m}
   {
+    %% V-less
+    \starray_get_prop:nnN {classes}{uniqueID} \l__ufrgscca_uniqueID_tmpb_tl
+    
     \str_case:nnF {#1}
       {
         {main}
           {
-            \starray_get_prop:nnN {classes}{bib seq} \l_tmpa_seq
-            \seq_put_right:Nn \l_tmpa_seq {#2}
-            \starray_set_prop:nnV {classes}{bib seq} \l_tmpa_seq
+            %% V-less
+            \seq_gput_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq} {#2}
           }
         {basic}%{ \starray_get_prop:nnN {classes}{bib basic seq} \l_tmpa_seq }
           {
-            \starray_get_prop:nnN {classes}{bib basic seq} \l_tmpa_seq
-            \seq_put_right:Nn \l_tmpa_seq {#2}
-            \starray_set_prop:nnV {classes}{bib basic seq} \l_tmpa_seq
+            %% V-less
+            \seq_gput_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq} {#2}
           }
         {compl}%{ \starray_get_prop:nnN {classes}{bib compl seq} \l_tmpa_seq }
           {
-            \starray_get_prop:nnN {classes}{bib compl seq} \l_tmpa_seq
-            \seq_put_right:Nn \l_tmpa_seq {#2}
-            \starray_set_prop:nnV {classes}{bib compl seq} \l_tmpa_seq
+            %% V-less
+            \seq_gput_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq} {#2}
           }
       }
       {
-        \starray_get_prop:nnN {classes}{bib seq} \l_tmpa_seq
-        \seq_put_right:Nn \l_tmpa_seq {#2}
-        \starray_set_prop:nnV {classes}{bib seq} \l_tmpa_seq
+            %% V-less
+            \seq_put_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq} {#2}
       }
   }
 
@@ -382,38 +402,36 @@
 
         \starray_get_prop:nnN {classes}{summary} \l__ufrgscca_tmp_summary_tl
         \use:e   { &  &  &   &  & \exp_not:N \smaller \l__ufrgscca_tmp_summary_tl\\*}
+               
+        %% V-less
+        \starray_get_prop:nnN {classes}{uniqueID} \l_tmpa_tl
+        \tl_gset:Ne \l__ufrgscca_uniqueID_tmpb_tl {\l_tmpa_tl}
 
          %% bibliography I
-        \starray_get_prop:nnN {classes}{bib seq} \l__ufrgscca_tmp_bib_seq
-        \seq_gset_eq:NN \l__ufrgscca_tmp_bibB_seq \l__ufrgscca_tmp_bib_seq
-        \seq_if_empty:NF \l__ufrgscca_tmp_bibB_seq
-          {
+        \seq_if_empty:cF {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq}
+          {                                     
             &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Básica~ Essencial}\\*
-            \seq_map_inline:Nn \l__ufrgscca_tmp_bibB_seq
+            \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq}
               {
                 &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
 
          %% bibliography II
-        \starray_get_prop:nnN {classes}{bib basic seq} \l__ufrgscca_tmp_bib_seq
-        \seq_gset_eq:NN \l__ufrgscca_tmp_bibB_seq \l__ufrgscca_tmp_bib_seq
-        \seq_if_empty:NF \l__ufrgscca_tmp_bibB_seq
+        \seq_if_empty:cF {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq}
           {
             &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Básica}\\*
-            \seq_map_inline:Nn \l__ufrgscca_tmp_bibB_seq
+            \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq}
               {
                 &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
 
          %% bibliography III
-        \starray_get_prop:nnN {classes}{bib compl seq} \l__ufrgscca_tmp_bib_seq
-        \seq_gset_eq:NN \l__ufrgscca_tmp_bibB_seq \l__ufrgscca_tmp_bib_seq
-        \seq_if_empty:NF \l__ufrgscca_tmp_bibB_seq
+        \seq_if_empty:cF {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq}
           {
            &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Complementar}\\*
-            \seq_map_inline:Nn \l__ufrgscca_tmp_bibB_seq
+            \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq}
               {
                  &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
@@ -445,8 +463,10 @@
                 \tl_set:Nn \l__ufrgscca_tmp_color_tl {black}
               }
             \use:e { & \exp_not:N \multicolumn{2}{J{11cm}}{\exp_not:N \textcolor{\l__ufrgscca_tmp_color_tl}{\exp_not:N \textbf{\l__ufrgscca_tmp_name_tl} }}}\\\hline
-            \starray_get_prop:nnN {topics}{class lst} \l__ufrgscca_tmp_classlst_seq
-            \seq_map_inline:Nn \l__ufrgscca_tmp_classlst_seq
+
+        %% V-less : to be replaced
+            \starray_get_prop:nnN {topics}{uniqueID} \l__ufrgscca_uniqueID_tmpa_tl
+             \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpa_tl _seq} 
               {
                 \starray_set_iter_from_hash:nn {classes}{##1}
                 \starray_get_prop:nnN {classes}{name} \l__ufrgscca_tmp_name_tl

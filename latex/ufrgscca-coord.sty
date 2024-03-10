@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.6} {2024/02/29}
+%% This is version {2.7} {2024/03/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2024/02/29}
-    {2.6}
+    {2024/03/10}
+    {2.7}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/29},
-     version     .code:n = {2.6} ,
+     date        .code:n = {2024/03/10},
+     version     .code:n = {2.7} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -54,6 +54,17 @@
   }  
 %%%%%%%
 %%% End of cut-n-paste
+%%%%%%%
+
+
+
+%%%%%%%
+%%%
+%%% V-less : Blocks of code affected: 
+%%%          Coord (checklist) 'kind of easy'
+%%%          curr (all!)  'to be seen how'
+%%%          ppc (all!)  'to be seen how'
+%%%
 %%%%%%%
 
 
@@ -656,7 +667,13 @@
 
 \NewDocumentCommand{\tcreports}{O{}m}{
   {
-      
+      \seq_map_inline:cn {l__ufrgscca_#2_list_seq}
+        {
+          \starray_set_iter_from_hash:nn {student}{##1}
+          \emptytermifnone{student.advisor}
+          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
+          \emptytermifnone{student.altreviewer}        
+        }
       \__ufrgscca_set_reports:n {#1}
       \bool_if:cF {l__ufrgscca_#2_classified_bool}
         { \sortstudentlist{#2} }
@@ -776,18 +793,27 @@
 \prop_new:N \l__ufrgscca_checkB_prop
 \prop_new:N \l__ufrgscca_checkref_prop
 
-\NewDocumentCommand{\checkdef}{mmm}{
-  \starray_get_prop:nnN {activity}{chkmarked}\l__ufrgscca_check_prop
-  \prop_gput:Nnn \l__ufrgscca_check_prop {#1}{\__ufrgscca_checkedbox:~\ #3}
-  \starray_gset_prop:nnV {activity}{chkmarked}\l__ufrgscca_check_prop
+\tl_new:N \l__ufrgscca_chkID_tl
+\tl_new:N \l__ufrgscca_chkIDa_tl
+\tl_new:N \l__ufrgscca_chkIDb_tl
 
-  \starray_get_prop:nnN {activity}{chkunmarked}\l__ufrgscca_check_prop
-  \prop_gput:Nnn \l__ufrgscca_check_prop {#1}{\__ufrgscca_uncheckedbox:~\ #3}
-  \starray_gset_prop:nnV {activity}{chkunmarked}\l__ufrgscca_check_prop
+\NewDocumentCommand{\checkdef}{mmm}{
+%  \starray_get_prop:nnN {activity}{chkmarked}\l__ufrgscca_check_prop
+%  \prop_gput:Nnn \l__ufrgscca_check_prop {#1}{\__ufrgscca_checkedbox:~\ #3}
+%  \starray_gset_prop:nnV {activity}{chkmarked}\l__ufrgscca_check_prop
+%
+%  \starray_get_prop:nnN {activity}{chkunmarked}\l__ufrgscca_check_prop
+%  \prop_gput:Nnn \l__ufrgscca_check_prop {#1}{\__ufrgscca_uncheckedbox:~\ #3}
+%  \starray_gset_prop:nnV {activity}{chkunmarked}\l__ufrgscca_check_prop
+%  
+%  \starray_get_prop:nnN {activity}{chkref}\l__ufrgscca_check_prop
+%  \prop_gput:Nnn \l__ufrgscca_check_prop {#2}{#1}
+%  \starray_gset_prop:nnV {activity}{chkref}\l__ufrgscca_check_prop
   
-  \starray_get_prop:nnN {activity}{chkref}\l__ufrgscca_check_prop
-  \prop_gput:Nnn \l__ufrgscca_check_prop {#2}{#1}
-  \starray_gset_prop:nnV {activity}{chkref}\l__ufrgscca_check_prop
+  \starray_get_prop:nnN {activity}{chkID}\l__ufrgscca_chkID_tl
+  \prop_gput:cnn {l__ufrgscca_ \l__ufrgscca_chkID_tl _chkmarked_prop} {#1}{\__ufrgscca_checkedbox:~\ #3}
+  \prop_gput:cnn {l__ufrgscca_ \l__ufrgscca_chkID_tl _chkunmarked_prop} {#1}{\__ufrgscca_uncheckedbox:~\ #3}
+  \prop_gput:cnn {l__ufrgscca_ \l__ufrgscca_chkID_tl _chkref_prop} {#2}{#1}
 }
 
 \cs_generate_variant:Nn \prop_gput:Nnn {Nee}
@@ -798,9 +824,16 @@
 \NewDocumentCommand{\checklist}{O{}m}{
   \tl_if_blank:nF {#1}
     {  \starray_set_iter_from_hash:nn {activity}{#1}  }
-  \starray_get_prop:nnN {student}{checklist}\l__ufrgscca_check_prop
-  \starray_get_prop:nnN {activity}{chkmarked}\l__ufrgscca_checkB_prop
-  \starray_get_prop:nnN {activity}{chkref}\l__ufrgscca_checkref_prop
+%  \starray_get_prop:nnN {student}{checklist}\l__ufrgscca_check_prop
+%  \starray_get_prop:nnN {activity}{chkmarked}\l__ufrgscca_checkB_prop
+%  \starray_get_prop:nnN {activity}{chkref}\l__ufrgscca_checkref_prop
+  %% V-less : checklists as hash_.... prop
+  \starray_get_prop:nnN {student}  {chkID} \l__ufrgscca_chkIDa_tl
+  \starray_get_prop:nnN {activity} {chkID} \l__ufrgscca_chkIDb_tl
+  \prop_set_eq:Nc \l__ufrgscca_check_prop {l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop} 
+  \prop_set_eq:Nc \l__ufrgscca_checkB_prop {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkmarked_prop} 
+  \prop_set_eq:Nc \l__ufrgscca_checkref_prop {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkref_prop}    
+  
   \clist_map_inline:nn {#2}
     {
       \prop_get:NnNT \l__ufrgscca_checkref_prop {##1} \l__ufrgscca_checkref_tl
@@ -809,7 +842,9 @@
           \prop_gput:Nee \l__ufrgscca_check_prop {\l__ufrgscca_checkref_tl} {\l__ufrgscca_checkB_tl}
         }
     }
-    \starray_gset_prop:nnV {student}{checklist}{\l__ufrgscca_check_prop}
+%    \starray_gset_prop:nnV {student}{checklist}{\l__ufrgscca_check_prop}
+    %% V-less : could be improved, direct reference
+    \prop_set_eq:cN {l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop} \l__ufrgscca_check_prop
 }
 
 \prop_new:N \l__ufrgscca_check_list_prop
@@ -819,8 +854,17 @@
 
 
 \cs_new_protected:Npn \__ufrgscca_checktable_lines:nn #1#2 {
-  \starray_get_prop:nnN {activity} {chkunmarked} \l__ufrgscca_checkA_prop
-  \starray_get_prop:nnN {student}{checklist}\l__ufrgscca_check_prop
+%  \starray_get_prop:nnN {activity} {chkunmarked} \l__ufrgscca_checkA_prop
+%  \starray_get_prop:nnN {student}  {checklist}   \l__ufrgscca_check_prop
+
+  %% V-less : checklists as hash_.... prop
+  \starray_get_prop:nnN {student}  {chkID} \l__ufrgscca_chkIDa_tl
+  \starray_get_prop:nnN {activity} {chkID} \l__ufrgscca_chkIDb_tl
+  \prop_set_eq:Nc \l__ufrgscca_check_prop  {l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop} 
+  \prop_set_eq:Nc \l__ufrgscca_checkA_prop {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkunmarked_prop} 
+  
+%  \prop_show:N \l__ufrgscca_check_prop
+%  \prop_show:c {l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop}
   
   \prop_map_inline:Nn \l__ufrgscca_check_prop
     { \prop_gput:Nnn \l__ufrgscca_checkA_prop {##1}{##2}  }  

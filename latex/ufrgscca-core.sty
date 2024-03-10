@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.6} {2024/02/29}
+%% This is version {2.7} {2024/03/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2024/02/29}
-    {2.6}
+    {2024/03/10}
+    {2.7}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/29},
-     version     .code:n = {2.6} ,
+     date        .code:n = {2024/03/10},
+     version     .code:n = {2.7} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -116,6 +116,7 @@
         carticle = ao(à) ,
         Carticle = Ao(À) ,
   remarks = ,
+  chkID     = , %%% 'unique ID' for checklist
   checklist = , %%% This shall be a property list of check items
   brief = \BlankLines{6} ,
   reason = \BlankLines{6} ,
@@ -267,17 +268,31 @@
         week = {-semana-} ,
         event = {-Descrição-} ,
       } ,
+    chkID = ,        %%% 'unique ID' for checklists
     chkmarked = ,    %%% This shall be a prop list of   marked itens
     chkunmarked = ,  %%% This shall be a prop list of unmarked itens
     chkref = ,       %%% This shall be a prop list of ref      itens
   }
 
+%% workaround (V-less) 
+%%   => \starray_get_uniqueID {starray-ref} .... 
+%%      (might just be parser construct...) and use it to define a unique prop name.
+
+\tl_new:N \l__ufrgscca_tmpID_tl
 \NewDocumentCommand{\NewActivity}{m} {
     \starray_new_term:nn {activity}{#1}
     \starray_new_term:nn {activity.coord}{}
-    \starray_gset_prop:nnV {activity}{chkmarked}\c_empty_prop
-    \starray_gset_prop:nnV {activity}{chkunmarked}\c_empty_prop
-    \starray_gset_prop:nnV {activity}{chkref}\c_empty_prop
+    \starray_get_unique_id:nNTF {activity} \l__ufrgscca_tmpID_tl
+      {}
+      {}
+    \starray_gset_prop:nnV {activity}{chkID} \l__ufrgscca_tmpID_tl
+    \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop}
+    \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkunmarked_prop}
+    \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkref_prop}
+%    \prop_show:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop}
+%    \starray_gset_prop:nnV {activity}{chkmarked}\c_empty_prop
+%    \starray_gset_prop:nnV {activity}{chkunmarked}\c_empty_prop
+%    \starray_gset_prop:nnV {activity}{chkref}\c_empty_prop
 }
 
 
@@ -381,7 +396,12 @@
       name = {#3~ #2} ,
     }
   \__ufrgscca_setgender:nn {student}{#4}
-  \starray_gset_prop:nnV {student}{checklist}\c_empty_prop
+  \starray_get_unique_id:nNTF {student}\l__ufrgscca_tmpID_tl
+    {}
+    {}
+  \starray_gset_prop:nnV {student}{chkID} \l__ufrgscca_tmpID_tl
+  \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _checklist_prop}
+  %\starray_gset_prop:nnV {student}{checklist}\c_empty_prop
 }%
   %
 \NewDocumentCommand{\eDataSet}{m}{

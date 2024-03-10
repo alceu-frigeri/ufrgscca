@@ -107,7 +107,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.6 (this)
+* Version 2.7 (this)
+    - fixing issue https://github.com/alceu-frigeri/ufrgscca/issues/1
+    - removing all V-expansion of property/sequence lists to avoid further issues with l3kernel 
+      issues: https://github.com/alceu-frigeri/starray/issues/6, https://github.com/latex3/latex3/issues/1460 and https://github.com/latex3/latex3/issues/1466
+    - Remarks: code is operational but needs further cleanup!
+
+* Version 2.6
     - Added other's case (student fate) for record keeping.
     - Report adjustments (other's case).
 

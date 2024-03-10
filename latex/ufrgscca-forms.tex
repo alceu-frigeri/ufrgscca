@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.6} {2024/02/29}
+%% This is version {2.7} {2024/03/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,6 +22,19 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
+
+\ExplSyntaxOn
+  \tl_new:N \tmpTabA
+  \tl_new:N \tmpTabB
+  \tl_new:N \tmpTabC
+  \tl_new:N \tmpTabD
+  \tl_new:N \tmpTabE
+  \tl_new:N \tmpTabEx
+  \tl_new:N \tmpTabF
+  \tl_new:N \tmpTabG
+  \tl_new:N \tmpTabMult
+  \tl_new:N \tmpTabAll
+\ExplSyntaxOff
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -881,7 +894,9 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
   {%%
     \footnotesize%
     \begin{center}%
-      \begin{tabular}{p{\UseConst{report.tabA*}}@{\ }p{\UseConst{report.tabB*}}@{\ }c}%\hline%
+      \GetConst{report.tabA*}{\tmpTabA}
+      \GetConst{report.tabB*}{\tmpTabB}
+      \begin{tabular}{p{\tmpTabA}@{\ }p{\tmpTabB}@{\ }c}%\hline%
         & \UseLabel{board} \\\hline%
         \IfBooleanTF{#1}
           {
@@ -906,14 +921,16 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
     {\footnotesize%
       \begin{center}%
         \resizebox{\textwidth}{!}{%
+          \GetConst{report.tabA}{\tmpTabA}
+          \GetConst{report.tabB}{\tmpTabB}
           \IfBooleanTF{#1}
             {%
-              \begin{tabular}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }c@{\ }c@{\ }c@{\ }p{0pt}@{}c@{\ }c}
+              \begin{tabular}{p{\tmpTabA}@{\ }p{\tmpTabB}@{\ }c@{\ }c@{\ }c@{\ }p{0pt}@{}c@{\ }c}
               \HeaderLine{II}
               \studentLine*
             }
             {%
-              \begin{tabular}{p{\UseConst{report.tabA}}@{\ }p{\UseConst{report.tabB}}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}
+              \begin{tabular}{p{\tmpTabA}@{\ }p{\tmpTabB}@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c@{\ }c}
               \HeaderLine{I}
               \studentLine
             }%
@@ -1080,6 +1097,14 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 
 \cs_new_protected:Npn \reportBody #1#2
   {
+    \GetConst{report.tabA}{\tmpTabA}
+    \GetConst{report.tabB}{\tmpTabB}
+    \GetConst{report.tabC}{\tmpTabC}
+    \GetConst{report.tabD}{\tmpTabD}
+    \GetConst{report.tabE}{\tmpTabE}
+    \GetConst{report.tabEx}{\tmpTabEx}
+    \GetConst{report.tabF}{\tmpTabF}
+    \GetConst{report.tabG}{\tmpTabG}
     \str_case:nn {#1}
       {
         {I} 
@@ -1087,14 +1112,14 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
             \ActivitySelect{tccI}
             \begin{longtable}
               {
-                p{\UseConst{report.tabA}}@{\ }
-                p{\UseConst{report.tabB}}@{\ }
-                p{\UseConst{report.tabC}}@{\ }
-                p{\UseConst{report.tabD}}@{\ }
-                p{\UseConst{report.tabE}}@{\ }
-                p{\UseConst{report.tabEx}}@{\ }
-                p{\UseConst{report.tabF}}@{\ }
-                p{\UseConst{report.tabG}}
+                p{\tmpTabA}@{\ }
+                p{\tmpTabB}@{\ }
+                p{\tmpTabC}@{\ }
+                p{\tmpTabD}@{\ }
+                p{\tmpTabE}@{\ }
+                p{\tmpTabEx}@{\ }
+                p{\tmpTabF}@{\ }
+                p{\tmpTabG}
               }
           }
         {II}
@@ -1102,25 +1127,26 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
             \ActivitySelect{tccII}
             \begin{longtable}
               {
-                p{\UseConst{report.tabA}}@{\ }
-                p{\UseConst{report.tabB}}@{\ }
-                p{\UseConst{report.tabC}}@{\ }
-                p{\UseConst{report.tabD}}@{\ }
-                p{\UseConst{report.tabE}}@{\ }
+                p{\tmpTabA}@{\ }
+                p{\tmpTabB}@{\ }
+                p{\tmpTabC}@{\ }
+                p{\tmpTabD}@{\ }
+                p{\tmpTabE}@{\ }
                 p{0pt}@{}
-                p{\UseConst{report.tabF}}@{\ }
-                p{\UseConst{report.tabG}}
+                p{\tmpTabF}@{\ }
+                p{\tmpTabG}
               }
           }
       }
     \HeaderLine{#1}
+    \GetConst{report.tabMult.#1}{\tmpTabMult}
     \seq_map_inline:Nn \l__ufrgscca_baselist_graded_seq
       {
         \studentselect{##1}
 %        \__ufrgscca_student_emptyfields_if_none:
         \__ufrgscca_emptyterm_if_none:nnn {3}{student.reviewer}{}
         #2\\\hline
-        \studentExtLine{7}{\UseConst{report.tabMult.#1}}\\\hline
+        \studentExtLine{7}{\tmpTabMult}\\\hline
         \bool_if:nT {\l__ufrgscca_checklist_bool}
         {
           \multicolumn{7}{l}
@@ -1132,17 +1158,17 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
         }
       }
     \__ufrgscca_miss_case:nnnnn 
-      {7} {report.tabMult.#1}
+      {7} {\tmpTabMult}
       {\l__ufrgscca_baselist_ff_seq}
       {Desistentes~ com~ conceito~FF~ (2o ~ semestre)}
       {red}
     \__ufrgscca_miss_case:nnnnn 
-      {7} {report.tabMult.#1}
+      {7} {\tmpTabMult}
       {\l__ufrgscca_baselist_dismiss_seq}
       {Desistentes~ sem~ conceito~ (1o ~ semestre)}
       {magenta}
     \__ufrgscca_miss_case:nnnnn 
-      {7} {report.tabMult.#1}
+      {7} {\tmpTabMult}
       {\l__ufrgscca_baselist_other_seq}
       {Outros~ (não~ matriculados)}
       {teal}
@@ -1161,7 +1187,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
             \__ufrgscca_emptyterm_if_none:nnn {3}{student.reviewer}{}
             &\\*
             \multicolumn{#1}{l}{\textbf{\color{#5}\DataFields{student}{name}}}\\*
-            \studentExtLine{#1}{\UseConst{#2}}\\*
+            \studentExtLine{#1}{#2}\\*
             \multicolumn{#1}{l}{\studentCoadvLabelCase}\\ \hline
           }     
       }
@@ -1230,7 +1256,12 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
 %%%
 \SetForm{boards}{opening}{  %
   {\footnotesize
-    \begin{longtable}{p{\UseConst{board.tabA}}p{\UseConst{board.tabB}}p{\UseConst{board.tabC}}p{\UseConst{board.tabD}}}%
+    \GetConst{board.tabA}{\tmpTabA}
+    \GetConst{board.tabB}{\tmpTabB}
+    \GetConst{board.tabC}{\tmpTabC}
+    \GetConst{board.tabD}{\tmpTabD}
+    \GetConst{board.tabAll}{\tmpTabAll}
+    \begin{longtable}{p{\tmpTabA}p{\tmpTabB}p{\tmpTabC}p{\tmpTabD}}%
     %\multicolumn{4}{c}{\UseTerm{board.title}}\\\hline
     \hline
     \tl_gclear:N \l__ufrgscca_daytmpa_tl
@@ -1260,7 +1291,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
         && \DataFields{student.reviewer[2]}{name} \\*
         && \DataFields{student.reviewer[3]}{name} \\*
         && ({\DataFields{student.altreviewer[1]}{name}}) \\*
-        \multicolumn{4}{p{\UseConst{board.tabAll}}}
+        \multicolumn{4}{p{\tmpTabAll}}
            {\textsc{Título:}\ \emph{\DataFields{student}{worktitle}}}\\\hline      
       }
     \end{longtable} 

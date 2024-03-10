@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.6} {2024/02/29}
+%% This is version {2.7} {2024/03/10}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-ppc}
-    {2024/02/29}
-    {2.6}
+    {2024/03/10}
+    {2.7}
     {UFRGS/CCA PPC commands}
 
 %%%%%%%
@@ -41,8 +41,8 @@
   {
      name        .code:n = {ufrgscca-ppc} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/02/29},
-     version     .code:n = {2.6} ,
+     date        .code:n = {2024/03/10},
+     version     .code:n = {2.7} ,
      description .code:n = {UFRGS/CCA~ auxiliary~ PPC-related~ (indicators)~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -55,6 +55,17 @@
 %%% End of cut-n-paste
 %%%%%%%
 
+
+%%%%%%%
+%%%
+%%% V-less nightmare TO BE DONE!
+%%%        => convert all V referenced sequences into 'starray sub structures'
+%%%           less efficient, but 'portable' and V-safe.
+%%%
+%%%        => Alternative approach: convert a _seq into a clist then store it into starray (argh! double damm)
+%%%        => or just use ..._clist instead of _seq (replacing all _seq that are stored in starrays by a _clist)
+%%%
+%%%%%%%
 
 
 \keys_define:nn { ufrgscca / ppc}
@@ -103,7 +114,7 @@
     self        = ,
     view        = \c_true_bool ,
     has_lst     = \c_false_bool , 
-    seqlst      = , %this is going to be a sequence of 'ind'
+    seqID       = , %this will have an unique hash (for a sequence)
     ind.struct  = 
       {
         self            = ,
@@ -115,7 +126,7 @@
         is_section      = \c_false_bool ,
         is_subsection   = \c_false_bool ,
         cnt             = 0 , %auxiliar 'counter' (num of references)
-        seqlst          = , %auxiliar list (references' list)
+        seqID           = , %this will have an unique hash (for a sequence)
         labelref        = , %this will contain the 'hyperref label' (at doc's end) to be used.        
         ref.struct      =
           {
@@ -143,15 +154,20 @@
  }
 
 
+\tl_new:N \l__ufrgscca_uniqueID_tmpa_tl
+\tl_new:N \l__ufrgscca_uniqueID_tmpb_tl
 \NewDocumentCommand{\declareindicator}{st+O{noref}mmm}
   {
     %#3: status #4:org #5:mark #6:short text 
       \starray_set_iter_from_hash:nnF {indicator}{#4}
         {
           \starray_new_term:nn {indicator}{#4}
-          \seq_clear:N \l_tmpa_seq
-          \starray_set_prop:nnV {indicator}{seqlst}{\l_tmpa_seq}
-          %\seq_new:c {l__ufrgscca_ind_ #4 _seq}
+          \starray_get_unique_id:nNTF {indicator}\l__ufrgscca_uniqueID_tmpa_tl
+            {}
+            {\tl_set:Nn \l__ufrgscca_uniqueID_tmpa_tl {}}
+          \starray_set_prop:nnV {indicator}{seqID}\l__ufrgscca_uniqueID_tmpa_tl
+          \seq_new:c {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpa_tl _seq}
+          
           \starray_set_prop:nnn {indicator}{self}{#4}
         }
       \starray_new_term:nn {indicator.ind}{@#5}
@@ -161,29 +177,26 @@
           status = {#3} ,
           self   = {#5} ,
           labelref = {@ufrgscca@ #4 @ #5} , %% to be issued when "printing the indicators' list"
-          %seqlst   = {l__ufrgscca_ind_ #4 _ #5 _seq} ,
-          %cnt      = {l__ufrgscca_ind_ #4 _ #5 _cnt_int} ,
         }
-      \seq_clear:N \l_tmpa_seq
-      \starray_set_prop:nnV {indicator.ind}{seqlst}{\l_tmpa_seq}
-      %\seq_new:c {l__ufrgscca_ind_ #4 _ #5 _seq}
-      %\int_new:c {l__ufrgscca_ind_ #4 _ #5 _cnt_int}
+          \starray_get_unique_id:nNTF {indicator.ind}\l__ufrgscca_uniqueID_tmpb_tl
+            {}
+            {\tl_set:Nn \l__ufrgscca_uniqueID_tmpb_tl {}}          
+          \starray_set_prop:nnV {indicator.ind}{seqID}\l__ufrgscca_uniqueID_tmpb_tl
+          \seq_new:c {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpb_tl _seq}
       \IfBooleanTF{#1}
         {
-          \starray_get_prop:nnN {indicator}{seqlst}\l_tmpa_seq
-          \seq_put_right:Nn \l_tmpa_seq {@#5}
-          \starray_set_prop:nnV {indicator}{seqlst}\l_tmpa_seq
-          %\seq_put_right:cn {l__ufrgscca_ind_ #4 _seq}{@#5}
+          %% V-less : 'unique' seq
+          \seq_put_right:cn {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpa_tl _seq}{@#5}
+          
           \starray_set_prop:nnn {indicator.ind}{is_section}{\c_true_bool}
           \starray_set_prop:nnn {indicator}{has_lst}{\c_true_bool}
         }
         {}
       \IfBooleanTF{#2}
         {
-          \starray_get_prop:nnN {indicator}{seqlst}\l_tmpa_seq
-          \seq_put_right:Nn \l_tmpa_seq {@#5}
-          \starray_set_prop:nnV {indicator}{seqlst}\l_tmpa_seq
-          %\seq_put_right:cn {l__ufrgscca_ind_ #4 _seq}{@#5}
+          %% V-less : 'unique' seq
+          \seq_put_right:cn {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpa_tl _seq}{@#5}
+
           \starray_set_prop:nnn {indicator.ind}{is_subsection}{\c_true_bool}
           \starray_set_prop:nnn {indicator}{has_lst}{\c_true_bool}
         }
@@ -212,8 +225,9 @@
   {
     \starray_set_iter_from_hash:nnT {indicator}{#3}
       {
-        \starray_get_prop:nnN {indicator}{seqlst}\l_tmpa_seq
-        \seq_map_inline:Nn \l_tmpa_seq
+        %% V-less : new seq
+        \starray_get_prop:nnN {indicator}{seqID}\l__ufrgscca_uniqueID_tmpa_tl
+        \seq_map_inline:cn {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpa_tl _seq}
           {
             \starray_set_iter_from_hash:nn {indicator.ind}{##1}
             \starray_term_syntax:n {indicator.ind}
@@ -376,12 +390,14 @@
                             {\color{\l__ufrgscca_txtcolor_tl}\starray_get_prop:nn {indicator.ind}{short} \dotfill \normalsize\starray_get_prop:nn {indicator.ind}{status}}
                             
                         \newline \starray_get_prop:nn {indicator.ind}{long} \starray_get_prop:nn {indicator.ind}{extra}
-                        \starray_get_prop:nnN {indicator.ind}{seqlst} \l_tmpa_seq
-                        \seq_if_empty:NF \l_tmpa_seq
+        %% V-less : new seq
+        \starray_get_prop:nnN {indicator.ind}{seqID}\l__ufrgscca_uniqueID_tmpb_tl
+        \seq_if_empty:cF {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpb_tl _seq}
                           {
                             \newline
                             \tl_set:Nn \l_tmpa_tl {} .\dotfill
-                            \seq_map_inline:Nn \l_tmpa_seq
+                            %% V-less : new seq
+                             \seq_map_inline:cn {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpb_tl _seq}
                               {
                                 \l_tmpa_tl \ref{##1} ~(\pageref{##1})
                                 \tl_set:Nn \l_tmpa_tl {,~}
@@ -466,13 +482,20 @@
     {
       \starray_gset_prop:nnn {indicator.ind}{status}{#2}
     }
-    \starray_get_prop:nnN {indicator.ind}{seqlst} \l_tmpa_seq
+    %% V-less : replacing / new seq
+    \starray_get_unique_id:nNTF {indicator.ind}\l__ufrgscca_uniqueID_tmpb_tl
+            {}
+            {\tl_set:Nn \l__ufrgscca_uniqueID_tmpb_tl {}}
+    % {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpb_tl _seq}
+    
     \starray_get_prop:nnN {indicator.ind}{cnt} \l_tmpb_tl
     \int_set:Nn \l_tmpa_int {\l_tmpb_tl + 1}
     \starray_set_prop:nnV {indicator.ind}{cnt} \l_tmpa_int
     \tl_set:Ne \l__ufrgscca_tmp_indref_tl {@indlabel@ #3 @ #4 - \int_use:N \l_tmpa_int }
-    \seq_put_right:Ne \l_tmpa_seq{\l__ufrgscca_tmp_indref_tl}
-    \starray_set_prop:nnV {indicator.ind}{seqlst} \l_tmpa_seq
+    
+    \seq_put_right:ce {l__ufrgscca_ind_ \l__ufrgscca_uniqueID_tmpb_tl _seq} {\l__ufrgscca_tmp_indref_tl}
+
+
     \label{\l__ufrgscca_tmp_indref_tl}
     \starray_term_syntax:n {indicator}
     \bool_if:nT {\starray_parsed_get_prop:n {view}}
