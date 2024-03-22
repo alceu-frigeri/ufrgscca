@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.7} {2024/03/10}
+%% This is version {2.8} {2024/03/22}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,13 +22,13 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\NeedsTeXFormat{LaTeX2e}[2023/11/01]
 
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2024/03/10}
-    {2.7}
+    {2024/03/22}
+    {2.8}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/03/10},
-     version     .code:n = {2.7} ,
+     date        .code:n = {2024/03/22},
+     version     .code:n = {2.8} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -63,13 +63,6 @@
 % starray based student commands%
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%\def\tc@IDrule{30mm}%
-%%%%\def\tc@emailrule{40mm}%
-%%%%\def\tc@namerule{50mm}%
-%%%%\def\tc@titlerule{40mm}%
-%%%%\def\tc@phonerule{20mm}%
-%%%%\def\tc@agreerule{25mm}%
-%%%%\def\tc@daterule{15mm}%
 
 \dim_new:N \l__ufrgscca_ID_rule_dim
 \dim_new:N \l__ufrgscca_email_rule_dim
@@ -245,7 +238,7 @@
  }
 
 
-\prop_new:N \l__ufrgscca_forms_prop
+\prop_new_linked:N \l__ufrgscca_forms_prop
 \starray_new:n {activity}
 \starray_def_from_keyval:nn {activity}
   {
@@ -286,13 +279,9 @@
       {}
       {}
     \starray_gset_prop:nnV {activity}{chkID} \l__ufrgscca_tmpID_tl
-    \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop}
-    \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkunmarked_prop}
-    \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkref_prop}
-%    \prop_show:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop}
-%    \starray_gset_prop:nnV {activity}{chkmarked}\c_empty_prop
-%    \starray_gset_prop:nnV {activity}{chkunmarked}\c_empty_prop
-%    \starray_gset_prop:nnV {activity}{chkref}\c_empty_prop
+    \prop_new_linked:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop}
+    \prop_new_linked:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkunmarked_prop}
+    \prop_new_linked:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkref_prop}
 }
 
 
@@ -401,7 +390,6 @@
     {}
   \starray_gset_prop:nnV {student}{chkID} \l__ufrgscca_tmpID_tl
   \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _checklist_prop}
-  %\starray_gset_prop:nnV {student}{checklist}\c_empty_prop
 }%
   %
 \NewDocumentCommand{\eDataSet}{m}{
@@ -648,14 +636,6 @@
 \NewDocumentCommand{\coadvisorinfo}{mmmm}{%%
   \__ufrgscca_set_prof_info:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
 }%
-
-
-%%%\NewDocumentCommand{\coadvisoremptyifnone}{}{%%
-%%%  \starray_get_cnt:nN {student.coadvisor} \l_tmpa_int
-%%%  \int_if_zero:nTF \l_tmpa_int
-%%%    { \starray_new_term:nn {student.coadvisor}{} }
-%%%    {}
-%%%}%
 
 
 \NewDocumentCommand{\tutor}{O{}mmO{}}{%%

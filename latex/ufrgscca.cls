@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.7} {2024/03/10}
+%% This is version {2.8} {2024/03/22}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,13 +22,13 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\NeedsTeXFormat{LaTeX2e}[2022/06/01]
+\NeedsTeXFormat{LaTeX2e}[2023/11/01]
 
 
 \ProvidesExplClass
     {ufrgscca}
-    {2024/03/10}
-    {2.7}
+    {2024/03/22}
+    {2.8}
     {UFRGS/CCA class}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/03/10},
-     version     .code:n = {2.7} ,
+     date        .code:n = {2024/03/22},
+     version     .code:n = {2.8} ,
      description .code:n = {UFRGS/CCA~a~report~based~class~bundle}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -73,7 +73,7 @@
 %%% 
 %%%%%%%%%%%%%%%%%%%%%%
 
-\prop_new:N \l__ufrgscca_terms_prop
+\prop_new_linked:N \l__ufrgscca_terms_prop
   
 \NewDocumentCommand{\SetHeadings}{m}
   {
@@ -118,7 +118,7 @@
   { \prop_item:Nn \l__ufrgscca_terms_prop {#1} }
 
 
-\prop_new:N \l__ufrgscca_const_prop
+\prop_new_linked:N \l__ufrgscca_const_prop
 
 \NewDocumentCommand{\SetConsts}{m}
   {

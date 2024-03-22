@@ -13,8 +13,8 @@ For more details, see the documentation,
 --------------
 
 ## Requirements
-* a fairly recent LaTeX distribution as recent as 2022/06/01
-(with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand*)
+* a fairly recent LaTeX distribution as recent as 2023/11/01
+(with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand* and *\prop_new_linked:*)
 
 ## Installation
 The stable version is available at [CTAN](https://ctan.org/pkg/ufrgscca).
@@ -107,7 +107,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.7 (this)
+* Version 2.8 (this) 
+    - code speedup thanks to 'linked' property lists. Code now relies on a more recent l3kernel.
+
+* Version 2.7
     - fixing issue https://github.com/alceu-frigeri/ufrgscca/issues/1
     - removing all V-expansion of property/sequence lists to avoid further issues with l3kernel 
       issues: https://github.com/alceu-frigeri/starray/issues/6, https://github.com/latex3/latex3/issues/1460 and https://github.com/latex3/latex3/issues/1466
