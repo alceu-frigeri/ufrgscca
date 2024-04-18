@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.8} {2024/03/22}
+%% This is version {2.9} {2024/04/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-core}
-    {2024/03/22}
-    {2.8}
+    {2024/04/17}
+    {2.9}
     {UFRGS/CCA core commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-core} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/03/22},
-     version     .code:n = {2.8} ,
+     date        .code:n = {2024/04/17},
+     version     .code:n = {2.9} ,
      description .code:n = {UFRGS/CCA~core~commands/data}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -239,6 +239,7 @@
 
 
 \prop_new_linked:N \l__ufrgscca_forms_prop
+
 \starray_new:n {activity}
 \starray_def_from_keyval:nn {activity}
   {
@@ -565,7 +566,7 @@
           {
             last = {#3} ,
             first = {#4} ,
-            name = {#2~#4~ #3} ,
+            name = {#2~ #4~ #3} ,
           }
       }
    \__ufrgscca_setgender:nn {student.#1}{#5}

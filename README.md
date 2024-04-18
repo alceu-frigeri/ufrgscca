@@ -107,7 +107,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.8 (this) 
+* Version 2.9 (this) 
+    - fixing the use of \pdfbookmark after the last hyperref/kernel update (which broke the \MakeForms command).
+
+* Version 2.8
     - code speedup thanks to 'linked' property lists. Code now relies on a more recent l3kernel.
 
 * Version 2.7

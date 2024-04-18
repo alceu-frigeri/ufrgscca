@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.8} {2024/03/22}
+%% This is version {2.9} {2024/04/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-cover}
-    {2024/03/22}
-    {2.8}
+    {2024/04/17}
+    {2.9}
     {UFRGS/CCA cover commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-cover} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/03/22},
-     version     .code:n = {2.8} ,
+     date        .code:n = {2024/04/17},
+     version     .code:n = {2.9} ,
      description .code:n = {UFRGS/CCA~ cover~pages}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -93,7 +93,10 @@
 \NewDocumentCommand{\MakeCoverPages}{m} 
   {
     \__ufrgscca_student_emptyfields_if_none:
-    \seq_set_from_clist:Ne \l__ufrgscca_tmp_seq {\prop_item:Nn \l__ufrgscca_coverpages_prop {#1.clist} }
+%    \seq_set_from_clist:Ne \l__ufrgscca_tmp_seq {\prop_item:Nn \l__ufrgscca_coverpages_prop {#1.clist} }
+
+    \prop_get:NnN \l__ufrgscca_coverpages_prop {#1.clist} \l_tmpa_tl
+    \seq_set_from_clist:Ne \l__ufrgscca_tmp_seq {\l_tmpa_tl }
 
     \seq_map_inline:Nn \l__ufrgscca_tmp_seq 
       {

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.8} {2024/03/22}
+%% This is version {2.9} {2024/04/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-curr}
-    {2024/03/22}
-    {2.8}
+    {2024/04/17}
+    {2.9}
     {UFRGS/CCA curricula commands}
 
 %%%%%%%
@@ -41,8 +41,8 @@
   {
      name        .code:n = {ufrgscca-curr} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/03/22},
-     version     .code:n = {2.8} ,
+     date        .code:n = {2024/04/17},
+     version     .code:n = {2.9} ,
      description .code:n = {UFRGS/CCA~ curricula~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -358,7 +358,7 @@
 
           %% Pre-reqs
         \bool_gset_false:N \l__ufrgscca_tmp_second_bool
-        \starray_iterate_over:nn {curricula.sem.class.prereqset}
+        \starray_iterate_over:nnTF {curricula.sem.class.prereqset}
           {
             \seq_gclear:N \l__ufrgscca_tmp_prereq_seq
             \starray_iterate_over:nnTF {curricula.sem.class.prereqset.prereq}
@@ -380,6 +380,9 @@
                   }
               }
           }
+          {}
+          {}
+          
         \starray_get_prop:nnN {curricula.sem.class}{obs} \l__ufrgscca_tmp_obs_tl
         \tl_if_empty:NF \l__ufrgscca_tmp_obs_tl
           {
@@ -636,9 +639,9 @@
         \draw
           ( \fp_use:N \l__ufrgscca_tmp_posX_fp  , \fp_eval:n {\l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaY_fp - 1.25 * \l__ufrgscca_graph_deltaY_fp} )
           node[disc,\l__ufrgscca_graph_color_tl](\l__ufrgscca_tmp_name_tl) {\l__ufrgscca_tmp_name_tl \nodepart{lower} \l__ufrgscca_tmp_cred_tl ~\ ~créd.};%
-        \starray_iterate_over:nn {curricula.sem.class.prereqset}
+        \starray_iterate_over:nnTF {curricula.sem.class.prereqset}
           {
-            \starray_iterate_over:nn {curricula.sem.class.prereqset.prereq}
+            \starray_iterate_over:nnTF {curricula.sem.class.prereqset.prereq}
               {
                 \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{starred} \l__ufrgscca_tmp_starred_bool
                 \bool_if:NF \l__ufrgscca_tmp_starred_bool
@@ -686,8 +689,8 @@
                       }
                     \path[dep,\l__ufrgscca_graph_color_tl] (\l__ufrgscca_tmp_prereq_name_tl)edge[out=\l__ufrgscca_angOUT_tl,in=\l__ufrgscca_angIN_tl] (\l__ufrgscca_tmp_name_tl);
                   }
-              }
-          }
+              }{}{} %iterate over:TF prereq
+          }{}{} %iterate over:TF prereqset
 
       }
 

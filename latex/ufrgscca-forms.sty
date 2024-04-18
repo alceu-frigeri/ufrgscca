@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.8} {2024/03/22}
+%% This is version {2.9} {2024/04/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-forms}
-    {2024/03/22}
-    {2.8}
+    {2024/04/17}
+    {2.9}
     {UFRGS/CCA forms commands}
    
     
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-forms} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/03/22},
-     version     .code:n = {2.8} ,
+     date        .code:n = {2024/04/17},
+     version     .code:n = {2.9} ,
      description .code:n = {UFRGS/CCA~ forms~commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -257,6 +257,9 @@
   \prop_put:Nnn \l__ufrgscca_forms_prop {#1.#2}{#3}
 }
 
+\NewDocumentCommand{\SetFormX}{mm+m}{
+  \prop_put:Nne \l__ufrgscca_forms_prop {#1.#2}{#3}
+}
 
 %%%
 %  Those variables below are used to set bookmarks at the many forms
@@ -265,6 +268,9 @@
 \tl_new:N \StudentBookMarkTL
 \tl_new:N \ReviewerBookMarkTL
 \bool_new:N \l__ufrgscca_emptyforms_bool
+
+\tl_new:N \l__ufrgscca_booktmp_a_tl
+\tl_new:N \l__ufrgscca_booktmp_b_tl
 
 \NewDocumentCommand{\MakeForm}{m} {
   \begin{center}
@@ -276,6 +282,9 @@
             \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.top} \l_tmpa_tl 
               { \l_tmpa_tl }
               { \UseTerm{cover.topbase}\\ }
+            \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.bookmark} \l_tmpa_tl 
+              { \l_tmpa_tl }
+              {}
             \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.heading} \l_tmpa_tl 
               { {\sc \l_tmpa_tl}\\[6mm] }
               { \par\vspace{5mm} }
