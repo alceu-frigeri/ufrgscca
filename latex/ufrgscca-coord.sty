@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.9} {2024/04/17}
+%% This is version {2.10} {2024/04/20}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2024/04/17}
-    {2.9}
+    {2024/04/20}
+    {2.10}
     {UFRGS/CCA coord commands}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca-coord} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/04/17},
-     version     .code:n = {2.9} ,
+     date        .code:n = {2024/04/20},
+     version     .code:n = {2.10} ,
      description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -689,8 +689,10 @@
       \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
         {
           \studentselect{##1}
-          \eDataSet{student}
-          \__ufrgscca_tlset_rem_accents:Ne \StudentBookMarkTL {\eDataFields{name}~-~}          
+          \DataGet{student}{name}{\l_tmpa_tl}
+          \tl_put_right:Nn \l_tmpa_tl {~-~}
+          \__ufrgscca_tlset_rem_accents:Ne \StudentBookMarkTL {\l_tmpa_tl}  
+                  
           \__ufrgscca_student_emptyfields_if_none:
 
           \bool_if:NT \l__ufrgscca_cocertificate_bool
@@ -710,8 +712,8 @@
               \studentReviewerSelect{2}
               \studentReviewerSetCase{2}
                 {
-                  \eDataSet{student.reviewer}
-                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
+                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
                 }
                 {
                   \tl_set:Nn \ReviewerBookMarkTL {~-~2}
@@ -720,8 +722,8 @@
               \studentReviewerSelect{3}
               \studentReviewerSetCase{3}
                 {
-                  \eDataSet{student.reviewer}
-                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
+                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
                 }
                 {
                   \tl_set:Nn \ReviewerBookMarkTL {~-~3}
@@ -740,8 +742,8 @@
               \studentReviewerSelect{1}
               \studentReviewerSetCase{1}
                 {
-                  \eDataSet{student.reviewer}
-                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
+                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
                 }
                 {
                   \tl_set:Nn \ReviewerBookMarkTL {~-~1}
@@ -751,8 +753,8 @@
               \studentReviewerSelect{2}
               \studentReviewerSetCase{2}
                 {
-                  \eDataSet{student.reviewer}
-                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
+                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
                 }
                 {
                   \tl_set:Nn \ReviewerBookMarkTL {~-~2}
@@ -762,8 +764,8 @@
               \studentReviewerSelect{3}
               \studentReviewerSetCase{3}
                 {
-                  \eDataSet{student.reviewer}
-                  \tl_set:Ne \ReviewerBookMarkTL {~-~\eDataFields{name}}    
+                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
+                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
                 }
                 {
                   \tl_set:Nn \ReviewerBookMarkTL {~-~3}

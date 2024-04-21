@@ -15,7 +15,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.9} {2024/04/17}
+%% This is version {2.10} {2024/04/20}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -636,13 +636,14 @@ Selects a student or reviewer based on theirs hash.
 
 
 
-\begin{codedescribe}[code,new=2023/11/18]{\DataFields,\eDataSet,\eDataFields}
+\begin{codedescribe}[code,new=2023/11/18,update=2024/04/18]{\DataFields,\eDataSet,\eDataFields,\DataGet}
 	\begin{codesyntax}%
     \tsmacro{\DataFields}{starray-ref,field}
     \tsmacro{\eDataSet}[act-hash]{starray-ref}
     \tsmacro{\eDataFields}{field}
+    \tsmacro{\DataFields}{starray-ref,field,tl-var}
 	\end{codesyntax}
-These are, respectively, \tsobj{\starray_get_prop:nn, \starray_term_syntax:n,\starray_parsed_get_prop:n} from \tsobj[pack]{starray}. One can reference/get any field from the main \tsobj[pack]{starray} defined structures: \tsobj[key]{student,activity} as defined at chapter \ref{activity-def}.
+These are, respectively, \tsobj{\starray_get_prop:nn, \starray_term_syntax:n,\starray_parsed_get_prop:n} and \tsobj{\starray_get_prop:nnN} from \tsobj[pack]{starray}. One can reference/get any field from the main \tsobj[pack]{starray} defined structures: \tsobj[key]{student,activity} as defined at chapter \ref{activity-def}.
 \end{codedescribe}
 
 
@@ -753,13 +754,6 @@ The commands \tsobj{\advisor,\coadvisor,\examiner,\altexaminer} are meant to be 
 \section{\tightul{ufrgscca-cover} Package}
 This package is the one that sets the front pages, depending on the kind of 'report' being generated. 
 
-%%%\subsection{Package Options}
-%%%\begin{describelist}{option}
-%%%	\describe {report} { in case the doc is just a class assignment with, possibly, many co-authors. It changes mainly the front matter, which is simplified (no referral page, for instance).}
-%%%    \describe {internship} { in case the doc is an internship report.}
-%%%    \describe {nonrequired} { in case the internship report is related to a “non required” / “optional” internship. This option is ignored otherwise.}
-%%%
-%%%\end{describelist}
 
 \subsection{Defined Commands}
 \begin{codedescribe}[code,new=2023/11/18]{\MakeCoverPages}
@@ -811,39 +805,26 @@ This is the main command, which will typeset the front matter, from the informat
 \describe{advisor-descpage}{Advisor's matter.}
 \describe{bottom-descpage}{The bottom of the desc page.}
 \describe{text-approvalpage}{The text presented in the approval page.}
-\describe{advisor-approvalpage}{Advisor´s matter in the approval page.}
+\describe{advisor-approvalpage}{Advisor's matter in the approval page.}
 \describe{bottom-approvalpage}{The bottom of the approval page.}
 \end{describelist}
 
 
-%%
-%%\begin{codedescribe}{\course,\courseacronym,\graduationtitle,\university,\universityacronym,%
-%%		\universitydivision,\divisiongradcouncil,\department,\classcode,\classname,\subject}
-%%\begin{codesyntax}%
-%%	\tsmacro{\course}{arg}
-%%	\tsmacro{\courseacronym}{arg}
-%%	\tsmacro{\graduationtitle}{arg}
-%%	\tsmacro{\university}{arg}
-%%	\tsmacro{\universityacronym}{arg}
-%%	\tsmacro{\universitydivision}{arg}
-%%	\tsmacro{\divisiongradcouncil}{arg}
-%%	\tsmacro{\department}{arg}
-%%	\tsmacro{\classcode}{arg}
-%%	\tsmacro{\classname}{arg}
-%%	\tsmacro{\subject}{arg}
-%%\end{codesyntax}
-%%In case some customization is needed, one can change them as needed. The default values are set for the \emph{control and automation} course at UFRGS/EE.
-%%\end{codedescribe}
 
 \section{\tightul{ufrgscca-forms} Package}
-This package defines just two user commands to generate specific forms needed at UFRGS/EE.
+This package defines just two user commands to create forms needed at UFRGS/EE.
+\subsection{Package Options}
+\begin{describelist}{option}
+	\describe {noxtrbookmarks} {By default, each form will have an associated PDF bookmark, this option will suppress them.}
+\end{describelist}
+
 \subsection{Forms Defined Commands}\label{forms.commands}
 \begin{codedescribe}[code,update=2023/05/29]{\tcforms,\tcemptyforms}
 	\begin{codesyntax}%
 \tsmacro{\tcforms}{formslist}
 \tsmacro{\tcemptyforms}{formslist}
 \end{codesyntax}
-The command \tsmacro{\tcforms}{} will generate the many forms (\tsobj[meta]{formslist}) using the information from \emph{local.tex}, whilst \tsmacro{\tcemptyforms}{} will generate said forms with 'blanks' (to be fulfilled by hand, for instance).
+The command \tsmacro{\tcforms}{} will generate the many forms (\tsobj[meta]{formslist}) using the information from \emph{local.tex}, whilst \tsmacro{\tcemptyforms}{} will generate said forms with 'blanks' (to be filled by hand, for instance).
 
 \end{codedescribe}
 
@@ -936,50 +917,6 @@ A new float environment, named \tsobj[env]{env-name}, will be created. Captions 
 \end{codedescribe}
 \fi
 
-\iffulldoc
-%%%%\section{\tightul{ufrgscca-gen} Package (extended documentation)}
-%%%%Just two set of commands are defined, one is kind of a 'command factory' aimed at creating macros in a standard way, while the other helps create 'case like' commands.
-%%%%
-%%%%
-%%%%\subsection{Package Options}
-%%%%\begin{describelist}{option}
-%%%%	\describe {family} { sets the family name, defaults to \tsobj[value]{tcdef}.}
-%%%%	\describe {group} { sets the group name, defaults to \tsobj[value]{gen}.}
-%%%%\end{describelist}
-%%%%
-%%%%\subsection{Defined Commands}
-%%%%\begin{codedescribe}{\cmdfactory,\factory,\tcgen@cdef}
-%%%%	\begin{codesyntax}%
-%%%%		\tsobj[code]{\cmdfactory}{\tsobj[oarg]{fam}\tsobj[xarg]{grp}\tsobj[marg]{cmd-list}}
-%%%%		\tsobj[code]{\factory}{\tsobj[oarg]{fam}\tsobj[xarg]{grp}\tsobj[marg]{cmd}}
-%%%%		\tsobj[code]{\tcgen@cdef}{\tsobj[oarg]{fam}\tsobj[xarg]{grp}\tsobj[marg]{cmd}\tsobj[marg]{new-val}}
-%%%%	\end{codesyntax}
-%%%%	\tsmacro{\cmdfactory}{} is the actual command meant to be used (the other two are just auxiliary ones). \tsobj[meta]{cmd-lst} is a csv list of commands. \tsobj[meta]{fam} is the command \emph{family} (defaults to \emph{tcdef}) and \tsobj[meta]{grp} is the family group (defaults to \emph{gen}).
-%%%%
-%%%%	The newly created commands will be based on \tsmacro{\tcgen@cdef}{} (the actual assigment command) having the form \tsmacro{\cmd}{new-val}, accepting a single mandatory value. Internally \tsobj[meta]{new-val} will be stored in a macro likely named \tsmacro{\fam@grp@cmd}{}.
-%%%%
-%%%%    \tsmacro{\factory}{} is basically the same as \tsmacro{\cmdfactory}{}, whilst to create just one new command (it is the command called by \tsmacro{\cmdfactory}{} via \tsmacro{\forcsvlist}{}.)
-%%%%\end{codedescribe}
-%%%%
-%%%%\begin{codedescribe}{\mkswitch,\addcase}
-%%%%	\begin{codesyntax}%
-%%%%		\tsmacro{\mkswitch}[default]{sw-name}
-%%%%		\tsmacro{\addcase}{sw-name,str-case,code}
-%%%%	\end{codesyntax}
-%%%%	\tsmacro{mkswitch}{} will create a command, \tsmacro{\sw-name}{case}, which will behave like a switch/case in other programming languages. \tsobj[meta]{default} is the code to be executed in case a \emph{switching value} isn't defined.
-%%%%	\tsmacro{\addcase}{} adds \emph{cases}, one by one, to the switch. \tsobj[meta]{str-case} can be any \tsmacro{\csname}{} valid name. \tsobj[meta]{code} is the code to be executed.
-%%%%
-%%%%	\begin{codestore}[st=d.switch]
-%%%%		\mkswitch[\gr@depcut]\gr@case@angle
-%%%%		\addcase\gr@case@angle{}{\def\gr@ANG{0}}
-%%%%		\addcase\gr@case@angle{A}{\def\gr@ANG{\gr@A}}
-%%%%		%%
-%%%%		%% actual use of the switch
-%%%%		\gr@case@angle{A}  % this will result in \def\gr@ANG{\gr@A}
-%%%%	\end{codestore}
-%%%%	\tscode*{d.switch}
-%%%%\end{codedescribe}
-\fi
 
 \iffulldoc
 \section{\tightul{ufrgscca-coord} Package (extended documentation)}

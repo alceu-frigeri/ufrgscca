@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.9} {2024/04/17}
+%% This is version {2.10} {2024/04/20}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -22,6 +22,14 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
+
+
+
+\ExplSyntaxOn
+  \tl_new:N \tmpFieldA
+  \tl_new:N \tmpFieldB
+  \tl_new:N \tmpFieldC
+\ExplSyntaxOff
 
 
 %%%%%%%%%%%%%%%
@@ -71,8 +79,9 @@
   } ,
   cover.students        = %
   {%
-        \eDataSet{student}%
-        \centering{\MakeUppercase{\eDataFields{name}} - \eDataFields{ID}}  
+        \DataGet{student}{name}{\tmpFieldA}
+        \DataGet{student}{ID}{\tmpFieldB}
+        \centering{\MakeUppercase{\tmpFieldA} - \tmpFieldB}  
   } ,
   cover.topbase            = %
   {%
@@ -83,8 +92,8 @@
   } ,
   cover.title             = %
   {%
-          \eDataSet{student}%
-          \centering\textbf{\MakeUppercase{\eDataFields{worktitle}}}  
+          \DataGet{student}{worktitle}{\tmpFieldA}
+          \centering\textbf{\MakeUppercase{\tmpFieldA}}  
   } ,
   cover.bottom            = {%
           \centering \UseConst{publ.city}\\ \UseConst{publ.date}\par
@@ -128,8 +137,9 @@
   {%
     \studentiterate%
      {%
-       \eDataSet{student}%
-       \centering{\MakeUppercase{\eDataFields{name}}~ -~ \eDataFields{ID}}\\     
+        \DataGet{student}{name}{\tmpFieldA}
+        \DataGet{student}{ID}{\tmpFieldB}
+        \centering{\MakeUppercase{\tmpFieldA} - \tmpFieldB}  
      }
   }  
 }

@@ -107,7 +107,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.9 (this) 
+* Version 2.10 (this) 
+    - added a package option, noxtrbookmarks, to package ufrgscca-forms (see manual).
+
+* Version 2.9
     - fixing the use of \pdfbookmark after the last hyperref/kernel update (which broke the \MakeForms command).
 
 * Version 2.8
