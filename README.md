@@ -107,7 +107,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.10 (this) 
+* Version 2.11 (this) 
+    - some minor forms' text adjustments (ufrgscca-forms).
+
+* Version 2.10
     - added a package option, noxtrbookmarks, to package ufrgscca-forms (see manual).
 
 * Version 2.9

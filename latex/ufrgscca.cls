@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.10} {2024/04/20}
+%% This is version {2.11} {2024/10/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplClass
     {ufrgscca}
-    {2024/04/20}
-    {2.10}
+    {2024/10/17}
+    {2.11}
     {UFRGS/CCA class}
 
 
@@ -42,8 +42,8 @@
   {
      name        .code:n = {ufrgscca} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2024/04/20},
-     version     .code:n = {2.10} ,
+     date        .code:n = {2024/10/17},
+     version     .code:n = {2.11} ,
      description .code:n = {UFRGS/CCA~a~report~based~class~bundle}
   }
 \cs_if_exist:NF \PkgInfo 
