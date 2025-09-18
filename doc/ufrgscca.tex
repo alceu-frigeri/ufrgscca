@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.11} {2024/10/17}
+%% This is version {2.12} {2025/09/18}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -221,21 +221,21 @@ Take note that \tsobj[pkg]{biblatex} is loaded with the \textbf{\tsobj[option]{b
 
  	\describe {chapternopagenum} { to suppress the page numbers at chapters begin.}
 
-	\describe {relnum} { by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.}
+	\describe {relnum} {by default, figures, tables, etc. are numbered as a continuous series. With this switch, those lists are reset at each chapter, e.g. Figure 5.1 instead of Figure 23.}
 
-	\describe {repeatfields} { in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.}
+	\describe {repeatfields} {in case of authors with multiple publications, their names will be repeated for each entry. In the default setting the author's name is written only in the first entry, and replaced by underscores in the other entries.}
 
-    \describe {yearsonly} { In some cover pages (like the ones for TCC) the bottom of the approval's page, will only displays the year (instead of the default mouth year construction).}
+    \describe {yearsonly} {In some cover pages (like the ones for TCC) the bottom of the approval's page, will only displays the year (instead of the default mouth year construction).}
   
-	\describe {nomicrotype} { in some rare cases, \tsobj[pkg]{microtype} might hurt page layout, this allows the suppression of \tsobj[pkg]{microtype}.}
+	\describe {nomicrotype} {in some rare cases, \tsobj[pkg]{microtype} might hurt page layout, this allows the suppression of \tsobj[pkg]{microtype}.}
 
-	\describe {showframes} { for layout proof only, it will draw frames around each page main parts.}
+	\describe {showframes} {for layout proof only, it will draw frames around each page main parts.}
 
-	\describe {showlabels} { it will put a reference mark in each label created, and print out it's name.}
+	\describe {showlabels} {it will put a reference mark in each label created, and print out it's name.}
 
-	\describe {tocdepth} { use: \tsobj[key]{tocdepth} = \tsobj[meta]{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 3 (\tsmacro{\subsubsection}{}).}
+	\describe {tocdepth} {use: \tsobj[key]{tocdepth} = \tsobj[meta]{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to appears in the Table of Contents (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 3 (\tsmacro{\subsubsection}{}).}
 
-	\describe {secdepth} { use: \tsobj[key]{secdepth} = \tsobj[meta]{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 4 (\tsmacro{\paragraph}{}).}
+	\describe {secdepth} {use: \tsobj[key]{secdepth} = \tsobj[meta]{number}, whereas \tsobj[meta]{number} indicates the deepest sectioning to be numbered. (0 being the top section, which is \tsmacro{\chapter}{} for report based classes, 1 being \tsmacro{\section}{}, and so on.) The default value being 4 (\tsmacro{\paragraph}{}).}
 
 \end{describelist}
 
@@ -288,14 +288,14 @@ This will \emph{underline} a short text, take note that \tsobj[meta]{text} `can'
 	\tightul{Some text example}%
 \end{codestore}
 
-\tsdemo[emph={tightul}]{demotight}[-0.75ex]
+\tsdemo[emph={tightul}]{demotight}%[-0.75ex]
 
 \begin{codedescribe}{\NewChapListEnv}
 	\begin{codesyntax}%
 		\tsmacro{\NewChapListEnv}{envname,displayname}
 	\end{codesyntax}
 \end{codedescribe}
-Creates those \emph{chapter like} lists, like `List of Symbols' or `List of acronyms'. With it, a new environment is created, \tsobj[meta]{envname}, with an associated `numberless' chapter name \tsobj[meta]{displayname}. The newly created environment will implement a \emph{description} like environment (thanks to \tsobj[pkg]{enumitem}) with an optional and a mandatory argument (see below).
+Creates a \emph{chapter like} lists, e.g. `List of Symbols' or `List of acronyms'. With it, a new environment is created, \tsobj[meta]{envname}, with an associated `numberless' chapter name \tsobj[meta]{displayname}. The newly created environment will implement a \emph{description} like environment (thanks to \tsobj[pkg]{enumitem}) with an optional and a mandatory argument (see below).
 
 \begin{codestore}[st=d.newchapenv]
 	\def\listabbrvname{Lista de Abreviaturas}
@@ -382,8 +382,8 @@ Besides the \emph{default} keys defined by the \tsobj[pkg]{enumitem} package a f
 
 \begin{describelist}{key}
 	\describe {ppc, tcc} {\tsobj[key]{ppc} and \tsobj[key]{tcc} are alias of each other, and just assure that lists indentation will be the same as paragraphs default.}
-	\describe {parindent} { with \tsobj[key]{parindent}, the list number/mark is aligned with paragraph indentation.}
-	\describe {noindent} { \tsobj[key]{noindent} removes the label indentation.}
+	\describe {parindent} {with \tsobj[key]{parindent}, the list number/mark is aligned with paragraph indentation.}
+	\describe {noindent} {\tsobj[key]{noindent} removes the label indentation.}
 
 	\begin{codestore}[st=enumA]
 \begin{enumerate}[tcc]
@@ -409,8 +409,8 @@ New paragraph, for reference.
 %	\tsdemo*[parindent=org]{enumA}
 	\tsdemo{enumA}
 
-	\describe {tight} { allows for very tight lists (no indentation) to be used, for instance, inside quotes. N.B. don't use it in normal paragraph mode, otherwise the labels will spill outside the default text window.}
-	\describe {miditemsep} { \tsobj[key]{miditemsep} halves items separation, as an alternative to \tsobj[key]{noitemsep} from \tsobj[pkg]{enumitem}}
+	\describe {tight} {allows for very tight lists (no indentation) to be used, for instance, inside quotes. N.B. don't use it in normal paragraph mode, otherwise the labels will spill outside the default text window.}
+	\describe {miditemsep} {\tsobj[key]{miditemsep} halves items separation, as an alternative to \tsobj[key]{noitemsep} from \tsobj[pkg]{enumitem}}
 	\begin{codestore}[st=enumB]
 	\begin{enumerate}[tcc]
 		\item some A
@@ -429,7 +429,7 @@ New paragraph, for reference.
 \tsdemo{enumB}
 
 
-	\describe {bullet} { for simple itemized lists, it will replace the default black dot by an `open bullet'}
+	\describe {bullet} {for simple itemized lists, it will replace the default black dot by an `open bullet'}
 
 	\begin{codestore}[st=enumD]
 	\begin{itemize}[tcc,miditemsep]
@@ -447,35 +447,35 @@ New paragraph, for reference.
 \tsdemo{enumD}
 
 
-	\describe {arabic} { That's the \emph{default} enumerate style. Arabic numbers, starting at 1, followed by a dot.}
-	\describe {arabic)} { Label will be constructed as number followed by a parenthesis.}
-	\describe {(arabic)} { Label will be enclosed by parenthesis.}
-	\describe {arabic*} { (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final dot.}
-	\describe {arabic*)} { (for secondary lists) Label will be constructed by the label of the outer list, this item number and a final parenthesis.}
+	\describe {arabic} {That's the \emph{default} enumerate style. Arabic numbers, starting at 1, followed by a dot.}
+	\describe {arabic)} {Label will be constructed as number followed by a parenthesis.}
+	\describe {(arabic)} {Label will be enclosed by parenthesis.}
+	\describe {arabic*} {(for secondary lists) Label will be constructed by the label of the outer list, this item number and a final dot.}
+	\describe {arabic*)} {(for secondary lists) Label will be constructed by the label of the outer list, this item number and a final parenthesis.}
 
-	\describe {roman} { This and below keys are the same as the arabic ones, but using lower case roman numbers.}
-	\describe {roman)} { lower case roman number, followed by a parenthesis.}
-	\describe {(roman)} { enclosed by parenthesis.}
-	\describe {roman*} { preceding one followed by roman number and a final dot.}
-	\describe {roman*)} { same, followed by a final parenthesis.}
+	\describe {roman} {This and below keys are the same as the arabic ones, but using lower case roman numbers.}
+	\describe {roman)} {lower case roman number, followed by a parenthesis.}
+	\describe {(roman)} {enclosed by parenthesis.}
+	\describe {roman*} {preceding one followed by roman number and a final dot.}
+	\describe {roman*)} {same, followed by a final parenthesis.}
 
-	\describe {Roman} { This and below keys are the same as the arabic ones, but using upper case roman numbers.}
-	\describe {Roman)} { upper case roman number, followed by a parenthesis.}
-	\describe {(Roman)} { enclosed by parenthesis.}
-	\describe {Roman*} { preceding one followed by roman number and a final dot.}
-	\describe {Roman*)} { same, followed by a final parenthesis.}
+	\describe {Roman} {This and below keys are the same as the arabic ones, but using upper case roman numbers.}
+	\describe {Roman)} {upper case roman number, followed by a parenthesis.}
+	\describe {(Roman)} {enclosed by parenthesis.}
+	\describe {Roman*} {preceding one followed by roman number and a final dot.}
+	\describe {Roman*)} {same, followed by a final parenthesis.}
 
-	\describe {alpha} { This and below keys are the same as the arabic ones, but using lower case alpha numbers.}
-	\describe {alpha)} { lower case alpha number, followed by a parenthesis.}
-	\describe {(alpha)} { enclosed by parenthesis.}
-	\describe {alpha*} { preceding one followed by alpha number and a final dot.}
-	\describe {alpha*)} { same, followed by a final parenthesis.}
+	\describe {alpha} {This and below keys are the same as the arabic ones, but using lower case alpha numbers.}
+	\describe {alpha)} {lower case alpha number, followed by a parenthesis.}
+	\describe {(alpha)} {enclosed by parenthesis.}
+	\describe {alpha*} {preceding one followed by alpha number and a final dot.}
+	\describe {alpha*)} {same, followed by a final parenthesis.}
 
-	\describe {Alpha} { This and below keys are the same as the arabic ones, but using upper case alpha numbers.}
-	\describe {Alpha)} { upper case roman number, followed by a parenthesis.}
-	\describe {(Alpha)} { enclosed by parenthesis.}
-	\describe {Alpha*} { preceding one followed by roman number and a final dot.}
-	\describe {Alpha*)} { same, followed by a final parenthesis.}
+	\describe {Alpha} {This and below keys are the same as the arabic ones, but using upper case alpha numbers.}
+	\describe {Alpha)} {upper case roman number, followed by a parenthesis.}
+	\describe {(Alpha)} {enclosed by parenthesis.}
+	\describe {Alpha*} {preceding one followed by roman number and a final dot.}
+	\describe {Alpha*)} {same, followed by a final parenthesis.}
 	\begin{codestore}[st=enumC]
 	\begin{enumerate}[tcc,roman]
 		\item some A
@@ -972,7 +972,7 @@ Whereas one has a '5x5 matrix' (\tsobj[meta]{checkLC} being one of L1C1...L1C5, 
 
 \tscode*[emph={{tcc-part},partOK,board,board-date,{tcc-final},approval,exam}]{d.check}
 
-\end{codedescribe}\\
+\end{codedescribe}
 
 
 \paragraph{Auxiliary / Report Specific}
@@ -1400,7 +1400,12 @@ The background of it: To have the ability to “describe” (store the informati
 
 \begin{codestore}[st=topicsdef]
   {
-    self  = , name = , color = , class lst = , %list (sequence) of classes
+    topichash  = ,
+    name = ,
+    color = ,
+    class . struct = {
+      classcode = ,
+    }
   }
 \end{codestore}
 
@@ -1409,10 +1414,19 @@ The background of it: To have the ability to “describe” (store the informati
 
 \begin{codestore}[st=classdef]
   {
-   cred = , self = , name = , summary = , topic = , remark = ,
-   bib seq = ,  bib basic seq = ,  bib compl seq = ,
+   cred = ,
+   classcode = ,
+   name = ,
+   summary = ,
+   topichash = ,
+   remark = ,
+   bib = ,
+   bib basic = ,
+   bib compl = ,
    ref . struct = {
-     curr = , sem = , kind = ,
+     currhash = ,
+     semhash = ,
+     kind = ,
    } ,
   }
 \end{codestore}
@@ -1421,14 +1435,25 @@ The background of it: To have the ability to “describe” (store the informati
 
 \begin{codestore}[st=curriculadef]
   {
-    self = , name = , text = ,
+    currhash = ,
+    name = ,
+    text = ,
     sem.struct = {
-      pos = , self = , name = ,
+      pos = ,
+      semhash = ,
+      name = ,
       class . struct = {
-        name = , kind = , obs = , pos = , color = ,
+        classcode = ,
+        kind = ,
+        obs = ,
+        pos = ,
+        color = ,
         prereqset . struct = {
           prereq . struct = {
-            starred = , name = , ang = ,
+            starred = ,
+            classcode = ,
+            angIN = ,
+            angOUT = ,
           }
         } ,
       } ,
@@ -1460,11 +1485,11 @@ The following commands “describe” a curricula, whereas one is a sequence of 
 The following commands always refer to the “last defined” \tsmacro{\classdef}{} unless \tsmacro{\setclass}{} is used, which changes the “current class” for the following commands.
 \end{codedescribe}
 
-\begin{codedescribe}[code,new=2023/11/18]{\csummary,\classremark,\bibdef}
+\begin{codedescribe}[code,new=2023/11/18,update=2025/09/18]{\csummary,\classremark,\bibdef}
     \begin{codesyntax}%
         \tsmacro{\csummary}{desc}
         \tsmacro{\classremark}{remark}
-        \tsmacro{\bibdef}[type]{text}
+        \tsmacro{\bibdef}[type]{bibref}
     \end{codesyntax}
     \tsobj{\csummary} sets a class summary, whilst \tsobj{\classremark} annotates a 'note/remark'. \tsobj{\bibdef}
  is used to set a list of bibliographies, one per issued command. The default \tsobj[meta]{type} value is  \tsobj[key]{main}, other possible values  \tsobj[key]{basic} and \tsobj[key]{compl}.
@@ -1482,11 +1507,13 @@ The following commands always refer to the “last defined” \tsmacro{\classdef
 \end{codedescribe}
 
 
-\begin{codedescribe}[code,update=2023/11/18]{\depdef,\altdep}
+\begin{codedescribe}[code,update=2023/11/18]{\addclass,\depdef,\altdep}
     \begin{codesyntax}%
-        \tsobj[code]{\depdef}\tsverb[oarg]{*}\tsargs[xarg]{pos}\tsargs[marg]{classID}
+        \tsobj[code]{\addclass}\tsargs[oarg]{color}\tsargs[marg]{pos,classID,kind}\tsargs[oarg]{obs}
+        \tsobj[code]{\depdef}\tsverb[oarg]{*}\tsargs[oarg]{pos}\tsargs[marg]{classID}
         \tsmacro{\altdep}{}
     \end{codesyntax}
+\tsmacro{\addclass}{} adds a class, \tsobj[marg]{classID}, to the current semester. \tsobj[marg]{pos} will set the vertical position of this class (when using \tsobj{\GraphEtp}. \tsobj[marg]{kind} will set the class kind and \tsobj[oarg]{obs} will add an observation.
 \tsmacro{\depdef}{} inserts/creates a “class dependency” list. \tsobj[meta]{pos} is used as a 'hint' for the incident (dependency) line angle. The starred version is meant to be used when the 'dependency' isn't another class but rather, for instance, a number of credits.
 
 \tsmacro{\altdep}{} defines/start and alternate dependency list.

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.12} {2025/09/18}
+%% This is version {2.11} {2024/10/17}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-curr}
-    {2025/09/18}
-    {2.12}
+    {2024/10/17}
+    {2.11}
     {UFRGS/CCA curricula commands}
 
 %%%%%%%
@@ -41,8 +41,8 @@
   {
      name        .code:n = {ufrgscca-curr} ,
      prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2025/09/18},
-     version     .code:n = {2.12} ,
+     date        .code:n = {2024/10/17},
+     version     .code:n = {2.11} ,
      description .code:n = {UFRGS/CCA~ curricula~ commands}
   }
 \cs_if_exist:NF \PkgInfo 
@@ -69,47 +69,44 @@
 
 
 \starray_new:n {topics}
+\starray_new:n {classes}
+\starray_new:n {curricula}
+
 \starray_def_from_keyval:nn {topics}
   {
-    topichash  = ,
+    self  = ,
     name = ,
     color = ,
-    class . struct = {
-      classcode = ,
-    }
+    uniqueID = , % to replace class list (V-less)
   }
 
-\starray_new:n {classes}
 \starray_def_from_keyval:nn {classes}
   {
    cred = ,
-   classcode = ,
+   self = ,
    name = ,
    summary = ,
-   topichash = ,
+   topic = ,
    remark = ,
-   bib = ,
-   bib basic = ,
-   bib compl = ,
+   uniqueID = , % to replace the many V sequences (bib)
    ref . struct = {
-     currhash = ,
-     semhash = ,
+     curr = ,
+     sem = ,
      kind = ,
    } ,
   }
 
-\starray_new:n {curricula}
 \starray_def_from_keyval:nn {curricula}
   {
-    currhash = ,
+    self = ,
     name = ,
     text = ,
     sem.struct = {
       pos = ,
-      semhash = ,
+      self = ,
       name = ,
       class . struct = {
-        classcode = ,
+        name = ,
         kind = ,
         obs = ,
         pos = ,
@@ -117,16 +114,75 @@
         prereqset . struct = {
           prereq . struct = {
             starred = ,
-            classcode = ,
-            angIN = ,
-            angOUT = ,
+            name = ,
+            ang = ,
           }
         } ,
       } ,
     } ,
   }
-  
-  
+
+\NewDocumentCommand{\currdef}{mmm}
+  {
+    \starray_new_term:nn {curricula}{#1}
+    \starray_set_from_keyval:nn {curricula}
+      {
+        self = {#1} ,
+        name = {#2} ,
+        text = {#3} ,
+      }
+  }
+
+\NewDocumentCommand{\semdef}{mmm}
+  {
+    \starray_new_term:nn {curricula.sem}{#1}
+    \starray_set_from_keyval:nn {curricula.sem}
+      {
+        self       = {#1} ,
+        name       = {#2} ,
+        pos        = {#3} ,
+      }
+  }
+
+\NewDocumentCommand{\addclass}{O{}D<>{}mmO{}}
+  {
+    \starray_new_term:nn {curricula.sem.class}{#3}
+    \starray_set_from_keyval:nn {curricula.sem.class}
+      {
+        color = {#1} ,
+        pos   = {#2} ,
+        name  = {#3} ,
+        kind  = {#4} ,
+        obs   = {#5} ,
+      }
+    \starray_new_term:nn {curricula.sem.class.prereqset}{}
+    \starray_set_iter_from_hash:nn {classes}{#3}
+
+    \starray_new_term:nn {classes.ref}{}
+    \starray_get_prop:nnN {curricula}{self} \l_tmpa_tl
+    \starray_set_prop:nnV {classes.ref}{curr} \l_tmpa_tl
+    \starray_get_prop:nnN {curricula.sem}{self} \l_tmpa_tl
+    \starray_set_prop:nnV {classes.ref}{sem} \l_tmpa_tl
+    \starray_set_prop:nnn {classes.ref}{kind}{#4}
+  }
+
+\NewDocumentCommand{\depdef}{sD<>{}m}
+  {
+    \starray_new_term:nn {curricula.sem.class.prereqset.prereq}{#3}
+    \starray_set_from_keyval:nn {curricula.sem.class.prereqset.prereq}
+      {
+        starred = {#1} ,
+        name = {#3} ,
+        ang  = {#2}
+      }
+  }
+
+\NewDocumentCommand{\altdep}{}
+  {
+    \starray_new_term:nn {curricula.sem.class.prereqset}{}
+  }
+
+
 
 
 \NewDocumentCommand\topicdef{O{}mm}
@@ -134,39 +190,48 @@
     \starray_new_term:nn {topics}{#2}
     \starray_set_from_keyval:nn {topics}
       {
-        topichash = {#2} ,
+        self = {#2} ,
         name = {#3} ,
         color = {#1} ,
       }
+    %% V-less : replacing / new seq
+    \starray_get_unique_id:nNTF {topics}\l__ufrgscca_uniqueID_tmpa_tl
+      {}
+      {\tl_set:Nn \l__ufrgscca_uniqueID_tmpa_tl {}}
+    \starray_set_prop:nnV {topics}{uniqueID} \l__ufrgscca_uniqueID_tmpa_tl
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpa_tl _seq}
+    
   }
 
 \tl_new:N \l__ufrgscca_default_topic_tl
 \NewDocumentCommand\defaulttopic{m}
   { \tl_set:Ne \l__ufrgscca_default_topic_tl{#1} }
 
-  
 
- 
 \NewDocumentCommand{\classdef}{O{\l__ufrgscca_default_topic_tl}mmm}
   {
     \starray_new_term:nn {classes}{#2}
     \starray_set_from_keyval:nn {classes}
       {
-        classcode = {#2} ,
+        self = {#2} ,
         cred = {#3} ,
         name = {#4} ,
-        topichash = {#1} ,
+        topic = {#1} ,
       }
+  %% V-less : new
+    \starray_get_unique_id:nNTF {classes}\l__ufrgscca_uniqueID_tmpb_tl
+      {}
+      {\tl_set:Nn \l__ufrgscca_uniqueID_tmpb_tl {}}
+    \starray_set_prop:nnV {classes}{uniqueID} \l__ufrgscca_uniqueID_tmpb_tl
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq}
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq}
+    \seq_new:c {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq}
     
-    \starray_set_prop:nnV {classes}{bib} \c_empty_clist
-    \starray_set_prop:nnV {classes}{bib basic} \c_empty_clist
-    \starray_set_prop:nnV {classes}{bib compl} \c_empty_clist
 
     \starray_set_iter_from_hash:nn {topics}{#1}
-
-    \starray_new_term:nn {topics.class}{}
-    \starray_set_prop:nnn {topics.class}{classcode}{#2}
-    
+    %% V-less : new seq
+    \starray_get_prop:nnN {topics}{uniqueID} \l__ufrgscca_uniqueID_tmpa_tl
+    \seq_put_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpa_tl _seq} {#2}    
   }
   
 \NewDocumentCommand{\csummary}{m}
@@ -180,38 +245,34 @@
     \starray_set_prop:nnn {classes}{remark}{#1}
   }
 
-
 \NewDocumentCommand{\bibdef}{O{main}m}
   {
+    %% V-less
+    \starray_get_prop:nnN {classes}{uniqueID} \l__ufrgscca_uniqueID_tmpb_tl
+    
     \str_case:nnF {#1}
       {
         {main}
           {
-            \starray_get_prop:nnN {classes}{bib} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib} \l_tmpa_clist
+            %% V-less
+            \seq_gput_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq} {#2}
           }
-        {basic}
+        {basic}%{ \starray_get_prop:nnN {classes}{bib basic seq} \l_tmpa_seq }
           {
-            \starray_get_prop:nnN {classes}{bib basic} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib basic} \l_tmpa_clist
+            %% V-less
+            \seq_gput_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq} {#2}
           }
-        {compl}
+        {compl}%{ \starray_get_prop:nnN {classes}{bib compl seq} \l_tmpa_seq }
           {
-            \starray_get_prop:nnN {classes}{bib compl} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib compl} \l_tmpa_clist
+            %% V-less
+            \seq_gput_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq} {#2}
           }
       }
       {
-            \starray_get_prop:nnN {classes}{bib} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib} \l_tmpa_clist
+            %% V-less
+            \seq_put_right:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq} {#2}
       }
   }
-
-
 
 \NewDocumentCommand{\classset}{m}
   {
@@ -219,152 +280,7 @@
   }
 \let\setclass\classset
 
-
-\cs_generate_variant:Nn \starray_set_iter_from_hash:nn {ne}
-\cs_generate_variant:Nn \starray_set_iter_from_hash:nn {nV}
-\prg_generate_conditional_variant:Nnn \starray_set_iter_from_hash:nn {ne} {T , F , TF}
-
-\NewDocumentCommand{\currdef}{mmm}
-  {
-    \starray_new_term:nn {curricula}{#1}
-    \starray_set_from_keyval:nn {curricula}
-      {
-        currhash = {#1} ,
-        name = {#2} ,
-        text = {#3} ,
-      }
-  }
-
-\NewDocumentCommand{\semdef}{mmm}
-  {
-    \starray_new_term:nn {curricula.sem}{#1}
-    \starray_set_from_keyval:nn {curricula.sem}
-      {
-        semhash       = {#1} ,
-        name       = {#2} ,
-        pos        = {#3} ,
-      }
-  }
-
-\NewDocumentCommand{\addclass}{O{}mmmO{}}
-  {
-    \starray_new_term:nn {curricula.sem.class}{#3}
-    \starray_set_from_keyval:nn {curricula.sem.class}
-      {
-        color = {#1} ,
-        pos   = {#2} ,
-        classcode  = {#3} ,
-        kind  = {#4} ,
-        obs   = {#5} ,
-      }
-    \starray_new_term:nn {curricula.sem.class.prereqset}{}
-    \starray_set_iter_from_hash:nn {classes}{#3}
-
-    \starray_new_term:nn {classes.ref}{}
-    \starray_get_prop:nnN {curricula}{currhash} \l_tmpa_tl
-    \starray_set_prop:nnV {classes.ref}{currhash} \l_tmpa_tl
-    \starray_get_prop:nnN {curricula.sem}{semhash} \l_tmpa_tl
-    \starray_set_prop:nnV {classes.ref}{semhash} \l_tmpa_tl
-    \starray_set_prop:nnn {classes.ref}{kind}{#4}
-  }
-
-
-
-
-\cs_new_protected:Npn \__stcurrdemo_cut:nNN #1#2#3
-  {
-    \tl_if_blank:nTF {#1}
-      {
-        \tl_set:Nn #2 {}
-        \tl_set:Nn #3 {}
-      }
-      {
-        \seq_set_split:NVn \l_tmpa_seq \c_colon_str {#1}
-        \seq_pop_left:NNTF \l_tmpa_seq \l_tmpa_tl
-          {
-           \tl_set_eq:NN #2 \l_tmpa_tl
-           \seq_pop_left:NNTF \l_tmpa_seq \l_tmpb_tl
-             {   
-              \tl_set_eq:NN #3 \l_tmpb_tl
-             }
-             {                          
-              \tl_set:Nn #3 {}
-             }
-          }
-          {
-            \tl_set:Nn #2 {}
-            \tl_set:Nn #3 {}
-          }
-      }
-  
-  }
-
-
-\NewDocumentCommand{\depdef}{sO{}m}
-  {
-    \__stcurrdemo_cut:nNN{#2}{\l__stcurrdemo_partA_tl}{\l__stcurrdemo_partB_tl}
-    \tl_if_empty:NTF \l__stcurrdemo_partB_tl
-      {
-        \str_case:NnF \l__stcurrdemo_partA_tl
-          {
-            {A}   { \tl_set:Nn \l__stcurrdemo_angOUT_tl {30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-30} }
-            {B}   { \tl_set:Nn \l__stcurrdemo_angOUT_tl {60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-60} }
-            {C}   { \tl_set:Nn \l__stcurrdemo_angOUT_tl {80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-80} }
-            {-A}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+30} }
-            {-B}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+60} }
-            {-C}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+80} }
-            {A*}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+30} }
-            {B*}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+60} }
-            {C*}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+80} }
-            {-A*} { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-30} }
-            {-B*} { \tl_set:Nn \l__stcurrdemo_angOUT_tl {60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-60} }
-            {-C*} { \tl_set:Nn \l__stcurrdemo_angOUT_tl {80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-80} }
-          }
-          {
-            \tl_if_blank:VTF {\l__stcurrdemo_partA_tl}
-              {
-                \tl_set:Nn \l__stcurrdemo_angOUT_tl {0}
-                \tl_set:Nn \l__stcurrdemo_angIN_tl {180}
-              }
-              {
-                \tl_set:Ne \l__stcurrdemo_angOUT_tl {\fp_eval:n {\l__stcurrdemo_partA_tl}}
-                \tl_set:Ne \l__stcurrdemo_angIN_tl {\fp_eval:n {180 - \l__stcurrdemo_angOUT_tl}}
-              }
-          }%didn't match
-      }
-      {
-        \tl_set:Ne \l__stcurrdemo_angOUT_tl {\l__stcurrdemo_partA_tl}
-        \tl_set:Ne \l__stcurrdemo_angIN_tl {180-\l__stcurrdemo_partB_tl}
-      }
-  
-   
-  
-    \starray_new_term:nn {curricula.sem.class.prereqset.prereq}{#3}    
-    \starray_set_from_keyval:nn {curricula.sem.class.prereqset.prereq}
-      {
-        starred = {#1} ,
-        classcode = {#3}
-      }
-    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angIN} \l__stcurrdemo_angIN_tl
-    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angOUT} \l__stcurrdemo_angOUT_tl
-  }
-
-\NewDocumentCommand{\altdep}{}
-  {
-    \starray_new_term:nn {curricula.sem.class.prereqset}{}
-  }
+%\NewDocumentCommand\xTabEtp{O{\notoc\section}m}{%
 
 \cs_generate_variant:Nn \starray_set_iter_from_hash:nn {ne}
 
@@ -394,7 +310,6 @@
 \seq_new:N \l__ufrgscca_tmp_prereq_seq
 \bool_new:N \l__ufrgscca_tmp_second_bool
 
-\clist_new:N \l__ufrgscca_tmpa_clist 
 \NewDocumentCommand\TabEtp{sO{\notoc\section}mO{\footnotesize}}{%
     \starray_set_iter_from_hash:nn {curricula.sem}{#3}
     \bool_if:nTF {#1}
@@ -413,20 +328,16 @@
 
     \starray_iterate_over:nn {curricula.sem.class}
       {
-        \starray_get_prop:nnN {curricula.sem.class}{classcode} \l__ufrgscca_tmp_class_tl
+        \starray_get_prop:nnN {curricula.sem.class}{name} \l__ufrgscca_tmp_class_tl
         \starray_get_prop:nnN {curricula.sem.class}{kind} \l__ufrgscca_tmp_kind_tl
         \starray_get_prop:nnN {curricula.sem.class}{color} \l__ufrgscca_tmp_color_tl
-        \starray_set_iter_from_hash:neTF {classes}{\l__ufrgscca_tmp_class_tl}
-          {}
-          {\color{red}MISSING}
+        \starray_set_iter_from_hash:ne {classes}{\l__ufrgscca_tmp_class_tl}
         \starray_get_prop:nnN {classes}{name} \l__ufrgscca_tmp_name_tl
-        \starray_get_prop:nnN {classes}{cred} \l__ufrgscca_tmp_cred_tl       
-%        \tl_show:N \l__ufrgscca_tmp_name_tl
+        \starray_get_prop:nnN {classes}{cred} \l__ufrgscca_tmp_cred_tl
         \tl_if_empty:NT \l__ufrgscca_tmp_color_tl
           {
             \tl_set:Nn \l__ufrgscca_tmp_color_tl {black}
           }
-%        \tl_show:N \l__ufrgscca_tmp_name_tl
 
           %% class identification
         \bool_if:NTF \l__ufrgscca_showind_bool
@@ -452,7 +363,7 @@
             \seq_gclear:N \l__ufrgscca_tmp_prereq_seq
             \starray_iterate_over:nnTF {curricula.sem.class.prereqset.prereq}
               {
-                \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{classcode} \l_tmpa_tl
+                \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{name} \l_tmpa_tl
                 \seq_gput_right:Ne \l__ufrgscca_tmp_prereq_seq {\l_tmpa_tl}
               }
               {}
@@ -461,10 +372,10 @@
               {
                 \bool_if:NTF \l__ufrgscca_tmp_second_bool
                   {
-                    &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{~\ ~OR}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~AND~} }\\*
+                    &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{~\ ~OU}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~E~} }\\*
                   }
                   {
-                    &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~AND~} }\\*
+                    &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~E~} }\\*
                     \bool_gset_true:N \l__ufrgscca_tmp_second_bool
                   }
               }
@@ -480,7 +391,7 @@
         \bool_if:nF {#1}
         {
           %% Topic
-        \starray_get_prop:nnN {classes}{topichash} \l__ufrgscca_tmp_topic_tl
+        \starray_get_prop:nnN {classes}{topic} \l__ufrgscca_tmp_topic_tl
         \starray_set_iter_from_hash:ne {topics}{\l__ufrgscca_tmp_topic_tl}
         \starray_get_prop:nnN {topics}{name} \l__ufrgscca_tmp_topic_tl
         \starray_get_prop:nnN {topics}{color} \l__ufrgscca_tmp_color_tl
@@ -496,43 +407,38 @@
 
         \starray_get_prop:nnN {classes}{summary} \l__ufrgscca_tmp_summary_tl
         \use:e   { &  &  &   &  & \exp_not:N \smaller \l__ufrgscca_tmp_summary_tl\\*}
+               
+        %% V-less
+        \starray_get_prop:nnN {classes}{uniqueID} \l_tmpa_tl
+        \tl_gset:Ne \l__ufrgscca_uniqueID_tmpb_tl {\l_tmpa_tl}
 
-         %% bibliography I  
-        \starray_get_prop:nnN {classes}{bib} \l_tmpa_clist 
-        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l_tmpa_clist  
-        \clist_if_empty:NF \l__ufrgscca_tmpa_clist 
+         %% bibliography I
+        \seq_if_empty:cF {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq}
           {                                     
             &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Básica~ Essencial}\\*
-            \clist_map_inline:Nn \l__ufrgscca_tmpa_clist 
+            \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib _seq}
               {
-                &  &  &   &  &  \smaller  \fullcite{##1}\\
-%                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
+                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
 
          %% bibliography II
-        \starray_get_prop:nnN {classes}{bib basic} \l_tmpa_clist 
-        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l_tmpa_clist
-        \clist_if_empty:NF \l__ufrgscca_tmpa_clist
+        \seq_if_empty:cF {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq}
           {
             &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Básica}\\*
-            \clist_map_inline:Nn \l__ufrgscca_tmpa_clist
+            \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib basic _seq}
               {
-                &  &  &   &  &  \smaller  \fullcite{##1}\\
-%                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
+                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
 
          %% bibliography III
-        \starray_get_prop:nnN {classes}{bib compl} \l_tmpa_clist 
-        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l_tmpa_clist
-        \clist_if_empty:NF \l__ufrgscca_tmpa_clist
+        \seq_if_empty:cF {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq}
           {
            &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Complementar}\\*
-            \clist_map_inline:Nn \l__ufrgscca_tmpa_clist
+            \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpb_tl _bib compl _seq}
               {
-                 &  &  &   &  &  \smaller  \fullcite{##1}\\
-%                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
+                 &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
           \\[-1.5mm]
@@ -548,12 +454,8 @@
 }
 
 
-
 \seq_new:N \l__ufrgscca_tmp_classlst_seq
-                  
 
-
-\tl_new:N \l__ufrgscca_tmpa_tl
 \NewDocumentCommand{\TabTopic}{m}
   {
     \starray_set_iter_from_hash:nnTF {topics}{#1}
@@ -567,20 +469,21 @@
               }
             \use:e { & \exp_not:N \multicolumn{2}{J{11cm}}{\exp_not:N \textcolor{\l__ufrgscca_tmp_color_tl}{\exp_not:N \textbf{\l__ufrgscca_tmp_name_tl} }}}\\\hline
 
-             \starray_iterate_over:nnTF {topics.class}
+        %% V-less : to be replaced
+            \starray_get_prop:nnN {topics}{uniqueID} \l__ufrgscca_uniqueID_tmpa_tl
+             \seq_map_inline:cn {l__ufrgscca_curr_ \l__ufrgscca_uniqueID_tmpa_tl _seq} 
               {
-                \starray_get_prop:nnN {topics.class}{classcode}\l__ufrgscca_tmpa_tl
-                \starray_set_iter_from_hash:nV {classes} \l__ufrgscca_tmpa_tl
+                \starray_set_iter_from_hash:nn {classes}{##1}
                 \starray_get_prop:nnN {classes}{name} \l__ufrgscca_tmp_name_tl
-                \use:e { & \l__ufrgscca_tmpa_tl & \l__ufrgscca_tmp_name_tl\\}
-              }{}{}
+                \use:e { & ##1 & \l__ufrgscca_tmp_name_tl\\}
+
+              }
         \end{tabular}
       }
       {
         \textbf{--Topic #1 non existant--}
       }
   }
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -710,10 +613,10 @@
     \starray_iterate_over:nn {curricula.sem.class}
       {
         \starray_get_prop:nnN {curricula.sem.class}{pos} \l__ufrgscca_tmp_pos_tl
-        \starray_get_prop:nnN {curricula.sem.class}{classcode} \l__ufrgscca_tmp_name_tl
+        \starray_get_prop:nnN {curricula.sem.class}{name} \l__ufrgscca_tmp_name_tl
         \starray_set_iter_from_hash:ne {classes}{\l__ufrgscca_tmp_name_tl}
         \starray_get_prop:nnN {classes}{cred} \l__ufrgscca_tmp_cred_tl
-        \starray_get_prop:nnN {classes}{topichash} \l__ufrgscca_tmp_topic_tl
+        \starray_get_prop:nnN {classes}{topic} \l__ufrgscca_tmp_topic_tl
         \tl_set:Ne \l__ufrgscca_graph_color_tl {\l__ufrgscca_graph_default_color_tl}
         \bool_if:NT \l__ufrgscca_colors_topic_bool
           {
@@ -734,12 +637,8 @@
           }
 
         \draw
-          ( 
-            \fp_use:N \l__ufrgscca_tmp_posX_fp  , 
-            \fp_eval:n {\l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaY_fp - 1.25 * \l__ufrgscca_graph_deltaY_fp} 
-          )
-          node[disc,\l__ufrgscca_graph_color_tl](\l__ufrgscca_tmp_name_tl) 
-            { \l__ufrgscca_tmp_name_tl \nodepart{lower} \l__ufrgscca_tmp_cred_tl ~\ ~créd. } ;
+          ( \fp_use:N \l__ufrgscca_tmp_posX_fp  , \fp_eval:n {\l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaY_fp - 1.25 * \l__ufrgscca_graph_deltaY_fp} )
+          node[disc,\l__ufrgscca_graph_color_tl](\l__ufrgscca_tmp_name_tl) {\l__ufrgscca_tmp_name_tl \nodepart{lower} \l__ufrgscca_tmp_cred_tl ~\ ~créd.};%
         \starray_iterate_over:nnTF {curricula.sem.class.prereqset}
           {
             \starray_iterate_over:nnTF {curricula.sem.class.prereqset.prereq}
@@ -747,12 +646,48 @@
                 \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{starred} \l__ufrgscca_tmp_starred_bool
                 \bool_if:NF \l__ufrgscca_tmp_starred_bool
                   {
-                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{classcode} \l__ufrgscca_tmp_prereq_name_tl
-                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{angIN} \l__ufrgscca_angIN_tl
-                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{angOUT} \l__ufrgscca_angOUT_tl
-                    \path[dep,\l__ufrgscca_graph_color_tl] 
-                      ( \l__ufrgscca_tmp_prereq_name_tl )
-                        edge [ out=\l__ufrgscca_angOUT_tl , in=\l__ufrgscca_angIN_tl] (\l__ufrgscca_tmp_name_tl) ;
+                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{name} \l__ufrgscca_tmp_prereq_name_tl
+                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{ang} \l__ufrgscca_tmp_ang_tl 
+                    \StrCut{\l__ufrgscca_tmp_ang_tl}{:}{\l__ufrgscca_partA_tl}{\l__ufrgscca_partB_tl}
+                    \tl_if_empty:NTF \l__ufrgscca_partB_tl
+                      {
+                        \str_case:NnF \l__ufrgscca_partA_tl
+                          {
+                            {A}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {30}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-30} }
+                            {B}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-60} }
+                            {C}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-80} }
+                            {-A}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-30}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+30} }
+                            {-B}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-60}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+60} }
+                            {-C}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-80}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+80} }
+                            {A*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {30}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+30} }
+                            {B*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+60} }
+                            {C*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+80} }
+                            {-A*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {-30}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-30} }
+                            {-B*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-60} }
+                            {-C*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
+                                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-80} }
+                          }
+                          {
+                            \tl_set:Nn \l__ufrgscca_angOUT_tl {0}
+                            \tl_set:Nn \l__ufrgscca_angIN_tl {180}
+                          }%didn't match
+                      }
+                      {
+                        \tl_set:Nn \l__ufrgscca_angOUT_tl {\l__ufrgscca_partA_tl}
+                        \tl_set:Nn \l__ufrgscca_angIN_tl {180-\l__ufrgscca_partB_tl}
+                      }
+                    \path[dep,\l__ufrgscca_graph_color_tl] (\l__ufrgscca_tmp_prereq_name_tl)edge[out=\l__ufrgscca_angOUT_tl,in=\l__ufrgscca_angIN_tl] (\l__ufrgscca_tmp_name_tl);
                   }
               }{}{} %iterate over:TF prereq
           }{}{} %iterate over:TF prereqset
