@@ -271,7 +271,7 @@
 
 
 
-\cs_new_protected:Npn \__stcurrdemo_cut:nNN #1#2#3
+\cs_new_protected:Npn \__ufrgscca_cut:nNN #1#2#3
   {
     \tl_if_blank:nTF {#1}
       {
@@ -302,51 +302,51 @@
 
 \NewDocumentCommand{\depdef}{sO{}m}
   {
-    \__stcurrdemo_cut:nNN{#2}{\l__stcurrdemo_partA_tl}{\l__stcurrdemo_partB_tl}
-    \tl_if_empty:NTF \l__stcurrdemo_partB_tl
+    \__ufrgscca_cut:nNN{#2}{\l__ufrgscca_partA_tl}{\l__ufrgscca_partB_tl}
+    \tl_if_empty:NTF \l__ufrgscca_partB_tl
       {
-        \str_case:NnF \l__stcurrdemo_partA_tl
+        \str_case:NnF \l__ufrgscca_partA_tl
           {
-            {A}   { \tl_set:Nn \l__stcurrdemo_angOUT_tl {30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-30} }
-            {B}   { \tl_set:Nn \l__stcurrdemo_angOUT_tl {60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-60} }
-            {C}   { \tl_set:Nn \l__stcurrdemo_angOUT_tl {80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-80} }
-            {-A}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+30} }
-            {-B}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+60} }
-            {-C}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+80} }
-            {A*}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+30} }
-            {B*}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+60} }
-            {C*}  { \tl_set:Nn \l__stcurrdemo_angOUT_tl {80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180+80} }
-            {-A*} { \tl_set:Nn \l__stcurrdemo_angOUT_tl {-30}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-30} }
-            {-B*} { \tl_set:Nn \l__stcurrdemo_angOUT_tl {60}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-60} }
-            {-C*} { \tl_set:Nn \l__stcurrdemo_angOUT_tl {80}
-                    \tl_set:Nn \l__stcurrdemo_angIN_tl {180-80} }
+            {A}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {30}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-30} }
+            {B}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-60} }
+            {C}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-80} }
+            {-A}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-30}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+30} }
+            {-B}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-60}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+60} }
+            {-C}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-80}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+80} }
+            {A*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {30}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+30} }
+            {B*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+60} }
+            {C*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+80} }
+            {-A*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {-30}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-30} }
+            {-B*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-60} }
+            {-C*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
+                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-80} }
           }
           {
-            \tl_if_blank:VTF {\l__stcurrdemo_partA_tl}
+            \tl_if_blank:VTF {\l__ufrgscca_partA_tl}
               {
-                \tl_set:Nn \l__stcurrdemo_angOUT_tl {0}
-                \tl_set:Nn \l__stcurrdemo_angIN_tl {180}
+                \tl_set:Nn \l__ufrgscca_angOUT_tl {0}
+                \tl_set:Nn \l__ufrgscca_angIN_tl {180}
               }
               {
-                \tl_set:Ne \l__stcurrdemo_angOUT_tl {\fp_eval:n {\l__stcurrdemo_partA_tl}}
-                \tl_set:Ne \l__stcurrdemo_angIN_tl {\fp_eval:n {180 - \l__stcurrdemo_angOUT_tl}}
+                \tl_set:Ne \l__ufrgscca_angOUT_tl {\fp_eval:n {\l__ufrgscca_partA_tl}}
+                \tl_set:Ne \l__ufrgscca_angIN_tl {\fp_eval:n {180 - \l__ufrgscca_angOUT_tl}}
               }
           }%didn't match
       }
       {
-        \tl_set:Ne \l__stcurrdemo_angOUT_tl {\l__stcurrdemo_partA_tl}
-        \tl_set:Ne \l__stcurrdemo_angIN_tl {180-\l__stcurrdemo_partB_tl}
+        \tl_set:Ne \l__ufrgscca_angOUT_tl {\l__ufrgscca_partA_tl}
+        \tl_set:Ne \l__ufrgscca_angIN_tl {180-\l__ufrgscca_partB_tl}
       }
   
    
@@ -357,8 +357,8 @@
         starred = {#1} ,
         classcode = {#3}
       }
-    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angIN} \l__stcurrdemo_angIN_tl
-    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angOUT} \l__stcurrdemo_angOUT_tl
+    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angIN} \l__ufrgscca_angIN_tl
+    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angOUT} \l__ufrgscca_angOUT_tl
   }
 
 \NewDocumentCommand{\altdep}{}
