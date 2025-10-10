@@ -5,7 +5,7 @@
 % !TEX program = pdflatex
 % !PDFTeXify ext =  --enable-etex  --restrict-write18
 % !PDFLaTeX ext  =  --enable-etex  --restrict-write18
-% !BIB program = none
+% !BIB program = biber
 %%%==============================================================================
 %% Copyright 2022-present by Alceu Frigeri
 %%
@@ -32,6 +32,9 @@
 %%%==============================================================================
 \documentclass[article,nogeometry,english,tocdepth=3,secdepth=3]{ufrgscca} % tcbundle  tcpack tcmain
 \usepackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.5cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage{lmodern}
 \usepackage{codedescribe}
 
 %\maxdeadcycles=500 %% the many marginpar statements are actually a pain.

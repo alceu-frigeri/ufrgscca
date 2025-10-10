@@ -750,7 +750,7 @@
     \if@openright
       \cleardoublepage
     \else
-      \clearpage
+      \cleardoublepage  %it should be \clearpage TODO: why \@openright test is failing ?
     \fi 
   }
 

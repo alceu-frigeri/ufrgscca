@@ -107,6 +107,10 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
+* Version 2.12a (next) 
+    - and+or/e+ou..
+    - @openright
+
 * Version 2.12 (this) 
     - ufrgscca-curr internals adjustment (better support for biblatex)
     - Documentation adjustments regarding ufrgscca-curr.

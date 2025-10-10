@@ -60,7 +60,7 @@
 
 
 
-\RequirePackage{etex}
+%\RequirePackage{etex}
 \RequirePackage{etoolbox}
 \RequirePackage{starray}
 \RequirePackage[T1]{fontenc}
@@ -244,7 +244,10 @@
     oldrenews     .usage:n      = load,
 	oldrenews     .bool_set:N   = \l__ufrgscca_oldrenews_bool,
 
-    unknown       .code:n       = {\PassOptionsToClass{\CurrentOption}{report}},
+    unknown       .code:n       = 
+      { 
+        \PassOptionsToClass{\CurrentOption}{report} 
+      },
   }
 \ProcessKeyOptions[ufrgscca]\relax
 
