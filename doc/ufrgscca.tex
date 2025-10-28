@@ -5,7 +5,7 @@
 % !TEX program = pdflatex
 % !PDFTeXify ext =  --enable-etex  --restrict-write18
 % !PDFLaTeX ext  =  --enable-etex  --restrict-write18
-% !BIB program = biber
+% !BIB program = none
 %%%==============================================================================
 %% Copyright 2022-present by Alceu Frigeri
 %%
@@ -20,7 +20,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.12} {2025/09/18}
+%% This is version {2.13} {2025/10/28}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -30,12 +30,12 @@
 %% EE    stands for "Engineering School"
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
-\documentclass[article,nogeometry,english,tocdepth=3,secdepth=3]{ufrgscca} % tcbundle  tcpack tcmain
+\documentclass[article,nofontwarning,nogeometry,english,tocdepth=3,secdepth=3]{ufrgscca} % tcbundle  tcpack tcmain
 \usepackage[a4paper,margin=5cm,right=2cm,marginparwidth=3.5cm,asymmetric,top=2.5cm,bottom=1.5cm]{geometry}
 %\usepackage[T1]{fontenc}
 %\usepackage[utf8]{inputenc}
 %\usepackage{lmodern}
-\usepackage{codedescribe}
+\usepackage[infograb]{codedescribe}
 
 %\maxdeadcycles=500 %% the many marginpar statements are actually a pain.
 
@@ -75,7 +75,7 @@
 
 \ifversiontest
 \ExplSyntaxOn
-\clist_map_inline:nn {ufrgscca,ufrgscca-abnt,ufrgscca-core,ufrgscca-cover,ufrgscca-lists,ufrgscca-forms,ufrgscca-coord,ufrgscca-curr,ufrgscca-ppc}{\PkgDescription{#1}}
+\clist_map_inline:nn {ufrgscca,ufrgscca-abnt,ufrgscca-core,ufrgscca-cover,ufrgscca-lists,ufrgscca-forms,ufrgscca-coord,ufrgscca-curr,ufrgscca-ppc}{\PkgInfoDescription{#1}}
 \ExplSyntaxOff
 \fi
 
@@ -651,7 +651,7 @@ Selects a student or reviewer based on theirs hash.
     \tsmacro{\eDataFields}{field}
     \tsmacro{\DataFields}{starray-ref,field,tl-var}
 	\end{codesyntax}
-These are, respectively, \tsobj{\starray_get_prop:nn, \starray_term_syntax:n,\starray_parsed_get_prop:n} and \tsobj{\starray_get_prop:nnN} from \tsobj[pack]{starray}. One can reference/get any field from the main \tsobj[pack]{starray} defined structures: \tsobj[key]{student,activity} as defined at chapter \ref{activity-def}.
+These are, respectively, \tsobj{\starray_get_prop:nn, \starray_term_parser:n,\starray_parsed_get_prop:n} and \tsobj{\starray_get_prop:nnN} from \tsobj[pack]{starray}. One can reference/get any field from the main \tsobj[pack]{starray} defined structures: \tsobj[key]{student,activity} as defined at chapter \ref{activity-def}.
 \end{codedescribe}
 
 

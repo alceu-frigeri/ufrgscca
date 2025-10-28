@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.12} {2025/09/18}
+%% This is version {2.13} {2025/10/28}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -1236,7 +1236,7 @@ A nota (variando de zero a dez) atribuída por cada membro da banca examinadora 
     \seq_map_inline:cn {l__ufrgscca_baselist_graded_seq} 
       {
         \starray_set_iter_from_hash:nn {student} {#1}
-        \starray_term_syntax:n {student}
+        \starray_term_parser:n {student}
         \tl_gset:Ne \l__ufrgscca_daytmpb_tl {\starray_parsed_get_prop:n{board-date}}
         \tl_gset:Ne \l__ufrgscca_daytmpc_tl {\UseConst{date:\l__ufrgscca_daytmpb_tl}}
         \studentNewPageCase

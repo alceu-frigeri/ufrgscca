@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.12} {2025/09/18}
+%% This is version {2.13} {2025/10/28}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplClass
     {ufrgscca}
-    {2025/09/18}
-    {2.12}
+    {2025/10/28}
+    {2.13}
     {UFRGS/CCA class}
 
 
@@ -38,20 +38,15 @@
 %%% Idea being: { <pck-name> / pkg info } for each and all.
 %%%
 %%%%%%%
-\keys_define:nn { ufrgscca / pkg info}
+\RequirePackage{pkginfograb}
+\pkginfograb_set:nn { ufrgscca }
   {
-     name        .code:n = {ufrgscca} ,
-     prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2025/09/18},
-     version     .code:n = {2.12} ,
-     description .code:n = {UFRGS/CCA~a~report~based~class~bundle}
+     name        = {ufrgscca} ,
+     prefix      = {ufrgscca} ,
+     date        = {2025/10/28},
+     version     = {2.13} ,
+     description = {UFRGS/CCA~a~report~based~class~bundle}
   }
-\cs_if_exist:NF \PkgInfo 
-  {
-    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
-    \NewDocumentCommand \PkgDescription {m} 
-      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
-  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -194,7 +189,7 @@
     yearsonly      .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
 
     oneside        .usage:n     = load,
-    oneside        .code:n      = {\AtEndOfClass{\@twosidefalse}\OptionNotUsed},
+    oneside        .code:n      = {\AtEndOfClass{\@twosidefalse} }, %\OptionNotUsed},
     strict-abnt    .usage:n     = load,
     strict-abnt    .code:n      = {\PassOptionsToPackage{\CurrentOption}{ufrgscca-abnt}},
     repeatfields   .usage:n     = load,
@@ -263,8 +258,8 @@
         \RequirePackage[english,brazilian]{babel}% babel has to be loaded BEFORE newtx*
       }
     \RequirePackage{mathptmx}
-    \PackageWarning{ufrgscca}{(obsolete) package mathptmx loaded. It loads a free 'implementantion/interpletation' of the proprietary Times Roman (by Adobe) and Times New Roman (by Microsoft)}
-    \PackageWarning{ufrgscca}{package microtype is suppressed, resulting in a subpar layout. Again, the “Roman” font used isn't a true Times Roman nor Times New Roman}
+    \PackageWarning{ufrgscca}{(obsolete) ~ package ~ mathptmx ~ loaded. ~ It ~ loads ~ a ~ free ~ 'implementantion/interpletation' ~ of ~ the ~ proprietary ~ Times ~ Roman ~ (by ~ Adobe) ~ and ~ Times ~ New ~ Roman ~ (by ~ Microsoft)}
+    \PackageWarning{ufrgscca}{package ~ microtype ~ is ~ suppressed, ~ resulting ~ in ~ a ~ subpar ~ layout. ~ Again, ~ the ~ “Roman” ~ font ~ used ~ isn't ~ a ~ true ~ Times ~ Roman ~ nor ~ Times ~ New ~ Roman}
   }
   {
     \RequirePackage{lmodern}%
@@ -298,9 +293,11 @@
 
 \bool_if:NT \l__ufrgscca_nofontwarning_bool
   {
-  \WarningFilter{latexfont}{Font shape}%
-  \WarningFilter{latexfont}{Size substitutions with differences}%
-  \WarningFilter{latexfont}{Some font shapes were not available}%
+  \WarningFilter{latexfont}{Font ~ shape}%
+  \WarningFilter{latexfont}{Size ~ substitutions ~ with ~ differences}%
+  \WarningFilter{latexfont}{Some ~ font ~ shapes ~ were ~ not ~ available}%
+  \WarningFilter{microtype}{I ~ cannot ~ find ~ a ~ spacing}%
+  \WarningFilter{hyperref}{Token ~ not ~ allowed ~ in ~ a ~ PDF}
   }
 
 

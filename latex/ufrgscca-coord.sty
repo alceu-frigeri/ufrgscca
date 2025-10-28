@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.12} {2025/09/18}
+%% This is version {2.13} {2025/10/28}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -27,8 +27,8 @@
 
 \ProvidesExplPackage
     {ufrgscca-coord}
-    {2025/09/18}
-    {2.12}
+    {2025/10/28}
+    {2.13}
     {UFRGS/CCA coord commands}
 
 
@@ -38,20 +38,15 @@
 %%% Idea being: { <pck-name> / pkg info } for each and all.
 %%%
 %%%%%%%
-\keys_define:nn { ufrgscca-coord / pkg info}
+\RequirePackage{pkginfograb}
+\pkginfograb_set:nn { ufrgscca-coord }
   {
-     name        .code:n = {ufrgscca-coord} ,
-     prefix      .code:n = {ufrgscca} ,
-     date        .code:n = {2025/09/18},
-     version     .code:n = {2.12} ,
-     description .code:n = {UFRGS/CCA~ coordination~ report~ commands}
+     name        = {ufrgscca-coord} ,
+     prefix      = {ufrgscca} ,
+     date        = {2025/10/28},
+     version     = {2.13} ,
+     description = {UFRGS/CCA~ coordination~ report~ commands}
   }
-\cs_if_exist:NF \PkgInfo 
-  {
-    \NewDocumentCommand \PkgInfo {mm} { \keys_set:nn {#1 / pkg info}{#2} } 
-    \NewDocumentCommand \PkgDescription {m} 
-      { \noindent Package~ \textbf{\PkgInfo{#1}{name}}~Version:~\PkgInfo{#1}{version}~ -~ \PkgInfo{#1}{date}\par \emph{\PkgInfo{#1}{description}}~\par } 
-  }  
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -148,7 +143,7 @@
   {
     \starray_set_iter_from_hash:nnTF {prof}{#3}
       {
-        \starray_term_syntax:n {prof}
+        \starray_term_parser:n {prof}
         \__ufrgscca_prof_ref_set:nneeeee {#1}{#2}
           {\starray_parsed_get_prop:n{last}}{\starray_parsed_get_prop:n{first}}{\starray_parsed_get_prop:n{gender}}
           {\starray_parsed_get_prop:n{email}}{\starray_parsed_get_prop:n{phone}}
@@ -171,12 +166,24 @@
   {  \__ufrgscca_prof_ref:nnn {\altexaminer}{\altexaminerinfo}{#1}  }
 
 %%% from -ppc
-\cs_new:Npn \__ufrgscca_def_colorpair:n #1
+\cs_if_exist:NF \__ufrgscca_def_colorpair:n
   {
-    \colorlet{light#1}{white!85!#1}
-    \colorlet{dark#1}{#1!70!black!100}
-    \colorlet{darker#1}{#1!40!black!100}
+    \cs_new:Npn \__ufrgscca_def_colorpair:n #1
+      {
+        \colorlet{light#1}{white!85!#1}
+        \colorlet{dark#1}{#1!70!black!100}
+        \colorlet{darker#1}{#1!40!black!100}
+      }
   }
+
+%\cs_new:Npn \__ufrgscca_def_colorpair:n #1
+%  {
+%    \colorlet{light#1}{white!85!#1}
+%    \colorlet{dark#1}{#1!70!black!100}
+%    \colorlet{darker#1}{#1!40!black!100}
+%  }
+  
+  
 \__ufrgscca_def_colorpair:n {red}
 \__ufrgscca_def_colorpair:n {green}
 \__ufrgscca_def_colorpair:n {blue}
@@ -303,18 +310,18 @@
 
 \cs_new_protected:Npn \__ufrgscca_studentgrade: 
     {
-      \starray_term_syntax:n {student}
+      \starray_term_parser:n {student}
       \bool_if:nTF {\starray_parsed_get_prop:n {flag-null}}
         {
            \starray_gset_prop:nnn {student}{grade}{\color{red}D*}
         }
         {
           %(\DataFields{student}{name})\par
-          \starray_term_syntax:n {student.reviewer[1]}
+          \starray_term_parser:n {student.reviewer[1]}
           \tl_set:Ne \l__ufrgscca_tmpa_tl {\starray_parsed_get_prop:n {grade}}
-          \starray_term_syntax:n {student.reviewer[2]}
+          \starray_term_parser:n {student.reviewer[2]}
           \tl_set:Ne \l__ufrgscca_tmpb_tl {\starray_parsed_get_prop:n {grade}}
-          \starray_term_syntax:n {student.reviewer[3]}
+          \starray_term_parser:n {student.reviewer[3]}
           \tl_set:Ne \l__ufrgscca_tmpc_tl {\starray_parsed_get_prop:n {grade}}
           \tl_set:Ne \l__ufrgscca_tmpe_tl {\starray_parsed_get_prop:n {gradetype}}
           \str_case:enF {\l__ufrgscca_tmpe_tl}
@@ -589,7 +596,7 @@
         \bool_new:c {l__ufrgscca_#1_classified_bool}
       }
     \bool_set_false:c {l__ufrgscca_#1_classified_bool}  
-    \starray_term_syntax:n {student}
+    \starray_term_parser:n {student}
     \seq_gput_right:ce {l__ufrgscca_#1_list_seq} {\starray_parsed_get_prop:n {self}}
   }
   
@@ -631,7 +638,7 @@
 \cs_new_protected:Npn \__ufrgscca_grade:n #1 
     {
       \starray_set_iter_from_hash:nn {student}{#1}
-      \starray_term_syntax:n {student}
+      \starray_term_parser:n {student}
       \bool_if:nF {\starray_parsed_get_prop:n {flag-graded}}
         {
           \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
@@ -643,7 +650,7 @@
 \cs_new_protected:Npn \__ufrgscca_listclassify:nn #1#2
     {
       \starray_set_iter_from_hash:nn {student}{#2}
-      \starray_term_syntax:n {student}
+      \starray_term_parser:n {student}
       \bool_case:nF
         {
           {\starray_parsed_get_prop:n {flag-ff}}{\seq_gput_right:cn {l__ufrgscca_#1_list_ff_seq}{#2}}

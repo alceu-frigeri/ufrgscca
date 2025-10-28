@@ -107,11 +107,13 @@ The Current Maintainer of this work is Alceu Frigeri
 
 
 ## Changelog
-* Version 2.12a (next) 
-    - and+or/e+ou..
-    - @openright
+* Version 2.13 (this) 
+    - and+or/e+ou..(issue [#2](https://github.com/alceu-frigeri/ufrgscca/issues/2))
+    - @openright (issue [#3](https://github.com/alceu-frigeri/ufrgscca/issues/3))
+    - replaced \starray_term_syntax: by \starray_term_parser: 
+    - switching over <pkginfo> package's info
 
-* Version 2.12 (this) 
+* Version 2.12 
     - ufrgscca-curr internals adjustment (better support for biblatex)
     - Documentation adjustments regarding ufrgscca-curr.
 
