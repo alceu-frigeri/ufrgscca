@@ -2,31 +2,144 @@
 ## from https://github.com/gitattributes/gitattributes.io
 ##      https://schacon.github.io/git/gitattributes.html
 ##
-## Core latex/pdflatex files:
-*.tex text
-*.sty text
-*.cls text
-*.def text
-*.bib text
 
+##############
+## Documentation
+##############
+# ============
+*.md      text
+LICENSE   text
+AUTHORS   text
+*.md      text
+README    text
+*.txt     text
+
+##############
+## git itself
+##############
+# ============
 *.gitattributes text
-*.gitignore text
-.gitattributes text
-.gitignore text
+*.gitignore     text
+.gitattributes  text
+.gitignore      text
 
-# Documentation
-*.md text
-LICENSE text
-AUTHORS text
-*.md  text
-*.htm text
-README text
-*.txt text
+##############
+## Core latex/pdflatex files:
+##############
+# ============
+*.tex     text  diff=tex
+*.sty     text  diff=tex
+*.cls     text  diff=tex
+*.def     text  diff=tex
+*.bib     text  diff=tex
 
-# binaries and others
-*.pdf binary
+##############
+## Core html/php files:
+##############
+# ============
+*.php     text  diff=php
+*.phpt    text  diff=php
+*.phtml   text  diff=html
+*.htm     text  diff=html
+*.html    text  diff=html
+*.xml     text  diff=html
+*.css     text  diff=html
+*.sql     text
+*.csv     text
+*.js      text  diff=html
 
-*.tex diff=tex
-*.sty diff=tex
-*.def diff=tex
-*.cls diff=tex
+##############
+## binaries and others
+##############
+# ============
+*.pdf     binary
+*.eot     binary
+*.svg     binary
+*.ttf     binary
+*.woff    binary
+*.woff2   binary
+*.jpg     binary
+*.png     binary
+*.gif     binary
+*.ico     binary
+
+
+##############
+## PowerShell files (ms, so just crlf)
+##############
+
+##############
+## Source files
+##############
+# ============
+*.ps1     text  eol=crlf
+*.ps1x    text  eol=crlf
+*.psm1    text  eol=crlf
+*.psd1    text  eol=crlf
+*.ps1xml  text  eol=crlf
+*.pssc    text  eol=crlf
+*.psrc    text  eol=crlf
+*.cdxml   text  eol=crlf
+
+
+##############
+## To be complete
+## C/C++ files
+##############
+
+##############
+## C/C++ Source files
+##############
+# ============
+*.c       text  diff=cpp
+*.cc      text  diff=cpp
+*.cxx     text  diff=cpp
+*.cpp     text  diff=cpp
+*.cpi     text  diff=cpp
+*.c++     text  diff=cpp
+*.hpp     text  diff=cpp
+*.h       text  diff=cpp
+*.h++     text  diff=cpp
+*.hh      text  diff=cpp
+
+##############
+## Compiled Object files
+##############
+# ============
+*.slo     binary
+*.lo      binary
+*.o       binary
+*.obj     binary
+
+##############
+## Precompiled Headers
+##############
+# ============
+*.gch     binary
+*.pch     binary
+
+##############
+## Compiled Dynamic libraries
+##############
+# ============
+*.so      binary
+*.dylib   binary
+*.dll     binary
+
+##############
+## Compiled Static libraries
+##############
+# ============
+*.lai     binary
+*.la      binary
+*.a       binary
+*.lib     binary
+
+##############
+## Executables
+##############
+# ============
+*.exe     binary
+*.out     binary
+*.app     binary
+

@@ -1,7 +1,88 @@
 ##
 ## from https://github.com/github/gitignore/blob/main/TeX.gitignore
 ##
-## Core latex/pdflatex auxiliary files:
+
+## test directories
+pkgTests/
+pkgDeprecated/
+
+#### temp/live data directory
+##excel/
+##deprecated/
+##
+#### site specific temp data directory
+##Site/csv/
+##
+####password sensitive information
+##Site/pages/coreconnect.php
+
+##############
+## Editors:
+##############
+
+##############
+## WinEdt
+##############
+# ============
+*.bak
+*.sav
+*.prj
+
+##############
+## Texpad
+##############
+# ============
+.texpadtmp
+
+##############
+## LyX
+##############
+# ============
+*.lyx~
+
+##############
+## Kile
+##############
+# ============
+*.backup
+
+##############
+## gummi
+##############
+# ============
+.*.swp
+
+##############
+## KBibTeX
+##############
+# ============
+*~[0-9]*
+
+##############
+## TeXstudio
+##############
+# ============
+*.txss2
+
+##############
+## TeXnicCenter
+##############
+# ============
+*.tps
+
+##############
+# auto folder when using emacs and auctex
+###############
+# ============
+./auto/*
+*.el
+
+
+
+##############
+## Core latex/pdflatex auxiliarey files:
+##############
+# ============
 *.aux
 *.lof
 *.log
@@ -15,29 +96,28 @@
 *.cb2
 .*.lb
 
-## test directories
-#tests/
-#deprecated/
-
-## TeXstudio
-*.txss2
-
-## WinEdt
-*.prj
-
-## Intermediate documents:
+##############
+## latex/pdflatex Intermediate documents:
+##############
+# ============
 *.dvi
 *.xdv
 *-converted-to.*
 # these rules might exclude image files for figures etc.
 *.ps
-#*.eps
+*.eps
 #*.pdf
 
+##############
 ## Generated if empty string is given at "Please type another file name for output:"
+##############
+# ============
 .pdf
 
+##############
 ## Bibliography auxiliary files (bibtex/biblatex/biber):
+##############
+# ============
 *.bbl
 *.bcf
 *.blg
@@ -45,7 +125,10 @@
 *-blx.bib
 *.run.xml
 
+##############
 ## Build tool auxiliary files:
+##############
+# ============
 *.fdb_latexmk
 *.synctex
 *.synctex(busy)
@@ -134,7 +217,6 @@ acs-*.bib
 # gnuplot
 *.gnuplot
 *.table
-*.vrs
 
 # gnuplottex
 *-gnuplottex-*
@@ -270,32 +352,6 @@ pythontex-files-*/
 # Latexian
 TSWLatexianTemp*
 
-## Editors:
-# WinEdt
-*.bak
-*.sav
-
-# Texpad
-.texpadtmp
-
-# LyX
-*.lyx~
-
-# Kile
-*.backup
-
-# gummi
-.*.swp
-
-# KBibTeX
-*~[0-9]*
-
-# TeXnicCenter
-*.tps
-
-# auto folder when using emacs and auctex
-./auto/*
-*.el
 
 # expex forward references with \gathertags
 *-tags.tex
