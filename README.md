@@ -13,7 +13,7 @@ For more details, see the documentation,
 --------------
 
 ## Requirements
-* a fairly recent LaTeX distribution as recent as 2026/06/01
+* a fairly recent LaTeX distribution as recent as [2026/06/01](https://ctan.org/pkg/l3kernel)
 (with the new in kernel *\ProcessKeyOptions* and *\NewDocumentCommand* and *\prop_new_linked:*)
 
 ## Installation
