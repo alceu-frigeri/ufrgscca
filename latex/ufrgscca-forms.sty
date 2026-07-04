@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.13} {2025/10/28}
+%% This is version {2.13a} {2026/07/04}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -23,41 +23,36 @@
 %% CCA   stands for "Control and Automation Engineering Course" (Portuguese acronym)
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2023/11/01]
-
-
-\ProvidesExplPackage
-    {ufrgscca-forms}
-    {2025/10/28}
-    {2.13}
-    {UFRGS/CCA forms commands}
-   
     
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn { <pkg-name>} { props } sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage { <pkg-name>} { props } sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { ufrgscca-forms }
-  {
+\pkginfograbProvidesExplPackage { ufrgscca-forms}
+  { 
      name        = {ufrgscca-forms} ,
      prefix      = {ufrgscca} ,
-     date        = {2025/10/28},
-     version     = {2.13} ,
-     description = {UFRGS/CCA~ forms~commands}
+     date        = {2026/07/04},
+     version     = {2.13a} ,
+     description = {UFRGS/CCA forms commands}
   }
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
  
     
-\RequirePackage{starray}
-\RequirePackage{amsfonts}
+\RequirePackage{ starray }
+\RequirePackage{ amsfonts }
 
 
 \keys_define:nn { ufrgscca.forms }
-  {
+  { 
     noxtrbookmarks   .usage:n          = load ,
 		noxtrbookmarks   .bool_set:N       = \l__ufrgscca_noxtrbookmarks_bool ,
   }
@@ -65,203 +60,203 @@
 \ProcessKeyOptions[ufrgscca.forms]\relax
 
 
-\cs_generate_variant:Nn \tl_gset:Nn {Ne}
+\cs_generate_variant:Nn \tl_gset:Nn { Ne }
 
-\DeclareKeys[forms]{
+\DeclareKeys[forms]{ 
   internreqform.usage = general,
-  internreqform.code = {
-        \MakeForm{internshiprequest}
+  internreqform.code = { 
+        \MakeForm{ internshiprequest }
         },
   internsupervisorform.usage = general,
-  internsupervisorform.code = {
-        \MakeForm{internshipsupervisorform}
+  internsupervisorform.code = { 
+        \MakeForm{ internshipsupervisorform }
         },
   interntutorform.usage = general,
-  interntutorform.code = {
-        \MakeForm{internshiptutorform}
+  interntutorform.code = { 
+        \MakeForm{ internshiptutorform }
         },
   reqform-I.usage = general,
-  reqform-I.code = {
-        \MakeForm{request-I}
+  reqform-I.code = { 
+        \MakeForm{ request-I }
         },
   reqform-II.usage = general,
-  reqform-II.code = {
-        \MakeForm{request-II}
+  reqform-II.code = { 
+        \MakeForm{ request-II }
         },
   coadvisor-I.usage = general,
-  coadvisor-I.code = {
-        \MakeForm{coadvisor-I}
+  coadvisor-I.code = { 
+        \MakeForm{ coadvisor-I }
         },
   coadvisor-II.usage = general,
-  coadvisor-II.code = {
-        \MakeForm{coadvisor-II}
+  coadvisor-II.code = { 
+        \MakeForm{ coadvisor-II }
         },
   boardapproval-I.usage = general,
-  boardapproval-I.code = {
-        \MakeForm{boardapproval-I}
+  boardapproval-I.code = { 
+        \MakeForm{ boardapproval-I }
         },
   boardapproval-II.usage = general,
-  boardapproval-II.code = {
-        \MakeForm{boardapproval-II}
+  boardapproval-II.code = { 
+        \MakeForm{ boardapproval-II }
         },
   advisorsapproval-I.usage = general,
-  advisorsapproval-I.code = {
-        \MakeForm{advisorsapproval-I}
+  advisorsapproval-I.code = { 
+        \MakeForm{ advisorsapproval-I }
         },
   advisorsapproval-II.usage = general,
-  advisorsapproval-II.code = {
-        \MakeForm{advisorsapproval-II}
+  advisorsapproval-II.code = { 
+        \MakeForm{ advisorsapproval-II }
         },
   receipts-II.usage = general,
-  receipts-II.code = {
-      \bool_if:nTF \l__ufrgscca_emptyforms_bool
-        {
-          \studentReviewerSelect{1}
-          \tl_set:Nn \ReviewerBookMarkTL {}
-          \MakeForm{receipts-II}
+  receipts-II.code = { 
+      \bool_if:NTF \l__ufrgscca_emptyforms_bool
+        { 
+          \studentReviewerSelect{ 1 }
+          \tl_set:Nn \ReviewerBookMarkTL { }
+          \MakeForm{ receipts-II }
         }
         {        
-          \studentReviewerSelect{1}
-          \studentReviewerSetCase{1}
-            {
-                \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}              
-                \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+          \studentReviewerSelect{ 1 }
+          \studentReviewerSetCase{ 1 }
+            { 
+                \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }              
+                \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
             }
-            {
-              \tl_set:Nn \ReviewerBookMarkTL {~-~1}
+            { 
+              \tl_set:Nn \ReviewerBookMarkTL { ~-~1 }
             }
-          \MakeForm{receipts-II}
+          \MakeForm{ receipts-II }
         }
         },
   examinersforms-I.usage = general,
-  examinersforms-I.code = {
-        \bool_if:nTF \l__ufrgscca_emptyforms_bool
-          {
-            \studentReviewerSelect{1}
-            \tl_set:Nn \ReviewerBookMarkTL {}
-            \MakeForm{examinersform-I}
+  examinersforms-I.code = { 
+        \bool_if:NTF \l__ufrgscca_emptyforms_bool
+          { 
+            \studentReviewerSelect{ 1 }
+            \tl_set:Nn \ReviewerBookMarkTL { }
+            \MakeForm{ examinersform-I }
           }
-          {
-            \studentReviewerSelect{2}
-            \studentReviewerSetCase{2}
-              {
-                \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+          { 
+            \studentReviewerSelect{ 2 }
+            \studentReviewerSetCase{ 2 }
+              { 
+                \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
               }
-              {
-                \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+              { 
+                \tl_set:Nn \ReviewerBookMarkTL { ~-~2 }
               }
-            \MakeForm{examinersform-I}
-            \studentReviewerSelect{3}
-            \studentReviewerSetCase{3}
-              {
-                \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+            \MakeForm{ examinersform-I }
+            \studentReviewerSelect{ 3 }
+            \studentReviewerSetCase{ 3 }
+              { 
+                \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
               }
-              {
-                \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+              { 
+                \tl_set:Nn \ReviewerBookMarkTL { ~-~3 }
               }
-            \MakeForm{examinersform-I}
+            \MakeForm{ examinersform-I }
           }
         },
   examinersforms-II.usage = general,
-  examinersforms-II.code = {
-        \bool_if:nTF \l__ufrgscca_emptyforms_bool
-        {
-          \studentReviewerSelect{1}
-          \tl_set:Nn \ReviewerBookMarkTL {}
-          \MakeForm{receipts-II}
-          \MakeForm{examinersform-II}
-          \MakeForm{correctionsform-II}
+  examinersforms-II.code = { 
+        \bool_if:NTF \l__ufrgscca_emptyforms_bool
+        { 
+          \studentReviewerSelect{ 1 }
+          \tl_set:Nn \ReviewerBookMarkTL { }
+          \MakeForm{ receipts-II }
+          \MakeForm{ examinersform-II }
+          \MakeForm{ correctionsform-II }
         }
-        {
-          \studentReviewerSelect{1}
-             \studentReviewerSetCase{1}
-              {
-                \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+        { 
+          \studentReviewerSelect{ 1 }
+             \studentReviewerSetCase{ 1 }
+              { 
+                \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
               }
-              {
-                \tl_set:Nn \ReviewerBookMarkTL {~-~1}
+              { 
+                \tl_set:Nn \ReviewerBookMarkTL { ~-~1 }
               }
-          \MakeForm{receipts-II}
-          \MakeForm{examinersform-II}
-          \MakeForm{correctionsform-II}
-          \studentReviewerSelect{2}
-            \studentReviewerSetCase{2}
-              {
-                \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+          \MakeForm{ receipts-II }
+          \MakeForm{ examinersform-II }
+          \MakeForm{ correctionsform-II }
+          \studentReviewerSelect{ 2 }
+            \studentReviewerSetCase{ 2 }
+              { 
+                \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
               }
-              {
-                \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+              { 
+                \tl_set:Nn \ReviewerBookMarkTL { ~-~2 }
               }
-          \MakeForm{receipts-II}
-          \MakeForm{examinersform-II}
-          \MakeForm{correctionsform-II}
-          \studentReviewerSelect{3}
-            \studentReviewerSetCase{3}
-              {
-                \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+          \MakeForm{ receipts-II }
+          \MakeForm{ examinersform-II }
+          \MakeForm{ correctionsform-II }
+          \studentReviewerSelect{ 3 }
+            \studentReviewerSetCase{ 3 }
+              { 
+                \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
               }
-              {
-                \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+              { 
+                \tl_set:Nn \ReviewerBookMarkTL { ~-~3 }
               }
-          \MakeForm{receipts-II}
-          \MakeForm{examinersform-II}
-          \MakeForm{correctionsform-II}
+          \MakeForm{ receipts-II }
+          \MakeForm{ examinersform-II }
+          \MakeForm{ correctionsform-II }
         }
         },
   rectifyapproval-I.usage = general,
-  rectifyapproval-I.code = {
-        \MakeForm{rectifyapproval-I}
+  rectifyapproval-I.code = { 
+        \MakeForm{ rectifyapproval-I }
         },
   rectifyapproval-II.usage = general,
-  rectifyapproval-II.code = {
-        \MakeForm{rectifyapproval-II}
+  rectifyapproval-II.code = { 
+        \MakeForm{ rectifyapproval-II }
         },
 }
 
 
-\NewDocumentCommand{\tcforms}{m}{%
+\NewDocumentCommand{ \tcforms }{ m }{ %
   \bool_set_false:N \l__ufrgscca_emptyforms_bool
   \__ufrgscca_student_emptyfields_if_none:
-  \DataGet{student}{name}{\StudentBookMarkTL}
-  \tl_put_right:Nn \StudentBookMarkTL {~-~}
+  \DataGet{ student }{ name }{ \StudentBookMarkTL }
+  \tl_put_right:Nn \StudentBookMarkTL { ~-~}
   
-  \SetKeys[forms]{#1}%
+  \SetKeys[forms]{ #1 }%
 }
 
 
-\NewDocumentCommand{\tcemptyforms}{m}
-  {
+\NewDocumentCommand{ \tcemptyforms }{ m }
+  { 
     \bool_set_true:N \l__ufrgscca_emptyforms_bool
     \__ufrgscca_emptyfields:
-    \tl_set:Nn \StudentBookMarkTL {}
-    \SetKeys[forms]{#1}%
+    \tl_set:Nn \StudentBookMarkTL { }
+    \SetKeys[forms]{ #1 }%
   }
 
 
 
 \int_new:N \l__ufrgscca_a_int
 \int_new:N \l__ufrgscca_b_int
-\NewDocumentCommand{\BlankLines}{O{0pt}m}{
+\NewDocumentCommand{ \BlankLines }{ O{ 0pt }m }{ 
   \int_zero:N \l__ufrgscca_a_int
-  \int_set:Nn \l__ufrgscca_b_int {#2}
-  \int_do_until:nNnn {\l__ufrgscca_a_int} {=} {\l__ufrgscca_b_int}
-    {
+  \int_set:Nn \l__ufrgscca_b_int { #2 }
+  \int_do_until:nNnn { \l__ufrgscca_a_int } = { \l__ufrgscca_b_int }
+    { 
       \int_incr:N \l__ufrgscca_a_int
       \hrulefill\\[#1]\par%
     }
 }
 
-\NewDocumentCommand{\SetForm}{mm+m}{
-  \prop_put:Nnn \l__ufrgscca_forms_prop {#1.#2}{#3}
+\NewDocumentCommand{ \SetForm }{ mm+m }{ 
+  \prop_put:Nnn \l__ufrgscca_forms_prop { #1.#2 }{ #3 }
 }
 
-\NewDocumentCommand{\SetFormX}{mm+m}{
-  \prop_put:Nne \l__ufrgscca_forms_prop {#1.#2}{#3}
+\NewDocumentCommand{ \SetFormX }{ mm+m }{ 
+  \prop_put:Nne \l__ufrgscca_forms_prop { #1.#2 }{ #3 }
 }
 
 %%%
@@ -275,73 +270,73 @@
 \tl_new:N \l__ufrgscca_booktmp_a_tl
 \tl_new:N \l__ufrgscca_booktmp_b_tl
 
-\NewDocumentCommand{\MakeForm}{m} {
-  \begin{center}
+\NewDocumentCommand{ \MakeForm }{ m } { 
+  \begin{ center }
     \noindent
-    \parbox[t]{\textwidth}
-      {
+    \parbox[t]{ \textwidth }
+      { 
         \centering
-          {
-            \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.top} \l_tmpa_tl 
-              { \l_tmpa_tl }
-              { \UseTerm{cover.topbase}\\ }
+          { 
+            \prop_get:NnNTF \l__ufrgscca_forms_prop { #1.top } \l__ufrgscca_tt_tmpa_tl 
+              { \l__ufrgscca_tt_tmpa_tl }
+              { \UseTerm{ cover.topbase }\\ }
             \bool_if:NTF \l__ufrgscca_noxtrbookmarks_bool
-              {}
-              {
-                \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.bookmark} \l_tmpa_tl 
-                  { \l_tmpa_tl }
-                  {}
+              { }
+              { 
+                \prop_get:NnNTF \l__ufrgscca_forms_prop { #1.bookmark } \l__ufrgscca_tt_tmpa_tl 
+                  { \l__ufrgscca_tt_tmpa_tl }
+                  { }
               }
-            \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.heading} \l_tmpa_tl 
-              { {\sc \l_tmpa_tl}\\[6mm] }
-              { \par\vspace{5mm} }
+            \prop_get:NnNTF \l__ufrgscca_forms_prop { #1.heading } \l__ufrgscca_tt_tmpa_tl 
+              { { \sc \l__ufrgscca_tt_tmpa_tl }\\[6mm] }
+              { \par\vspace{ 5mm } }
           }
       }\par
-      \prop_get:NnNT \l__ufrgscca_forms_prop {#1.title} \l_tmpa_tl 
-        {
-          \textbf{\l_tmpa_tl}
-          \prop_get:NnNT \l__ufrgscca_forms_prop {#1.footnote} \l_tmpa_tl
-            { \footnote[1]{\l_tmpa_tl} }
+      \prop_get:NnNT \l__ufrgscca_forms_prop { #1.title } \l__ufrgscca_tt_tmpa_tl 
+        { 
+          \textbf{ \l__ufrgscca_tt_tmpa_tl }
+          \prop_get:NnNT \l__ufrgscca_forms_prop { #1.footnote } \l__ufrgscca_tt_tmpa_tl
+            { \footnote[1]{ \l__ufrgscca_tt_tmpa_tl } }
           \\
         }
-  \end{center}
+  \end{ center }
 %
-  \prop_get:NnNT \l__ufrgscca_forms_prop {#1.opening} \l_tmpa_tl 
-    {
-      \prop_get:NnNTF \l__ufrgscca_forms_prop {#1.preopening} \l_tmpb_tl 
-        {\l_tmpb_tl}
-        {\vfill}      
-      \l_tmpa_tl
+  \prop_get:NnNT \l__ufrgscca_forms_prop { #1.opening } \l__ufrgscca_tt_tmpa_tl 
+    { 
+      \prop_get:NnNTF \l__ufrgscca_forms_prop { #1.preopening } \l__ufrgscca_tt_tmpb_tl 
+        { \l__ufrgscca_tt_tmpb_tl }
+        { \vfill }      
+      \l__ufrgscca_tt_tmpa_tl
     }
-  \prop_get:NnNT \l__ufrgscca_forms_prop {#1.body} \l_tmpa_tl 
-    {
+  \prop_get:NnNT \l__ufrgscca_forms_prop { #1.body } \l__ufrgscca_tt_tmpa_tl 
+    { 
       \vfill
-      \l_tmpa_tl
+      \l__ufrgscca_tt_tmpa_tl
     }
-  \prop_get:NnNT \l__ufrgscca_forms_prop {#1.closing} \l_tmpa_tl 
-    {
+  \prop_get:NnNT \l__ufrgscca_forms_prop { #1.closing } \l__ufrgscca_tt_tmpa_tl 
+    { 
       \vfill
-      \l_tmpa_tl
+      \l__ufrgscca_tt_tmpa_tl
     }
   \pagebreak
 }
 
 
-\NewDocumentCommand{\SignatureDate}{m}{
-  \begin{flushright} \UseTerm{localdate}%
-    ~\vspace*{6mm}\\
+\NewDocumentCommand{ \SignatureDate }{ m }{ 
+  \begin{ flushright } \UseTerm{ localdate }%
+    ~\vspace*{ 6mm }\\
 %
-    $\overline{\text{\emph{#1}}}$
-  \end{flushright}
+    $\overline{ \text{ \emph{ #1 }}}$
+  \end{ flushright }
 }
 
-\NewDocumentCommand{\BoardDescSignature}{mm}{
-  #1:~ \textbf{\DataFields{#2}{name}}\vspace{-2ex}
-    \begin{flushright}%~ \hfill
-    \UseLabel{email}:~ \textbf{\DataFields{#2}{email}}~ 
-    \UseLabel{phone}:~ \textbf{\DataFields{#2}{phone}}~
-    \UseLabel{agree}:~ \rule{\l__ufrgscca_agree_rule_dim}{.1pt}
-    \end{flushright}
+\NewDocumentCommand{ \BoardDescSignature }{ mm }{ 
+  #1:~ \textbf{ \DataFields{ #2 }{ name }}\vspace{ -2ex }
+    \begin{ flushright }%~ \hfill
+    \UseLabel{ email }:~ \textbf{ \DataFields{ #2 }{ email }}~ 
+    \UseLabel{ phone }:~ \textbf{ \DataFields{ #2 }{ phone }}~
+    \UseLabel{ agree }:~ \rule{ \l__ufrgscca_agree_rule_dim }{ .1pt }
+    \end{ flushright }
 }
 
 
@@ -353,6 +348,6 @@
 %%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%
 \ExplSyntaxOff
-  \input{ufrgscca-forms.tex}
+  \input{ ufrgscca-forms.tex }
 \ExplSyntaxOn  
 

@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.13} {2025/10/28}
+%% This is version {2.13a} {2026/07/04}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -24,28 +24,23 @@
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2023/11/01]
 
-
-\ProvidesExplPackage
-    {ufrgscca-coord}
-    {2025/10/28}
-    {2.13}
-    {UFRGS/CCA coord commands}
-
-
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn { <pkg-name>} { props } sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage { <pkg-name>} { props } sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { ufrgscca-coord }
-  {
+\pkginfograbProvidesExplPackage {ufrgscca-coord}
+  { 
      name        = {ufrgscca-coord} ,
      prefix      = {ufrgscca} ,
-     date        = {2025/10/28},
-     version     = {2.13} ,
-     description = {UFRGS/CCA~ coordination~ report~ commands}
+     date        = {2026/07/04},
+     version     = {2.13a} ,
+     description = {UFRGS/CCA coordination report commands}
   }
 %%%%%%%
 %%% End of cut-n-paste
@@ -55,10 +50,10 @@
 
 
 
-\cs_generate_variant:Nn \tl_set:Nn {Ne}
+\cs_generate_variant:Nn \tl_set:Nn { Ne }
 
 \keys_define:nn { ufrgscca / coord }
-  {
+  { 
     attendance. bool_set:N   = \l__ufrgscca_attendance_bool ,
     attendance. usage:n       = general , 
     
@@ -94,206 +89,206 @@
   }
 
 \cs_new_protected:Npn \__ufrgscca_set_reports:n #1 
-  {  \keys_set:nn { ufrgscca / coord }{#1}  }
+  {  \keys_set:nn { ufrgscca / coord }{ #1 }  }
 
-\def\c@one#1:#2:{\csname #1\endcsname}
-\def\c@two#1:#2:{\csname #1\endcsname[newpage]}
-\def\tccoord@split#1:#2:#3#4#5,{#4#1:#2:}
-\NewDocumentCommand{\tccoord@student@exec}{m}{\tccoord@split#1::\c@two\c@one\empty,}
+\def\c@one#1:#2:{ \csname #1\endcsname }
+\def\c@two#1:#2:{ \csname #1\endcsname[newpage]}
+\def\tccoord@split#1:#2:#3#4#5,{ #4#1:#2:}
+\NewDocumentCommand{ \tccoord@student@exec }{ m }{ \tccoord@split#1::\c@two\c@one\empty,}
 
-\RequirePackage{longtable}
-\RequirePackage{multirow}
-\RequirePackage{pgfcalendar}
-
-
-\RequirePackage{ufrgscca-core}
-\RequirePackage{ufrgscca-forms}
+\RequirePackage{ longtable }
+\RequirePackage{ multirow }
+\RequirePackage{ pgfcalendar }
 
 
-\starray_new:n {prof}
-\starray_def_from_keyval:nn {prof}
- {
-   last   = {},
-   first  = {},
-   gender = {},
+\RequirePackage{ ufrgscca-core }
+\RequirePackage{ ufrgscca-forms }
+
+
+\starray_new:n { prof }
+\starray_def_from_keyval:nn { prof }
+ { 
+   last   = { },
+   first  = { },
+   gender = { },
  }
  
-\NewDocumentCommand{\professor}{O{}mmmmO{}}
-  {
-    \starray_new_term:nn {prof}{#1}
-    \starray_set_from_keyval:nn {prof}
-      {
-        last   = {#2},
-        first  = {#3},
-        email  = {#4},
-        phone  = {#5},
-        gender = {#6},
+\NewDocumentCommand{ \professor }{ O{ }mmmmO{ }}
+  { 
+    \starray_new_term:nn { prof }{ #1 }
+    \starray_set_from_keyval:nn { prof }
+      { 
+        last   = { #2 },
+        first  = { #3 },
+        email  = { #4 },
+        phone  = { #5 },
+        gender = { #6 },
       }
   }
 
 \cs_new_protected:Npn \__ufrgscca_prof_ref_set:nnnnnnn #1#2#3#4#5#6#7
   {  
-    #1 {#3}{#4}[#5]  
-    #2 {}{}{#6}{#7}
+    #1 { #3 }{ #4 }[#5]  
+    #2 { }{ }{ #6 }{ #7 }
   }
   
-\cs_generate_variant:Nn \__ufrgscca_prof_ref_set:nnnnnnn {nneeeee}  
+\cs_generate_variant:Nn \__ufrgscca_prof_ref_set:nnnnnnn { nneeeee }  
 
 \cs_new_protected:Npn \__ufrgscca_prof_ref:nnn #1#2#3
-  {
-    \starray_set_iter_from_hash:nnTF {prof}{#3}
-      {
-        \starray_term_parser:n {prof}
-        \__ufrgscca_prof_ref_set:nneeeee {#1}{#2}
-          {\starray_parsed_get_prop:n{last}}{\starray_parsed_get_prop:n{first}}{\starray_parsed_get_prop:n{gender}}
-          {\starray_parsed_get_prop:n{email}}{\starray_parsed_get_prop:n{phone}}
+  { 
+    \starray_set_iter_from_hash:nnTF { prof }{ #3 }
+      { 
+        \starray_term_parser:n { prof }
+        \__ufrgscca_prof_ref_set:nneeeee { #1 }{ #2 }
+          { \starray_parsed_get_prop:n{ last }}{ \starray_parsed_get_prop:n{ first }}{ \starray_parsed_get_prop:n{ gender }}
+          { \starray_parsed_get_prop:n{ email }}{ \starray_parsed_get_prop:n{ phone }}
       }
-      {
-        #1{definido:(#3)}{não}
+      { 
+        #1{ definido:(#3)}{ não }
       }    
   }
 
-\NewDocumentCommand{\advisorprof}{m}
-  {  \__ufrgscca_prof_ref:nnn {\advisor}{\advisorinfo}{#1}  }
+\NewDocumentCommand{ \advisorprof }{ m }
+  {  \__ufrgscca_prof_ref:nnn { \advisor }{ \advisorinfo }{ #1 }  }
 
-\NewDocumentCommand{\coadvisorprof}{m}
-  {  \__ufrgscca_prof_ref:nnn {\coadvisor}{\coadvisorinfo}{#1}  }
+\NewDocumentCommand{ \coadvisorprof }{ m }
+  {  \__ufrgscca_prof_ref:nnn { \coadvisor }{ \coadvisorinfo }{ #1 }  }
   
-\NewDocumentCommand{\examinerprof}{m}
-  {  \__ufrgscca_prof_ref:nnn {\examiner}{\examinerinfo}{#1}  }
+\NewDocumentCommand{ \examinerprof }{ m }
+  {  \__ufrgscca_prof_ref:nnn { \examiner }{ \examinerinfo }{ #1 }  }
   
-\NewDocumentCommand{\altexaminerprof}{m}
-  {  \__ufrgscca_prof_ref:nnn {\altexaminer}{\altexaminerinfo}{#1}  }
+\NewDocumentCommand{ \altexaminerprof }{ m }
+  {  \__ufrgscca_prof_ref:nnn { \altexaminer }{ \altexaminerinfo }{ #1 }  }
 
 %%% from -ppc
 \cs_if_exist:NF \__ufrgscca_def_colorpair:n
-  {
+  { 
     \cs_new:Npn \__ufrgscca_def_colorpair:n #1
-      {
-        \colorlet{light#1}{white!85!#1}
-        \colorlet{dark#1}{#1!70!black!100}
-        \colorlet{darker#1}{#1!40!black!100}
+      { 
+        \colorlet{ light#1 }{ white!85!#1 }
+        \colorlet{ dark#1 }{ #1!70!black!100 }
+        \colorlet{ darker#1 }{ #1!40!black!100 }
       }
   }
 
 %\cs_new:Npn \__ufrgscca_def_colorpair:n #1
-%  {
-%    \colorlet{light#1}{white!85!#1}
-%    \colorlet{dark#1}{#1!70!black!100}
-%    \colorlet{darker#1}{#1!40!black!100}
+%  { 
+%    \colorlet{ light#1 }{ white!85!#1 }
+%    \colorlet{ dark#1 }{ #1!70!black!100 }
+%    \colorlet{ darker#1 }{ #1!40!black!100 }
 %  }
   
   
-\__ufrgscca_def_colorpair:n {red}
-\__ufrgscca_def_colorpair:n {green}
-\__ufrgscca_def_colorpair:n {blue}
+\__ufrgscca_def_colorpair:n { red }
+\__ufrgscca_def_colorpair:n { green }
+\__ufrgscca_def_colorpair:n { blue }
 
-\NewDocumentCommand{\ActivitySetNewEvent}{O{}mm}{
-  \tl_if_blank:nTF {#1}
-    {
-      \starray_new_term:nn {activity.calendar}{#2}
-      \starray_gset_prop:nnn {activity.calendar}{event}{#3}
+\NewDocumentCommand{ \ActivitySetNewEvent }{ O{ }mm }{ 
+  \tl_if_blank:nTF { #1 }
+    { 
+      \starray_new_term:nn { activity.calendar }{ #2 }
+      \starray_gset_prop:nnn { activity.calendar }{ event }{ #3 }
     }
-    {
-      \starray_new_term:nn {activity[#1].calendar}{#2}
-      \starray_gset_prop:nnn {activity[#1].calendar}{event}{#3}
+    { 
+      \starray_new_term:nn { activity[#1].calendar }{ #2 }
+      \starray_gset_prop:nnn { activity[#1].calendar }{ event }{ #3 }
     }
 }
 
-\NewDocumentCommand{\ActivitySetEventDay}{O{}mmm}{
-  \tl_if_blank:nTF {#1}
-    {
-      \starray_gset_from_keyval:nn {activity.calendar[#2]}
-        {
-            date = {#3} ,
-            week = {#4} ,
+\NewDocumentCommand{ \ActivitySetEventDay }{ O{ }mmm }{ 
+  \tl_if_blank:nTF { #1 }
+    { 
+      \starray_gset_from_keyval:nn { activity.calendar[#2]}
+        { 
+            date = { #3 } ,
+            week = { #4 } ,
         }
     }
-    {
-      \starray_gset_from_keyval:nn {activity[#1].calendar[#2]}
-        {
-            date = {#3} ,
-            week = {#4} ,
+    { 
+      \starray_gset_from_keyval:nn { activity[#1].calendar[#2]}
+        { 
+            date = { #3 } ,
+            week = { #4 } ,
         }
     }
 }
 
 %
-\NewDocumentCommand{\studentfate}{O{}}{%%
-  \tl_if_blank:nTF {#1}
-    {
-      \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
+\NewDocumentCommand{ \studentfate }{ O{ }}{ %%
+  \tl_if_blank:nTF { #1 }
+    { 
+      \emptytermifnone[3]{ student.reviewer }[\starray_gset_prop:nnn { student }{ flag-null }{ \c_true_bool }]
       \__ufrgscca_studentgrade:
     }
-    {
-      \str_case:nnF  {#1}
-        {
-          {C}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
+    { 
+      \str_case:nnF  { #1 }
+        { 
+          { C }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
                   grade = C ,
                   flag-exam = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                   flag-approved = \c_true_bool ,
                 }
             }
-          {D}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
+          { D }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
                   grade = D ,
                   flag-exam = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                 }
             }
-          {exam}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
-                  grade = {\textcolor{red}{exame}} ,
+          { exam }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
+                  grade = { \textcolor{ red }{ exame }} ,
                   flag-exam = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                 }
             }
-          {FF}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
+          { FF }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
                   grade = FF ,
                   flag-ff = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                 }
             }
-          {dismiss}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
+          { dismiss }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
                   flag-dismiss = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                 }
             }
-          {none}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
+          { none }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
                   flag-dismiss = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                 }
             }
-          {other}
-            {
-              \starray_gset_from_keyval:nn {student} 
-                {
+          { other }
+            { 
+              \starray_gset_from_keyval:nn { student } 
+                { 
                   flag-other = \c_true_bool ,
                   flag-graded = \c_true_bool ,
                 }
             }
         }
         { %% in case of none of above...
-          \starray_gset_from_keyval:nn {student} 
-            {
-              grade = {\textcolor{red}{\textbf{#1}}} ,
+          \starray_gset_from_keyval:nn { student } 
+            { 
+              grade = { \textcolor{ red }{ \textbf{ #1 }}} ,
               flag-exam = \c_true_bool ,
               flag-graded = \c_true_bool ,
             }       
@@ -306,70 +301,70 @@
 \tl_new:N \l__ufrgscca_tmpc_tl
 \tl_new:N \l__ufrgscca_tmpd_tl
 \tl_new:N \l__ufrgscca_tmpe_tl
-\prg_generate_conditional_variant:Nnn \str_case:nn {en}{T,F,TF}
+\prg_generate_conditional_variant:Nnn \str_case:nn { en }{ T,F,TF }
 
 \cs_new_protected:Npn \__ufrgscca_studentgrade: 
-    {
-      \starray_term_parser:n {student}
-      \bool_if:nTF {\starray_parsed_get_prop:n {flag-null}}
-        {
-           \starray_gset_prop:nnn {student}{grade}{\color{red}D*}
+    { 
+      \starray_term_parser:n { student }
+      \bool_if:nTF { \starray_parsed_get_prop:n { flag-null }}
+        { 
+           \starray_gset_prop:nnn { student }{ grade }{ \color{ red }D*}
         }
-        {
-          %(\DataFields{student}{name})\par
-          \starray_term_parser:n {student.reviewer[1]}
-          \tl_set:Ne \l__ufrgscca_tmpa_tl {\starray_parsed_get_prop:n {grade}}
-          \starray_term_parser:n {student.reviewer[2]}
-          \tl_set:Ne \l__ufrgscca_tmpb_tl {\starray_parsed_get_prop:n {grade}}
-          \starray_term_parser:n {student.reviewer[3]}
-          \tl_set:Ne \l__ufrgscca_tmpc_tl {\starray_parsed_get_prop:n {grade}}
-          \tl_set:Ne \l__ufrgscca_tmpe_tl {\starray_parsed_get_prop:n {gradetype}}
-          \str_case:enF {\l__ufrgscca_tmpe_tl}
-            {
-              {1}
-                {
+        { 
+          %(\DataFields{ student }{ name })\par
+          \starray_term_parser:n { student.reviewer[1]}
+          \tl_set:Ne \l__ufrgscca_tmpa_tl { \starray_parsed_get_prop:n { grade }}
+          \starray_term_parser:n { student.reviewer[2]}
+          \tl_set:Ne \l__ufrgscca_tmpb_tl { \starray_parsed_get_prop:n { grade }}
+          \starray_term_parser:n { student.reviewer[3]}
+          \tl_set:Ne \l__ufrgscca_tmpc_tl { \starray_parsed_get_prop:n { grade }}
+          \tl_set:Ne \l__ufrgscca_tmpe_tl { \starray_parsed_get_prop:n { gradetype }}
+          \str_case:enF { \l__ufrgscca_tmpe_tl }
+            { 
+              { 1 }
+                { 
                   \tl_set:Ne \l__ufrgscca_tmpd_tl
-                    {\fpeval{round(((\l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/2),2,1)}}
+                    { \fpeval{ round(((\l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/2),2,1)}}
                   \__ufrgscca_set_grade:n \l__ufrgscca_tmpd_tl
                 }
-              {2}
-                {
+              { 2 }
+                { 
                   \tl_set:Ne \l__ufrgscca_tmpd_tl
-                    {\fpeval{round(((\l__ufrgscca_tmpa_tl + \l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/3),2,1)}}
+                    { \fpeval{ round(((\l__ufrgscca_tmpa_tl + \l__ufrgscca_tmpb_tl + \l__ufrgscca_tmpc_tl)/3),2,1)}}
                   \__ufrgscca_set_grade:n \l__ufrgscca_tmpd_tl
                 }
             }
             {  
-              \starray_gset_prop:nne {student}{gradeavrg}{0}
-              \starray_gset_prop:nnn {student}{grade}{\color{red}D*}
+              \starray_gset_prop:nne { student }{ gradeavrg }{ 0 }
+              \starray_gset_prop:nnn { student }{ grade }{ \color{ red }D*}
             }
         }
-      \starray_gset_prop:nnn {student}{flag-graded}{\c_true_bool}
+      \starray_gset_prop:nnn { student }{ flag-graded }{ \c_true_bool }
     }
 
 
 \cs_new_protected:Npn \__ufrgscca_set_grade:n #1
-  {
-    \starray_gset_prop:nne {student}{gradeavrg}{#1}
-    \fp_compare:nNnTF {#1} < {\UseConst{NgradeC}}
+  { 
+    \starray_gset_prop:nne { student }{ gradeavrg }{ #1 }
+    \fp_compare:nNnTF { #1 } < { \UseConst{ NgradeC }}
       { % D
-        \starray_gset_prop:nnn {student}{grade}{D}
+        \starray_gset_prop:nnn { student }{ grade }{ D }
       }
-      {
-        \fp_compare:nNnTF {#1} < {\UseConst{NgradeB}}
+      { 
+        \fp_compare:nNnTF { #1 } < { \UseConst{ NgradeB }}
           { % C
-            \starray_gset_prop:nnn {student}{grade}{C}
-            \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
+            \starray_gset_prop:nnn { student }{ grade }{ C }
+            \starray_gset_prop:nnn { student }{ flag-approved }{ \c_true_bool }
           }
-          {
-            \fp_compare:nNnTF {#1} < {\UseConst{NgradeA}}
+          { 
+            \fp_compare:nNnTF { #1 } < { \UseConst{ NgradeA }}
               { % B
-                \starray_gset_prop:nnn {student}{grade}{B}
-                \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
+                \starray_gset_prop:nnn { student }{ grade }{ B }
+                \starray_gset_prop:nnn { student }{ flag-approved }{ \c_true_bool }
               }
               { % A
-                \starray_gset_prop:nnn {student}{grade}{A}
-                \starray_gset_prop:nnn {student}{flag-approved}{\c_true_bool}
+                \starray_gset_prop:nnn { student }{ grade }{ A }
+                \starray_gset_prop:nnn { student }{ flag-approved }{ \c_true_bool }
               }
           }
       }
@@ -377,21 +372,21 @@
 
 
 \cs_new_protected:Npn \__ufrgscca_set_timeslot:nnnnn #1#2#3#4#5
-  {
-  \starray_gset_from_keyval:nn {student}
-    {
-      board-local = {#1} ,
-      board-time = {#2} ,
-      board-date = {#3} ,
-      board-datetime = {#5} ,
+  { 
+  \starray_gset_from_keyval:nn { student }
+    { 
+      board-local = { #1 } ,
+      board-time = { #2 } ,
+      board-date = { #3 } ,
+      board-datetime = { #5 } ,
     }
-    \SetConsts {
-      date:#3 = {\__ufrgscca_weekday:n {#4}} ,
+    \SetConsts { 
+      date:#3 = { \__ufrgscca_weekday:n { #4 }} ,
     }    
   }
-\cs_generate_variant:Nn \__ufrgscca_set_timeslot:nnnnn {neeee}    
+\cs_generate_variant:Nn \__ufrgscca_set_timeslot:nnnnn { neeee }    
 
-\cs_generate_variant:Nn \int_set:Nn {Ne}
+\cs_generate_variant:Nn \int_set:Nn { Ne }
 
 \seq_new:N \l__ufrgscca_date_seq
 \seq_new:N \l__ufrgscca_time_seq
@@ -403,113 +398,113 @@
 \int_new:N \l__ufrgscca_year_tmp_int
 \int_new:N \l__ufrgscca_hour_tmp_int
 \int_new:N \l__ufrgscca_min_tmp_int
-\cs_generate_variant:Nn \seq_set_split:Nnn {Nen}
-\NewDocumentCommand{\timeslot}{O{}mm}
-  {%%
-    \tl_set:Ne \l_tmpa_tl {\tl_to_str:n{:}}
-    \seq_set_split:Nen \l__ufrgscca_time_seq {\l_tmpa_tl} {#3}
-    \int_case:nnF {\seq_count:N \l__ufrgscca_time_seq}
-      {
-        {2}{
-             \seq_pop_left:NNTF \l__ufrgscca_time_seq \l_tmpa_tl 
-               { \int_set:Ne \l__ufrgscca_hour_tmp_int {\l_tmpa_tl} }
-               {}
-             \seq_pop_left:NNTF \l__ufrgscca_time_seq \l_tmpa_tl 
-               { \int_set:Ne \l__ufrgscca_min_tmp_int {\l_tmpa_tl} }
-               {}
+\cs_generate_variant:Nn \seq_set_split:Nnn { Nen }
+\NewDocumentCommand{ \timeslot }{ O{ }mm }
+  { %%
+    \tl_set:Ne \l__ufrgscca_tt_tmpa_tl { \tl_to_str:n{ :}}
+    \seq_set_split:Nen \l__ufrgscca_time_seq { \l__ufrgscca_tt_tmpa_tl } { #3 }
+    \int_case:nnF { \seq_count:N \l__ufrgscca_time_seq }
+      { 
+        { 2 }{ 
+             \seq_pop_left:NNTF \l__ufrgscca_time_seq \l__ufrgscca_tt_tmpa_tl 
+               { \int_set:Ne \l__ufrgscca_hour_tmp_int { \l__ufrgscca_tt_tmpa_tl } }
+               { }
+             \seq_pop_left:NNTF \l__ufrgscca_time_seq \l__ufrgscca_tt_tmpa_tl 
+               { \int_set:Ne \l__ufrgscca_min_tmp_int { \l__ufrgscca_tt_tmpa_tl } }
+               { }
            }
       }
-      {
-        \int_set:Nn \l__ufrgscca_hour_tmp_int {12}
-        \int_set:Nn \l__ufrgscca_min_tmp_int {12}
+      { 
+        \int_set:Nn \l__ufrgscca_hour_tmp_int { 12 }
+        \int_set:Nn \l__ufrgscca_min_tmp_int { 12 }
       }
     \seq_clear:N \l__ufrgscca_time_seq
-    \int_compare:nNnTF {\l__ufrgscca_hour_tmp_int} < {10}
-      {\seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_hour_tmp_int}}
-      {\seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_hour_tmp_int}}  
-    \int_compare:nNnTF {\l__ufrgscca_min_tmp_int} < {10}
-      { \seq_put_right:Ne \l__ufrgscca_time_seq {0 \int_use:N \l__ufrgscca_min_tmp_int} }
-      {\seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_min_tmp_int}}  
+    \int_compare:nNnTF { \l__ufrgscca_hour_tmp_int } < { 10 }
+      { \seq_put_right:Ne \l__ufrgscca_time_seq { 0 \int_use:N \l__ufrgscca_hour_tmp_int }}
+      { \seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_hour_tmp_int }}  
+    \int_compare:nNnTF { \l__ufrgscca_min_tmp_int } < { 10 }
+      { \seq_put_right:Ne \l__ufrgscca_time_seq { 0 \int_use:N \l__ufrgscca_min_tmp_int } }
+      { \seq_put_right:Ne \l__ufrgscca_time_seq {  \int_use:N \l__ufrgscca_min_tmp_int }}  
   
-    \seq_set_split:Nnn \l__ufrgscca_date_seq {/} {#2}
-    \int_case:nnF {\seq_count:N \l__ufrgscca_date_seq}
-      {
-        {2}{ \seq_put_right:Ne \l__ufrgscca_date_seq {\number\year}  }
-        {3}{}
+    \seq_set_split:Nnn \l__ufrgscca_date_seq { /} { #2 }
+    \int_case:nnF { \seq_count:N \l__ufrgscca_date_seq }
+      { 
+        { 2 }{ \seq_put_right:Ne \l__ufrgscca_date_seq { \number\year }  }
+        { 3 }{ }
       }
-      {
+      { 
         \seq_clear:N \l__ufrgscca_date_seq
-        \seq_put_right:Nn \l__ufrgscca_date_seq {31}
-        \seq_put_right:Nn \l__ufrgscca_date_seq {12}
-        \seq_put_right:Ne \l__ufrgscca_date_seq {\number\year}
+        \seq_put_right:Nn \l__ufrgscca_date_seq { 31 }
+        \seq_put_right:Nn \l__ufrgscca_date_seq { 12 }
+        \seq_put_right:Ne \l__ufrgscca_date_seq { \number\year }
       }
-    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l_tmpa_tl 
-      { \int_set:Ne \l__ufrgscca_day_tmp_int {\l_tmpa_tl} }
-      {}
-    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l_tmpa_tl 
-      { \int_set:Ne \l__ufrgscca_month_tmp_int {\l_tmpa_tl} }
-      {}
-    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l_tmpa_tl 
-      { \int_set:Ne \l__ufrgscca_year_tmp_int {\l_tmpa_tl} }
-      {}
+    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l__ufrgscca_tt_tmpa_tl 
+      { \int_set:Ne \l__ufrgscca_day_tmp_int { \l__ufrgscca_tt_tmpa_tl } }
+      { }
+    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l__ufrgscca_tt_tmpa_tl 
+      { \int_set:Ne \l__ufrgscca_month_tmp_int { \l__ufrgscca_tt_tmpa_tl } }
+      { }
+    \seq_pop_left:NNTF \l__ufrgscca_date_seq \l__ufrgscca_tt_tmpa_tl 
+      { \int_set:Ne \l__ufrgscca_year_tmp_int { \l__ufrgscca_tt_tmpa_tl } }
+      { }
     \seq_clear:N \l__ufrgscca_date_seq
-    \seq_put_right:Ne \l__ufrgscca_date_seq {\int_use:N \l__ufrgscca_year_tmp_int}
-    \int_compare:nNnTF {\l__ufrgscca_month_tmp_int} < {10}
-      {\seq_put_right:Ne \l__ufrgscca_date_seq {0 \int_use:N \l__ufrgscca_month_tmp_int}}
-      {\seq_put_right:Ne \l__ufrgscca_date_seq {  \int_use:N \l__ufrgscca_month_tmp_int}}  
-    \int_compare:nNnTF {\l__ufrgscca_day_tmp_int} < {10}
-      {\seq_put_right:Ne \l__ufrgscca_date_seq {0 \int_use:N \l__ufrgscca_day_tmp_int}}
-      {\seq_put_right:Ne \l__ufrgscca_date_seq {  \int_use:N \l__ufrgscca_day_tmp_int}}  
+    \seq_put_right:Ne \l__ufrgscca_date_seq { \int_use:N \l__ufrgscca_year_tmp_int }
+    \int_compare:nNnTF { \l__ufrgscca_month_tmp_int } < { 10 }
+      { \seq_put_right:Ne \l__ufrgscca_date_seq { 0 \int_use:N \l__ufrgscca_month_tmp_int }}
+      { \seq_put_right:Ne \l__ufrgscca_date_seq {  \int_use:N \l__ufrgscca_month_tmp_int }}  
+    \int_compare:nNnTF { \l__ufrgscca_day_tmp_int } < { 10 }
+      { \seq_put_right:Ne \l__ufrgscca_date_seq { 0 \int_use:N \l__ufrgscca_day_tmp_int }}
+      { \seq_put_right:Ne \l__ufrgscca_date_seq {  \int_use:N \l__ufrgscca_day_tmp_int }}  
          
-    \tl_set:Ne \l__ufrgscca_cal_datetime_tl {\seq_use:Nn \l__ufrgscca_date_seq {-} - \seq_use:Nn \l__ufrgscca_time_seq {:}}
-    \pgfcalendardatetojulian{\seq_use:Nn \l__ufrgscca_date_seq {-}}{\l__ufrgscca_day_counter}
-    \pgfcalendarjuliantoweekday{\the\l__ufrgscca_day_counter}{\l__ufrgscca_weekday_counter}
+    \tl_set:Ne \l__ufrgscca_cal_datetime_tl { \seq_use:Nn \l__ufrgscca_date_seq { -} - \seq_use:Nn \l__ufrgscca_time_seq { :}}
+    \pgfcalendardatetojulian{ \seq_use:Nn \l__ufrgscca_date_seq { -}}{ \l__ufrgscca_day_counter }
+    \pgfcalendarjuliantoweekday{ \the\l__ufrgscca_day_counter }{ \l__ufrgscca_weekday_counter }
     \seq_greverse:N \l__ufrgscca_date_seq
-    \seq_gpop_right:NN \l__ufrgscca_date_seq \l_tmpa_tl
+    \seq_gpop_right:NN \l__ufrgscca_date_seq \l__ufrgscca_tt_tmpa_tl
   
-    \__ufrgscca_set_timeslot:neeee {#1}{\seq_use:Nn \l__ufrgscca_time_seq {:}}{\seq_use:Nn \l__ufrgscca_date_seq {/}}{\the\l__ufrgscca_weekday_counter}{\l__ufrgscca_cal_datetime_tl}
+    \__ufrgscca_set_timeslot:neeee { #1 }{ \seq_use:Nn \l__ufrgscca_time_seq { :}}{ \seq_use:Nn \l__ufrgscca_date_seq { /}}{ \the\l__ufrgscca_weekday_counter }{ \l__ufrgscca_cal_datetime_tl }
   }%
 
 
 
-\NewDocumentCommand{\boardtitle}{m}{%%
-  \SetTerms{%
-    board.title = {#1} ,
+\NewDocumentCommand{ \boardtitle }{ m }{ %%
+  \SetTerms{ %
+    board.title = { #1 } ,
   }
 }%
 
 
-\NewDocumentCommand{\boardobs}{m}{%%
-  \SetTerms{%
-    board.obs = {#1} ,
+\NewDocumentCommand{ \boardobs }{ m }{ %%
+  \SetTerms{ %
+    board.obs = { #1 } ,
   }
 }%
 
-\NewDocumentCommand{\semester}{m}{%%
-  \SetTerms{%
-    semester = {#1} ,
+\NewDocumentCommand{ \semester }{ m }{ %%
+  \SetTerms{ %
+    semester = { #1 } ,
   }
 }%
 %
 
 
-%%%%%%\NewDocumentCommand{\studentturnindate}{m}{\tccoord@studentdatesplit#1,}
+%%%%%%\NewDocumentCommand{ \studentturnindate }{ m }{ \tccoord@studentdatesplit#1,}
 %%%%%%%23/12/2022
 %%%%%%
-%%%%%%\def\tccoord@studentdatesplit#1/#2/#3,{
-%%%%%%   \pgfcalendarifdate{#3-#2-#1}{at least=\tc@internshipcommitB+1}{\tccoord@studentFF}{}
-%%%%%%   \pgfcalendarifdate{#3-#2-#1}{between=\tc@internshipcommitA+1 and \tc@internshipcommitB}{\tccoord@studentExam{X}}{}
-%%%%%%   \expandafter\gdef\csname tc@student\Alph{tc@studentcount}date\endcsname{#1/#2/#3}%
+%%%%%%\def\tccoord@studentdatesplit#1/#2/#3,{ 
+%%%%%%   \pgfcalendarifdate{ #3-#2-#1 }{ at least=\tc@internshipcommitB+1 }{ \tccoord@studentFF }{ }
+%%%%%%   \pgfcalendarifdate{ #3-#2-#1 }{ between=\tc@internshipcommitA+1 and \tc@internshipcommitB }{ \tccoord@studentExam{ X }}{ }
+%%%%%%   \expandafter\gdef\csname tc@student\Alph{ tc@studentcount }date\endcsname{ #1/#2/#3 }%
 %%%%%%}
 %%%%%%
-%%%%%%\NewDocumentCommand{\intershipcommitdates}{mm}{%
+%%%%%%\NewDocumentCommand{ \intershipcommitdates }{ mm }{ %
 %%%%%%    \tccoord@commitdatesplit#1,A,%
 %%%%%%    \tccoord@commitdatesplit#2,B,%
 %%%%%%}
 %%%%%%
-%%%%%%\def\tccoord@commitdatesplit#1/#2/#3,#4,{
-%%%%%%   \expandafter\xdef\csname tc@internshipcommit#4\endcsname{#3-#2-#1}%
-%%%%%%   \expandafter\xdef\csname tc@internshipcommit#4#4\endcsname{#1/#2/#3}%
+%%%%%%\def\tccoord@commitdatesplit#1/#2/#3,#4,{ 
+%%%%%%   \expandafter\xdef\csname tc@internshipcommit#4\endcsname{ #3-#2-#1 }%
+%%%%%%   \expandafter\xdef\csname tc@internshipcommit#4#4\endcsname{ #1/#2/#3 }%
 %%%%%%}
 
 
@@ -520,46 +515,46 @@
   {  $\square$  }
 
 
-\cs_generate_variant:Nn \starray_gset_prop:nnn {nne}
+\cs_generate_variant:Nn \starray_gset_prop:nnn { nne }
 
 
-\NewDocumentCommand{\examinergrades}{mmmO{}s}{
-  \tl_if_blank:nTF {#1}
+\NewDocumentCommand{ \examinergrades }{ mmmO{ }s }{ 
+  \tl_if_blank:nTF { #1 }
     { 
-      \starray_gset_prop:nnn {student.reviewer}{grade}{0} 
-      \starray_gset_prop:nnn {student}{flag-null}{\c_true_bool} 
+      \starray_gset_prop:nnn { student.reviewer }{ grade }{ 0 } 
+      \starray_gset_prop:nnn { student }{ flag-null }{ \c_true_bool } 
     }
-    {
-      \tl_if_blank:nTF {#4}
+    { 
+      \tl_if_blank:nTF { #4 }
         { %% 3 grades, TCC II
-            \starray_gset_from_keyval:nn {student.reviewer}
-              {
+            \starray_gset_from_keyval:nn { student.reviewer }
+              { 
                 pointA = #1 ,
                 pointB = #2 ,
                 pointC = #3 ,
                 gradetype = 2 ,
               }
-            \starray_gset_prop:nne {student.reviewer}{grade}
-                {%
-                    \fpeval{round((#1 * \UseConst{TCC-II.weightA} + #2 * \UseConst{TCC-II.weightB} + #3 * \UseConst{TCC-II.weightC}) / ( \UseConst{TCC-II.weightA} + \UseConst{TCC-II.weightB} + \UseConst{TCC-II.weightC}) , 2 , 1) }
+            \starray_gset_prop:nne { student.reviewer }{ grade }
+                { %
+                    \fpeval{ round((#1 * \UseConst{ TCC-II.weightA } + #2 * \UseConst{ TCC-II.weightB } + #3 * \UseConst{ TCC-II.weightC }) / ( \UseConst{ TCC-II.weightA } + \UseConst{ TCC-II.weightB } + \UseConst{ TCC-II.weightC }) , 2 , 1) }
                 }
         }
         { %% 4 grades, TCC I
-            \starray_gset_from_keyval:nn {student.reviewer}
-              {
+            \starray_gset_from_keyval:nn { student.reviewer }
+              { 
                 pointA = #1 ,
                 pointB = #2 ,
                 pointC = #3 ,
                 pointD = #4 ,
                 gradetype = 1 ,
               }
-            \starray_gset_prop:nne {student.reviewer}{grade}
-                {%
-                    \fpeval{round((#1 * \UseConst{TCC-I.weightA} + #2 * \UseConst{TCC-I.weightB} + #3 * \UseConst{TCC-I.weightC} + #4 * \UseConst{TCC-I.weightD}) / ( \UseConst{TCC-I.weightA} + \UseConst{TCC-I.weightB} + \UseConst{TCC-I.weightC} + \UseConst{TCC-I.weightD}) , 2 , 1) }
+            \starray_gset_prop:nne { student.reviewer }{ grade }
+                { %
+                    \fpeval{ round((#1 * \UseConst{ TCC-I.weightA } + #2 * \UseConst{ TCC-I.weightB } + #3 * \UseConst{ TCC-I.weightC } + #4 * \UseConst{ TCC-I.weightD }) / ( \UseConst{ TCC-I.weightA } + \UseConst{ TCC-I.weightB } + \UseConst{ TCC-I.weightC } + \UseConst{ TCC-I.weightD }) , 2 , 1) }
                 }    
         }
-      \bool_if:nT {#5}
-        {\starray_gset_prop:nnn {student.reviewer}{flag-examreview}{\c_true_bool}}
+      \bool_if:nT { #5 }
+        { \starray_gset_prop:nnn { student.reviewer }{ flag-examreview }{ \c_true_bool }}
     }
 }
 
@@ -568,218 +563,218 @@
 \tl_new:N \l__ufrgscca_sortA_tl
 \tl_new:N \l__ufrgscca_sortB_tl
 \cs_new_protected:Npn \__ufrgscca_seq_sort:nn #1#2
-  {
-    \seq_gsort:cn {l__ufrgscca_#1_list_seq }
-      {
-        \starray_set_iter_from_hash:nn {student}{##1}
-        \starray_get_prop:nnN {student}{#2} \l__ufrgscca_sortA_tl
-        \starray_set_iter_from_hash:nn {student}{##2}
-        \starray_get_prop:nnN {student}{#2} \l__ufrgscca_sortB_tl          
+  { 
+    \seq_gsort:cn { l__ufrgscca_#1_list_seq }
+      { 
+        \starray_set_iter_from_hash:nn { student }{ ##1 }
+        \starray_get_prop:nnN { student }{ #2 } \l__ufrgscca_sortA_tl
+        \starray_set_iter_from_hash:nn { student }{ ##2 }
+        \starray_get_prop:nnN { student }{ #2 } \l__ufrgscca_sortB_tl          
         \str_compare:eNeTF { \l__ufrgscca_sortA_tl } > { \l__ufrgscca_sortB_tl }
           { \sort_return_swapped: }
           { \sort_return_same: }
       }  
   }
 
-\cs_generate_variant:Nn \seq_gput_right:Nn {ce}
+\cs_generate_variant:Nn \seq_gput_right:Nn { ce }
 
-\NewDocumentCommand{\studentaddtolist}{m}
-  {
-    \seq_if_exist:cF {l__ufrgscca_#1_list_seq}
-      {
-        \seq_new:c {l__ufrgscca_#1_list_seq}
-        \seq_new:c {l__ufrgscca_#1_list_ff_seq}
-        \seq_new:c {l__ufrgscca_#1_list_dismiss_seq}
-        \seq_new:c {l__ufrgscca_#1_list_graded_seq}
-        \seq_new:c {l__ufrgscca_#1_list_other_seq}
-
-        \bool_new:c {l__ufrgscca_#1_classified_bool}
-      }
-    \bool_set_false:c {l__ufrgscca_#1_classified_bool}  
-    \starray_term_parser:n {student}
-    \seq_gput_right:ce {l__ufrgscca_#1_list_seq} {\starray_parsed_get_prop:n {self}}
-  }
-  
-\NewDocumentCommand{\sortstudentlist}{st+m}
-  {
-    \bool_set_true:c {l__ufrgscca_#3_classified_bool}
-    \bool_if:nTF {#1}
-      { \__ufrgscca_seq_sort:nn {#3}{name}  }
+\NewDocumentCommand{ \studentaddtolist }{ m }
+  { 
+    \seq_if_exist:cF { l__ufrgscca_#1_list_seq }
       { 
-        \bool_if:nT {#2}
-          { \__ufrgscca_seq_sort:nn {#3}{board-datetime} }
+        \seq_new:c { l__ufrgscca_#1_list_seq }
+        \seq_new:c { l__ufrgscca_#1_list_ff_seq }
+        \seq_new:c { l__ufrgscca_#1_list_dismiss_seq }
+        \seq_new:c { l__ufrgscca_#1_list_graded_seq }
+        \seq_new:c { l__ufrgscca_#1_list_other_seq }
+
+        \bool_new:c { l__ufrgscca_#1_classified_bool }
+      }
+    \bool_set_false:c { l__ufrgscca_#1_classified_bool }  
+    \starray_term_parser:n { student }
+    \seq_gput_right:ce { l__ufrgscca_#1_list_seq } { \starray_parsed_get_prop:n { self }}
+  }
+  
+\NewDocumentCommand{ \sortstudentlist }{ st+m }
+  { 
+    \bool_set_true:c { l__ufrgscca_#3_classified_bool }
+    \bool_if:nTF { #1 }
+      { \__ufrgscca_seq_sort:nn { #3 }{ name }  }
+      { 
+        \bool_if:nT { #2 }
+          { \__ufrgscca_seq_sort:nn { #3 }{ board-datetime } }
       }    
-    \seq_map_tokens:cn {l__ufrgscca_#3_list_seq} {\__ufrgscca_grade:n}
-    \seq_map_tokens:cn {l__ufrgscca_#3_list_seq} {\__ufrgscca_listclassify:nn {#3}}    
+    \seq_map_tokens:cn { l__ufrgscca_#3_list_seq } { \__ufrgscca_grade:n }
+    \seq_map_tokens:cn { l__ufrgscca_#3_list_seq } { \__ufrgscca_listclassify:nn { #3 }}    
   }
 
 
-\NewDocumentCommand{\setstudentlist}{mm}{
-  \seq_gclear_new:c {l__ufrgscca_#1_list_seq}
-  \seq_gclear_new:c {l__ufrgscca_#1_list_ff_seq}
-  \seq_gclear_new:c {l__ufrgscca_#1_list_dismiss_seq}
-  \seq_gclear_new:c {l__ufrgscca_#1_list_other_seq}
-  \seq_gclear_new:c {l__ufrgscca_#1_list_graded_seq}
-  \bool_if_exist:cF {l__ufrgscca_#1_classified_bool}
-    { \bool_new:c {l__ufrgscca_#1_classified_bool} }
+\NewDocumentCommand{ \setstudentlist }{ mm }{ 
+  \seq_gclear_new:c { l__ufrgscca_#1_list_seq }
+  \seq_gclear_new:c { l__ufrgscca_#1_list_ff_seq }
+  \seq_gclear_new:c { l__ufrgscca_#1_list_dismiss_seq }
+  \seq_gclear_new:c { l__ufrgscca_#1_list_other_seq }
+  \seq_gclear_new:c { l__ufrgscca_#1_list_graded_seq }
+  \bool_if_exist:cF { l__ufrgscca_#1_classified_bool }
+    { \bool_new:c { l__ufrgscca_#1_classified_bool } }
   
-  \clist_map_inline:nn {#2}
-    {
-      \starray_set_iter_from_hash:nnT {student}{##1}
+  \clist_map_inline:nn { #2 }
+    { 
+      \starray_set_iter_from_hash:nnT { student }{ ##1 }
         {  
-          \seq_put_right:cn {l__ufrgscca_#1_list_seq} {##1} 
-          \emptytermifnone{student.advisor}
-          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
-          \emptytermifnone{student.altreviewer}
+          \seq_put_right:cn { l__ufrgscca_#1_list_seq } { ##1 } 
+          \emptytermifnone{ student.advisor }
+          \emptytermifnone[3]{ student.reviewer }[\starray_gset_prop:nnn { student }{ flag-null }{ \c_true_bool }]
+          \emptytermifnone{ student.altreviewer }
         }
     }
 }
 
 \cs_new_protected:Npn \__ufrgscca_grade:n #1 
-    {
-      \starray_set_iter_from_hash:nn {student}{#1}
-      \starray_term_parser:n {student}
-      \bool_if:nF {\starray_parsed_get_prop:n {flag-graded}}
-        {
-          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
+    { 
+      \starray_set_iter_from_hash:nn { student }{ #1 }
+      \starray_term_parser:n { student }
+      \bool_if:nF { \starray_parsed_get_prop:n { flag-graded }}
+        { 
+          \emptytermifnone[3]{ student.reviewer }[\starray_gset_prop:nnn { student }{ flag-null }{ \c_true_bool }]
           \__ufrgscca_studentgrade: 
         }        
     }
 
 
 \cs_new_protected:Npn \__ufrgscca_listclassify:nn #1#2
-    {
-      \starray_set_iter_from_hash:nn {student}{#2}
-      \starray_term_parser:n {student}
+    { 
+      \starray_set_iter_from_hash:nn { student }{ #2 }
+      \starray_term_parser:n { student }
       \bool_case:nF
-        {
-          {\starray_parsed_get_prop:n {flag-ff}}{\seq_gput_right:cn {l__ufrgscca_#1_list_ff_seq}{#2}}
-          {\starray_parsed_get_prop:n {flag-dismiss}}{\seq_gput_right:cn {l__ufrgscca_#1_list_dismiss_seq}{#2}}
-          {\starray_parsed_get_prop:n {flag-other}}{\seq_gput_right:cn {l__ufrgscca_#1_list_other_seq}{#2}}
+        { 
+          { \starray_parsed_get_prop:n { flag-ff }}{ \seq_gput_right:cn { l__ufrgscca_#1_list_ff_seq }{ #2 }}
+          { \starray_parsed_get_prop:n { flag-dismiss }}{ \seq_gput_right:cn { l__ufrgscca_#1_list_dismiss_seq }{ #2 }}
+          { \starray_parsed_get_prop:n { flag-other }}{ \seq_gput_right:cn { l__ufrgscca_#1_list_other_seq }{ #2 }}
         }
-        {\seq_gput_right:cn {l__ufrgscca_#1_list_graded_seq}{#2}}     
+        { \seq_gput_right:cn { l__ufrgscca_#1_list_graded_seq }{ #2 }}     
     }
     
 
-\NewDocumentCommand{\tcreports}{O{}m}{
-  {
-      \seq_map_inline:cn {l__ufrgscca_#2_list_seq}
-        {
-          \starray_set_iter_from_hash:nn {student}{##1}
-          \emptytermifnone{student.advisor}
-          \emptytermifnone[3]{student.reviewer}[\starray_gset_prop:nnn {student}{flag-null}{\c_true_bool}]
-          \emptytermifnone{student.altreviewer}        
+\NewDocumentCommand{ \tcreports }{ O{ }m }{ 
+  { 
+      \seq_map_inline:cn { l__ufrgscca_#2_list_seq }
+        { 
+          \starray_set_iter_from_hash:nn { student }{ ##1 }
+          \emptytermifnone{ student.advisor }
+          \emptytermifnone[3]{ student.reviewer }[\starray_gset_prop:nnn { student }{ flag-null }{ \c_true_bool }]
+          \emptytermifnone{ student.altreviewer }        
         }
-      \__ufrgscca_set_reports:n {#1}
-      \bool_if:cF {l__ufrgscca_#2_classified_bool}
-        { \sortstudentlist{#2} }
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_seq {l__ufrgscca_#2_list_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq {l__ufrgscca_#2_list_ff_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq {l__ufrgscca_#2_list_dismiss_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_other_seq {l__ufrgscca_#2_list_other_seq}
-      \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq {l__ufrgscca_#2_list_graded_seq}
+      \__ufrgscca_set_reports:n { #1 }
+      \bool_if:cF { l__ufrgscca_#2_classified_bool }
+        { \sortstudentlist{ #2 } }
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_seq { l__ufrgscca_#2_list_seq }
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_ff_seq { l__ufrgscca_#2_list_ff_seq }
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_dismiss_seq { l__ufrgscca_#2_list_dismiss_seq }
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_other_seq { l__ufrgscca_#2_list_other_seq }
+      \seq_gset_eq:Nc \l__ufrgscca_baselist_graded_seq { l__ufrgscca_#2_list_graded_seq }
 
       \bool_if:NT \l__ufrgscca_attendance_bool
-        { \MakeForm{attendancelist} 
-          \MakeForm{attendancelist} }
+        { \MakeForm{ attendancelist } 
+          \MakeForm{ attendancelist } }
     
       \bool_if:NT \l__ufrgscca_calendarI_bool
-        { \MakeForm{calendar-I} }
+        { \MakeForm{ calendar-I } }
       \bool_if:NT \l__ufrgscca_calendarII_bool
-        { \MakeForm{calendar-II} }
+        { \MakeForm{ calendar-II } }
       \bool_if:NT \l__ufrgscca_reportI_bool
-        { \MakeForm{report-I} }
+        { \MakeForm{ report-I } }
       \bool_if:NT \l__ufrgscca_reportII_bool
-        { \MakeForm{report-II} }
+        { \MakeForm{ report-II } }
       \bool_if:NT \l__ufrgscca_boards_bool
-        { \MakeForm{boards} }      
-      \seq_map_inline:cn {l__ufrgscca_baselist_seq} 
-        {
-          \studentselect{##1}
-          \DataGet{student}{name}{\l_tmpa_tl}
-          \tl_put_right:Nn \l_tmpa_tl {~-~}
-          \__ufrgscca_tlset_rem_accents:Ne \StudentBookMarkTL {\l_tmpa_tl}  
+        { \MakeForm{ boards } }      
+      \seq_map_inline:cn { l__ufrgscca_baselist_seq } 
+        { 
+          \studentselect{ ##1 }
+          \DataGet{ student }{ name }{ \l__ufrgscca_tt_tmpa_tl }
+          \tl_put_right:Nn \l__ufrgscca_tt_tmpa_tl { ~-~}
+          \__ufrgscca_tlset_rem_accents:Ne \StudentBookMarkTL { \l__ufrgscca_tt_tmpa_tl }  
                   
           \__ufrgscca_student_emptyfields_if_none:
 
           \bool_if:NT \l__ufrgscca_cocertificate_bool
-            {
+            { 
               \studentCoadvCase
-                {\MakeForm{cocertificate}}
-                {}
+                { \MakeForm{ cocertificate }}
+                { }
             }
           \bool_if:NT \l__ufrgscca_referralI_bool
-            {
+            { 
               \studentDismissOtherCase
-                {}
-                { \MakeForm{referral-I} }
+                { }
+                { \MakeForm{ referral-I } }
             }
           \bool_if:NT \l__ufrgscca_revformsI_bool
-            {
-              \studentReviewerSelect{2}
-              \studentReviewerSetCase{2}
-                {
-                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+            { 
+              \studentReviewerSelect{ 2 }
+              \studentReviewerSetCase{ 2 }
+                { 
+                  \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                  \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
                 }
-                {
-                  \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+                { 
+                  \tl_set:Nn \ReviewerBookMarkTL { ~-~2 }
                 }
-              \MakeForm{examinersform-I}
-              \studentReviewerSelect{3}
-              \studentReviewerSetCase{3}
-                {
-                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+              \MakeForm{ examinersform-I }
+              \studentReviewerSelect{ 3 }
+              \studentReviewerSetCase{ 3 }
+                { 
+                  \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                  \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
                 }
-                {
-                  \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+                { 
+                  \tl_set:Nn \ReviewerBookMarkTL { ~-~3 }
                 }
-              \MakeForm{examinersform-I}
-              \MakeForm{rectifyapproval-I}
+              \MakeForm{ examinersform-I }
+              \MakeForm{ rectifyapproval-I }
             }
           \bool_if:NT \l__ufrgscca_referralII_bool
-            {
+            { 
               \studentDismissOtherCase
-                {}
-                { \MakeForm{referral-II} }
+                { }
+                { \MakeForm{ referral-II } }
             }
           \bool_if:NT \l__ufrgscca_revformsII_bool
-            {
-              \studentReviewerSelect{1}
-              \studentReviewerSetCase{1}
-                {
-                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+            { 
+              \studentReviewerSelect{ 1 }
+              \studentReviewerSetCase{ 1 }
+                { 
+                  \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                  \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
                 }
-                {
-                  \tl_set:Nn \ReviewerBookMarkTL {~-~1}
+                { 
+                  \tl_set:Nn \ReviewerBookMarkTL { ~-~1 }
                 }
-              \MakeForm{examinersform-II}
-              \MakeForm{correctionsform-II}
-              \studentReviewerSelect{2}
-              \studentReviewerSetCase{2}
-                {
-                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+              \MakeForm{ examinersform-II }
+              \MakeForm{ correctionsform-II }
+              \studentReviewerSelect{ 2 }
+              \studentReviewerSetCase{ 2 }
+                { 
+                  \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                  \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
                 }
-                {
-                  \tl_set:Nn \ReviewerBookMarkTL {~-~2}
+                { 
+                  \tl_set:Nn \ReviewerBookMarkTL { ~-~2 }
                 }
-              \MakeForm{examinersform-II}
-              \MakeForm{correctionsform-II}
-              \studentReviewerSelect{3}
-              \studentReviewerSetCase{3}
-                {
-                  \DataGet{student.reviewer}{name}{\ReviewerBookMarkTL}
-                  \tl_put_left:Nn \ReviewerBookMarkTL {~-~}
+              \MakeForm{ examinersform-II }
+              \MakeForm{ correctionsform-II }
+              \studentReviewerSelect{ 3 }
+              \studentReviewerSetCase{ 3 }
+                { 
+                  \DataGet{ student.reviewer }{ name }{ \ReviewerBookMarkTL }
+                  \tl_put_left:Nn \ReviewerBookMarkTL { ~-~}
                 }
-                {
-                  \tl_set:Nn \ReviewerBookMarkTL {~-~3}
+                { 
+                  \tl_set:Nn \ReviewerBookMarkTL { ~-~3 }
                 }
-              \MakeForm{examinersform-II}
-              \MakeForm{correctionsform-II}
-              \MakeForm{rectifyapproval-II}
+              \MakeForm{ examinersform-II }
+              \MakeForm{ correctionsform-II }
+              \MakeForm{ rectifyapproval-II }
             }
         }
   }
@@ -790,31 +785,31 @@
 \tl_new:N \l__ufrgscca_chkIDa_tl
 \tl_new:N \l__ufrgscca_chkIDb_tl
 
-\NewDocumentCommand{\checkdef}{mmm}{
-  \starray_get_prop:nnN {activity}{chkID}\l__ufrgscca_chkID_tl
-  \prop_gput:cnn {l__ufrgscca_ \l__ufrgscca_chkID_tl _chkmarked_prop} {#1}{\__ufrgscca_checkedbox:~\ #3}
-  \prop_gput:cnn {l__ufrgscca_ \l__ufrgscca_chkID_tl _chkunmarked_prop} {#1}{\__ufrgscca_uncheckedbox:~\ #3}
-  \prop_gput:cnn {l__ufrgscca_ \l__ufrgscca_chkID_tl _chkref_prop} {#2}{#1}
+\NewDocumentCommand{ \checkdef }{ mmm }{ 
+  \starray_get_prop:nnN { activity }{ chkID }\l__ufrgscca_chkID_tl
+  \prop_gput:cnn { l__ufrgscca_ \l__ufrgscca_chkID_tl _chkmarked_prop } { #1 }{ \__ufrgscca_checkedbox:~\ #3 }
+  \prop_gput:cnn { l__ufrgscca_ \l__ufrgscca_chkID_tl _chkunmarked_prop } { #1 }{ \__ufrgscca_uncheckedbox:~\ #3 }
+  \prop_gput:cnn { l__ufrgscca_ \l__ufrgscca_chkID_tl _chkref_prop } { #2 }{ #1 }
 }
 
-\cs_generate_variant:Nn \prop_gput:Nnn {Nee}
+\cs_generate_variant:Nn \prop_gput:Nnn { Nee }
 
 
 \tl_new:N \l__ufrgscca_checkB_tl
 \tl_new:N \l__ufrgscca_checkref_tl
-\NewDocumentCommand{\checklist}{O{}m}{
-  \tl_if_blank:nF {#1}
-    {  \starray_set_iter_from_hash:nn {activity}{#1}  }
+\NewDocumentCommand{ \checklist }{ O{ }m }{ 
+  \tl_if_blank:nF { #1 }
+    {  \starray_set_iter_from_hash:nn { activity }{ #1 }  }
 
-  \starray_get_prop:nnN {student}  {chkID} \l__ufrgscca_chkIDa_tl
-  \starray_get_prop:nnN {activity} {chkID} \l__ufrgscca_chkIDb_tl
+  \starray_get_prop:nnN { student }  { chkID } \l__ufrgscca_chkIDa_tl
+  \starray_get_prop:nnN { activity } { chkID } \l__ufrgscca_chkIDb_tl
 
-  \clist_map_inline:nn {#2}
-    {
-      \prop_get:cnNT {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkref_prop} {##1} \l__ufrgscca_checkref_tl
-        {
-          \prop_get:ceN {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkmarked_prop} {\l__ufrgscca_checkref_tl} \l__ufrgscca_checkB_tl
-          \prop_gput:cee {l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop} {\l__ufrgscca_checkref_tl} {\l__ufrgscca_checkB_tl}
+  \clist_map_inline:nn { #2 }
+    { 
+      \prop_get:cnNT { l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkref_prop } { ##1 } \l__ufrgscca_checkref_tl
+        { 
+          \prop_get:ceN { l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkmarked_prop } { \l__ufrgscca_checkref_tl } \l__ufrgscca_checkB_tl
+          \prop_gput:cee { l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop } { \l__ufrgscca_checkref_tl } { \l__ufrgscca_checkB_tl }
         }
     }
 }
@@ -824,27 +819,27 @@
 \tl_new:N \l__ufrgscca_table_tl
 
 
-\cs_new_protected:Npn \__ufrgscca_checktable_lines:nn #1#2 {
+\cs_new_protected:Npn \__ufrgscca_checktable_lines:nn #1#2 { 
 
-  \starray_get_prop:nnN {student}  {chkID} \l__ufrgscca_chkIDa_tl
-  \starray_get_prop:nnN {activity} {chkID} \l__ufrgscca_chkIDb_tl
-  {
-    \prop_map_inline:cn {l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop}
-      { \prop_put:cnn {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkunmarked_prop} {##1}{##2}  }  
+  \starray_get_prop:nnN { student }  { chkID } \l__ufrgscca_chkIDa_tl
+  \starray_get_prop:nnN { activity } { chkID } \l__ufrgscca_chkIDb_tl
+  { 
+    \prop_map_inline:cn { l__ufrgscca_ \l__ufrgscca_chkIDa_tl _checklist_prop }
+      { \prop_put:cnn { l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkunmarked_prop } { ##1 }{ ##2 }  }  
   
     \tl_gclear:N \l__ufrgscca_table_tl
-    \clist_map_inline:nn {#1}    
+    \clist_map_inline:nn { #1 }    
       { 
-        \tl_gclear:N \l_tmpa_tl    
-        \clist_map_inline:nn {#2}
+        \tl_gclear:N \l__ufrgscca_tt_tmpa_tl    
+        \clist_map_inline:nn { #2 }
           {       
-           \tl_gset:Nn \l__ufrgscca_tmpx_tl {##1####1} 
-           \prop_get:ceNTF {l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkunmarked_prop} {\l__ufrgscca_tmpx_tl} \l__ufrgscca_tmpy_tl
-             {\tl_gput_right:Ne \l__ufrgscca_table_tl {\l_tmpa_tl~ \l__ufrgscca_tmpy_tl}}
-             {\tl_gput_right:Ne \l__ufrgscca_table_tl {\l_tmpa_tl~ }}
-           \tl_gset:Nn \l_tmpa_tl {~&~}
+           \tl_gset:Nn \l__ufrgscca_tmpx_tl { ##1####1 } 
+           \prop_get:ceNTF { l__ufrgscca_ \l__ufrgscca_chkIDb_tl _chkunmarked_prop } { \l__ufrgscca_tmpx_tl } \l__ufrgscca_tmpy_tl
+             { \tl_gput_right:Ne \l__ufrgscca_table_tl { \l__ufrgscca_tt_tmpa_tl~ \l__ufrgscca_tmpy_tl }}
+             { \tl_gput_right:Ne \l__ufrgscca_table_tl { \l__ufrgscca_tt_tmpa_tl~ }}
+           \tl_gset:Nn \l__ufrgscca_tt_tmpa_tl { ~&~}
           }
-        \tl_gput_right:Nn \l__ufrgscca_table_tl {\\*}
+        \tl_gput_right:Nn \l__ufrgscca_table_tl { \\*}
       }
     }
     \l__ufrgscca_table_tl   
@@ -853,6 +848,6 @@
 
 \bool_new:N \l__ufrgscca_checklist_bool
 \bool_set_true:N \l__ufrgscca_checklist_bool
-\NewDocumentCommand{\suppresschecklist}{}{
+\NewDocumentCommand{ \suppresschecklist }{ }{ 
   \bool_set_false:N \l__ufrgscca_checklist_bool
 }

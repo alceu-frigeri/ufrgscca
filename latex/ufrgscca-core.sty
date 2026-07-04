@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.13} {2025/10/28}
+%% This is version {2.13a} {2026/07/04}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -24,28 +24,23 @@
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2023/11/01]
 
-
-\ProvidesExplPackage
-    {ufrgscca-core}
-    {2025/10/28}
-    {2.13}
-    {UFRGS/CCA core commands}
-
-
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn { <pkg-name>} { props } sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage { <pkg-name>} { props } sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { ufrgscca-core }
-  {
+\pkginfograbProvidesExplPackage {ufrgscca-core}
+  { 
      name        = {ufrgscca-core} ,
      prefix      = {ufrgscca} ,
-     date        = {2025/10/28},
-     version     = {2.13} ,
-     description = {UFRGS/CCA~core~commands/data}
+     date        = {2026/07/04},
+     version     = {2.13a} ,
+     description = {UFRGS/CCA core commands/data}
   }
 %%%%%%%
 %%% End of cut-n-paste
@@ -71,32 +66,32 @@
 \dim_new:N \l__ufrgscca_office_rule_dim
 \dim_new:N \l__ufrgscca_field_rule_dim
 
-\dim_set:Nn \l__ufrgscca_ID_rule_dim {30mm}
-\dim_set:Nn \l__ufrgscca_email_rule_dim {40mm}
-\dim_set:Nn \l__ufrgscca_name_rule_dim {50mm}
-\dim_set:Nn \l__ufrgscca_title_rule_dim {30mm}
-\dim_set:Nn \l__ufrgscca_worktitle_rule_dim {60mm}
-\dim_set:Nn \l__ufrgscca_phone_rule_dim {20mm}
-\dim_set:Nn \l__ufrgscca_agree_rule_dim {25mm}
-\dim_set:Nn \l__ufrgscca_date_rule_dim {15mm}
-\dim_set:Nn \l__ufrgscca_register_rule_dim {20mm}
-\dim_set:Nn \l__ufrgscca_office_rule_dim {25mm}
-\dim_set:Nn \l__ufrgscca_field_rule_dim {30mm}
+\dim_set:Nn \l__ufrgscca_ID_rule_dim { 30mm }
+\dim_set:Nn \l__ufrgscca_email_rule_dim { 40mm }
+\dim_set:Nn \l__ufrgscca_name_rule_dim { 50mm }
+\dim_set:Nn \l__ufrgscca_title_rule_dim { 30mm }
+\dim_set:Nn \l__ufrgscca_worktitle_rule_dim { 60mm }
+\dim_set:Nn \l__ufrgscca_phone_rule_dim { 20mm }
+\dim_set:Nn \l__ufrgscca_agree_rule_dim { 25mm }
+\dim_set:Nn \l__ufrgscca_date_rule_dim { 15mm }
+\dim_set:Nn \l__ufrgscca_register_rule_dim { 20mm }
+\dim_set:Nn \l__ufrgscca_office_rule_dim { 25mm }
+\dim_set:Nn \l__ufrgscca_field_rule_dim { 30mm }
 
 
 
 
-\starray_new:n {student}
-\starray_def_from_keyval:nn {student}
- {
+\starray_new:n { student }
+\starray_def_from_keyval:nn { student }
+ { 
   self = , %% this shall be self hash (if any)
   first = ,
   last = ,
-  name = \rule{\l__ufrgscca_name_rule_dim}{.1pt} ,
-  Nproc = \rule{\l__ufrgscca_ID_rule_dim}{.1pt} ,
-  ID    = \rule{\l__ufrgscca_ID_rule_dim}{.1pt} , 
-  email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-  worktitle = \rule{\l__ufrgscca_worktitle_rule_dim}{.1pt} ,
+  name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt } ,
+  Nproc = \rule{ \l__ufrgscca_ID_rule_dim }{ .1pt } ,
+  ID    = \rule{ \l__ufrgscca_ID_rule_dim }{ .1pt } , 
+  email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+  worktitle = \rule{ \l__ufrgscca_worktitle_rule_dim }{ .1pt } ,
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -106,11 +101,11 @@
   remarks = ,
   chkID     = , %%% 'unique ID' for checklist
   checklist = , %%% This shall be a property list of check items
-  brief = \BlankLines{6} ,
-  reason = \BlankLines{6} ,
-  board-local = {local} ,
-  board-date   = {dia} ,
-  board-time  = {hora} ,
+  brief = \BlankLines{ 6 } ,
+  reason = \BlankLines{ 6 } ,
+  board-local = { local } ,
+  board-date   = { dia } ,
+  board-time  = { hora } ,
   gradeavrg = 0,
   grade = ,
   flag-null = \c_false_bool , %% IF no grade was given
@@ -123,46 +118,46 @@
   flag-distinctboard = \c_false_bool , %% if advisor isn't in the board
   flag-approved = \c_false_bool ,
   flag-coadvisor = \c_false_bool ,
-  advisor . struct = {
+  advisor . struct = { 
     first = ,
     last =  ,
-    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
-    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+    name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    institution = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    title = \rule{ \l__ufrgscca_title_rule_dim }{ .1pt } ,
+    email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+    phone = \rule{ \l__ufrgscca_phone_rule_dim }{ .1pt } ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
         Narticle = (A) ,
         carticle = ao(à) ,
         Carticle = Ao(À) ,
-    assessment = \BlankLines{6}
+    assessment = \BlankLines{ 6 }
   } ,
-  coadvisor . struct = {
+  coadvisor . struct = { 
     first = ,
     last =  ,
-    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
-    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+    name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    institution = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    title = \rule{ \l__ufrgscca_title_rule_dim }{ .1pt } ,
+    email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+    phone = \rule{ \l__ufrgscca_phone_rule_dim }{ .1pt } ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
         Narticle = (A) ,
         carticle = ao(à) ,
         Carticle = Ao(À) ,
-    reason = \BlankLines{6}
+    reason = \BlankLines{ 6 }
   } ,
-  reviewer . struct = {
+  reviewer . struct = { 
     first = ,
     last =  ,
-    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
-    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+    name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    institution = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    title = \rule{ \l__ufrgscca_title_rule_dim }{ .1pt } ,
+    email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+    phone = \rule{ \l__ufrgscca_phone_rule_dim }{ .1pt } ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -178,14 +173,14 @@
     flag-examreview = \c_false_bool , 
     flag-set = \c_false_bool , 
   } ,
-  altreviewer . struct = {
+  altreviewer . struct = { 
     first = ,
     last =  ,
-    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    institution = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
-    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+    name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    institution = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    title = \rule{ \l__ufrgscca_title_rule_dim }{ .1pt } ,
+    email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+    phone = \rule{ \l__ufrgscca_phone_rule_dim }{ .1pt } ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -193,20 +188,20 @@
         carticle = ao(à) ,
         Carticle = Ao(À) 
   } ,
-  internship . struct = {
-    company = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    field = \rule{\l__ufrgscca_field_rule_dim}{.1pt},
-    start = \rule{\l__ufrgscca_date_rule_dim}{.1pt},
-    end = \rule{\l__ufrgscca_date_rule_dim}{.1pt},
-    length = \rule{\l__ufrgscca_date_rule_dim}{.1pt},  
+  internship . struct = { 
+    company = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    field = \rule{ \l__ufrgscca_field_rule_dim }{ .1pt },
+    start = \rule{ \l__ufrgscca_date_rule_dim }{ .1pt },
+    end = \rule{ \l__ufrgscca_date_rule_dim }{ .1pt },
+    length = \rule{ \l__ufrgscca_date_rule_dim }{ .1pt },  
   } ,
-  tutor . struct = {
+  tutor . struct = { 
     first = ,
     last =  ,
-    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
-    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+    name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    title = \rule{ \l__ufrgscca_title_rule_dim }{ .1pt } ,
+    email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+    phone = \rule{ \l__ufrgscca_phone_rule_dim }{ .1pt } ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -214,15 +209,15 @@
         carticle = ao(à) ,
         Carticle = Ao(À) 
   } ,
-  supervisor . struct = {
+  supervisor . struct = { 
     first = ,
     last =  ,
-    name = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    register = \rule{\l__ufrgscca_name_rule_dim}{.1pt},
-    title = \rule{\l__ufrgscca_title_rule_dim}{.1pt} ,
-    office = \rule{\l__ufrgscca_office_rule_dim}{.1pt} ,
-    email = \rule{\l__ufrgscca_email_rule_dim}{.1pt} ,
-    phone = \rule{\l__ufrgscca_phone_rule_dim}{.1pt} ,    
+    name = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    register = \rule{ \l__ufrgscca_name_rule_dim }{ .1pt },
+    title = \rule{ \l__ufrgscca_title_rule_dim }{ .1pt } ,
+    office = \rule{ \l__ufrgscca_office_rule_dim }{ .1pt } ,
+    email = \rule{ \l__ufrgscca_email_rule_dim }{ .1pt } ,
+    phone = \rule{ \l__ufrgscca_phone_rule_dim }{ .1pt } ,    
         article = o(a) ,
         Article = O(A) ,
         narticle = (a) ,
@@ -235,13 +230,13 @@
 
 \prop_new_linked:N \l__ufrgscca_forms_prop
 
-\starray_new:n {activity}
-\starray_def_from_keyval:nn {activity}
-  {
+\starray_new:n { activity }
+\starray_def_from_keyval:nn { activity }
+  { 
     name = Nome~ da~ Atividade ,
     acronym = ACRO ,
     coord . struct = 
-      {
+      { 
         name = Nome~ do(a)~ Coordenador(a) ,
         title = Coordenador(a)~ de ,
         article = o(a) ,
@@ -252,10 +247,10 @@
         Carticle = Ao(À) 
       } ,
     calendar . struct =
-      {
-        date = {-Dia-} ,
-        week = {-semana-} ,
-        event = {-Descrição-} ,
+      { 
+        date = { -Dia-} ,
+        week = { -semana-} ,
+        event = { -Descrição-} ,
       } ,
     chkID = ,        %%% 'unique ID' for checklists
     chkmarked = ,    %%% This shall be a prop list of   marked itens
@@ -264,87 +259,87 @@
   }
 
 %% workaround (V-less) 
-%%   => \starray_get_uniqueID {starray-ref} .... 
+%%   => \starray_get_uniqueID { starray-ref } .... 
 %%      (might just be parser construct...) and use it to define a unique prop name.
 
 \tl_new:N \l__ufrgscca_tmpID_tl
-\NewDocumentCommand{\NewActivity}{m} {
-    \starray_new_term:nn {activity}{#1}
-    \starray_new_term:nn {activity.coord}{}
-    \starray_get_unique_id:nNTF {activity} \l__ufrgscca_tmpID_tl
-      {}
-      {}
-    \starray_gset_prop:nnV {activity}{chkID} \l__ufrgscca_tmpID_tl
-    \prop_new_linked:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop}
-    \prop_new_linked:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkunmarked_prop}
-    \prop_new_linked:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkref_prop}
+\NewDocumentCommand{ \NewActivity }{ m } { 
+    \starray_new_term:nn { activity }{ #1 }
+    \starray_new_term:nn { activity.coord }{ }
+    \starray_get_unique_id:nNTF { activity } \l__ufrgscca_tmpID_tl
+      { }
+      { }
+    \starray_gset_prop:nnV { activity }{ chkID } \l__ufrgscca_tmpID_tl
+    \prop_new_linked:c { l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkmarked_prop }
+    \prop_new_linked:c { l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkunmarked_prop }
+    \prop_new_linked:c { l__ufrgscca_ \l__ufrgscca_tmpID_tl _chkref_prop }
 }
 
 
-\NewDocumentCommand{\ActivitySet}{O{}mm} {
-  \tl_if_blank:nTF {#1}
-    {
-      \starray_set_prop:nnn {activity}{name}{#3}
-      \starray_set_prop:nnn {activity}{acronym}{#2}
+\NewDocumentCommand{ \ActivitySet }{ O{ }mm } { 
+  \tl_if_blank:nTF { #1 }
+    { 
+      \starray_set_prop:nnn { activity }{ name }{ #3 }
+      \starray_set_prop:nnn { activity }{ acronym }{ #2 }
     }
-    {
-      \starray_set_prop:nnn {activity[#1]}{name}{#3}
-      \starray_set_prop:nnn {activity[#1]}{acronym}{#2}
+    { 
+      \starray_set_prop:nnn { activity[#1]}{ name }{ #3 }
+      \starray_set_prop:nnn { activity[#1]}{ acronym }{ #2 }
     }
 }
  
-\NewDocumentCommand{\ActivitySetCoordTitle}{O{}m} {
-  \tl_if_blank:nTF {#1}
-    { \starray_set_prop:nnn {activity.coord}{title}{#2} }
-    { \starray_set_prop:nnn {activity[#1].coord}{title}{#2} }
+\NewDocumentCommand{ \ActivitySetCoordTitle }{ O{ }m } { 
+  \tl_if_blank:nTF { #1 }
+    { \starray_set_prop:nnn { activity.coord }{ title }{ #2 } }
+    { \starray_set_prop:nnn { activity[#1].coord }{ title }{ #2 } }
 }
 
-\NewDocumentCommand{\ActivitySetCoord}{O{}mO{}}{
-  \tl_if_blank:nTF {#1}
-    {
-      \starray_gset_prop:nnn {activity.coord}{name}{#2}
-      \__ufrgscca_setgender:nn {activity.coord}{#3}
+\NewDocumentCommand{ \ActivitySetCoord }{ O{ }mO{ }}{ 
+  \tl_if_blank:nTF { #1 }
+    { 
+      \starray_gset_prop:nnn { activity.coord }{ name }{ #2 }
+      \__ufrgscca_setgender:nn { activity.coord }{ #3 }
     }
-    {
-      \starray_gset_prop:nnn {activity[#1].coord}{name}{#2}
-      \__ufrgscca_setgender:nn {activity[#1].coord}{#3}
+    { 
+      \starray_gset_prop:nnn { activity[#1].coord }{ name }{ #2 }
+      \__ufrgscca_setgender:nn { activity[#1].coord }{ #3 }
     }
 }
 
-\NewDocumentCommand{\ActivitySelect}{m}{ \starray_set_iter_from_hash:nn {activity}{#1} }
+\NewDocumentCommand{ \ActivitySelect }{ m }{ \starray_set_iter_from_hash:nn { activity }{ #1 } }
 
 
-\NewDocumentCommand{\Activity}{O{}m}{
-  \tl_if_blank:nTF {#1}
-    { \starray_get_prop:nn {activity}{#2} }
-    { \starray_get_prop:nn {activity[#1]}{#2} }
+\NewDocumentCommand{ \Activity }{ O{ }m }{ 
+  \tl_if_blank:nTF { #1 }
+    { \starray_get_prop:nn { activity }{ #2 } }
+    { \starray_get_prop:nn { activity[#1]}{ #2 } }
 }
-\NewDocumentCommand{\ActivityCoord}{O{}m}{
-  \tl_if_blank:nTF {#1}
-    { \starray_get_prop:nn {activity.coord}{#2} }
-    { \starray_get_prop:nn {activity[#1].coord}{#2} }
-}
-
-
-\NewDocumentCommand{\ActivityCalLine}{O{}m}{
-  \tl_if_blank:nF {#1}
-    {\starray_set_iter_from_hash:nn {activity}{#1}}
-  \starray_set_iter_from_hash:nn {activity.calendar}{#2}
-  \starray_get_prop:nn {activity.calendar}{date} & \starray_get_prop:nn {activity.calendar}{week} & \starray_get_prop:nn {activity.calendar}{event}
+\NewDocumentCommand{ \ActivityCoord }{ O{ }m }{ 
+  \tl_if_blank:nTF { #1 }
+    { \starray_get_prop:nn { activity.coord }{ #2 } }
+    { \starray_get_prop:nn { activity[#1].coord }{ #2 } }
 }
 
-\NewDocumentCommand{\ActivityCalendarIterate}{m}{
-    \starray_iterate_over:nn{activity.calendar}{#1}
+
+\NewDocumentCommand{ \ActivityCalLine }{ O{ }m }{ 
+  \tl_if_blank:nF { #1 }
+    { \starray_set_iter_from_hash:nn { activity }{ #1 }}
+  \starray_set_iter_from_hash:nn { activity.calendar }{ #2 }
+  \starray_get_prop:nn { activity.calendar }{ date } & \starray_get_prop:nn { activity.calendar }{ week } & \starray_get_prop:nn { activity.calendar }{ event }
+}
+
+\NewDocumentCommand{ \ActivityCalendarIterate }{ m }{ 
+    \starray_iterate_over:nn{ activity.calendar }{ #1 }
 }
 
 
 %
 \cs_new_protected:Npn \__ufrgscca_setgender:nn #1#2 
-  {
-    \str_if_eq:nnT {#2}{m}
-      {
-        \starray_gset_from_keyval:nn {#1}
-          {
+  { 
+    \str_if_eq:nnT { #2 }{ m }
+      { 
+        \starray_gset_from_keyval:nn { #1 }
+          { 
             article = o ,
             Article = O ,
             narticle =  ,
@@ -353,10 +348,10 @@
             Carticle = Ao 
           }
       } 
-    \str_if_eq:nnT {#2}{f}
-      {
-        \starray_gset_from_keyval:nn {#1}
-          {
+    \str_if_eq:nnT { #2 }{ f }
+      { 
+        \starray_gset_from_keyval:nn { #1 }
+          { 
             article = a ,
             Article = A ,
             narticle = a ,
@@ -369,346 +364,346 @@
 
 
 
-\NewDocumentCommand{\student}{O{}mmO{}}{%
-  \tl_if_blank:nTF {#1}
-    {\starray_new_term:nn {student}{}}
-    {\starray_new_term:nn {student}{#1}}
-  \starray_gset_from_keyval:nn {student}
-    {
-      self  = {#1} ,
-      first = {#3} ,
-      last = {#2} ,
-      name = {#3~ #2} ,
+\NewDocumentCommand{ \student }{ O{ }mmO{ }}{ %
+  \tl_if_blank:nTF { #1 }
+    { \starray_new_term:nn { student }{ }}
+    { \starray_new_term:nn { student }{ #1 }}
+  \starray_gset_from_keyval:nn { student }
+    { 
+      self  = { #1 } ,
+      first = { #3 } ,
+      last = { #2 } ,
+      name = { #3~ #2 } ,
     }
-  \__ufrgscca_setgender:nn {student}{#4}
-  \starray_get_unique_id:nNTF {student}\l__ufrgscca_tmpID_tl
-    {}
-    {}
-  \starray_gset_prop:nnV {student}{chkID} \l__ufrgscca_tmpID_tl
-  \prop_new:c {l__ufrgscca_ \l__ufrgscca_tmpID_tl _checklist_prop}
+  \__ufrgscca_setgender:nn { student }{ #4 }
+  \starray_get_unique_id:nNTF { student }\l__ufrgscca_tmpID_tl
+    { }
+    { }
+  \starray_gset_prop:nnV { student }{ chkID } \l__ufrgscca_tmpID_tl
+  \prop_new:c { l__ufrgscca_ \l__ufrgscca_tmpID_tl _checklist_prop }
 }%
   %
-\NewDocumentCommand{\eDataSet}{m}{
-  \starray_term_parser:n{#1}
+\NewDocumentCommand{ \eDataSet }{ m }{ 
+  \starray_term_parser:n{ #1 }
 }  
 
 \cs_new:Npn \eDataFields #1 
-  { \starray_parsed_get_prop:n{#1} }
+  { \starray_parsed_get_prop:n{ #1 } }
 
 
-\NewDocumentCommand{\DataFields}{mm}{
-  \starray_get_prop:nn{#1}{#2}
+\NewDocumentCommand{ \DataFields }{ mm }{ 
+  \starray_get_prop:nn{ #1 }{ #2 }
 }  
 
-\NewDocumentCommand{\DataGet}{mmm}{
-  \starray_get_prop:nnN{#1}{#2}{#3}
+\NewDocumentCommand{ \DataGet }{ mmm }{ 
+  \starray_get_prop:nnN{ #1 }{ #2 }{ #3 }
 }  
 
-\NewDocumentCommand{\studentReviewerSelect}{m}{
-  \starray_set_iter:nn {student.reviewer}{#1}
+\NewDocumentCommand{ \studentReviewerSelect }{ m }{ 
+  \starray_set_iter:nn { student.reviewer }{ #1 }
 }
   %
 
-\NewDocumentCommand{\studentCoadvCase}{+m+m}{
-    \starray_term_parser:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-coadvisor}}
-      {#1}
-      {#2}
+\NewDocumentCommand{ \studentCoadvCase }{ +m+m }{ 
+    \starray_term_parser:n{ student }
+    \bool_if:nTF { \starray_parsed_get_prop:n{ flag-coadvisor }}
+      { #1 }
+      { #2 }
 }
 
-\NewDocumentCommand{\studentAdvCase}{mm}{
-    \starray_term_parser:n{student.advisor}
-    \int_compare:nNnTF {\starray_parsed_get_cnt:} > {1}
-      {#1}
-      {#2}
+\NewDocumentCommand{ \studentAdvCase }{ mm }{ 
+    \starray_term_parser:n{ student.advisor }
+    \int_compare:nNnTF { \starray_parsed_get_cnt:} > { 1 }
+      { #1 }
+      { #2 }
 }
 
-\NewDocumentCommand{\studentremark}{m}{
-  \starray_gset_prop:nnn {student}{remarks}{#1}
+\NewDocumentCommand{ \studentremark }{ m }{ 
+  \starray_gset_prop:nnn { student }{ remarks }{ #1 }
 }
 
 
-\NewDocumentCommand{\distinctboard}{}{
-  \starray_gset_prop:nnn {student}{flag-distinctboard}{\c_true_bool}
+\NewDocumentCommand{ \distinctboard }{ }{ 
+  \starray_gset_prop:nnn { student }{ flag-distinctboard }{ \c_true_bool }
 }
 
-\NewDocumentCommand{\studentDistinctBoardCase}{mm}
-  {
-    \starray_term_parser:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-distinctboard}}
-      {#1}
-      {#2}
+\NewDocumentCommand{ \studentDistinctBoardCase }{ mm }
+  { 
+    \starray_term_parser:n{ student }
+    \bool_if:nTF { \starray_parsed_get_prop:n{ flag-distinctboard }}
+      { #1 }
+      { #2 }
   }
 
-\NewDocumentCommand{\studentReviewerSetCase}{mmm}{
-    \starray_term_parser:n{student.reviewer[#1]}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-set}}
-      {#2}
-      {#3}
+\NewDocumentCommand{ \studentReviewerSetCase }{ mmm }{ 
+    \starray_term_parser:n{ student.reviewer[#1]}
+    \bool_if:nTF { \starray_parsed_get_prop:n{ flag-set }}
+      { #2 }
+      { #3 }
 }
 
 
 
-\NewDocumentCommand{\studentCase}{mmmmm}{
-    \starray_term_parser:n{student}
+\NewDocumentCommand{ \studentCase }{ mmmmm }{ 
+    \starray_term_parser:n{ student }
     \bool_case:nF
-    {
-      {\starray_parsed_get_prop:n{flag-ff}}
-        {#5}
-      {\starray_parsed_get_prop:n{flag-exam}}
-        {
-          \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
-            {#3}
-            {#4}
+    { 
+      { \starray_parsed_get_prop:n{ flag-ff }}
+        { #5 }
+      { \starray_parsed_get_prop:n{ flag-exam }}
+        { 
+          \bool_if:nTF{ \starray_parsed_get_prop:n{ flag-approved }}
+            { #3 }
+            { #4 }
         }
     }
-    {
-      \bool_if:nTF{\starray_parsed_get_prop:n{flag-approved}}
-        {#1}
-        {#2}
+    { 
+      \bool_if:nTF{ \starray_parsed_get_prop:n{ flag-approved }}
+        { #1 }
+        { #2 }
     }
 }
 
 
-\NewDocumentCommand{\studentDismissOtherCase}{mm}{
-    \starray_term_parser:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-dismiss} || \starray_parsed_get_prop:n{flag-other}}
-      {#1}
-      {#2}
+\NewDocumentCommand{ \studentDismissOtherCase }{ mm }{ 
+    \starray_term_parser:n{ student }
+    \bool_if:nTF { \starray_parsed_get_prop:n{ flag-dismiss } || \starray_parsed_get_prop:n{ flag-other }}
+      { #1 }
+      { #2 }
 }
 
-\NewDocumentCommand{\studentReviewerCase}{mmm}{
-    \starray_term_parser:n{student.reviewer[#1]}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-examreview}}
-      {#2}
-      {#3}
+\NewDocumentCommand{ \studentReviewerCase }{ mmm }{ 
+    \starray_term_parser:n{ student.reviewer[#1]}
+    \bool_if:nTF { \starray_parsed_get_prop:n{ flag-examreview }}
+      { #2 }
+      { #3 }
 }
 
 
-\NewDocumentCommand{\studentnewpage}{O{}}{
-  \tl_if_blank:nTF {#1}
-    { \starray_gset_prop:nnn {student}{flag-newpage}{\c_true_bool} }
-    { \starray_gset_prop:nnn {student[#1]}{flag-newpage}{\c_true_bool} }
+\NewDocumentCommand{ \studentnewpage }{ O{ }}{ 
+  \tl_if_blank:nTF { #1 }
+    { \starray_gset_prop:nnn { student }{ flag-newpage }{ \c_true_bool } }
+    { \starray_gset_prop:nnn { student[#1]}{ flag-newpage }{ \c_true_bool } }
 }%
 
-\NewDocumentCommand{\studentNewPageCase}{mm}
-  {
-    \starray_term_parser:n{student}
-    \bool_if:nTF {\starray_parsed_get_prop:n{flag-newpage}}
-      {#1}
-      {#2}
+\NewDocumentCommand{ \studentNewPageCase }{ mm }
+  { 
+    \starray_term_parser:n{ student }
+    \bool_if:nTF { \starray_parsed_get_prop:n{ flag-newpage }}
+      { #1 }
+      { #2 }
   }
 
-\NewDocumentCommand{\studentiterate}{m}{
-    \starray_iterate_over:nn{student}{#1}
+\NewDocumentCommand{ \studentiterate }{ m }{ 
+    \starray_iterate_over:nn{ student }{ #1 }
 }
 
-\NewDocumentCommand{\studentadvisoriterate}{m}{
-    \starray_iterate_over:nn{student.advisor}{#1}
+\NewDocumentCommand{ \studentadvisoriterate }{ m }{ 
+    \starray_iterate_over:nn{ student.advisor }{ #1 }
 }
 
-\NewDocumentCommand{\worktitle}{m}{%%
-  \starray_gset_prop:nnn {student}{worktitle}{#1}
+\NewDocumentCommand{ \worktitle }{ m }{ %%
+  \starray_gset_prop:nnn { student }{ worktitle }{ #1 }
 }
 
-\NewDocumentCommand{\workbrief}{m}{
-  \starray_gset_prop:nnn {student}{brief}{#1}
+\NewDocumentCommand{ \workbrief }{ m }{ 
+  \starray_gset_prop:nnn { student }{ brief }{ #1 }
 }
 
-\NewDocumentCommand{\workchange}{m}{
-  \starray_gset_prop:nnn {student}{reason}{#1}
+\NewDocumentCommand{ \workchange }{ m }{ 
+  \starray_gset_prop:nnn { student }{ reason }{ #1 }
 }
 
-\NewDocumentCommand{\advisorreview}{m}{
-  \starray_gset_prop:nnn {student.advisor}{assessment}{#1}
+\NewDocumentCommand{ \advisorreview }{ m }{ 
+  \starray_gset_prop:nnn { student.advisor }{ assessment }{ #1 }
 }
 
-\NewDocumentCommand{\coadvisorreason}{m}{
-  \starray_gset_prop:nnn {student.coadvisor}{reason}{#1}
+\NewDocumentCommand{ \coadvisorreason }{ m }{ 
+  \starray_gset_prop:nnn { student.coadvisor }{ reason }{ #1 }
 }
 
 
 
-\NewDocumentCommand{\studentinfo}{O{}mm}{%
-  \starray_gset_from_keyval:nn {student}
-    {
-      Nproc = {#1} ,
-      ID    = {#2} ,
-      email = {\tl_to_str:n{#3}} ,
+\NewDocumentCommand{ \studentinfo }{ O{ }mm }{ %
+  \starray_gset_from_keyval:nn { student }
+    { 
+      Nproc = { #1 } ,
+      ID    = { #2 } ,
+      email = { \tl_to_str:n{ #3 }} ,
     }
 }%
 
 
 \bool_if:NT \l__ufrgscca_oldrenews_bool
-  {
-    \RenewDocumentCommand{\author}{O{}mmO{}}{\student[#1]{#2}{#3}[#4]}%
-    \NewDocumentCommand{\authorinfo}{O{}mm}{\studentinfo[#1]{#2}{#3}}%
-    \RenewDocumentCommand{\title}{m}{\worktitle{#1}}%
+  { 
+    \RenewDocumentCommand{ \author }{ O{ }mmO{ }}{ \student[#1]{ #2 }{ #3 }[#4]}%
+    \NewDocumentCommand{ \authorinfo }{ O{ }mm }{ \studentinfo[#1]{ #2 }{ #3 }}%
+    \RenewDocumentCommand{ \title }{ m }{ \worktitle{ #1 }}%
   }
 
 
-\NewDocumentCommand{\studentselect}{m}{ \starray_set_iter_from_hash:nn {student}{#1} }
+\NewDocumentCommand{ \studentselect }{ m }{ \starray_set_iter_from_hash:nn { student }{ #1 } }
 
 \cs_new_protected:Npn \__ufrgscca_set_prof:nnnnn #1#2#3#4#5 
-  {
-    \tl_if_blank:nTF {#2}
-      {
-        \starray_gset_from_keyval:nn {student.#1}
-          {
-            last = {#3} ,
-            first = {#4} ,
-            name = {#4~ #3} ,
+  { 
+    \tl_if_blank:nTF { #2 }
+      { 
+        \starray_gset_from_keyval:nn { student.#1 }
+          { 
+            last = { #3 } ,
+            first = { #4 } ,
+            name = { #4~ #3 } ,
           }
       }
-      {
-        \starray_gset_from_keyval:nn {student.#1}
-          {
-            last = {#3} ,
-            first = {#4} ,
-            name = {#2~ #4~ #3} ,
+      { 
+        \starray_gset_from_keyval:nn { student.#1 }
+          { 
+            last = { #3 } ,
+            first = { #4 } ,
+            name = { #2~ #4~ #3 } ,
           }
       }
-   \__ufrgscca_setgender:nn {student.#1}{#5}
+   \__ufrgscca_setgender:nn { student.#1 }{ #5 }
   }
 
 
 \cs_new_protected:Npn \__ufrgscca_set_prof_info:nnnnn #1#2#3#4#5
-  {
-    \starray_gset_from_keyval:nn {student.#1}
-      {
-        institution = {#2} ,
-        title = {#3} ,
-        email = {\tl_to_str:n{#4}} ,
-        phone = {#5} ,
+  { 
+    \starray_gset_from_keyval:nn { student.#1 }
+      { 
+        institution = { #2 } ,
+        title = { #3 } ,
+        email = { \tl_to_str:n{ #4 }} ,
+        phone = { #5 } ,
       }
   }
 
 \cs_new_protected:Npn \__ufrgscca_emptyterm_if_none:nnn #1#2#3
-  {
-    \starray_get_cnt:nN {#2} \l_tmpa_int
-    \int_while_do:nNnn {\l_tmpa_int} < {#1}
+  { 
+    \starray_get_cnt:nN { #2 } \l__ufrgscca_tt_tmpa_int
+    \int_while_do:nNnn { \l__ufrgscca_tt_tmpa_int } < { #1 }
       { 
-        \starray_new_term:nn {#2}{} 
+        \starray_new_term:nn { #2 }{ } 
         #3
-        \starray_get_cnt:nN {#2} \l_tmpa_int
+        \starray_get_cnt:nN { #2 } \l__ufrgscca_tt_tmpa_int
       }
   }
 
-\NewDocumentCommand{\emptytermifnone}{O{1}mO{}}
-  {
-    \__ufrgscca_emptyterm_if_none:nnn {#1}{#2}{#3}
+\NewDocumentCommand{ \emptytermifnone }{ O{ 1 }mO{ }}
+  { 
+    \__ufrgscca_emptyterm_if_none:nnn { #1 }{ #2 }{ #3 }
   }
 
 \cs_new_protected:Npn \__ufrgscca_student_emptyfields_if_none:
-  {
-    \__ufrgscca_emptyterm_if_none:nnn {1}{student}{}
-    \__ufrgscca_emptyterm_if_none:nnn {1}{student.advisor}{}
-    \__ufrgscca_emptyterm_if_none:nnn {3}{student.reviewer}{}
-    \__ufrgscca_emptyterm_if_none:nnn {1}{student.altreviewer}{}
-    \__ufrgscca_emptyterm_if_none:nnn {1}{student.tutor}{}
-    \__ufrgscca_emptyterm_if_none:nnn {1}{student.supervisor}{}
-    \__ufrgscca_emptyterm_if_none:nnn {1}{student.internship}{}
+  { 
+    \__ufrgscca_emptyterm_if_none:nnn { 1 }{ student }{ }
+    \__ufrgscca_emptyterm_if_none:nnn { 1 }{ student.advisor }{ }
+    \__ufrgscca_emptyterm_if_none:nnn { 3 }{ student.reviewer }{ }
+    \__ufrgscca_emptyterm_if_none:nnn { 1 }{ student.altreviewer }{ }
+    \__ufrgscca_emptyterm_if_none:nnn { 1 }{ student.tutor }{ }
+    \__ufrgscca_emptyterm_if_none:nnn { 1 }{ student.supervisor }{ }
+    \__ufrgscca_emptyterm_if_none:nnn { 1 }{ student.internship }{ }
   }
 
 
-\NewDocumentCommand{\advisor}{O{}mmO{}}{%%
-  \starray_new_term:nn {student.advisor}{}
-  \__ufrgscca_set_prof:nnnnn {advisor}{#1}{#2}{#3}{#4}
-  \starray_term_parser:n{student}
-  \bool_if:nF {\starray_parsed_get_prop:n{flag-distinctboard}}
-    { \examiner[#1]{#2}{#3}[#4] }
+\NewDocumentCommand{ \advisor }{ O{ }mmO{ }}{ %%
+  \starray_new_term:nn { student.advisor }{ }
+  \__ufrgscca_set_prof:nnnnn { advisor }{ #1 }{ #2 }{ #3 }{ #4 }
+  \starray_term_parser:n{ student }
+  \bool_if:nF { \starray_parsed_get_prop:n{ flag-distinctboard }}
+    { \examiner[#1]{ #2 }{ #3 }[#4] }
 }
 
-\NewDocumentCommand{\advisorinfo}{mmmm}{%%
-  \__ufrgscca_set_prof_info:nnnnn {advisor}{#1}{#2}{#3}{#4}
-  \starray_term_parser:n{student}
-  \bool_if:nF {\starray_parsed_get_prop:n{flag-distinctboard}}
-    { \examinerinfo{#1}{#2}{#3}{#4} }
+\NewDocumentCommand{ \advisorinfo }{ mmmm }{ %%
+  \__ufrgscca_set_prof_info:nnnnn { advisor }{ #1 }{ #2 }{ #3 }{ #4 }
+  \starray_term_parser:n{ student }
+  \bool_if:nF { \starray_parsed_get_prop:n{ flag-distinctboard }}
+    { \examinerinfo{ #1 }{ #2 }{ #3 }{ #4 } }
 }%
 
 
-\NewDocumentCommand{\coadvisor}{O{}mmO{}}{%%
-  \starray_new_term:nn {student.coadvisor}{}
-  \__ufrgscca_set_prof:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
-  \starray_set_prop:nnn {student}{flag-coadvisor}{\c_true_bool}
+\NewDocumentCommand{ \coadvisor }{ O{ }mmO{ }}{ %%
+  \starray_new_term:nn { student.coadvisor }{ }
+  \__ufrgscca_set_prof:nnnnn { coadvisor }{ #1 }{ #2 }{ #3 }{ #4 }
+  \starray_set_prop:nnn { student }{ flag-coadvisor }{ \c_true_bool }
 }%
 
-\NewDocumentCommand{\coadvisorinfo}{mmmm}{%%
-  \__ufrgscca_set_prof_info:nnnnn {coadvisor}{#1}{#2}{#3}{#4}
-}%
-
-
-\NewDocumentCommand{\tutor}{O{}mmO{}}{%%
-  \starray_new_term:nn {student.tutor}{}
-  \__ufrgscca_set_prof:nnnnn {tutor}{#1}{#2}{#3}{#4}
-}%
-
-\NewDocumentCommand{\tutorinfo}{mmmm}{%%
-  \__ufrgscca_set_prof_info:nnnnn {tutor}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{ \coadvisorinfo }{ mmmm }{ %%
+  \__ufrgscca_set_prof_info:nnnnn { coadvisor }{ #1 }{ #2 }{ #3 }{ #4 }
 }%
 
 
-\NewDocumentCommand{\supervisor}{O{}mmO{}}{%%
-  \starray_new_term:nn {student.supervisor}{}
-  \__ufrgscca_set_prof:nnnnn {supervisor}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{ \tutor }{ O{ }mmO{ }}{ %%
+  \starray_new_term:nn { student.tutor }{ }
+  \__ufrgscca_set_prof:nnnnn { tutor }{ #1 }{ #2 }{ #3 }{ #4 }
+}%
+
+\NewDocumentCommand{ \tutorinfo }{ mmmm }{ %%
+  \__ufrgscca_set_prof_info:nnnnn { tutor }{ #1 }{ #2 }{ #3 }{ #4 }
+}%
+
+
+\NewDocumentCommand{ \supervisor }{ O{ }mmO{ }}{ %%
+  \starray_new_term:nn { student.supervisor }{ }
+  \__ufrgscca_set_prof:nnnnn { supervisor }{ #1 }{ #2 }{ #3 }{ #4 }
 }
 
-\NewDocumentCommand{\supervisorinfo}{mmmm}{%%
-    \starray_gset_from_keyval:nn {student.supervisor}
-      {
-        register = {#1} ,
-        office = {#2} ,
-        email = {\tl_to_str:n{#3}} ,
-        phone = {#4} ,
+\NewDocumentCommand{ \supervisorinfo }{ mmmm }{ %%
+    \starray_gset_from_keyval:nn { student.supervisor }
+      { 
+        register = { #1 } ,
+        office = { #2 } ,
+        email = { \tl_to_str:n{ #3 }} ,
+        phone = { #4 } ,
       }
 }%
 
-\NewDocumentCommand{\internship}{mmmmm}{%%
-    \starray_new_term:nn {student.internship}{}
-    \starray_gset_from_keyval:nn {student.internship}
-      {
-        company = {#1} ,
-        field = {#2} ,
-        start = {#3} ,
-        end = {#4} ,
-        length = {#5} ,
+\NewDocumentCommand{ \internship }{ mmmmm }{ %%
+    \starray_new_term:nn { student.internship }{ }
+    \starray_gset_from_keyval:nn { student.internship }
+      { 
+        company = { #1 } ,
+        field = { #2 } ,
+        start = { #3 } ,
+        end = { #4 } ,
+        length = { #5 } ,
       }
 }%
 
-\NewDocumentCommand{\examiner}{O{}mmO{}}{%%
-  \starray_new_term:nn {student.reviewer}{}
-  \starray_gset_prop:nnn {student.reviewer}{flag-set}{\c_true_bool}
-  \__ufrgscca_set_prof:nnnnn {reviewer}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{ \examiner }{ O{ }mmO{ }}{ %%
+  \starray_new_term:nn { student.reviewer }{ }
+  \starray_gset_prop:nnn { student.reviewer }{ flag-set }{ \c_true_bool }
+  \__ufrgscca_set_prof:nnnnn { reviewer }{ #1 }{ #2 }{ #3 }{ #4 }
 }%
 
-\NewDocumentCommand{\examinerinfo}{mmmm}{%%
-  \__ufrgscca_set_prof_info:nnnnn {reviewer}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{ \examinerinfo }{ mmmm }{ %%
+  \__ufrgscca_set_prof_info:nnnnn { reviewer }{ #1 }{ #2 }{ #3 }{ #4 }
 }%
 
-\NewDocumentCommand{\altexaminer}{O{}mmO{}}{%%
-  \starray_new_term:nn {student.altreviewer}{}
-  \__ufrgscca_set_prof:nnnnn {altreviewer}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{ \altexaminer }{ O{ }mmO{ }}{ %%
+  \starray_new_term:nn { student.altreviewer }{ }
+  \__ufrgscca_set_prof:nnnnn { altreviewer }{ #1 }{ #2 }{ #3 }{ #4 }
 }%
-\NewDocumentCommand{\altexaminerinfo}{mmmm}{%%
-  \__ufrgscca_set_prof_info:nnnnn {altreviewer}{#1}{#2}{#3}{#4}
+\NewDocumentCommand{ \altexaminerinfo }{ mmmm }{ %%
+  \__ufrgscca_set_prof_info:nnnnn { altreviewer }{ #1 }{ #2 }{ #3 }{ #4 }
 }%
 
 
 \cs_new_protected:Npn \__ufrgscca_emptyfields:
-  {
-    \starray_new_term:nn {student}{empty}
-    \starray_new_term:nn {student.advisor}{}
-    \starray_new_term:nn {student.coadvisor}{}
-    \starray_new_term:nn {student.reviewer}{}
-    \starray_new_term:nn {student.reviewer}{}
-    \starray_new_term:nn {student.reviewer}{}
-    \starray_new_term:nn {student.altreviewer}{}
-    \starray_new_term:nn {student.supervisor}{}
-    \starray_new_term:nn {student.tutor}{}
-    \starray_new_term:nn {student.internship}{}
+  { 
+    \starray_new_term:nn { student }{ empty }
+    \starray_new_term:nn { student.advisor }{ }
+    \starray_new_term:nn { student.coadvisor }{ }
+    \starray_new_term:nn { student.reviewer }{ }
+    \starray_new_term:nn { student.reviewer }{ }
+    \starray_new_term:nn { student.reviewer }{ }
+    \starray_new_term:nn { student.altreviewer }{ }
+    \starray_new_term:nn { student.supervisor }{ }
+    \starray_new_term:nn { student.tutor }{ }
+    \starray_new_term:nn { student.internship }{ }
   }
 
-\def\emptybox{\framebox[3em]{\color{white}W}}
+\def\emptybox{ \framebox[3em]{ \color{ white }W }}
   
 
 
@@ -723,34 +718,34 @@
 
   
 \cs_new_protected:Npn \__ufrgscca_tlset_rem_accents:Nn #1#2
-  {
-    \str_set:Ne \l_tmpa_str {#2}
-    \str_replace_all:Nnn \l_tmpa_str {ã}{a}
-    \str_replace_all:Nnn \l_tmpa_str {õ}{o}
-    \str_replace_all:Nnn \l_tmpa_str {ñ}{n}
-    \str_replace_all:Nnn \l_tmpa_str {á}{a}
-    \str_replace_all:Nnn \l_tmpa_str {é}{e}
-    \str_replace_all:Nnn \l_tmpa_str {í}{i}
-    \str_replace_all:Nnn \l_tmpa_str {ó}{o}
-    \str_replace_all:Nnn \l_tmpa_str {ú}{u}
-    \str_replace_all:Nnn \l_tmpa_str {à}{a}
-    \str_replace_all:Nnn \l_tmpa_str {è}{e}
-    \str_replace_all:Nnn \l_tmpa_str {ì}{i}
-    \str_replace_all:Nnn \l_tmpa_str {ò}{o}
-    \str_replace_all:Nnn \l_tmpa_str {ù}{u}
-    \str_replace_all:Nnn \l_tmpa_str {ä}{a}
-    \str_replace_all:Nnn \l_tmpa_str {ë}{e}
-    \str_replace_all:Nnn \l_tmpa_str {ï}{i}
-    \str_replace_all:Nnn \l_tmpa_str {ö}{o}
-    \str_replace_all:Nnn \l_tmpa_str {ü}{u}
-    \str_replace_all:Nnn \l_tmpa_str {â}{a}
-    \str_replace_all:Nnn \l_tmpa_str {ê}{e}
-    \str_replace_all:Nnn \l_tmpa_str {î}{i}
-    \str_replace_all:Nnn \l_tmpa_str {ô}{o}
-    \str_replace_all:Nnn \l_tmpa_str {û}{u}
-    \str_replace_all:Nnn \l_tmpa_str {ç}{c}
-    \tl_set:Ne #1 {\l_tmpa_str}
+  { 
+    \str_set:Ne \l__ufrgscca_tt_tmpa_str { #2 }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ã}{ a }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { õ}{ o }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ñ}{ n }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { á}{ a }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { é}{ e }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { í}{ i }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ó}{ o }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ú}{ u }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { à}{ a }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { è}{ e }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ì}{ i }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ò}{ o }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ù}{ u }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ä}{ a }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ë}{ e }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ï}{ i }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ö}{ o }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ü}{ u }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { â}{ a }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ê}{ e }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { î}{ i }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ô}{ o }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { û}{ u }
+    \str_replace_all:Nnn \l__ufrgscca_tt_tmpa_str { ç}{ c }
+    \tl_set:Ne #1 { \l__ufrgscca_tt_tmpa_str }
   }    
   
-\cs_generate_variant:Nn \__ufrgscca_tlset_rem_accents:Nn {Ne}
+\cs_generate_variant:Nn \__ufrgscca_tlset_rem_accents:Nn { Ne }
 

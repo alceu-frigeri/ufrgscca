@@ -104,10 +104,15 @@ The Current Maintainer of this work is Alceu Frigeri
     - documentation in PDF format
 
 -------------
-
-
 ## Changelog
-* Version 2.13 (this) 
+
+* Version 2.13a (this)
+    - using ```\pkginfograbProvidesExplPackage``` and ```\pkginfograbProvidesExplClass```
+    - minor (text) adjustments in -forms.tex
+    - removing all references to kernel scratch variables.
+    - linter (expltools) adjustments
+
+* Version 2.13 
     - and+or/e+ou..(issue [#2](https://github.com/alceu-frigeri/ufrgscca/issues/2))
     - @openright (issue [#3](https://github.com/alceu-frigeri/ufrgscca/issues/3))
     - replaced \starray_term_syntax: by \starray_term_parser: 

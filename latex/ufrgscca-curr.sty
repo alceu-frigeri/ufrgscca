@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.13} {2025/10/28}
+%% This is version {2.13a} {2026/07/04}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -24,27 +24,23 @@
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2023/11/01]
 
-
-\ProvidesExplPackage
-    {ufrgscca-curr}
-    {2025/10/28}
-    {2.13}
-    {UFRGS/CCA curricula commands}
-
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn { <pkg-name>} { props } sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage { <pkg-name>} { props } sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { ufrgscca-curr }
-  {
+\pkginfograbProvidesExplPackage {ufrgscca-curr}
+  { 
      name        = {ufrgscca-curr} ,
      prefix      = {ufrgscca} ,
-     date        = {2025/10/28},
-     version     = {2.13} ,
-     description = {UFRGS/CCA~ curricula~ commands}
+     date        = {2026/07/04},
+     version     = {2.13a} ,
+     description = {UFRGS/CCA curricula commands}
   }
 %%%%%%%
 %%% End of cut-n-paste
@@ -63,20 +59,20 @@
 %%%%%%%
 
 
-\starray_new:n {topics}
-\starray_def_from_keyval:nn {topics}
-  {
+\starray_new:n { topics }
+\starray_def_from_keyval:nn { topics }
+  { 
     topichash  = ,
     name = ,
     color = ,
-    class . struct = {
+    class . struct = { 
       classcode = ,
     }
   }
 
-\starray_new:n {classes}
-\starray_def_from_keyval:nn {classes}
-  {
+\starray_new:n { classes }
+\starray_def_from_keyval:nn { classes }
+  { 
    cred = ,
    classcode = ,
    name = ,
@@ -86,31 +82,31 @@
    bib = ,
    bib basic = ,
    bib compl = ,
-   ref . struct = {
+   ref . struct = { 
      currhash = ,
      semhash = ,
      kind = ,
    } ,
   }
 
-\starray_new:n {curricula}
-\starray_def_from_keyval:nn {curricula}
-  {
+\starray_new:n { curricula }
+\starray_def_from_keyval:nn { curricula }
+  { 
     currhash = ,
     name = ,
     text = ,
-    sem.struct = {
+    sem.struct = { 
       pos = ,
       semhash = ,
       name = ,
-      class . struct = {
+      class . struct = { 
         classcode = ,
         kind = ,
         obs = ,
         pos = ,
         color = ,
-        prereqset . struct = {
-          prereq . struct = {
+        prereqset . struct = { 
+          prereq . struct = { 
             starred = ,
             classcode = ,
             angIN = ,
@@ -124,244 +120,246 @@
   
 
 
-\NewDocumentCommand\topicdef{O{}mm}
-  {
-    \starray_new_term:nn {topics}{#2}
-    \starray_set_from_keyval:nn {topics}
-      {
-        topichash = {#2} ,
-        name = {#3} ,
-        color = {#1} ,
+\NewDocumentCommand\topicdef{ O{ }mm }
+  { 
+    \starray_new_term:nn { topics }{ #2 }
+    \starray_set_from_keyval:nn { topics }
+      { 
+        topichash = { #2 } ,
+        name = { #3 } ,
+        color = { #1 } ,
       }
   }
 
 \tl_new:N \l__ufrgscca_default_topic_tl
-\NewDocumentCommand\defaulttopic{m}
-  { \tl_set:Ne \l__ufrgscca_default_topic_tl{#1} }
+\NewDocumentCommand\defaulttopic{ m }
+  { \tl_set:Ne \l__ufrgscca_default_topic_tl{ #1 } }
 
   
 
  
-\NewDocumentCommand{\classdef}{O{\l__ufrgscca_default_topic_tl}mmm}
-  {
-    \starray_new_term:nn {classes}{#2}
-    \starray_set_from_keyval:nn {classes}
-      {
-        classcode = {#2} ,
-        cred = {#3} ,
-        name = {#4} ,
-        topichash = {#1} ,
+\NewDocumentCommand{ \classdef }{ O{ \l__ufrgscca_default_topic_tl }mmm }
+  { 
+    \starray_new_term:nn { classes }{ #2 }
+    \starray_set_from_keyval:nn { classes }
+      { 
+        classcode = { #2 } ,
+        cred = { #3 } ,
+        name = { #4 } ,
+        topichash = { #1 } ,
       }
     
-    \starray_set_prop:nnV {classes}{bib} \c_empty_clist
-    \starray_set_prop:nnV {classes}{bib basic} \c_empty_clist
-    \starray_set_prop:nnV {classes}{bib compl} \c_empty_clist
+    \starray_set_prop:nnV { classes }{ bib } \c_empty_clist
+    \starray_set_prop:nnV { classes }{ bib basic } \c_empty_clist
+    \starray_set_prop:nnV { classes }{ bib compl } \c_empty_clist
 
-    \starray_set_iter_from_hash:nn {topics}{#1}
+    \starray_set_iter_from_hash:nn { topics }{ #1 }
 
-    \starray_new_term:nn {topics.class}{}
-    \starray_set_prop:nnn {topics.class}{classcode}{#2}
+    \starray_new_term:nn { topics.class }{ }
+    \starray_set_prop:nnn { topics.class }{ classcode }{ #2 }
     
   }
   
-\NewDocumentCommand{\csummary}{m}
-  {
-    \starray_set_prop:nnn {classes}{summary}{#1}
+\NewDocumentCommand{ \csummary }{ m }
+  { 
+    \starray_set_prop:nnn { classes }{ summary }{ #1 }
   }
 
 
-\NewDocumentCommand{\classremark}{m}
-  {
-    \starray_set_prop:nnn {classes}{remark}{#1}
+\NewDocumentCommand{ \classremark }{ m }
+  { 
+    \starray_set_prop:nnn { classes }{ remark }{ #1 }
   }
 
 
-\NewDocumentCommand{\bibdef}{O{main}m}
-  {
-    \str_case:nnF {#1}
-      {
-        {main}
-          {
-            \starray_get_prop:nnN {classes}{bib} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib} \l_tmpa_clist
+\NewDocumentCommand{ \bibdef }{ O{ main }m }
+  { 
+    \str_case:nnF { #1 }
+      { 
+        { main }
+          { 
+            \starray_get_prop:nnN { classes }{ bib } \l__ufrgscca_tt_tmpa_clist
+            \clist_put_right:Nn \l__ufrgscca_tt_tmpa_clist { #2 }
+            \starray_set_prop:nnV { classes }{ bib } \l__ufrgscca_tt_tmpa_clist
           }
-        {basic}
-          {
-            \starray_get_prop:nnN {classes}{bib basic} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib basic} \l_tmpa_clist
+        { basic }
+          { 
+            \starray_get_prop:nnN { classes }{ bib basic } \l__ufrgscca_tt_tmpa_clist
+            \clist_put_right:Nn \l__ufrgscca_tt_tmpa_clist { #2 }
+            \starray_set_prop:nnV { classes }{ bib basic } \l__ufrgscca_tt_tmpa_clist
           }
-        {compl}
-          {
-            \starray_get_prop:nnN {classes}{bib compl} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib compl} \l_tmpa_clist
+        { compl }
+          { 
+            \starray_get_prop:nnN { classes }{ bib compl } \l__ufrgscca_tt_tmpa_clist
+            \clist_put_right:Nn \l__ufrgscca_tt_tmpa_clist { #2 }
+            \starray_set_prop:nnV { classes }{ bib compl } \l__ufrgscca_tt_tmpa_clist
           }
       }
-      {
-            \starray_get_prop:nnN {classes}{bib} \l_tmpa_clist
-            \clist_put_right:Nn \l_tmpa_clist {#2}
-            \starray_set_prop:nnV {classes}{bib} \l_tmpa_clist
+      { 
+            \starray_get_prop:nnN { classes }{ bib } \l__ufrgscca_tt_tmpa_clist
+            \clist_put_right:Nn \l__ufrgscca_tt_tmpa_clist { #2 }
+            \starray_set_prop:nnV { classes }{ bib } \l__ufrgscca_tt_tmpa_clist
       }
   }
 
 
 
-\NewDocumentCommand{\classset}{m}
-  {
-    \starray_set_iter_from_hash:nn {classes}{#1}
+\NewDocumentCommand{ \classset }{ m }
+  { 
+    \starray_set_iter_from_hash:nn { classes }{ #1 }
   }
 \let\setclass\classset
 
 
-\cs_generate_variant:Nn \starray_set_iter_from_hash:nn {ne}
-\cs_generate_variant:Nn \starray_set_iter_from_hash:nn {nV}
-\prg_generate_conditional_variant:Nnn \starray_set_iter_from_hash:nn {ne} {T , F , TF}
+\cs_generate_variant:Nn \starray_set_iter_from_hash:nn { ne }
+\cs_generate_variant:Nn \starray_set_iter_from_hash:nn { nV }
+\prg_generate_conditional_variant:Nnn \starray_set_iter_from_hash:nn { ne } { T , F , TF }
 
-\NewDocumentCommand{\currdef}{mmm}
-  {
-    \starray_new_term:nn {curricula}{#1}
-    \starray_set_from_keyval:nn {curricula}
-      {
-        currhash = {#1} ,
-        name = {#2} ,
-        text = {#3} ,
+\NewDocumentCommand{ \currdef }{ mmm }
+  { 
+    \starray_new_term:nn { curricula }{ #1 }
+    \starray_set_from_keyval:nn { curricula }
+      { 
+        currhash = { #1 } ,
+        name = { #2 } ,
+        text = { #3 } ,
       }
   }
 
-\NewDocumentCommand{\semdef}{mmm}
-  {
-    \starray_new_term:nn {curricula.sem}{#1}
-    \starray_set_from_keyval:nn {curricula.sem}
-      {
-        semhash       = {#1} ,
-        name       = {#2} ,
-        pos        = {#3} ,
+\NewDocumentCommand{ \semdef }{ mmm }
+  { 
+    \starray_new_term:nn { curricula.sem }{ #1 }
+    \starray_set_from_keyval:nn { curricula.sem }
+      { 
+        semhash       = { #1 } ,
+        name       = { #2 } ,
+        pos        = { #3 } ,
       }
   }
 
-\NewDocumentCommand{\addclass}{O{}mmmO{}}
-  {
-    \starray_new_term:nn {curricula.sem.class}{#3}
-    \starray_set_from_keyval:nn {curricula.sem.class}
-      {
-        color = {#1} ,
-        pos   = {#2} ,
-        classcode  = {#3} ,
-        kind  = {#4} ,
-        obs   = {#5} ,
+\NewDocumentCommand{ \addclass }{ O{ }mmmO{ }}
+  { 
+    \starray_new_term:nn { curricula.sem.class }{ #3 }
+    \starray_set_from_keyval:nn { curricula.sem.class }
+      { 
+        color = { #1 } ,
+        pos   = { #2 } ,
+        classcode  = { #3 } ,
+        kind  = { #4 } ,
+        obs   = { #5 } ,
       }
-    \starray_new_term:nn {curricula.sem.class.prereqset}{}
-    \starray_set_iter_from_hash:nn {classes}{#3}
+    \starray_new_term:nn { curricula.sem.class.prereqset }{ }
+    \starray_set_iter_from_hash:nn { classes }{ #3 }
 
-    \starray_new_term:nn {classes.ref}{}
-    \starray_get_prop:nnN {curricula}{currhash} \l_tmpa_tl
-    \starray_set_prop:nnV {classes.ref}{currhash} \l_tmpa_tl
-    \starray_get_prop:nnN {curricula.sem}{semhash} \l_tmpa_tl
-    \starray_set_prop:nnV {classes.ref}{semhash} \l_tmpa_tl
-    \starray_set_prop:nnn {classes.ref}{kind}{#4}
+    \starray_new_term:nn { classes.ref }{ }
+    \starray_get_prop:nnN { curricula }{ currhash } \l__ufrgscca_tt_tmpa_tl
+    \starray_set_prop:nnV { classes.ref }{ currhash } \l__ufrgscca_tt_tmpa_tl
+    \starray_get_prop:nnN { curricula.sem }{ semhash } \l__ufrgscca_tt_tmpa_tl
+    \starray_set_prop:nnV { classes.ref }{ semhash } \l__ufrgscca_tt_tmpa_tl
+    \starray_set_prop:nnn { classes.ref }{ kind }{ #4 }
   }
 
 
 
 
 \cs_new_protected:Npn \__ufrgscca_cut:nNN #1#2#3
-  {
-    \tl_if_blank:nTF {#1}
-      {
-        \tl_set:Nn #2 {}
-        \tl_set:Nn #3 {}
+  { 
+    \tl_if_blank:nTF { #1 }
+      { 
+        \tl_set:Nn #2 { }
+        \tl_set:Nn #3 { }
       }
-      {
-        \seq_set_split:NVn \l_tmpa_seq \c_colon_str {#1}
-        \seq_pop_left:NNTF \l_tmpa_seq \l_tmpa_tl
-          {
-           \tl_set_eq:NN #2 \l_tmpa_tl
-           \seq_pop_left:NNTF \l_tmpa_seq \l_tmpb_tl
+      { 
+        \seq_set_split:NVn \l__ufrgscca_tt_tmpa_seq \c_colon_str { #1 }
+        \seq_pop_left:NNTF \l__ufrgscca_tt_tmpa_seq \l__ufrgscca_tt_tmpa_tl
+          { 
+           \tl_set_eq:NN #2 \l__ufrgscca_tt_tmpa_tl
+           \seq_pop_left:NNTF \l__ufrgscca_tt_tmpa_seq \l__ufrgscca_tt_tmpb_tl
              {   
-              \tl_set_eq:NN #3 \l_tmpb_tl
+              \tl_set_eq:NN #3 \l__ufrgscca_tt_tmpb_tl
              }
              {                          
-              \tl_set:Nn #3 {}
+              \tl_set:Nn #3 { }
              }
           }
-          {
-            \tl_set:Nn #2 {}
-            \tl_set:Nn #3 {}
+          { 
+            \tl_set:Nn #2 { }
+            \tl_set:Nn #3 { }
           }
       }
   
   }
 
 
-\NewDocumentCommand{\depdef}{sO{}m}
-  {
-    \__ufrgscca_cut:nNN{#2}{\l__ufrgscca_partA_tl}{\l__ufrgscca_partB_tl}
+\NewDocumentCommand{ \depdef }{ sO{ }m }
+  { 
+    \__ufrgscca_cut:nNN { #2 } 
+      \l__ufrgscca_partA_tl  
+      \l__ufrgscca_partB_tl 
     \tl_if_empty:NTF \l__ufrgscca_partB_tl
-      {
+      { 
         \str_case:NnF \l__ufrgscca_partA_tl
-          {
-            {A}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {30}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-30} }
-            {B}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-60} }
-            {C}   { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-80} }
-            {-A}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-30}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+30} }
-            {-B}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-60}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+60} }
-            {-C}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {-80}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+80} }
-            {A*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {30}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+30} }
-            {B*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+60} }
-            {C*}  { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180+80} }
-            {-A*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {-30}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-30} }
-            {-B*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {60}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-60} }
-            {-C*} { \tl_set:Nn \l__ufrgscca_angOUT_tl {80}
-                    \tl_set:Nn \l__ufrgscca_angIN_tl {180-80} }
+          { 
+            { A }   { \tl_set:Nn \l__ufrgscca_angOUT_tl { 30 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180-30 } }
+            { B }   { \tl_set:Nn \l__ufrgscca_angOUT_tl { 60 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180-60 } }
+            { C }   { \tl_set:Nn \l__ufrgscca_angOUT_tl { 80 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180-80 } }
+            { -A }  { \tl_set:Nn \l__ufrgscca_angOUT_tl { -30 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180+30 } }
+            { -B }  { \tl_set:Nn \l__ufrgscca_angOUT_tl { -60 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180+60 } }
+            { -C }  { \tl_set:Nn \l__ufrgscca_angOUT_tl { -80 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180+80 } }
+            { A* }  { \tl_set:Nn \l__ufrgscca_angOUT_tl { 30 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180+30 } }
+            { B* }  { \tl_set:Nn \l__ufrgscca_angOUT_tl { 60 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180+60 } }
+            { C* }  { \tl_set:Nn \l__ufrgscca_angOUT_tl { 80 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180+80 } }
+            { -A* } { \tl_set:Nn \l__ufrgscca_angOUT_tl { -30 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180-30 } }
+            { -B* } { \tl_set:Nn \l__ufrgscca_angOUT_tl { 60 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180-60 } }
+            { -C* } { \tl_set:Nn \l__ufrgscca_angOUT_tl { 80 }
+                    \tl_set:Nn \l__ufrgscca_angIN_tl { 180-80 } }
           }
-          {
-            \tl_if_blank:VTF {\l__ufrgscca_partA_tl}
-              {
-                \tl_set:Nn \l__ufrgscca_angOUT_tl {0}
-                \tl_set:Nn \l__ufrgscca_angIN_tl {180}
+          { 
+            \tl_if_blank:VTF \l__ufrgscca_partA_tl
+              { 
+                \tl_set:Nn \l__ufrgscca_angOUT_tl { 0 }
+                \tl_set:Nn \l__ufrgscca_angIN_tl { 180 }
               }
-              {
-                \tl_set:Ne \l__ufrgscca_angOUT_tl {\fp_eval:n {\l__ufrgscca_partA_tl}}
-                \tl_set:Ne \l__ufrgscca_angIN_tl {\fp_eval:n {180 - \l__ufrgscca_angOUT_tl}}
+              { 
+                \tl_set:Ne \l__ufrgscca_angOUT_tl { \fp_eval:n { \l__ufrgscca_partA_tl }}
+                \tl_set:Ne \l__ufrgscca_angIN_tl { \fp_eval:n { 180 - \l__ufrgscca_angOUT_tl }}
               }
           }%didn't match
       }
-      {
-        \tl_set:Ne \l__ufrgscca_angOUT_tl {\l__ufrgscca_partA_tl}
-        \tl_set:Ne \l__ufrgscca_angIN_tl {180-\l__ufrgscca_partB_tl}
+      { 
+        \tl_set:Ne \l__ufrgscca_angOUT_tl { \l__ufrgscca_partA_tl }
+        \tl_set:Ne \l__ufrgscca_angIN_tl { 180-\l__ufrgscca_partB_tl }
       }
   
    
   
-    \starray_new_term:nn {curricula.sem.class.prereqset.prereq}{#3}    
-    \starray_set_from_keyval:nn {curricula.sem.class.prereqset.prereq}
-      {
-        starred = {#1} ,
-        classcode = {#3}
+    \starray_new_term:nn { curricula.sem.class.prereqset.prereq }{ #3 }    
+    \starray_set_from_keyval:nn { curricula.sem.class.prereqset.prereq }
+      { 
+        starred = { #1 } ,
+        classcode = { #3 }
       }
-    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angIN} \l__ufrgscca_angIN_tl
-    \starray_set_prop:nnV {curricula.sem.class.prereqset.prereq} {angOUT} \l__ufrgscca_angOUT_tl
+    \starray_set_prop:nnV { curricula.sem.class.prereqset.prereq } { angIN } \l__ufrgscca_angIN_tl
+    \starray_set_prop:nnV { curricula.sem.class.prereqset.prereq } { angOUT } \l__ufrgscca_angOUT_tl
   }
 
-\NewDocumentCommand{\altdep}{}
-  {
-    \starray_new_term:nn {curricula.sem.class.prereqset}{}
+\NewDocumentCommand{ \altdep }{ }
+  { 
+    \starray_new_term:nn { curricula.sem.class.prereqset }{ }
   }
 
-\cs_generate_variant:Nn \starray_set_iter_from_hash:nn {ne}
+\cs_generate_variant:Nn \starray_set_iter_from_hash:nn { ne }
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -390,155 +388,155 @@
 \bool_new:N \l__ufrgscca_tmp_second_bool
 
 \clist_new:N \l__ufrgscca_tmpa_clist 
-\NewDocumentCommand\TabEtp{sO{\notoc\section}mO{\footnotesize}}{%
-    \starray_set_iter_from_hash:nn {curricula.sem}{#3}
-    \bool_if:nTF {#1}
-      {
+\NewDocumentCommand\TabEtp{ sO{ \notoc\section }mO{ \footnotesize }}{ %
+    \starray_set_iter_from_hash:nn { curricula.sem }{ #3 }
+    \bool_if:nTF { #1 }
+      { 
         #4
-        \begin{tabular}{l@{\,}l@{\ }c@{\ }c@{\ }J{5mm}@{}J{10.2cm}}%
-        \starray_get_prop:nnN {curricula.sem}{name} \l__ufrgscca_tmp_name_tl
-        \use:e { & \exp_not:N \multicolumn{5}{J{11cm}}{\exp_not:N \textbf{\l__ufrgscca_tmp_name_tl}}}\\*
+        \begin{ tabular }{ l@{ \,}l@{ \ }c@{ \ }c@{ \ }J{ 5mm }@{ }J{ 10.2cm }}%
+        \starray_get_prop:nnN { curricula.sem }{ name } \l__ufrgscca_tmp_name_tl
+        \use:e { & \exp_not:N \multicolumn{ 5 }{ J{ 11cm }}{ \exp_not:N \textbf{ \l__ufrgscca_tmp_name_tl }}}\\*
       }
-      {
-        \starray_term_parser:n {curricula.sem}
-        #2{\starray_parsed_get_prop:n {name}}
+      { 
+        \starray_term_parser:n { curricula.sem }
+        #2{ \starray_parsed_get_prop:n { name }}
         #4
-        \begin{longtable}{l@{\,}l@{\ }c@{\ }c@{\ }J{5mm}@{}J{10.2cm}}%
+        \begin{ longtable }{ l@{ \,}l@{ \ }c@{ \ }c@{ \ }J{ 5mm }@{ }J{ 10.2cm }}%
       }
 
-    \starray_iterate_over:nn {curricula.sem.class}
-      {
-        \starray_get_prop:nnN {curricula.sem.class}{classcode} \l__ufrgscca_tmp_class_tl
-        \starray_get_prop:nnN {curricula.sem.class}{kind} \l__ufrgscca_tmp_kind_tl
-        \starray_get_prop:nnN {curricula.sem.class}{color} \l__ufrgscca_tmp_color_tl
-        \starray_set_iter_from_hash:neTF {classes}{\l__ufrgscca_tmp_class_tl}
-          {}
-          {\color{red}MISSING}
-        \starray_get_prop:nnN {classes}{name} \l__ufrgscca_tmp_name_tl
-        \starray_get_prop:nnN {classes}{cred} \l__ufrgscca_tmp_cred_tl       
+    \starray_iterate_over:nn { curricula.sem.class }
+      { 
+        \starray_get_prop:nnN { curricula.sem.class }{ classcode } \l__ufrgscca_tmp_class_tl
+        \starray_get_prop:nnN { curricula.sem.class }{ kind } \l__ufrgscca_tmp_kind_tl
+        \starray_get_prop:nnN { curricula.sem.class }{ color } \l__ufrgscca_tmp_color_tl
+        \starray_set_iter_from_hash:neTF { classes }{ \l__ufrgscca_tmp_class_tl }
+          { }
+          { \color{ red }MISSING }
+        \starray_get_prop:nnN { classes }{ name } \l__ufrgscca_tmp_name_tl
+        \starray_get_prop:nnN { classes }{ cred } \l__ufrgscca_tmp_cred_tl       
 %        \tl_show:N \l__ufrgscca_tmp_name_tl
         \tl_if_empty:NT \l__ufrgscca_tmp_color_tl
-          {
-            \tl_set:Nn \l__ufrgscca_tmp_color_tl {black}
+          { 
+            \tl_set:Nn \l__ufrgscca_tmp_color_tl { black }
           }
 %        \tl_show:N \l__ufrgscca_tmp_name_tl
 
           %% class identification
         \bool_if:NTF \l__ufrgscca_showind_bool
-          {
+          { 
             \use:e { & \l__ufrgscca_tmp_class_tl
                      & \l__ufrgscca_tmp_cred_tl
                      & \l__ufrgscca_tmp_kind_tl
-                     &  \exp_not:N \multicolumn{2}{J{10.5cm}}{\exp_not:N \textcolor{\l__ufrgscca_tmp_color_tl}{\l__ufrgscca_tmp_name_tl}}\\*
+                     &  \exp_not:N \multicolumn{ 2 }{ J{ 10.5cm }}{ \exp_not:N \textcolor{ \l__ufrgscca_tmp_color_tl }{ \l__ufrgscca_tmp_name_tl }}\\*
                    }
           }
-          {
+          { 
             \use:e { & \l__ufrgscca_tmp_class_tl
                      & \l__ufrgscca_tmp_cred_tl
                      & \l__ufrgscca_tmp_kind_tl
-                     &  \exp_not:N \multicolumn{2}{J{10.5cm}}{\l__ufrgscca_tmp_name_tl}\\*
+                     &  \exp_not:N \multicolumn{ 2 }{ J{ 10.5cm }}{ \l__ufrgscca_tmp_name_tl }\\*
                    }
           }
 
           %% Pre-reqs
         \bool_gset_false:N \l__ufrgscca_tmp_second_bool
-        \starray_iterate_over:nnTF {curricula.sem.class.prereqset}
-          {
+        \starray_iterate_over:nnTF { curricula.sem.class.prereqset }
+          { 
             \seq_gclear:N \l__ufrgscca_tmp_prereq_seq
-            \starray_iterate_over:nnTF {curricula.sem.class.prereqset.prereq}
-              {
-                \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{classcode} \l_tmpa_tl
-                \seq_gput_right:Ne \l__ufrgscca_tmp_prereq_seq {\l_tmpa_tl}
+            \starray_iterate_over:nnTF { curricula.sem.class.prereqset.prereq }
+              { 
+                \starray_get_prop:nnN { curricula.sem.class.prereqset.prereq }{ classcode } \l__ufrgscca_tt_tmpa_tl
+                \seq_gput_right:Ne \l__ufrgscca_tmp_prereq_seq { \l__ufrgscca_tt_tmpa_tl }
               }
-              {}
-              {}
+              { }
+              { }
             \seq_if_empty:NF \l__ufrgscca_tmp_prereq_seq
-              {
+              { 
                 \bool_if:NTF \l__ufrgscca_tmp_second_bool
-                  {
-                    &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{~\ ~OU}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~E~} }\\*
+                  { 
+                    &  &   &   & \multicolumn{ 2 }{ J{ 11cm }}{ \smaller\makebox[10mm][l]{ ~\ ~OU }\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq { ~E~} }\\*
                   }
-                  {
-                    &  &   &   & \multicolumn{2}{J{11cm}}{\smaller\makebox[10mm][l]{}\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq {~E~} }\\*
+                  { 
+                    &  &   &   & \multicolumn{ 2 }{ J{ 11cm }}{ \smaller\makebox[10mm][l]{ }\seq_use:Nn  \l__ufrgscca_tmp_prereq_seq { ~E~} }\\*
                     \bool_gset_true:N \l__ufrgscca_tmp_second_bool
                   }
               }
           }
-          {}
-          {}
+          { }
+          { }
           
-        \starray_get_prop:nnN {curricula.sem.class}{obs} \l__ufrgscca_tmp_obs_tl
+        \starray_get_prop:nnN { curricula.sem.class }{ obs } \l__ufrgscca_tmp_obs_tl
         \tl_if_empty:NF \l__ufrgscca_tmp_obs_tl
-          {
-            \use:e { &  &  &  &  & {\exp_not:N \scriptsize{\exp_not:N \emph{\l__ufrgscca_tmp_obs_tl}}}\\* }
+          { 
+            \use:e { &  &  &  &  & { \exp_not:N \scriptsize{ \exp_not:N \emph{ \l__ufrgscca_tmp_obs_tl }}}\\* }
           }
-        \bool_if:nF {#1}
-        {
+        \bool_if:nF { #1 }
+        { 
           %% Topic
-        \starray_get_prop:nnN {classes}{topichash} \l__ufrgscca_tmp_topic_tl
-        \starray_set_iter_from_hash:ne {topics}{\l__ufrgscca_tmp_topic_tl}
-        \starray_get_prop:nnN {topics}{name} \l__ufrgscca_tmp_topic_tl
-        \starray_get_prop:nnN {topics}{color} \l__ufrgscca_tmp_color_tl
+        \starray_get_prop:nnN { classes }{ topichash } \l__ufrgscca_tmp_topic_tl
+        \starray_set_iter_from_hash:ne { topics }{ \l__ufrgscca_tmp_topic_tl }
+        \starray_get_prop:nnN { topics }{ name } \l__ufrgscca_tmp_topic_tl
+        \starray_get_prop:nnN { topics }{ color } \l__ufrgscca_tmp_color_tl
         \tl_if_empty:NT \l__ufrgscca_tmp_color_tl
-          {
-            \tl_set:Nn \l__ufrgscca_tmp_color_tl {black}
+          { 
+            \tl_set:Nn \l__ufrgscca_tmp_color_tl { black }
           }
 
-        \use:e { &  &  &   & \exp_not:N \multicolumn{2}{J{11cm}}{\exp_not:N \smaller \exp_not:N \scshape\exp_not:N \textcolor{\l__ufrgscca_tmp_color_tl}{\l__ufrgscca_tmp_topic_tl}}\\* }
+        \use:e { &  &  &   & \exp_not:N \multicolumn{ 2 }{ J{ 11cm }}{ \exp_not:N \smaller \exp_not:N \scshape\exp_not:N \textcolor{ \l__ufrgscca_tmp_color_tl }{ \l__ufrgscca_tmp_topic_tl }}\\* }
 
          %% class summary
-         &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Súmula}\\*
+         &  &  &   & \multicolumn{ 2 }{ J{ 11cm }}{ \smaller\scshape Súmula }\\*
 
-        \starray_get_prop:nnN {classes}{summary} \l__ufrgscca_tmp_summary_tl
+        \starray_get_prop:nnN { classes }{ summary } \l__ufrgscca_tmp_summary_tl
         \use:e   { &  &  &   &  & \exp_not:N \smaller \l__ufrgscca_tmp_summary_tl\\*}
 
          %% bibliography I  
-        \starray_get_prop:nnN {classes}{bib} \l_tmpa_clist 
-        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l_tmpa_clist  
+        \starray_get_prop:nnN { classes }{ bib } \l__ufrgscca_tt_tmpa_clist 
+        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l__ufrgscca_tt_tmpa_clist  
         \clist_if_empty:NF \l__ufrgscca_tmpa_clist 
           {                                     
-            &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Básica~ Essencial}\\*
+            &  &  &   & \multicolumn{ 2 }{ J{ 11cm }}{ \smaller\scshape Bibliografia~ Básica~ Essencial }\\*
             \clist_map_inline:Nn \l__ufrgscca_tmpa_clist 
-              {
-                &  &  &   &  &  \smaller  \fullcite{##1}\\
+              { 
+                &  &  &   &  &  \smaller  \fullcite{ ##1 }\\
 %                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
 
          %% bibliography II
-        \starray_get_prop:nnN {classes}{bib basic} \l_tmpa_clist 
-        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l_tmpa_clist
+        \starray_get_prop:nnN { classes }{ bib basic } \l__ufrgscca_tt_tmpa_clist 
+        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l__ufrgscca_tt_tmpa_clist
         \clist_if_empty:NF \l__ufrgscca_tmpa_clist
-          {
-            &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Básica}\\*
+          { 
+            &  &  &   & \multicolumn{ 2 }{ J{ 11cm }}{ \smaller\scshape Bibliografia~ Básica }\\*
             \clist_map_inline:Nn \l__ufrgscca_tmpa_clist
-              {
-                &  &  &   &  &  \smaller  \fullcite{##1}\\
+              { 
+                &  &  &   &  &  \smaller  \fullcite{ ##1 }\\
 %                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
 
          %% bibliography III
-        \starray_get_prop:nnN {classes}{bib compl} \l_tmpa_clist 
-        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l_tmpa_clist
+        \starray_get_prop:nnN { classes }{ bib compl } \l__ufrgscca_tt_tmpa_clist 
+        \clist_gset_eq:NN \l__ufrgscca_tmpa_clist  \l__ufrgscca_tt_tmpa_clist
         \clist_if_empty:NF \l__ufrgscca_tmpa_clist
-          {
-           &  &  &   & \multicolumn{2}{J{11cm}}{\smaller\scshape Bibliografia~ Complementar}\\*
+          { 
+           &  &  &   & \multicolumn{ 2 }{ J{ 11cm }}{ \smaller\scshape Bibliografia~ Complementar }\\*
             \clist_map_inline:Nn \l__ufrgscca_tmpa_clist
-              {
-                 &  &  &   &  &  \smaller  \fullcite{##1}\\
+              { 
+                 &  &  &   &  &  \smaller  \fullcite{ ##1 }\\
 %                &  &  &   &  &  \smaller\textopenbullet  ~\ ~  ##1\\
               }
           }
           \\[-1.5mm]
           }
       }
-    \bool_if:nTF {#1}
-      {
-        \end{tabular}
+    \bool_if:nTF { #1 }
+      { 
+        \end{ tabular }
       }
-      {
-        \end{longtable}
+      { 
+        \end{ longtable }
       }
 }
 
@@ -549,30 +547,30 @@
 
 
 %\tl_new:N \l__ufrgscca_tmpa_tl
-\NewDocumentCommand{\TabTopic}{m}
-  {
-    \starray_set_iter_from_hash:nnTF {topics}{#1}
-      {
-        \begin{tabular}{l@{\,}l@{\ -\ }J{11.5cm}}
-            \starray_get_prop:nnN {topics}{name} \l__ufrgscca_tmp_name_tl
-            \starray_get_prop:nnN {topics}{color} \l__ufrgscca_tmp_color_tl
+\NewDocumentCommand{ \TabTopic }{ m }
+  { 
+    \starray_set_iter_from_hash:nnTF { topics }{ #1 }
+      { 
+        \begin{ tabular }{ l@{ \,}l@{ \ -\ }J{ 11.5cm }}
+            \starray_get_prop:nnN { topics }{ name } \l__ufrgscca_tmp_name_tl
+            \starray_get_prop:nnN { topics }{ color } \l__ufrgscca_tmp_color_tl
             \tl_if_empty:NF \l__ufrgscca_tmp_color_tl
-              {
-                \tl_set:Nn \l__ufrgscca_tmp_color_tl {black}
+              { 
+                \tl_set:Nn \l__ufrgscca_tmp_color_tl { black }
               }
-            \use:e { & \exp_not:N \multicolumn{2}{J{11cm}}{\exp_not:N \textcolor{\l__ufrgscca_tmp_color_tl}{\exp_not:N \textbf{\l__ufrgscca_tmp_name_tl} }}}\\\hline
+            \use:e { & \exp_not:N \multicolumn{ 2 }{ J{ 11cm }}{ \exp_not:N \textcolor{ \l__ufrgscca_tmp_color_tl }{ \exp_not:N \textbf{ \l__ufrgscca_tmp_name_tl } }}}\\\hline
 
-             \starray_iterate_over:nnTF {topics.class}
-              {
-                \starray_get_prop:nnN {topics.class}{classcode}\l__ufrgscca_tmpa_tl
-                \starray_set_iter_from_hash:nV {classes} \l__ufrgscca_tmpa_tl
-                \starray_get_prop:nnN {classes}{name} \l__ufrgscca_tmp_name_tl
+             \starray_iterate_over:nnTF { topics.class }
+              { 
+                \starray_get_prop:nnN { topics.class }{ classcode }\l__ufrgscca_tmpa_tl
+                \starray_set_iter_from_hash:nV { classes } \l__ufrgscca_tmpa_tl
+                \starray_get_prop:nnN { classes }{ name } \l__ufrgscca_tmp_name_tl
                 \use:e { & \l__ufrgscca_tmpa_tl & \l__ufrgscca_tmp_name_tl\\}
-              }{}{}
-        \end{tabular}
+              }{ }{ }
+        \end{ tabular }
       }
-      {
-        \textbf{--Topic #1 non existant--}
+      { 
+        \textbf{ --Topic #1 non existant--}
       }
   }
 
@@ -591,99 +589,99 @@
 \bool_new:N \l__ufrgscca_colors_topic_bool
 \bool_new:N \l__ufrgscca_colors_class_bool
 
-\keys_define:nn { ufrgscca / curr graph}
-  {
+\keys_define:nn { ufrgscca / curr graph }
+  { 
   	deltaX        .usage:n              = general,
     deltaX        .fp_set:N             = \l__ufrgscca_graph_deltaX_fp,
   	deltaX        .value_required:n     = true,
-  	deltaX        .initial:n            = {4.2},
+  	deltaX        .initial:n            = { 4.2 },
 
   	deltaY        .usage:n              = general,
     deltaY        .fp_set:N             = \l__ufrgscca_graph_deltaY_fp,
   	deltaY        .value_required:n     = true,
-  	deltaY        .initial:n            = {2.1},
+  	deltaY        .initial:n            = { 2.1 },
 
   	clipminX          .usage:n              = general,
     clipminX          .fp_set:N             = \l__ufrgscca_graph_clip_minX_fp,
   	clipminX          .value_required:n     = true,
-  	clipminX          .initial:n            = {0},
+  	clipminX          .initial:n            = { 0 },
 
   	maxX          .usage:n              = general,
     maxX          .fp_set:N             = \l__ufrgscca_graph_maxX_fp,
   	maxX          .value_required:n     = true,
-  	maxX          .initial:n            = {11.5},
+  	maxX          .initial:n            = { 11.5 },
 
   	clipminY          .usage:n              = general,
     clipminY          .fp_set:N             = \l__ufrgscca_graph_clip_minY_fp,
   	clipminY          .value_required:n     = true,
-  	clipminY          .initial:n            = {0},
+  	clipminY          .initial:n            = { 0 },
 
   	maxY          .usage:n              = general,
     maxY          .fp_set:N             = \l__ufrgscca_graph_maxY_fp,
   	maxY          .value_required:n     = true,
-  	maxY          .initial:n            = {-18.5},
+  	maxY          .initial:n            = { -18.5 },
 
     graph~ title   .usage:n              = general,
     graph~ title   .tl_set:N             = \l__ufrgscca_graph_title_tl,
   	graph~ title   .value_required:n     = true,
-  	graph~ title   .initial:n            = {Graph Title},
+  	graph~ title   .initial:n            = { Graph Title },
 
     default~ color .usage:n              = general,
     default~ color .tl_set:N             = \l__ufrgscca_graph_default_color_tl,
   	default~ color .value_required:n     = true,
-  	default~ color .initial:n            = {black},
+  	default~ color .initial:n            = { black },
 
     colors         .usage:n              = general,
     colors         .choice: ,
-    colors / none  .code:n               = {
+    colors / none  .code:n               = { 
                                              \bool_set_false:N \l__ufrgscca_colors_topic_bool
                                              \bool_set_false:N \l__ufrgscca_colors_class_bool
                                            } ,
-    colors / topic .code:n               = {
+    colors / topic .code:n               = { 
                                              \bool_set_true:N \l__ufrgscca_colors_topic_bool
                                              \bool_set_false:N \l__ufrgscca_colors_class_bool
                                            } ,
-    colors / class .code:n               = {
+    colors / class .code:n               = { 
                                              \bool_set_false:N \l__ufrgscca_colors_topic_bool
                                              \bool_set_true:N \l__ufrgscca_colors_class_bool
                                            } ,
-    colors / both .code:n                = {
+    colors / both .code:n                = { 
                                              \bool_set_true:N \l__ufrgscca_colors_topic_bool
                                              \bool_set_true:N \l__ufrgscca_colors_class_bool
                                            } ,
-    colors / unknown .code:n             = {
+    colors / unknown .code:n             = { 
                                              \bool_set_false:N \l__ufrgscca_colors_topic_bool
                                              \bool_set_false:N \l__ufrgscca_colors_class_bool
                                            } ,
   }
 
-\keys_define:nn { ufrgscca / graph angles}
-  {
+\keys_define:nn { ufrgscca / graph angles }
+  { 
   }
 
-\NewDocumentEnvironment{tikzGraphSem}{O{}}{%
+\NewDocumentEnvironment{ tikzGraphSem }{ O{ }}{ %
     \bool_set_false:N \l__ufrgscca_colors_topic_bool
     \bool_set_false:N \l__ufrgscca_colors_class_bool
 
-    \keys_set:nn {ufrgscca / curr graph}{#1}
-    \fp_set:Nn \l__ufrgscca_graph_clip_maxX_fp {\l__ufrgscca_graph_maxX_fp * \l__ufrgscca_graph_deltaX_fp }
-    \fp_set:Nn \l__ufrgscca_graph_clip_maxY_fp {\l__ufrgscca_graph_maxY_fp * \l__ufrgscca_graph_deltaY_fp }
-    \begin{tikzpicture}[%
-        disc/.style={%
+    \keys_set:nn { ufrgscca / curr graph }{ #1 }
+    \fp_set:Nn \l__ufrgscca_graph_clip_maxX_fp { \l__ufrgscca_graph_maxX_fp * \l__ufrgscca_graph_deltaX_fp }
+    \fp_set:Nn \l__ufrgscca_graph_clip_maxY_fp { \l__ufrgscca_graph_maxY_fp * \l__ufrgscca_graph_deltaY_fp }
+    \begin{ tikzpicture }[%
+        disc/.style={ %
           ellipse~ split, double, draw, line~ width=2pt,%
-          every~ text~ node part/.style={font=\small\bfseries},%
-          every~ lower~ node part/.style={font=\large\bfseries,color=blue}},%
-        dep/.style={->,dotted,line~ width=3pt}]%
-      \begin{scope}
+          every~ text~ node part/.style={ font=\small\bfseries },%
+          every~ lower~ node part/.style={ font=\large\bfseries,color=blue }},%
+        dep/.style={ ->,dotted,line~ width=3pt }]%
+      \begin{ scope }
         \clip ( \fp_use:N \l__ufrgscca_graph_clip_minX_fp , \fp_use:N \l__ufrgscca_graph_clip_minY_fp )
            -- ( \fp_use:N \l__ufrgscca_graph_clip_minX_fp , \fp_use:N \l__ufrgscca_graph_clip_maxY_fp )
            -- ( \fp_use:N \l__ufrgscca_graph_clip_maxX_fp , \fp_use:N \l__ufrgscca_graph_clip_maxY_fp )
            -- ( \fp_use:N \l__ufrgscca_graph_clip_maxX_fp , \fp_use:N \l__ufrgscca_graph_clip_minY_fp );
          \filldraw[color=red]
-           ( \fp_eval:n {0.5*\l__ufrgscca_graph_clip_maxX_fp} , \fp_eval:n {-0.25*\l__ufrgscca_graph_deltaY_fp} ) node{\Huge\textbf{\l__ufrgscca_graph_title_tl}};%
-}{%
-      \end{scope}%
-    \end{tikzpicture}%
+           ( \fp_eval:n { 0.5*\l__ufrgscca_graph_clip_maxX_fp } , \fp_eval:n { -0.25*\l__ufrgscca_graph_deltaY_fp } ) node{ \Huge\textbf{ \l__ufrgscca_graph_title_tl }};%
+}{ %
+      \end{ scope }%
+    \end{ tikzpicture }%
 }
 
 
@@ -693,64 +691,64 @@
 \tl_new:N \l__ufrgscca_tmp_prereq_name_tl
 \tl_new:N \l__ufrgscca_graph_color_tl
 
-\NewDocumentCommand{\GraphEtp}{m}
-  {
-    \starray_set_iter_from_hash:nn {curricula.sem}{#1}
-    \starray_get_prop:nnN {curricula.sem}{pos} \l__ufrgscca_tmp_pos_tl
-    \starray_get_prop:nnN {curricula.sem}{name} \l__ufrgscca_tmp_name_tl
-    \fp_set:Nn \l__ufrgscca_tmp_posX_fp {\l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaX_fp - 0.5*\l__ufrgscca_graph_deltaX_fp}
+\NewDocumentCommand{ \GraphEtp }{ m }
+  { 
+    \starray_set_iter_from_hash:nn { curricula.sem }{ #1 }
+    \starray_get_prop:nnN { curricula.sem }{ pos } \l__ufrgscca_tmp_pos_tl
+    \starray_get_prop:nnN { curricula.sem }{ name } \l__ufrgscca_tmp_name_tl
+    \fp_set:Nn \l__ufrgscca_tmp_posX_fp { \l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaX_fp - 0.5*\l__ufrgscca_graph_deltaX_fp }
     \draw
-      ( \fp_use:N \l__ufrgscca_tmp_posX_fp , \fp_eval:n {-\l__ufrgscca_graph_deltaY_fp} )
-      node[disc](#1) {\l__ufrgscca_tmp_name_tl };
-    \starray_iterate_over:nn {curricula.sem.class}
-      {
-        \starray_get_prop:nnN {curricula.sem.class}{pos} \l__ufrgscca_tmp_pos_tl
-        \starray_get_prop:nnN {curricula.sem.class}{classcode} \l__ufrgscca_tmp_name_tl
-        \starray_set_iter_from_hash:ne {classes}{\l__ufrgscca_tmp_name_tl}
-        \starray_get_prop:nnN {classes}{cred} \l__ufrgscca_tmp_cred_tl
-        \starray_get_prop:nnN {classes}{topichash} \l__ufrgscca_tmp_topic_tl
-        \tl_set:Ne \l__ufrgscca_graph_color_tl {\l__ufrgscca_graph_default_color_tl}
+      ( \fp_use:N \l__ufrgscca_tmp_posX_fp , \fp_eval:n { -\l__ufrgscca_graph_deltaY_fp } )
+      node[disc](#1) { \l__ufrgscca_tmp_name_tl };
+    \starray_iterate_over:nn { curricula.sem.class }
+      { 
+        \starray_get_prop:nnN { curricula.sem.class }{ pos } \l__ufrgscca_tmp_pos_tl
+        \starray_get_prop:nnN { curricula.sem.class }{ classcode } \l__ufrgscca_tmp_name_tl
+        \starray_set_iter_from_hash:ne { classes }{ \l__ufrgscca_tmp_name_tl }
+        \starray_get_prop:nnN { classes }{ cred } \l__ufrgscca_tmp_cred_tl
+        \starray_get_prop:nnN { classes }{ topichash } \l__ufrgscca_tmp_topic_tl
+        \tl_set:Ne \l__ufrgscca_graph_color_tl { \l__ufrgscca_graph_default_color_tl }
         \bool_if:NT \l__ufrgscca_colors_topic_bool
-          {
-            \starray_set_iter_from_hash:ne {topics}{\l__ufrgscca_tmp_topic_tl}
-            \starray_get_prop:nnN {topics}{color} \l__ufrgscca_tmp_color_tl
+          { 
+            \starray_set_iter_from_hash:ne { topics }{ \l__ufrgscca_tmp_topic_tl }
+            \starray_get_prop:nnN { topics }{ color } \l__ufrgscca_tmp_color_tl
             \tl_if_empty:NF \l__ufrgscca_tmp_color_tl
-              {
-                \tl_set:Ne \l__ufrgscca_graph_color_tl {\l__ufrgscca_tmp_color_tl}
+              { 
+                \tl_set:Ne \l__ufrgscca_graph_color_tl { \l__ufrgscca_tmp_color_tl }
               }
           }
         \bool_if:NT \l__ufrgscca_colors_class_bool
-          {
-            \starray_get_prop:nnN {curricula.sem.class}{color} \l__ufrgscca_tmp_color_tl
+          { 
+            \starray_get_prop:nnN { curricula.sem.class }{ color } \l__ufrgscca_tmp_color_tl
             \tl_if_empty:NF \l__ufrgscca_tmp_color_tl
-              {
-                \tl_set:Ne \l__ufrgscca_graph_color_tl {\l__ufrgscca_tmp_color_tl}
+              { 
+                \tl_set:Ne \l__ufrgscca_graph_color_tl { \l__ufrgscca_tmp_color_tl }
               }
           }
 
         \draw
           ( 
             \fp_use:N \l__ufrgscca_tmp_posX_fp  , 
-            \fp_eval:n {\l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaY_fp - 1.25 * \l__ufrgscca_graph_deltaY_fp} 
+            \fp_eval:n { \l__ufrgscca_tmp_pos_tl * \l__ufrgscca_graph_deltaY_fp - 1.25 * \l__ufrgscca_graph_deltaY_fp } 
           )
           node[disc,\l__ufrgscca_graph_color_tl](\l__ufrgscca_tmp_name_tl) 
-            { \l__ufrgscca_tmp_name_tl \nodepart{lower} \l__ufrgscca_tmp_cred_tl ~\ ~créd. } ;
-        \starray_iterate_over:nnTF {curricula.sem.class.prereqset}
-          {
-            \starray_iterate_over:nnTF {curricula.sem.class.prereqset.prereq}
-              {
-                \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{starred} \l__ufrgscca_tmp_starred_bool
+            { \l__ufrgscca_tmp_name_tl \nodepart{ lower } \l__ufrgscca_tmp_cred_tl ~\ ~créd. } ;
+        \starray_iterate_over:nnTF { curricula.sem.class.prereqset }
+          { 
+            \starray_iterate_over:nnTF { curricula.sem.class.prereqset.prereq }
+              { 
+                \starray_get_prop:nnN { curricula.sem.class.prereqset.prereq }{ starred } \l__ufrgscca_tmp_starred_bool
                 \bool_if:NF \l__ufrgscca_tmp_starred_bool
-                  {
-                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{classcode} \l__ufrgscca_tmp_prereq_name_tl
-                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{angIN} \l__ufrgscca_angIN_tl
-                    \starray_get_prop:nnN {curricula.sem.class.prereqset.prereq}{angOUT} \l__ufrgscca_angOUT_tl
+                  { 
+                    \starray_get_prop:nnN { curricula.sem.class.prereqset.prereq }{ classcode } \l__ufrgscca_tmp_prereq_name_tl
+                    \starray_get_prop:nnN { curricula.sem.class.prereqset.prereq }{ angIN } \l__ufrgscca_angIN_tl
+                    \starray_get_prop:nnN { curricula.sem.class.prereqset.prereq }{ angOUT } \l__ufrgscca_angOUT_tl
                     \path[dep,\l__ufrgscca_graph_color_tl] 
                       ( \l__ufrgscca_tmp_prereq_name_tl )
                         edge [ out=\l__ufrgscca_angOUT_tl , in=\l__ufrgscca_angIN_tl] (\l__ufrgscca_tmp_name_tl) ;
                   }
-              }{}{} %iterate over:TF prereq
-          }{}{} %iterate over:TF prereqset
+              }{ }{ } %iterate over:TF prereq
+          }{ }{ } %iterate over:TF prereqset
 
       }
 

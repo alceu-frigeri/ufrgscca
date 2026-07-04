@@ -12,7 +12,7 @@
 %%
 %% The Current Maintainer of this work is Alceu Frigeri
 %%
-%% This is version {2.13} {2025/10/28}
+%% This is version {2.13a} {2026/07/04}
 %%
 %% The list of files that compose this work can be found in the README.md file at
 %% https://ctan.org/pkg/ufrgscca
@@ -24,29 +24,24 @@
 %%%==============================================================================
 \NeedsTeXFormat{LaTeX2e}[2023/11/01]
 
-
-\ProvidesExplPackage
-    {ufrgscca-lists}
-    {2025/10/28}
-    {2.13}
-    {UFRGS/CCA auxiliary lists commands}
-
-
 %%%%%%%
 %%%
-%%% Just an attempt of having my packages info in a regular way
-%%% Idea being: { <pck-name> / pkg info } for each and all.
+%%% Just an attempt at having my package's info in a regular way
+%%%   \pkginfograb_set:nn { <pkg-name>} { props } sets package info
+%%%
+%%%   \pkginfograbProvidesExplPackage { <pkg-name>} { props } sets package info
+%%%     and calls \ProvidesExplPackage
 %%%
 %%%%%%%
 \RequirePackage{pkginfograb}
-\pkginfograb_set:nn { ufrgscca-lists }
-  {
+\pkginfograbProvidesExplPackage {ufrgscca-lists}
+  { 
      name        = {ufrgscca-lists} ,
      prefix      = {ufrgscca} ,
-     date        = {2025/10/28} ,
-     version     = {2.13} ,
-     description = {UFRGS/CCA~Auxiliary~ lists~ commands}
-  }
+     date        = {2026/07/04} ,
+     version     = {2.13a} ,
+     description = {UFRGS/CCA Auxiliary lists commands}
+ }
 %%%%%%%
 %%% End of cut-n-paste
 %%%%%%%
@@ -56,8 +51,8 @@
 %==============================================================================
 % Declaração de opções
 %==============================================================================
-\keys_define:nn { ufrgscca  / lists}
-  {
+\keys_define:nn { ufrgscca  / lists }
+  { 
     relnum      .usage:n        = load ,
 	relnum      .bool_set:N     = \l__ufrgscca_relnum_bool ,
   }
@@ -69,46 +64,46 @@
 %%% Packages Loading
 %%%%%%%%%%%%%%%%%%%%%
 
-\RequirePackage{newfloat}
-\RequirePackage{listings}
-\RequirePackage{xcolor}
+\RequirePackage{ newfloat }
+\RequirePackage{ listings }
+\RequirePackage{ xcolor }
 
 %%%
-%%% command to declare a new 'list of ...' things {package newfloat}
+%%% command to declare a new 'list of ...' things { package newfloat }
 %%%
-\NewDocumentCommand{\DeclareNewFloat}{mmmm}{
+\NewDocumentCommand{ \DeclareNewFloat }{ mmmm }{ 
  \DeclareFloatingEnvironment[
-  fileext={#2},
-	listname={#4},
-	name={#3},
+  fileext={ #2 },
+	listname={ #4 },
+	name={ #3 },
 	placement=htb,
-	chapterlistsgaps=off]{#1} 
+	chapterlistsgaps=off]{ #1 } 
     \bool_if:NTF \l__ufrgscca_relnum_bool
-        { \SetupFloatingEnvironment{#1}{within=chapter} }
-        { \SetupFloatingEnvironment{#1}{within=none} }
+        { \SetupFloatingEnvironment{ #1 }{ within=chapter } }
+        { \SetupFloatingEnvironment{ #1 }{ within=none } }
 }
 
 
 %
-%%%%\def\listoflistings{\lstlistoflistings}%
-\definecolor{lstgray}{rgb}{0.965,0.965,0.965}
-\lstset{basicstyle=\ttfamily\small,
+%%%%\def\listoflistings{ \lstlistoflistings }%
+\definecolor{ lstgray }{ rgb }{ 0.965,0.965,0.965 }
+\lstset{ basicstyle=\ttfamily\small,
   columns=fullflexible,
   keepspaces=true,
   frame=tb,
   inputencoding=latin1,
 %  inputencoding=utf8,
   extendedchars=true,
-  backgroundcolor=\color{lstgray},
+  backgroundcolor=\color{ lstgray },
 	breaklines=true,
 %	xleftmargin=7pt,
 %	xrightmargin=7pt
 }
 
 
-\def\listingname{Listing}
-\def\listlistingname{List~ of~ Listings}
-\DeclareNewFloat{codelist}{lox}{\listingname}{\listlistingname}
+\def\listingname{ Listing }
+\def\listlistingname{ List~ of~ Listings }
+\DeclareNewFloat{ codelist }{ lox }{ \listingname }{ \listlistingname }
 
 
 
